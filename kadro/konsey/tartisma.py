@@ -8,7 +8,9 @@ Tur 3: sekreter JSON karar listesi üretir; kural ihlali içeren kararlar kodla 
 from __future__ import annotations
 
 import json
+import os
 import re
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -45,12 +47,26 @@ def _demet_oku(konu: str) -> str:
     return p.read_text(encoding="utf-8") if p.exists() else ""
 
 
+def _paralel(fn, isler: list) -> list:
+    """İşleri sınırlı eşzamanlılıkla çalıştırır (yavaş tek modelde süre kazanır)."""
+    n = max(1, int(os.environ.get("ACARBOT_PARALEL") or 3))
+    if n == 1 or len(isler) <= 1:
+        return [fn(i) for i in isler]
+    with ThreadPoolExecutor(max_workers=n) as havuz:
+        return list(havuz.map(fn, isler))
+
+
 def oneri_turu(o: Oturum, kuru: bool) -> None:
+    roller = []
     for rol in ROLLER:
         demet = _demet_oku(rol.konu)
         if not demet:
             o.hatalar.append(f"demet yok: {rol.konu}")
             continue
+        roller.append((rol, demet))
+
+    def _bir(is_):
+        rol, demet = is_
         parcalar = []
         for sag in o.saglayicilar:
             for model in o.modeller.get(sag, [None])[:1]:
@@ -58,10 +74,14 @@ def oneri_turu(o: Oturum, kuru: bool) -> None:
                                  butce=o.butce, rol=rol.ad, tur=1, kuru_kosu=kuru)
                 if metin:
                     parcalar.append(metin.strip())
-        o.oneriler[rol.ad] = "\n\n".join(parcalar) if parcalar else ""
+        return rol.ad, "\n\n".join(parcalar) if parcalar else ""
+
+    for ad, metin in _paralel(_bir, roller):
+        o.oneriler[ad] = metin
 
 
 def itiraz_turu(o: Oturum, kuru: bool) -> None:
+    isler = []
     for rol in ROLLER:
         kendi = o.oneriler.get(rol.ad, "")
         if not kendi:
@@ -69,11 +89,17 @@ def itiraz_turu(o: Oturum, kuru: bool) -> None:
         digerleri = {ad: m for ad, m in o.oneriler.items() if ad != rol.ad and m}
         if not digerleri:
             continue
-        sag = o.saglayicilar[0]
-        metin = sg.cagir(sag, itiraz_istemi(rol, kendi, digerleri), butce=o.butce,
-                         rol=rol.ad, tur=2, kuru_kosu=kuru)
+        isler.append((rol, kendi, digerleri))
+
+    def _bir(is_):
+        rol, kendi, digerleri = is_
+        metin = sg.cagir(o.saglayicilar[0], itiraz_istemi(rol, kendi, digerleri),
+                         butce=o.butce, rol=rol.ad, tur=2, kuru_kosu=kuru)
+        return rol.ad, (metin or "").strip()
+
+    for ad, metin in _paralel(_bir, isler):
         if metin:
-            o.itirazlar[rol.ad] = metin.strip()
+            o.itirazlar[ad] = metin
 
 
 def _json_ayikla(metin: str) -> dict:

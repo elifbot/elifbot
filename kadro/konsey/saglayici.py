@@ -12,12 +12,14 @@ from __future__ import annotations
 
 import json
 import os
+import socket
+import threading
 import time
 import urllib.error
 import urllib.request
 from dataclasses import dataclass, field
 
-ESIK_KARAKTER = 26_000          # ~7.4K token; 8K girdi sınırının altında güvenli
+ESIK_KARAKTER = int(os.environ.get("ACARBOT_ESIK") or 26_000)          # ~7.4K token; 8K girdi sınırının altında güvenli
 
 
 @dataclass(frozen=True)
@@ -62,6 +64,8 @@ class Butce:
     baslangic: float = field(default_factory=time.time)
     kayitlar: list[Cagri] = field(default_factory=list)
 
+    kilit: object = field(default_factory=threading.Lock, repr=False)
+
     def bitti(self) -> bool:
         return (self.kullanilan >= self.azami_cagri
                 or self.denemeler >= self.azami_cagri * 6      # başarısız denemeler de sayılır
@@ -87,7 +91,7 @@ def _kirp(mesajlar: list[dict], esik: int = ESIK_KARAKTER) -> list[dict]:
 
 def cagir(saglayici: str, mesajlar: list[dict], model: str | None = None,
           butce: Butce | None = None, rol: str = "", tur: int = 1,
-          sicaklik: float = 0.3, azami_token: int = 1200,
+          sicaklik: float = 0.3, azami_token: int = int(os.environ.get("ACARBOT_TOKEN") or 1200),
           kuru_kosu: bool = False, otomatik_model: bool = True) -> str:
     """Tek chat-completions çağrısı.
 
@@ -188,6 +192,8 @@ def _tek_cagri(s: "Saglayici", model: str, mesajlar: list[dict], butce: "Butce",
         except Exception as e:                       # ağ/timeout
             butce.denemeler += 1
             son_hata = f"{type(e).__name__}: {e}"[:120]
+            if isinstance(e, (TimeoutError, socket.timeout)):
+                break                                # yavaş model: tekrar denemek süre kaybı
             if deneme < 2:
                 time.sleep(2 ** deneme * 3)
                 continue
