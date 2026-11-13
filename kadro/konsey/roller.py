@@ -93,3 +93,20 @@ def sekreter_istemi(oneriler: dict[str, str], itirazlar: dict[str, str],
             "2) yeni_kod aynı girinti düzeyinde geçerli Python olmalı.\n"
             "3) Kural sayılarını (1000$, 50$, 10x, -10$) değiştiren hiçbir karar yazma."},
     ]
+
+def yama_istemi(karar: dict, dosya: str, kaynak: str) -> list[dict]:
+    """Tek kararı, dosyanın GERÇEK kaynağıyla uygulanabilir yamaya çevirir."""
+    return [
+        {"role": "system", "content":
+            "Sen kıdemli bir Python mühendisisin. Sana bir karar ve bir dosyanın tam kaynağı verilir. "
+            "YALNIZCA geçerli JSON döndür, başka metin yok. " + KURAL},
+        {"role": "user", "content":
+            f"KARAR: {karar.get('baslik', '')}\nGEREKÇE: {karar.get('gerekce', '')}\n\n"
+            f"DOSYA: {dosya}\n```python\n{kaynak}\n```\n\n"
+            "Bu kararı bu dosyada uygula. Şema:\n"
+            '{"eski_kod":"dosyadan BİREBİR kopyalanmış 2-25 satır (girinti dahil)",'
+            '"yeni_kod":"onun yerine geçecek kod","aciklama":"tek cümle"}\n'
+            "Kurallar: eski_kod dosyada birebir ve tek kez geçmeli; yeni_kod aynı girintiyle "
+            "geçerli Python olmalı; 1000/50/10x/-10$ sayılarını değiştirme. "
+            "Uygulanabilir bir değişiklik yoksa {\"eski_kod\":\"\",\"yeni_kod\":\"\"} döndür."},
+    ]

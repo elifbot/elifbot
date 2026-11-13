@@ -192,8 +192,8 @@ def _tek_cagri(s: "Saglayici", model: str, mesajlar: list[dict], butce: "Butce",
         except Exception as e:                       # ağ/timeout
             butce.denemeler += 1
             son_hata = f"{type(e).__name__}: {e}"[:120]
-            if isinstance(e, (TimeoutError, socket.timeout)):
-                break                                # yavaş model: tekrar denemek süre kaybı
+            if isinstance(e, (TimeoutError, socket.timeout)) and deneme < 1:
+                continue                             # bayat bağlantı: taze istek genelde hızlı döner
             if deneme < 2:
                 time.sleep(2 ** deneme * 3)
                 continue

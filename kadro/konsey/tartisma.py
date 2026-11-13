@@ -15,7 +15,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from . import saglayici as sg
-from .roller import ROLLER, itiraz_istemi, oneri_istemi, sekreter_istemi
+from .roller import ROLLER, itiraz_istemi, oneri_istemi, sekreter_istemi, yama_istemi
 
 HAVUZ = Path(__file__).resolve().parents[2] / "havuz" / "digest"
 
@@ -128,8 +128,20 @@ def sekreter_turu(o: Oturum, kuru: bool) -> None:
         if kuru:                                  # kuru koşuda kod doğrulaması atlanır
             o.kararlar.append({**k, "uygulanabilir": None, "yama": ""})
             continue
-        diff, hata = ym.yama_uret(str(k.get("dosya", "")), str(k.get("eski_kod", "")),
-                                  str(k.get("yeni_kod", "")))
+        dosya = str(k.get("dosya", ""))
+        diff, hata = ym.yama_uret(dosya, str(k.get("eski_kod", "")), str(k.get("yeni_kod", "")))
+        if hata:                              # onarım: dosyanın gerçek kaynağıyla tekrar dene
+            yol = ym.KOK / dosya
+            if yol.exists() and yol.suffix == ".py" and not o.butce.bitti():
+                kaynak = yol.read_text(encoding="utf-8", errors="ignore")
+                ham = sg.cagir(sag, yama_istemi(k, dosya, kaynak), butce=o.butce,
+                               rol="yama", tur=3, sicaklik=0.0, kuru_kosu=kuru)
+                v = _json_ayikla(ham) if ham else {}
+                if v.get("eski_kod"):
+                    diff, hata = ym.yama_uret(dosya, str(v["eski_kod"]), str(v.get("yeni_kod", "")))
+                    if not hata:
+                        k = {**k, "eski_kod": v["eski_kod"], "yeni_kod": v.get("yeni_kod", ""),
+                             "aciklama": v.get("aciklama", "")}
         if hata:
             o.dusen.append({**k, "neden": hata})
             continue
