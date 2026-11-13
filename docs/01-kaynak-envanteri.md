@@ -47,7 +47,8 @@ Mail ayrıca 25 dakikalık koşunun ham dökümünü (`loglar/`), 3 test dosyas�
 | `analyze_bots.py` | bot karşılaştırma scripti |
 | `README_KURULUM.md`, `YENI_REPO_KURULUM.md`, `kur_yeni_repo.sh` | kurulum notları |
 
-**GitHub Release'e taşınanlar** (`veri-2026-11-13` etiketi, repoya girmez — 250 MB):
+**Repoya alınmayanlar** (250 MB — `uploads.github.com` bu ortamda kapalı olduğu için Release'e
+yüklenemedi; dosyalar Drive'da kalıyor, izleri `drive/MANIFEST/` altında):
 
 | Dosya | Boyut | İçerik |
 |---|---|---|
@@ -55,6 +56,8 @@ Mail ayrıca 25 dakikalık koşunun ham dökümünü (`loglar/`), 3 test dosyas�
 | `toplama 2.zip` | 52 MB | 399 dosya: V10 denemeleri, omnistudio, HTML paneller, ekran görüntüleri |
 | `toplama 3.zip` | 102 MB | sürüm arşivi (en büyük) |
 | `toplama 4.zip` | 59 MB | sürüm arşivi |
+
+Doğrulama: `sha256sum -c drive/MANIFEST/sha256.txt`.
 
 Bu dört arşiv **tarihsel sürüm koleksiyonu**dur; içlerinde gerçek piyasa tick verisi yok
 (kontrol edildi: patch, zip, html, pdf, jpg). Bu yüzden backtest için kullanılamazlar.

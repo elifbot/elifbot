@@ -11,7 +11,8 @@
 - [x] v8 motoru yazıldı: kurala sabit, stop borsada, teminat/tasfiye modelli, 37 test.
 - [x] Panel: 6 bot tek ekranda dikey kart.
 - [x] AI kadro: 14 ajan + 10 beceri + yönlendirme + çalışma kuralları.
-- [x] Drive'daki bugünkü 31 öğe: 13'ü depoya, 4 büyük arşiv GitHub Release'e.
+- [x] Drive'daki bugünkü 31 öğe: 13'ü depoya; 4 büyük arşiv (250 MB) manifest + sha256 ile
+doğrulanabilir hâle getirildi (Release yüklemesi ağ engeline takıldı, dosyalar Drive'da).
 - [x] Gerçek veri yolu: `replay_6bot.py --besleme csv --ticks ...`
 
 ## Açık
