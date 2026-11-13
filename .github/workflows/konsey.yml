@@ -17,6 +17,10 @@ on:
         description: "Azami model çağrısı"
         required: false
         default: "20"
+      teshis:
+        description: "1 = model sondası (çalışan modeli bulur, konsey kurmaz)"
+        required: false
+        default: "0"
 
 permissions:
   contents: write
@@ -59,6 +63,7 @@ jobs:
           GOREV: ${{ github.event.inputs.gorev }}
           SAGLAYICILAR: ${{ github.event.inputs.saglayici }}
           BUTCE: ${{ github.event.inputs.butce }}
+          TESHIS: ${{ github.event.inputs.teshis }}
         run: |
           ETIKET="$(date -u +%Y%m%d-%H%M%S)"
           ARGS=()

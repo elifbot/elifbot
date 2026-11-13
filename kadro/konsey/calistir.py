@@ -49,19 +49,36 @@ def main(argv: list[str] | None = None) -> int:
         return 2
 
     if a.teshis:
-        from .saglayici import modeller_listele
+        from .saglayici import _tek_cagri, modeller_listele, SAGLAYICILAR as SP
         import json as _json
         from pathlib import Path as _Path
-        rapor = {s: {"anahtar": bool(SAGLAYICILAR[s].anahtar()),
-                     "modeller": modeller_listele(s)[:40]} for s in saglayicilar}
         d = _Path(__file__).resolve().parents[2] / "konsey" / (a.etiket or "teshis")
         d.mkdir(parents=True, exist_ok=True)
-        (d / "modeller.json").write_text(_json.dumps(rapor, ensure_ascii=False, indent=1),
-                                         encoding="utf-8")
-        for s, v in rapor.items():
-            print(f"{s:<8} anahtar={'var' if v['anahtar'] else 'YOK'}  model={len(v['modeller'])}")
-            for m in v["modeller"][:5]:
-                print(f"    - {m}")
+        rapor: dict[str, dict] = {}
+        for s_ in saglayicilar:
+            sp = SP[s_]
+            katalog = modeller_listele(s_)
+            sonuc = []
+            # kataloğun tamamını değil, sohbet olabilecek ilk N tanesini dene
+            import re as _re
+            kok = _re.compile(r"instruct|chat|nemotron|deepseek|qwen|mistral|llama|gpt|phi|gemma", _re.I)
+            adaylar = [m for m in katalog if kok.search(m)][:12] or katalog[:12]
+            for m in adaylar:
+                b = Butce(azami_cagri=1, azami_saniye=60)
+                metin, hata = _tek_cagri(sp, m, [{"role": "user", "content": "ping"}],
+                                         b, "teshis", 0, 0.0, 8, 20)
+                sonuc.append({"model": m, "ok": bool(metin),
+                              "hata": hata[:220], "yanit": (metin or "")[:40]})
+                if metin:
+                    break
+            rapor[s_] = {"anahtar": bool(sp.anahtar()), "katalog": len(katalog),
+                         "denenen": sonuc,
+                         "calisan": next((x["model"] for x in sonuc if x["ok"]), None)}
+            print(f"{s_}: katalog={len(katalog)} çalışan={rapor[s_]['calisan']}")
+            for x in sonuc[:6]:
+                print(f"   {'✓' if x['ok'] else '✗'} {x['model']}  {x['hata'][:110]}")
+        (d / "teshis.json").write_text(_json.dumps(rapor, ensure_ascii=False, indent=1),
+                                       encoding="utf-8")
         return 0
 
     modeller: dict[str, list[str | None]] = {s: [None] for s in saglayicilar}
