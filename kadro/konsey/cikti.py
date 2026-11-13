@@ -27,8 +27,12 @@ def yaz(o, d: Path) -> dict:
         encoding="utf-8")
     (d / "karar.md").write_text(_karar_md(o), encoding="utf-8")
 
-    yamalar = re.findall(r"```(?:diff|patch)\n(.*?)```", "\n".join(o.oneriler.values()), flags=re.S)
-    (d / "yama.diff").write_text("\n".join(yamalar) if yamalar else "", encoding="utf-8")
+    # yama yalnızca doğrulamadan geçen kararlardan üretilir (yama.py)
+    yamalar = [k.get("yama", "") for k in o.kararlar if k.get("yama")]
+    (d / "yama.diff").write_text("\n".join(yamalar), encoding="utf-8")
+    (d / "kararlar.json").write_text(json.dumps(
+        {"kararlar": o.kararlar, "dusen": o.dusen}, ensure_ascii=False, indent=1),
+        encoding="utf-8")
 
     from .saglayici import modeller_listele
     (d / "oturum.json").write_text(json.dumps({
@@ -58,7 +62,9 @@ def _karar_md(o) -> str:
     if not o.kararlar:
         satir += ["_Karar üretilemedi. `oturum.json` içindeki hatalara bak._", ""]
     for i, k in enumerate(o.kararlar, 1):
+        durum = {True: "✅ kod doğrulandı", False: "—", None: "kuru koşu"}[k.get("uygulanabilir")]
         satir += [f"## {i}. {k.get('baslik', '(başlıksız)')}",
+                  f"- **Dosya:** `{k.get('dosya', '—')}` · **Durum:** {durum}",
                   f"- **Gerekçe:** {k.get('gerekce', '—')}",
                   f"- **Kanıt:** `{k.get('kanit', '—')}`",
                   f"- **Etki / risk:** {k.get('etki', '—')} / {k.get('risk', '—')}", ""]

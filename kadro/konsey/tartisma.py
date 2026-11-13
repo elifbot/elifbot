@@ -115,16 +115,29 @@ def _json_ayikla(metin: str) -> dict:
 def sekreter_turu(o: Oturum, kuru: bool) -> None:
     if not o.oneriler:
         return
+    from . import yama as ym
     sag = o.saglayicilar[0]
-    metin = sg.cagir(sag, sekreter_istemi(o.oneriler, o.itirazlar), butce=o.butce,
-                     rol="sekreter", tur=3, sicaklik=0.1, kuru_kosu=kuru)
+    metin = sg.cagir(sag, sekreter_istemi(o.oneriler, o.itirazlar, ym.indeks_metni()),
+                     butce=o.butce, rol="sekreter", tur=3, sicaklik=0.1, kuru_kosu=kuru)
     veri = _json_ayikla(metin)
-    for k in veri.get("kararlar", [])[:5]:
+    for k in veri.get("kararlar", [])[:4]:
         metin_k = " ".join(str(k.get(x, "")) for x in ("baslik", "gerekce", "etki"))
         if KURAL_IHLALI.search(metin_k):
             o.dusen.append({**k, "neden": "değişmez kural ihlali"})
             continue
-        o.kararlar.append(k)
+        if kuru:                                  # kuru koşuda kod doğrulaması atlanır
+            o.kararlar.append({**k, "uygulanabilir": None, "yama": ""})
+            continue
+        diff, hata = ym.yama_uret(str(k.get("dosya", "")), str(k.get("eski_kod", "")),
+                                  str(k.get("yeni_kod", "")))
+        if hata:
+            o.dusen.append({**k, "neden": hata})
+            continue
+        gecerli, hata2 = ym.diff_uygula_denemesi(diff)
+        if not gecerli:
+            o.dusen.append({**k, "neden": hata2})
+            continue
+        o.kararlar.append({**k, "uygulanabilir": True, "yama": diff})
 
 
 def kos(o: Oturum, kuru: bool = False, turlar: int = 3) -> Oturum:
