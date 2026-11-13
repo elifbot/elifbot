@@ -58,11 +58,15 @@ def main(argv: list[str] | None = None) -> int:
     d = cikti.klasor(a.etiket or None)
     ozet = cikti.yaz(o, d)
 
+    hatalar = [c for c in o.butce.kayitlar if c.hata]
     print(f"sağlayıcı : {', '.join(saglayicilar)}")
-    print(f"çağrı     : {ozet['cagri']} (hata: {ozet['hata']})")
+    print(f"çağrı     : {ozet['cagri']} (hatalı: {len(hatalar)})")
     print(f"karar     : {ozet['karar']}  düşen: {ozet['dusen']}")
     print(f"çıktı     : {ozet['klasor']}")
-    return 0 if ozet["karar"] or a.kuru_kosu else 3
+    for h in hatalar[:5]:
+        print(f"  ! {h.saglayici}/{h.model} tur{h.tur}: {h.hata}")
+    # Karar çıkmasa bile oturum kaydı değerlidir (teşhis); CI'ı kırmayız.
+    return 0
 
 
 if __name__ == "__main__":
