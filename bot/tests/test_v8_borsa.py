@@ -107,10 +107,18 @@ def test_cross_tasfiye():
         b.hacim24[s] = 5e9
         b.emir_gonder(giris_emri(s, adet=5.0), ts=1000.0)
     assert len(b.pozisyonlar) == 19
-    # hepsi %9.6 düşsün -> tasfiye eşiği
+    # Tasfiye eşiği: notional 19 x 500 = 9.500 $, kasa 1.000 $
+    #   -> başabaş hareket = 1.000 / 9.500 = %10.5
+    # %9.6 düşüş tasfiye ETMEMELİ (bakım marjı %0.5 hâlâ karşılanıyor).
     for s in list(b.pozisyonlar):
         b.son_fiyat[s] = 100.0 * 0.904
     b.tick_islet("S0-USDT-SWAP", 90.4)
+    assert b.tasfiye_sayisi == 0
+    assert len(b.pozisyonlar) == 19
+    # %12 düşüş -> özkaynak bakım marjının altında, hepsi kapanır
+    for s in list(b.pozisyonlar):
+        b.son_fiyat[s] = 100.0 * 0.88
+    b.tick_islet("S0-USDT-SWAP", 88.0)
     assert b.tasfiye_sayisi >= 1
     assert not b.pozisyonlar
 

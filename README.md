@@ -92,7 +92,7 @@ ts,symbol,price,delta_usd,buy_usd,quote_vol_24h
 bot/acarbot_6bot/      Orijinal 6-bot paketi (posta gelen zip) — yamalı çalışma kopyası
 bot/tools/             sentetik piyasa, replay koşucusu, metrikler
 bot/v8/                Kurala sabitlenmiş yeni motor (config, sizing, risk, broker, engine, adaptörler)
-bot/tests/             Kural + borsa fiziği + adaptör testleri (37 test)
+bot/tests/             Kural + borsa fiziği + adaptör testleri (38 test)
 panel/                 Canlı panel (tek ekran, 6 dikey kart)
 kadro/                 14 AI ajanı + 10 beceri + yönlendirme + çalışma kuralları
 docs/                  Raporlar, mimari, test protokolü, risk matematiği
