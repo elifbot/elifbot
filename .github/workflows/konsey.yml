@@ -69,8 +69,12 @@ jobs:
           ARGS=()
           IFS=',' read -ra LISTE <<< "$SAGLAYICILAR"
           for s in "${LISTE[@]}"; do ARGS+=(--saglayici "$(echo "$s" | tr -d ' ')"); done
-          python3 -m kadro.konsey.calistir \
-            --gorev "$GOREV" "${ARGS[@]}" --butce "$BUTCE" --tur 3 --etiket "$ETIKET"
+          if [ "$TESHIS" = "1" ]; then
+            python3 -m kadro.konsey.calistir --teshis "${ARGS[@]}" --etiket "$ETIKET"
+          else
+            python3 -m kadro.konsey.calistir \
+              --gorev "$GOREV" "${ARGS[@]}" --butce "$BUTCE" --tur 3 --etiket "$ETIKET"
+          fi
           echo "ETIKET=$ETIKET" >> "$GITHUB_ENV"
 
       - name: Çıktıyı yükle
