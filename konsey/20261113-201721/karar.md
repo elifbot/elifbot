@@ -1,0 +1,8 @@
+# Konsey kararı · 2026-11-13 20:17
+
+**Görev:** Altı botlu Binance+OKX vadeli işlem sistemini iyileştir. Değişmez kurallar: 1000$ kasa, 50$ giriş x10 kaldıraç (500$ notional), sınırsız pozisyon, CROSS teminat, pozisyon başına -10$ stop, evren tüm Binance+OKX vadeli pariteleri. Ölçülmüş gerçek veri (v9 smoke, 60 sembol, 20 dk): 44 kapanan işlem, WR %15.9, PF 0.676, en iyi +16.1$, en kötü -6.02$, maksDD -30.38$, çıkış dağılımı REJIM_DONUS 36 / STOP 8, komisyon 24.66$ (gidiş-dönüş 0.50$). Kenar ölçülmedi, churn yüksek. Görevin: havuzdaki tüm bilgileri tarayıp (1) churn'ü azaltan, (2) REJIM_DONUS çıkışını kanıta bağlayan, (3) stop mesafesini 0.50$ maliyetle uyumlu hale getiren somut, uygulanabilir bir yama önerisi üret. Genel geçer tavsiye değil; dosya+fonksiyon düzeyinde diff öner.
+**Sağlayıcılar:** nvidia
+**Çağrı:** 0
+
+_Karar üretilemedi. `oturum.json` içindeki hatalara bak._
+
