@@ -21,6 +21,10 @@ on:
         description: "1 = model sondası (çalışan modeli bulur, konsey kurmaz)"
         required: false
         default: "0"
+      teshis_model:
+        description: "Sondayı bu model(ler)e sınırla (virgülle)"
+        required: false
+        default: ""
 
 permissions:
   contents: write
@@ -64,13 +68,18 @@ jobs:
           SAGLAYICILAR: ${{ github.event.inputs.saglayici }}
           BUTCE: ${{ github.event.inputs.butce }}
           TESHIS: ${{ github.event.inputs.teshis }}
+          TESHIS_MODEL: ${{ github.event.inputs.teshis_model }}
         run: |
           ETIKET="$(date -u +%Y%m%d-%H%M%S)"
           ARGS=()
           IFS=',' read -ra LISTE <<< "$SAGLAYICILAR"
           for s in "${LISTE[@]}"; do ARGS+=(--saglayici "$(echo "$s" | tr -d ' ')"); done
           if [ "$TESHIS" = "1" ]; then
-            python3 -m kadro.konsey.calistir --teshis "${ARGS[@]}" --etiket "$ETIKET"
+            TARGS=()
+            IFS=',' read -ra MLIST <<< "$TESHIS_MODEL"
+            for m in "${MLIST[@]}"; do [ -n "$m" ] && TARGS+=(--teshis-model "$m"); done
+            ACARBOT_ZAMAN_ASIMI=300 python3 -m kadro.konsey.calistir --teshis \
+              "${ARGS[@]}" "${TARGS[@]}" --etiket "$ETIKET"
           else
             python3 -m kadro.konsey.calistir \
               --gorev "$GOREV" "${ARGS[@]}" --butce "$BUTCE" --tur 3 --etiket "$ETIKET"
