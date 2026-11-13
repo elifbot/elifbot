@@ -1,0 +1,737 @@
+{
+ "motor": "v9_ortak_akil",
+ "kasa_usd": 1002.77,
+ "realize_usd": -14.16,
+ "acik_pnl_usd": 32.63,
+ "acik_pozisyon": 11,
+ "kapanan": 44,
+ "wr": 0.1591,
+ "pf": 0.676,
+ "ort_kazanc": 7.23,
+ "ort_kayip": -2.02,
+ "en_iyi": 16.1,
+ "en_kotu": -6.02,
+ "teminat_usd": 547.56,
+ "hesap_kaldirac": 5.46,
+ "komisyon_usd": 24.66,
+ "tasfiye": 0,
+ "red": {
+  "SOGUTMA": 8
+ },
+ "rejim": {
+  "trend_asagi": 28187,
+  "trend_yukari": 25633,
+  "dagilma": 19867,
+  "sikisma": 4829
+ },
+ "cikis_nedeni": {
+  "REJIM_DONUS": 36,
+  "STOP": 8
+ },
+ "etiket": "v9_smoke",
+ "mod": "paper",
+ "dakika": 20.0,
+ "seed": 20261113,
+ "sembol_sayisi": 60,
+ "duvar_suresi_sn": 9.1,
+ "maks_dusus_usd": -30.38,
+ "asiri_teminat_usd": 0.0,
+ "kasa_egrisi": [
+  {
+   "dk": 0.0,
+   "kasa": 1000.0,
+   "acik": 0
+  },
+  {
+   "dk": 0.5,
+   "kasa": 1000.0,
+   "acik": 0
+  },
+  {
+   "dk": 1.0,
+   "kasa": 998.97,
+   "acik": 4
+  },
+  {
+   "dk": 1.5,
+   "kasa": 1000.76,
+   "acik": 5
+  },
+  {
+   "dk": 2.0,
+   "kasa": 995.74,
+   "acik": 6
+  },
+  {
+   "dk": 2.5,
+   "kasa": 991.76,
+   "acik": 8
+  },
+  {
+   "dk": 3.0,
+   "kasa": 991.98,
+   "acik": 8
+  },
+  {
+   "dk": 3.5,
+   "kasa": 986.61,
+   "acik": 7
+  },
+  {
+   "dk": 4.0,
+   "kasa": 980.1,
+   "acik": 5
+  },
+  {
+   "dk": 4.5,
+   "kasa": 984.17,
+   "acik": 4
+  },
+  {
+   "dk": 5.0,
+   "kasa": 979.49,
+   "acik": 6
+  },
+  {
+   "dk": 5.5,
+   "kasa": 982.33,
+   "acik": 5
+  },
+  {
+   "dk": 6.0,
+   "kasa": 979.93,
+   "acik": 6
+  },
+  {
+   "dk": 6.5,
+   "kasa": 978.8,
+   "acik": 6
+  },
+  {
+   "dk": 7.0,
+   "kasa": 978.77,
+   "acik": 6
+  },
+  {
+   "dk": 7.5,
+   "kasa": 979.1,
+   "acik": 7
+  },
+  {
+   "dk": 8.0,
+   "kasa": 971.07,
+   "acik": 8
+  },
+  {
+   "dk": 8.5,
+   "kasa": 981.29,
+   "acik": 9
+  },
+  {
+   "dk": 9.0,
+   "kasa": 981.22,
+   "acik": 10
+  },
+  {
+   "dk": 9.5,
+   "kasa": 980.42,
+   "acik": 8
+  },
+  {
+   "dk": 10.0,
+   "kasa": 988.3,
+   "acik": 8
+  },
+  {
+   "dk": 10.5,
+   "kasa": 998.71,
+   "acik": 9
+  },
+  {
+   "dk": 11.0,
+   "kasa": 999.78,
+   "acik": 11
+  },
+  {
+   "dk": 11.5,
+   "kasa": 997.09,
+   "acik": 9
+  },
+  {
+   "dk": 12.0,
+   "kasa": 999.35,
+   "acik": 10
+  },
+  {
+   "dk": 12.5,
+   "kasa": 996.93,
+   "acik": 11
+  },
+  {
+   "dk": 13.0,
+   "kasa": 992.39,
+   "acik": 11
+  },
+  {
+   "dk": 13.5,
+   "kasa": 985.79,
+   "acik": 12
+  },
+  {
+   "dk": 14.0,
+   "kasa": 994.33,
+   "acik": 13
+  },
+  {
+   "dk": 14.5,
+   "kasa": 992.59,
+   "acik": 13
+  },
+  {
+   "dk": 15.0,
+   "kasa": 990.25,
+   "acik": 11
+  },
+  {
+   "dk": 15.5,
+   "kasa": 992.46,
+   "acik": 11
+  },
+  {
+   "dk": 16.0,
+   "kasa": 990.98,
+   "acik": 14
+  },
+  {
+   "dk": 16.5,
+   "kasa": 994.16,
+   "acik": 14
+  },
+  {
+   "dk": 17.0,
+   "kasa": 994.36,
+   "acik": 16
+  },
+  {
+   "dk": 17.5,
+   "kasa": 996.17,
+   "acik": 12
+  },
+  {
+   "dk": 18.0,
+   "kasa": 999.96,
+   "acik": 13
+  },
+  {
+   "dk": 18.5,
+   "kasa": 996.93,
+   "acik": 13
+  },
+  {
+   "dk": 19.0,
+   "kasa": 996.89,
+   "acik": 13
+  },
+  {
+   "dk": 19.5,
+   "kasa": 994.77,
+   "acik": 11
+  }
+ ],
+ "kural": {
+  "kasa": 1000.0,
+  "teminat": 50.0,
+  "kaldirac": 10,
+  "notional": 500.0,
+  "stop_usd": 10.0,
+  "marjin": "cross",
+  "max_pozisyon": 0
+ },
+ "besleme": "SENTETIK (borsa agi kapali) — kenar olcumu DEGIL, davranis olcumu",
+ "islemler": [
+  {
+   "sembol": "APE-USDT-SWAP",
+   "yon": -1,
+   "giris": 65.5029974424,
+   "cikis": 65.5278143343,
+   "net_usd": -0.6892,
+   "neden": "REJIM_DONUS",
+   "motor": "hacim_kirilim+vwap_donus",
+   "ts": 1791000177.0,
+   "sure_sn": 127.0
+  },
+  {
+   "sembol": "ARKM-USDT-SWAP",
+   "yon": -1,
+   "giris": 0.0378921733,
+   "cikis": 0.0382493774,
+   "net_usd": -5.1781,
+   "neden": "REJIM_DONUS",
+   "motor": "biyik_donus",
+   "ts": 1791000178.0,
+   "sure_sn": 128.0
+  },
+  {
+   "sembol": "AKE-USDT-SWAP",
+   "yon": -1,
+   "giris": 6.9386392528,
+   "cikis": 6.9658594322,
+   "net_usd": -2.4604,
+   "neden": "REJIM_DONUS",
+   "motor": "hacim_kirilim+vwap_donus",
+   "ts": 1791000193.0,
+   "sure_sn": 143.0
+  },
+  {
+   "sembol": "A-USDT-SWAP",
+   "yon": -1,
+   "giris": 1073.2075529298,
+   "cikis": 1071.9292443305,
+   "net_usd": 0.0957,
+   "neden": "STOP",
+   "motor": "hacim_kirilim",
+   "ts": 1791000222.5,
+   "sure_sn": 107.5
+  },
+  {
+   "sembol": "ATOM-USDT-SWAP",
+   "yon": 1,
+   "giris": 0.0001139997,
+   "cikis": 0.0001140167,
+   "net_usd": -0.4256,
+   "neden": "REJIM_DONUS",
+   "motor": "hacim_kirilim",
+   "ts": 1791000223.0,
+   "sure_sn": 178.0
+  },
+  {
+   "sembol": "ADBE-USDT-SWAP",
+   "yon": 1,
+   "giris": 34346.3330325084,
+   "cikis": 34327.0340312897,
+   "net_usd": -0.7509,
+   "neden": "REJIM_DONUS",
+   "motor": "hacim_kirilim",
+   "ts": 1791000241.5,
+   "sure_sn": 166.5
+  },
+  {
+   "sembol": "AXS-USDT-SWAP",
+   "yon": -1,
+   "giris": 0.0110623226,
+   "cikis": 0.0110847731,
+   "net_usd": -1.5119,
+   "neden": "REJIM_DONUS",
+   "motor": "hacim_kirilim",
+   "ts": 1791000260.5,
+   "sure_sn": 130.5
+  },
+  {
+   "sembol": "ADA-USDT-SWAP",
+   "yon": -1,
+   "giris": 6.5581863771,
+   "cikis": 6.5693418836,
+   "net_usd": -1.3467,
+   "neden": "REJIM_DONUS",
+   "motor": "hacim_kirilim",
+   "ts": 1791000278.0,
+   "sure_sn": 153.0
+  },
+  {
+   "sembol": "BARD-USDT-SWAP",
+   "yon": -1,
+   "giris": 24.2872282898,
+   "cikis": 24.4189299282,
+   "net_usd": -3.2116,
+   "neden": "REJIM_DONUS",
+   "motor": "hacim_kirilim",
+   "ts": 1791000297.5,
+   "sure_sn": 122.5
+  },
+  {
+   "sembol": "ACU-USDT-SWAP",
+   "yon": 1,
+   "giris": 26.7229064821,
+   "cikis": 26.5901804255,
+   "net_usd": -2.982,
+   "neden": "REJIM_DONUS",
+   "motor": "hacim_kirilim",
+   "ts": 1791000300.5,
+   "sure_sn": 120.5
+  },
+  {
+   "sembol": "ARKM-USDT-SWAP",
+   "yon": 1,
+   "giris": 0.0385639583,
+   "cikis": 0.0382074119,
+   "net_usd": -5.0946,
+   "neden": "REJIM_DONUS",
+   "motor": "hacim_kirilim",
+   "ts": 1791000390.5,
+   "sure_sn": 120.5
+  },
+  {
+   "sembol": "APE-USDT-SWAP",
+   "yon": 1,
+   "giris": 65.6310226351,
+   "cikis": 65.5413792373,
+   "net_usd": -1.1813,
+   "neden": "REJIM_DONUS",
+   "motor": "hacim_kirilim+vwap_donus",
+   "ts": 1791000413.5,
+   "sure_sn": 133.5
+  },
+  {
+   "sembol": "AMAT-USDT-SWAP",
+   "yon": 1,
+   "giris": 29.536513035,
+   "cikis": 29.5240728328,
+   "net_usd": -0.7106,
+   "neden": "REJIM_DONUS",
+   "motor": "hacim_kirilim",
+   "ts": 1791000420.0,
+   "sure_sn": 135.0
+  },
+  {
+   "sembol": "AKE-USDT-SWAP",
+   "yon": -1,
+   "giris": 6.9259992686,
+   "cikis": 6.9255855862,
+   "net_usd": -0.4689,
+   "neden": "REJIM_DONUS",
+   "motor": "hacim_kirilim",
+   "ts": 1791000470.5,
+   "sure_sn": 170.5
+  },
+  {
+   "sembol": "APT-USDT-SWAP",
+   "yon": -1,
+   "giris": 0.0001392201,
+   "cikis": 0.0001393179,
+   "net_usd": -0.8512,
+   "neden": "REJIM_DONUS",
+   "motor": "hacim_kirilim+vwap_donus",
+   "ts": 1791000548.0,
+   "sure_sn": 128.0
+  },
+  {
+   "sembol": "AXIS-USDT-SWAP",
+   "yon": -1,
+   "giris": 1.6615847666,
+   "cikis": 1.6645693117,
+   "net_usd": -1.3943,
+   "neden": "REJIM_DONUS",
+   "motor": "hacim_kirilim",
+   "ts": 1791000561.0,
+   "sure_sn": 166.0
+  },
+  {
+   "sembol": "ACH-USDT-SWAP",
+   "yon": 1,
+   "giris": 81.2686626882,
+   "cikis": 80.8098230253,
+   "net_usd": -3.3203,
+   "neden": "REJIM_DONUS",
+   "motor": "hacim_kirilim",
+   "ts": 1791000580.5,
+   "sure_sn": 120.5
+  },
+  {
+   "sembol": "ACT-USDT-SWAP",
+   "yon": -1,
+   "giris": 4063.5059154703,
+   "cikis": 4067.5342913727,
+   "net_usd": -0.9955,
+   "neden": "REJIM_DONUS",
+   "motor": "hacim_kirilim",
+   "ts": 1791000605.5,
+   "sure_sn": 200.5
+  },
+  {
+   "sembol": "2Z-USDT-SWAP",
+   "yon": -1,
+   "giris": 335.3348181242,
+   "cikis": 331.1936880654,
+   "net_usd": 5.6737,
+   "neden": "STOP",
+   "motor": "hacim_kirilim",
+   "ts": 1791000640.0,
+   "sure_sn": 340.0
+  },
+  {
+   "sembol": "AGLD-USDT-SWAP",
+   "yon": -1,
+   "giris": 0.3953105832,
+   "cikis": 0.3907562019,
+   "net_usd": 5.2599,
+   "neden": "STOP",
+   "motor": "hacim_kirilim",
+   "ts": 1791000647.5,
+   "sure_sn": 302.5
+  },
+  {
+   "sembol": "ASML-USDT-SWAP",
+   "yon": 1,
+   "giris": 0.0012893861,
+   "cikis": 0.0012889839,
+   "net_usd": -0.6559,
+   "neden": "REJIM_DONUS",
+   "motor": "hacim_kirilim",
+   "ts": 1791000682.5,
+   "sure_sn": 187.5
+  },
+  {
+   "sembol": "BABY-USDT-SWAP",
+   "yon": 1,
+   "giris": 875.7999414022,
+   "cikis": 874.8802939479,
+   "net_usd": -1.0231,
+   "neden": "REJIM_DONUS",
+   "motor": "hacim_kirilim+vwap_donus",
+   "ts": 1791000686.5,
+   "sure_sn": 226.5
+  },
+  {
+   "sembol": "AAVE-USDT-SWAP",
+   "yon": 1,
+   "giris": 0.0323979147,
+   "cikis": 0.0324018995,
+   "net_usd": -0.4376,
+   "neden": "REJIM_DONUS",
+   "motor": "hacim_kirilim",
+   "ts": 1791000712.5,
+   "sure_sn": 127.5
+  },
+  {
+   "sembol": "ASTER-USDT-SWAP",
+   "yon": 1,
+   "giris": 85.9458694355,
+   "cikis": 85.9939180851,
+   "net_usd": -0.2203,
+   "neden": "STOP",
+   "motor": "hacim_kirilim",
+   "ts": 1791000757.5,
+   "sure_sn": 137.5
+  },
+  {
+   "sembol": "AMD-USDT-SWAP",
+   "yon": -1,
+   "giris": 0.0448201755,
+   "cikis": 0.0452609477,
+   "net_usd": -5.3925,
+   "neden": "REJIM_DONUS",
+   "motor": "hacim_kirilim",
+   "ts": 1791000780.5,
+   "sure_sn": 120.5
+  },
+  {
+   "sembol": "BAC-USDT-SWAP",
+   "yon": 1,
+   "giris": 0.1149331024,
+   "cikis": 0.1136640009,
+   "net_usd": -6.0192,
+   "neden": "REJIM_DONUS",
+   "motor": "hacim_kirilim",
+   "ts": 1791000781.5,
+   "sure_sn": 121.5
+  },
+  {
+   "sembol": "AXIS-USDT-SWAP",
+   "yon": -1,
+   "giris": 1.6558654966,
+   "cikis": 1.6554133239,
+   "net_usd": -0.3622,
+   "neden": "REJIM_DONUS",
+   "motor": "hacim_kirilim",
+   "ts": 1791000843.0,
+   "sure_sn": 183.0
+  },
+  {
+   "sembol": "ANIME-USDT-SWAP",
+   "yon": 1,
+   "giris": 4334.461430872,
+   "cikis": 4478.8680587775,
+   "net_usd": 16.1,
+   "neden": "STOP",
+   "motor": "hacim_kirilim",
+   "ts": 1791000850.0,
+   "sure_sn": 415.0
+  },
+  {
+   "sembol": "ATOM-USDT-SWAP",
+   "yon": 1,
+   "giris": 0.0001147013,
+   "cikis": 0.0001139458,
+   "net_usd": -3.7925,
+   "neden": "REJIM_DONUS",
+   "motor": "hacim_kirilim",
+   "ts": 1791000875.5,
+   "sure_sn": 160.5
+  },
+  {
+   "sembol": "AT-USDT-SWAP",
+   "yon": -1,
+   "giris": 0.3292432167,
+   "cikis": 0.3292382788,
+   "net_usd": -0.4923,
+   "neden": "REJIM_DONUS",
+   "motor": "hacim_kirilim",
+   "ts": 1791000898.0,
+   "sure_sn": 158.0
+  },
+  {
+   "sembol": "ARKM-USDT-SWAP",
+   "yon": 1,
+   "giris": 0.0387344334,
+   "cikis": 0.0384612242,
+   "net_usd": -4.0223,
+   "neden": "REJIM_DONUS",
+   "motor": "hacim_kirilim",
+   "ts": 1791000905.5,
+   "sure_sn": 120.5
+  },
+  {
+   "sembol": "ADBE-USDT-SWAP",
+   "yon": -1,
+   "giris": 34376.7736637535,
+   "cikis": 34407.422749444,
+   "net_usd": -0.9106,
+   "neden": "REJIM_DONUS",
+   "motor": "hacim_kirilim",
+   "ts": 1791000910.5,
+   "sure_sn": 120.5
+  },
+  {
+   "sembol": "AEON-USDT-SWAP",
+   "yon": -1,
+   "giris": 860.000083423,
+   "cikis": 860.4100507573,
+   "net_usd": -0.7367,
+   "neden": "REJIM_DONUS",
+   "motor": "hacim_kirilim",
+   "ts": 1791000911.0,
+   "sure_sn": 131.0
+  },
+  {
+   "sembol": "ACH-USDT-SWAP",
+   "yon": -1,
+   "giris": 79.5114677451,
+   "cikis": 78.5116470026,
+   "net_usd": 5.7827,
+   "neden": "STOP",
+   "motor": "hacim_kirilim",
+   "ts": 1791000927.5,
+   "sure_sn": 117.5
+  },
+  {
+   "sembol": "AAPL-USDT-SWAP",
+   "yon": 1,
+   "giris": 796.9291455518,
+   "cikis": 796.4415787466,
+   "net_usd": -0.7962,
+   "neden": "REJIM_DONUS",
+   "motor": "hacim_kirilim",
+   "ts": 1791000982.5,
+   "sure_sn": 137.5
+  },
+  {
+   "sembol": "2Z-USDT-SWAP",
+   "yon": -1,
+   "giris": 329.5969572576,
+   "cikis": 331.5484864251,
+   "net_usd": -3.446,
+   "neden": "REJIM_DONUS",
+   "motor": "hacim_kirilim",
+   "ts": 1791001030.5,
+   "sure_sn": 120.5
+  },
+  {
+   "sembol": "ADA-USDT-SWAP",
+   "yon": -1,
+   "giris": 6.626751954,
+   "cikis": 6.6990106987,
+   "net_usd": -5.9191,
+   "neden": "REJIM_DONUS",
+   "motor": "hacim_kirilim",
+   "ts": 1791001035.5,
+   "sure_sn": 120.5
+  },
+  {
+   "sembol": "ACN-USDT-SWAP",
+   "yon": 1,
+   "giris": 90.0291936567,
+   "cikis": 90.0484671245,
+   "net_usd": -0.3927,
+   "neden": "REJIM_DONUS",
+   "motor": "hacim_kirilim",
+   "ts": 1791001038.0,
+   "sure_sn": 193.0
+  },
+  {
+   "sembol": "ARM-USDT-SWAP",
+   "yon": -1,
+   "giris": 0.0039659845,
+   "cikis": 0.0038934925,
+   "net_usd": 8.6388,
+   "neden": "STOP",
+   "motor": "hacim_kirilim",
+   "ts": 1791001042.5,
+   "sure_sn": 412.5
+  },
+  {
+   "sembol": "AGLD-USDT-SWAP",
+   "yon": -1,
+   "giris": 0.3873518437,
+   "cikis": 0.3898023658,
+   "net_usd": -3.6624,
+   "neden": "REJIM_DONUS",
+   "motor": "hacim_kirilim",
+   "ts": 1791001045.5,
+   "sure_sn": 125.5
+  },
+  {
+   "sembol": "AMZN-USDT-SWAP",
+   "yon": -1,
+   "giris": 0.0034438402,
+   "cikis": 0.0034435658,
+   "net_usd": -0.4599,
+   "neden": "REJIM_DONUS",
+   "motor": "hacim_kirilim",
+   "ts": 1791001072.5,
+   "sure_sn": 127.5
+  },
+  {
+   "sembol": "A-USDT-SWAP",
+   "yon": 1,
+   "giris": 1080.6589825397,
+   "cikis": 1101.4004250244,
+   "net_usd": 9.0785,
+   "neden": "STOP",
+   "motor": "hacim_kirilim",
+   "ts": 1791001097.5,
+   "sure_sn": 92.5
+  },
+  {
+   "sembol": "ASTS-USDT-SWAP",
+   "yon": 1,
+   "giris": 0.1281630713,
+   "cikis": 0.1275391719,
+   "net_usd": -2.9333,
+   "neden": "REJIM_DONUS",
+   "motor": "hacim_kirilim",
+   "ts": 1791001141.0,
+   "sure_sn": 121.0
+  },
+  {
+   "sembol": "ATOM-USDT-SWAP",
+   "yon": 1,
+   "giris": 0.0001151811,
+   "cikis": 0.0001151429,
+   "net_usd": -0.6659,
+   "neden": "REJIM_DONUS",
+   "motor": "hacim_kirilim",
+   "ts": 1791001159.5,
+   "sure_sn": 179.5
+  }
+ ]
+}
