@@ -40,7 +40,8 @@ def _metrik(rap: dict) -> dict:
             "acik_pnl": rap.get("acik_pnl_usd"), "red": rap.get("redler")}
 
 
-def ab(dosya: str, eski: str, yeni: str, dakika: float = 3.0, sembol: int = 40) -> dict:
+def ab(dosya: str, eski: str, yeni: str, dakika: float = 3.0, sembol: int = 40,
+       parcalar: list[dict] | None = None) -> dict:
     gecici = Path(tempfile.mkdtemp(prefix="konsey_ab_"))
     try:
         hedef = gecici / "depo"
@@ -48,6 +49,9 @@ def ab(dosya: str, eski: str, yeni: str, dakika: float = 3.0, sembol: int = 40) 
         p = hedef / dosya
         metin = p.read_text(encoding="utf-8")
         # yama çalışma ağacında zaten uygulanmışsa önce geri al (taban = yamasız hâl)
+        if parcalar:
+            eski = parcalar[0].get("eski_kod", "")
+            yeni = parcalar[0].get("yeni_kod", "")
         if metin.count(eski) != 1:
             if metin.count(yeni) == 1:
                 metin = metin.replace(yeni, eski, 1)
@@ -56,7 +60,12 @@ def ab(dosya: str, eski: str, yeni: str, dakika: float = 3.0, sembol: int = 40) 
                 return {"hata": f"eski_kod {metin.count(eski)} / yeni_kod {metin.count(yeni)} kez geçiyor"}
         taban = _metrik(_kos(hedef, "ab_taban", dakika, sembol))
         metin = p.read_text(encoding="utf-8")
-        p.write_text(metin.replace(eski, yeni, 1), encoding="utf-8")
+        if parcalar:
+            for d in parcalar:
+                metin = metin.replace(str(d.get("eski_kod", "")), str(d.get("yeni_kod", "")), 1)
+            p.write_text(metin, encoding="utf-8")
+        else:
+            p.write_text(metin.replace(eski, yeni, 1), encoding="utf-8")
         yamali = _metrik(_kos(hedef, "ab_yamali", dakika, sembol))
         fark = {k: (None if taban.get(k) in (None, 0) or yamali.get(k) is None
                     else round(yamali[k] - taban[k], 3)) for k in taban}
@@ -81,7 +90,7 @@ def main(argv: list[str] | None = None) -> int:
     if a.kararlar:
         veri = json.loads(Path(a.kararlar).read_text(encoding="utf-8"))
         for k in veri.get("kararlar", []):
-            if k.get("uygulanabilir") and k.get("eski_kod"):
+            if k.get("uygulanabilir") and (k.get("degisiklikler") or k.get("eski_kod")):
                 isler.append(k)
     elif a.dosya and a.eski and a.yeni:
         isler.append({"baslik": "elle", "dosya": a.dosya, "eski_kod": a.eski, "yeni_kod": a.yeni})
@@ -91,7 +100,8 @@ def main(argv: list[str] | None = None) -> int:
 
     for k in isler:
         print(f"== {k.get('baslik', '?')} ({k['dosya']})")
-        r = ab(k["dosya"], k["eski_kod"], k["yeni_kod"], a.dakika, a.sembol)
+        r = ab(k["dosya"], k.get("eski_kod", ""), k.get("yeni_kod", ""), a.dakika, a.sembol,
+               parcalar=k.get("degisiklikler"))
         if r.get("hata"):
             print(f"   ! {r['hata']}")
             continue

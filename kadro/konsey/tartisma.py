@@ -137,11 +137,14 @@ def sekreter_turu(o: Oturum, kuru: bool) -> None:
                 ham = sg.cagir(sag, yama_istemi(k, dosya, kaynak), butce=o.butce,
                                rol="yama", tur=3, sicaklik=0.0, kuru_kosu=kuru)
                 v = _json_ayikla(ham) if ham else {}
-                if v.get("eski_kod"):
-                    diff, hata = ym.yama_uret(dosya, str(v["eski_kod"]), str(v.get("yeni_kod", "")))
+                parcalar = v.get("degisiklikler") or []
+                if parcalar:
+                    diff, hata = ym.yama_uret_coklu(dosya, parcalar)
                     if not hata:
-                        k = {**k, "eski_kod": v["eski_kod"], "yeni_kod": v.get("yeni_kod", ""),
-                             "aciklama": v.get("aciklama", "")}
+                        k = {**k, "degisiklikler": parcalar,
+                             "eski_kod": parcalar[0].get("eski_kod", ""),
+                             "yeni_kod": parcalar[0].get("yeni_kod", ""),
+                             "aciklama": v.get("ozet", "")}
         if hata:
             o.dusen.append({**k, "neden": hata})
             continue
