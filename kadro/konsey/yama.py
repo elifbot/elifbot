@@ -91,6 +91,31 @@ def yama_uret(dosya: str, eski: str, yeni: str) -> tuple[str, str]:
     return diff, ""
 
 
+def yama_uret_coklu(dosya: str, degisiklikler: list[dict]) -> tuple[str, str]:
+    """Aynı dosyada sıralı çoklu değişiklikten tek bir diff üretir."""
+    yol = (KOK / dosya).resolve()
+    if not dosya or not str(yol).startswith(str(KOK)) or not yol.exists():
+        return "", f"dosya yok: {dosya}"
+    metin = yol.read_text(encoding="utf-8")
+    for i, d in enumerate(degisiklikler, 1):
+        eski = str(d.get("eski_kod", "")).replace("\r\n", "\n").strip("\n")
+        yeni = str(d.get("yeni_kod", "")).replace("\r\n", "\n").strip("\n")
+        if not eski:
+            return "", f"{i}. değişiklikte eski_kod boş"
+        if metin.count(eski) != 1:
+            return "", f"{i}. değişiklik: eski_kod {metin.count(eski)} kez geçiyor"
+        metin = metin.replace(eski, yeni, 1)
+    try:
+        ast.parse(metin)
+    except SyntaxError as e:
+        return "", f"yama sonrası sözdizimi hatası: {e.lineno}. satır {e.msg}"
+    diff = "".join(difflib.unified_diff(
+        yol.read_text(encoding="utf-8").splitlines(keepends=True),
+        metin.splitlines(keepends=True),
+        fromfile=f"a/{dosya}", tofile=f"b/{dosya}", n=3, lineterm="\n"))
+    return diff, ""
+
+
 def diff_uygula_denemesi(diff: str) -> tuple[bool, str]:
     """Üretilen diff'i (kuru) uygulanabilirlik açısından doğrular."""
     if not diff.strip():
