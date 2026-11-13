@@ -117,9 +117,16 @@ def sekreter_turu(o: Oturum, kuru: bool) -> None:
         return
     from . import yama as ym
     sag = o.saglayicilar[0]
-    metin = sg.cagir(sag, sekreter_istemi(o.oneriler, o.itirazlar, ym.indeks_metni()),
-                     butce=o.butce, rol="sekreter", tur=3, sicaklik=0.1, kuru_kosu=kuru)
-    veri = _json_ayikla(metin)
+    istem = sekreter_istemi(o.oneriler, o.itirazlar, ym.indeks_metni())
+    veri = {}
+    for deneme in range(2):                    # sekreter tek hata noktası: bir kez daha dene
+        if o.butce.bitti():
+            break
+        metin = sg.cagir(sag, istem, butce=o.butce, rol="sekreter", tur=3,
+                         sicaklik=0.1, kuru_kosu=kuru)
+        veri = _json_ayikla(metin)
+        if veri.get("kararlar"):
+            break
     for k in veri.get("kararlar", [])[:4]:
         metin_k = " ".join(str(k.get(x, "")) for x in ("baslik", "gerekce", "etki"))
         if KURAL_IHLALI.search(metin_k):
