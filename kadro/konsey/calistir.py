@@ -37,6 +37,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--tur", type=int, default=3)
     ap.add_argument("--etiket", default="")
     ap.add_argument("--kuru-kosu", action="store_true", help="ağ olmadan boru hattını dene")
+    ap.add_argument("--teshis-model", action="append", default=[],
+                    help="sondayı yalnızca bu model(ler)le sınırla")
     ap.add_argument("--teshis", action="store_true",
                     help="sağlayıcı model listelerini yaz ve çık (ucuz, 1-2 çağrı)")
     a = ap.parse_args(argv)
@@ -62,7 +64,10 @@ def main(argv: list[str] | None = None) -> int:
             # kataloğun tamamını değil, sohbet olabilecek ilk N tanesini dene
             import re as _re
             kok = _re.compile(r"instruct|chat|nemotron|deepseek|qwen|mistral|llama|gpt|phi|gemma", _re.I)
-            adaylar = [m for m in katalog if kok.search(m)][:12] or katalog[:12]
+            if a.teshis_model:
+                adaylar = list(a.teshis_model)
+            else:
+                adaylar = [m for m in katalog if kok.search(m)][:12] or katalog[:12]
             for m in adaylar:
                 b = Butce(azami_cagri=1, azami_saniye=60)
                 metin, hata = _tek_cagri(sp, m, [{"role": "user", "content": "ping"}],

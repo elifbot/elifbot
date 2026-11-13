@@ -156,7 +156,8 @@ def _tek_cagri(s: "Saglayici", model: str, mesajlar: list[dict], butce: "Butce",
         try:
             istek = urllib.request.Request(f"{s.taban}/chat/completions", data=govde,
                                            headers=hac, method="POST")
-            with urllib.request.urlopen(istek, timeout=120) as y:
+            zaman = float(os.environ.get("ACARBOT_ZAMAN_ASIMI", "120"))
+            with urllib.request.urlopen(istek, timeout=zaman) as y:
                 ham = y.read().decode(errors="ignore")
             try:
                 d = json.loads(ham)
