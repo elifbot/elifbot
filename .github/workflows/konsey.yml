@@ -38,7 +38,7 @@ concurrency:
 jobs:
   konsey:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 100
     steps:
       - uses: actions/checkout@v4
 
@@ -71,6 +71,7 @@ jobs:
           TESHIS_MODEL: ${{ github.event.inputs.teshis_model }}
           ACARBOT_MODEL: ${{ vars.ACARBOT_MODEL }}
           ACARBOT_ZAMAN_ASIMI: "300"
+          ACARBOT_SURE: "3000"
         run: |
           ETIKET="$(date -u +%Y%m%d-%H%M%S)"
           [ -n "$NVIDIA_API_KEY" ] && echo "::add-mask::$NVIDIA_API_KEY"
