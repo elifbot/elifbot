@@ -1,0 +1,17 @@
+{
+ "kararlar": [
+  {
+   "baslik": "Giriş Sinyali RVOL Filtresi",
+   "gerekce": "Düşük WR (%15.9) ve gürültülü girişleri engellemek için hacim teyidi şarttır. Mimar ve Test tarafından onaylanan RVOL filtresi, düşük hacimli sahte kırılımları eler.",
+   "dosya": "bot/v9/sinyaller.py",
+   "eski_kod": "def komite(h: Hafiza, r: RejimSonucu, ts: float, min_skor: float = 0.55) -> KomiteKarari:\n    adaylar = [a for a in (f(h, r, ts) for f in DEDEKTORLER) if a is not None]",
+   "yeni_kod": "def komite(h: Hafiza, r: RejimSonucu, ts: float, min_skor: float = 0.55) -> KomiteKarari:\n    # RVOL Filtresi: Düşük hacimli sahte kırılımları engellemek için hacim teyidi şarttır\n    if h.hacim_orani < 1.5:\n        return KomiteKarari(None, (), False)\n    adaylar = [a for a in (f(h, r, ts) for f in DEDEKTORLER) if a is not None]",
+   "etki": "yüksek",
+   "risk": "düşük",
+   "aciklama": "Düşük WR oranını iyileştirmek ve gürültüyü azaltmak için komite girişine RVOL (hacim oranı) filtresi eklendi.",
+   "uygulanabilir": true,
+   "yama": "--- a/bot/v9/sinyaller.py\n+++ b/bot/v9/sinyaller.py\n@@ -108,6 +108,9 @@\n \n \n def komite(h: Hafiza, r: RejimSonucu, ts: float, min_skor: float = 0.55) -> KomiteKarari:\n+    # RVOL Filtresi: Düşük hacimli sahte kırılımları engellemek için hacim teyidi şarttır\n+    if h.hacim_orani < 1.5:\n+        return KomiteKarari(None, (), False)\n     adaylar = [a for a in (f(h, r, ts) for f in DEDEKTORLER) if a is not None]\n     if not adaylar:\n         return KomiteKarari(None, (), False)\n"
+  }
+ ],
+ "dusen": []
+}

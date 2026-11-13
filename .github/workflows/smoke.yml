@@ -1,0 +1,53 @@
+name: Smoke
+
+# Uzun gerçek-veri koşusu: sonucu ayrı bir dala yazar (indirilebilir olsun diye).
+on:
+  workflow_dispatch:
+    inputs:
+      dakika:
+        description: "Koşu süresi (piyasa dakikası)"
+        required: false
+        default: "20"
+      sembol:
+        description: "Sembol sayısı"
+        required: false
+        default: "60"
+      etiket:
+        description: "Koşu etiketi"
+        required: false
+        default: "smoke"
+
+permissions:
+  contents: write
+
+jobs:
+  kosu:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Bağımlılıklar
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: v9 paper koşusu
+        env:
+          DAKIKA: ${{ github.event.inputs.dakika }}
+          SEMBOL: ${{ github.event.inputs.sembol }}
+          ETIKET: ${{ github.event.inputs.etiket }}
+        run: python3 -m bot.v9.cli paper --dakika "$DAKIKA" --sembol "$SEMBOL" --etiket "$ETIKET"
+      - name: Sonucu dala yaz
+        if: always()
+        env:
+          ETIKET: ${{ github.event.inputs.etiket }}
+        run: |
+          git config user.name "konsey-bot"
+          git config user.email "konsey@users.noreply.github.com"
+          DAL="smoke/${ETIKET}-$(date -u +%Y%m%d-%H%M%S)"
+          git checkout -b "$DAL"
+          git add -A "runs/${ETIKET}" || true
+          git commit -m "smoke: ${ETIKET}" || echo "değişiklik yok"
+          git push origin "$DAL"
