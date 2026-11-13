@@ -17,3 +17,4 @@ runs/*/durum.json.tmp
 # konsey geçici çıktıları (gerçek oturumlar commit edilir)
 konsey/kuru-*/
 konsey/ci_*/
+yedek/
