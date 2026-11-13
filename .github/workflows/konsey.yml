@@ -52,6 +52,7 @@ jobs:
           python3 -m havuz.digest
 
       - name: Konsey oturumu
+        continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
@@ -68,6 +69,7 @@ jobs:
           echo "ETIKET=$ETIKET" >> "$GITHUB_ENV"
 
       - name: Çıktıyı yükle
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: konsey-${{ env.ETIKET }}
@@ -77,6 +79,7 @@ jobs:
           retention-days: 30
 
       - name: Sonucu PR olarak aç
+        if: always()
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -91,5 +94,19 @@ jobs:
             --body-file "konsey/${ETIKET}/karar.md" || echo "PR açılamadı"
 
       - name: Özet
+        if: always()
         run: |
-          cat "konsey/${ETIKET}/karar.md" >> "$GITHUB_STEP_SUMMARY"
+          if [ -f "konsey/${ETIKET}/karar.md" ]; then
+            cat "konsey/${ETIKET}/karar.md" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "karar.md üretilemedi — oturum.json içindeki hata kayıtlarına bak" >> "$GITHUB_STEP_SUMMARY"
+          fi
+          python3 - <<'PY' >> "$GITHUB_STEP_SUMMARY" || true
+          import json,glob,os
+          for f in glob.glob("konsey/*/oturum.json"):
+              d=json.load(open(f))
+              h=[c for c in d.get("cagri",[]) if c.get("hata")]
+              print(f"\n### {f}\n- çağrı: {d.get('kullanilan_cagri')}, hata: {len(h)}")
+              for c in h[:6]:
+                  print(f"- `{c['saglayici']}/{c['model']}` tur{c['tur']}: {c['hata'][:160]}")
+          PY

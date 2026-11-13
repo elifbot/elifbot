@@ -34,10 +34,11 @@ def test_kuru_kosu_boru_hatti(tmp_path, monkeypatch):
 
 
 def test_butce_siniri():
+    """Bütçe dolunca ağa hiç çıkılmaz (deterministik, ağ gerektirmez)."""
     b = sg.Butce(azami_cagri=2)
-    for _ in range(5):
-        sg.cagir("github", [{"role": "user", "content": "x"}], butce=b, kuru_kosu=False)
-    assert b.kullanilan <= 2
+    b.kullanilan = 2
+    assert sg.cagir("github", [{"role": "user", "content": "x"}], butce=b) == ""
+    assert b.kullanilan == 2
 
 
 def test_anahtar_yoksa_cagri_yapilmaz(monkeypatch):

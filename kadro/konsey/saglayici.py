@@ -26,6 +26,7 @@ class Saglayici:
     taban: str
     anahtar_env: str | None
     varsayilan_model: str
+    yedek_model: str = ""
 
     def anahtar(self) -> str:
         return os.environ.get(self.anahtar_env, "") if self.anahtar_env else ""
@@ -33,10 +34,10 @@ class Saglayici:
 
 SAGLAYICILAR: dict[str, Saglayici] = {
     "github": Saglayici("github", "https://models.github.ai/inference", "GITHUB_TOKEN",
-                        "openai/gpt-4.1-mini"),
+                        "openai/gpt-4.1-mini", "openai/gpt-4o-mini"),
     "nvidia": Saglayici("nvidia", "https://integrate.api.nvidia.com/v1", "NVIDIA_API_KEY",
-                        "meta/llama-3.3-70b-instruct"),
-    "ollama": Saglayici("ollama", "http://localhost:11434/v1", None, "llama3.1"),
+                        "meta/llama-3.3-70b-instruct", "meta/llama-3.1-8b-instruct"),
+    "ollama": Saglayici("ollama", "http://localhost:11434/v1", None, "llama3.1", ""),
 }
 
 
@@ -112,21 +113,46 @@ def cagir(saglayici: str, mesajlar: list[dict], model: str | None = None,
     if anahtar:
         basliklar["Authorization"] = f"Bearer {anahtar}"
 
+    denenecek = [model] + ([s.yedek_model] if s.yedek_model and s.yedek_model != model else [])
+    for model_dene in denenecek:
+        metin, hata = _tek_cagri(s, model_dene, mesajlar, butce, rol, tur,
+                                 sicaklik, azami_token, istem_karakter)
+        if metin:
+            return metin
+        son_hata = hata
+        if "HTTP 4" not in hata:      # 401/403/404 → yedek model de fayda etmez, dene yine de
+            continue
+    butce.kayitlar.append(Cagri(saglayici, model, rol, tur, istem_karakter, "", 0.0, son_hata))
+    return ""
+
+
+def _tek_cagri(s: "Saglayici", model: str, mesajlar: list[dict], butce: "Butce", rol: str,
+               tur: int, sicaklik: float, azami_token: int, istem_karakter: int):
+    anahtar = s.anahtar()
+    hac = {"Content-Type": "application/json"}
+    if anahtar:
+        hac["Authorization"] = f"Bearer {anahtar}"
+    govde = json.dumps({"model": model, "messages": mesajlar,
+                        "temperature": sicaklik, "max_tokens": azami_token}).encode()
     son_hata = ""
     for deneme in range(3):
         t0 = time.time()
         try:
             istek = urllib.request.Request(f"{s.taban}/chat/completions", data=govde,
-                                           headers=basliklar, method="POST")
+                                           headers=hac, method="POST")
             with urllib.request.urlopen(istek, timeout=120) as y:
                 d = json.loads(y.read().decode())
             metin = (d.get("choices") or [{}])[0].get("message", {}).get("content", "") or ""
             butce.kullanilan += 1
-            butce.kayitlar.append(Cagri(saglayici, model, rol, tur, istem_karakter,
+            butce.kayitlar.append(Cagri(s.ad, model, rol, tur, istem_karakter,
                                         metin, round(time.time() - t0, 1)))
-            return metin
+            return metin, ""
         except urllib.error.HTTPError as e:
-            son_hata = f"HTTP {e.code}"
+            try:
+                govde_hata = e.read().decode()[:200]
+            except Exception:
+                govde_hata = ""
+            son_hata = f"HTTP {e.code} {govde_hata}"[:200]
             if e.code in (429, 500, 502, 503, 504) and deneme < 2:
                 bekle = float(e.headers.get("Retry-After") or (2 ** deneme * 5))
                 time.sleep(min(bekle, 60))
@@ -138,10 +164,7 @@ def cagir(saglayici: str, mesajlar: list[dict], model: str | None = None,
                 time.sleep(2 ** deneme * 3)
                 continue
             break
-
-    butce.kayitlar.append(Cagri(saglayici, model, rol, tur, istem_karakter, "",
-                                0.0, son_hata))
-    return ""
+    return "", son_hata
 
 
 def _kuru_yanit(rol: str, tur: int, istem_karakter: int) -> str:
