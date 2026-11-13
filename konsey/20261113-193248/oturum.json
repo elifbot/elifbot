@@ -1,0 +1,151 @@
+{
+ "gorev": "ACARBOT v9'un ölçülebilir kenarını artır: en yüksek etkili 5 değişiklik. Bilinen zayıflık: 44 işlemde 24.66 dolar komisyon, çıkışların yüzde 82'si rejim dönüşüyle küçük zararla kapanıyor.",
+ "saglayicilar": [
+  "github",
+  "nvidia"
+ ],
+ "modeller": {
+  "github": [
+   null
+  ],
+  "nvidia": [
+   null
+  ]
+ },
+ "cagri": [
+  {
+   "saglayici": "github",
+   "model": "openai/gpt-4.1-mini",
+   "rol": "mimar",
+   "tur": 1,
+   "istem_karakter": 22794,
+   "yanit": "",
+   "saniye": 0.0,
+   "hata": "openai/gpt-4o-mini: JSON değil (4 bayt): 'OK\\r\\n'"
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "01-ai/yi-large",
+   "rol": "mimar",
+   "tur": 1,
+   "istem_karakter": 22794,
+   "yanit": "",
+   "saniye": 0.0,
+   "hata": "meta/llama-3.1-8b-instruct: HTTP 410 {\"type\":\"about:blank\",\"title\":\"Gone\",\"status\":410,\"detail\":\"The model 'meta/llama-3.1-8b-instruct' has reached its end of life on 2026-08-26T09:00:00Z and is no longer available.\"}\n"
+  },
+  {
+   "saglayici": "github",
+   "model": "openai/gpt-4.1-mini",
+   "rol": "risk_subayi",
+   "tur": 1,
+   "istem_karakter": 22658,
+   "yanit": "",
+   "saniye": 0.0,
+   "hata": "openai/gpt-4o-mini: JSON değil (4 bayt): 'OK\\r\\n'"
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "01-ai/yi-large",
+   "rol": "risk_subayi",
+   "tur": 1,
+   "istem_karakter": 22658,
+   "yanit": "",
+   "saniye": 0.0,
+   "hata": "meta/llama-3.1-8b-instruct: HTTP 410 {\"type\":\"about:blank\",\"title\":\"Gone\",\"status\":410,\"detail\":\"The model 'meta/llama-3.1-8b-instruct' has reached its end of life on 2026-08-26T09:00:00Z and is no longer available.\"}\n"
+  },
+  {
+   "saglayici": "github",
+   "model": "openai/gpt-4.1-mini",
+   "rol": "icra",
+   "tur": 1,
+   "istem_karakter": 22692,
+   "yanit": "",
+   "saniye": 0.0,
+   "hata": "openai/gpt-4o-mini: JSON değil (4 bayt): 'OK\\r\\n'"
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "01-ai/yi-large",
+   "rol": "icra",
+   "tur": 1,
+   "istem_karakter": 22692,
+   "yanit": "",
+   "saniye": 0.0,
+   "hata": "meta/llama-3.1-8b-instruct: HTTP 410 {\"type\":\"about:blank\",\"title\":\"Gone\",\"status\":410,\"detail\":\"The model 'meta/llama-3.1-8b-instruct' has reached its end of life on 2026-08-26T09:00:00Z and is no longer available.\"}\n"
+  },
+  {
+   "saglayici": "github",
+   "model": "openai/gpt-4.1-mini",
+   "rol": "test",
+   "tur": 1,
+   "istem_karakter": 22594,
+   "yanit": "",
+   "saniye": 0.0,
+   "hata": "openai/gpt-4o-mini: JSON değil (4 bayt): 'OK\\r\\n'"
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "01-ai/yi-large",
+   "rol": "test",
+   "tur": 1,
+   "istem_karakter": 22594,
+   "yanit": "",
+   "saniye": 0.0,
+   "hata": "meta/llama-3.1-8b-instruct: HTTP 410 {\"type\":\"about:blank\",\"title\":\"Gone\",\"status\":410,\"detail\":\"The model 'meta/llama-3.1-8b-instruct' has reached its end of life on 2026-08-26T09:00:00Z and is no longer available.\"}\n"
+  },
+  {
+   "saglayici": "github",
+   "model": "openai/gpt-4.1-mini",
+   "rol": "olcum",
+   "tur": 1,
+   "istem_karakter": 22457,
+   "yanit": "",
+   "saniye": 0.0,
+   "hata": "openai/gpt-4o-mini: JSON değil (4 bayt): 'OK\\r\\n'"
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "01-ai/yi-large",
+   "rol": "olcum",
+   "tur": 1,
+   "istem_karakter": 22457,
+   "yanit": "",
+   "saniye": 0.0,
+   "hata": "meta/llama-3.1-8b-instruct: HTTP 410 {\"type\":\"about:blank\",\"title\":\"Gone\",\"status\":410,\"detail\":\"The model 'meta/llama-3.1-8b-instruct' has reached its end of life on 2026-08-26T09:00:00Z and is no longer available.\"}\n"
+  },
+  {
+   "saglayici": "github",
+   "model": "openai/gpt-4.1-mini",
+   "rol": "ops",
+   "tur": 1,
+   "istem_karakter": 22808,
+   "yanit": "",
+   "saniye": 0.0,
+   "hata": "openai/gpt-4o-mini: JSON değil (4 bayt): 'OK\\r\\n'"
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "01-ai/yi-large",
+   "rol": "ops",
+   "tur": 1,
+   "istem_karakter": 22808,
+   "yanit": "",
+   "saniye": 0.0,
+   "hata": "meta/llama-3.1-8b-instruct: HTTP 410 {\"type\":\"about:blank\",\"title\":\"Gone\",\"status\":410,\"detail\":\"The model 'meta/llama-3.1-8b-instruct' has reached its end of life on 2026-08-26T09:00:00Z and is no longer available.\"}\n"
+  },
+  {
+   "saglayici": "github",
+   "model": "openai/gpt-4.1-mini",
+   "rol": "sekreter",
+   "tur": 3,
+   "istem_karakter": 612,
+   "yanit": "",
+   "saniye": 0.0,
+   "hata": "openai/gpt-4o-mini: JSON değil (4 bayt): 'OK\\r\\n'"
+  }
+ ],
+ "kullanilan_cagri": 0,
+ "kararlar": [],
+ "dusen": [],
+ "hatalar": []
+}
