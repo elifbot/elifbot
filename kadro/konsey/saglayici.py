@@ -36,7 +36,7 @@ SAGLAYICILAR: dict[str, Saglayici] = {
     "github": Saglayici("github", "https://models.github.ai/inference", "GITHUB_TOKEN",
                         "openai/gpt-4.1-mini", "openai/gpt-4o-mini"),
     "nvidia": Saglayici("nvidia", "https://integrate.api.nvidia.com/v1", "NVIDIA_API_KEY",
-                        "meta/llama-3.3-70b-instruct", "meta/llama-3.1-8b-instruct"),
+                        os.environ.get("ACARBOT_MODEL", "google/gemma-4-31b-it"), "meta/llama-3.3-70b-instruct"),
     "ollama": Saglayici("ollama", "http://localhost:11434/v1", None, "llama3.1", ""),
 }
 
@@ -156,7 +156,7 @@ def _tek_cagri(s: "Saglayici", model: str, mesajlar: list[dict], butce: "Butce",
         try:
             istek = urllib.request.Request(f"{s.taban}/chat/completions", data=govde,
                                            headers=hac, method="POST")
-            zaman = float(os.environ.get("ACARBOT_ZAMAN_ASIMI", "120"))
+            zaman = float(os.environ.get("ACARBOT_ZAMAN_ASIMI", "300"))
             with urllib.request.urlopen(istek, timeout=zaman) as y:
                 ham = y.read().decode(errors="ignore")
             try:
@@ -221,7 +221,7 @@ IYI = ("nemotron", "llama-3.3", "llama-3.1", "deepseek", "qwen", "mistral", "gpt
 KOTU = ("embed", "rerank", "guard", "bge", "e5-", "clip", "vision-only", "safety")
 
 # çalışan modeli süreç içinde hatırla: her rol için yeniden keşif yapılmasın
-_CALISAN: dict[str, str] = {}
+_CALISAN: dict[str, str] = {"nvidia": os.environ.get("ACARBOT_MODEL", "google/gemma-4-31b-it")}
 
 
 def model_adaylari(saglayici: str, en_fazla: int = 4) -> list[str]:
