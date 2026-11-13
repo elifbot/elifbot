@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OTOMAT — Kripto Alım-Satım Terminali</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0B0E11; --panel:#12161C; --panel2:#161B22; --cizgi:#1E252C; --cizgi2:#2A323C;
+    --metin:#DEE3EA; --soluk:#8792A0; --cok-soluk:#5A6472;
+    --sari:#F0B90B; --yesil:#0ECB81; --kirmizi:#F6465D; --mavi:#5BC0EB;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--metin);font-family:'IBM Plex Mono',monospace;font-size:13px;min-height:100vh}
+  ::-webkit-scrollbar{width:8px;height:8px}
+  ::-webkit-scrollbar-thumb{background:var(--cizgi2);border-radius:4px}
+  ::-webkit-scrollbar-track{background:transparent}
+
+  /* ---------- Üst bar ---------- */
+  .ustbar{display:flex;align-items:center;gap:14px;padding:0 18px;height:54px;
+    border-bottom:1px solid var(--cizgi);background:var(--panel);position:sticky;top:0;z-index:20}
+  .marka{font-family:'Space Grotesk';font-weight:700;font-size:17px;letter-spacing:.14em}
+  .marka i{font-style:normal;color:var(--sari)}
+  .marka small{display:block;font-family:'IBM Plex Mono';font-weight:400;font-size:9px;
+    letter-spacing:.2em;color:var(--soluk);margin-top:1px}
+  select,.giris{background:var(--panel2);border:1px solid var(--cizgi2);color:var(--metin);
+    font-family:inherit;font-size:12px;border-radius:4px;padding:7px 10px;cursor:pointer}
+  select:focus{outline:none;border-color:var(--sari)}
+  .canli{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--soluk)}
+  .led{width:8px;height:8px;border-radius:50%;background:var(--cok-soluk);flex:none}
+  .led.acik{background:var(--yesil);box-shadow:0 0 6px rgba(14,203,129,.7);animation:nabiz 1.6s infinite}
+  @keyframes nabiz{50%{opacity:.45}}
+  .bosluk{flex:1}
+  .fiyat{font-size:15px;font-weight:600;letter-spacing:.02em}
+  .fiyat.up{color:var(--yesil)} .fiyat.down{color:var(--kirmizi)}
+  .btn{border:1px solid var(--cizgi2);background:var(--panel2);color:var(--metin);font-family:inherit;
+    font-size:12px;font-weight:500;padding:8px 16px;border-radius:4px;cursor:pointer;transition:all .12s}
+  .btn:hover{border-color:var(--soluk)}
+  .btn.acilabilir{border-color:var(--yesil);color:var(--yesil)}
+  .btn.acilabilir:hover{background:rgba(14,203,129,.1)}
+  .btn.kapatilabilir{border-color:var(--kirmizi);color:var(--kirmizi)}
+  .btn.kapatilabilir:hover{background:rgba(246,70,93,.1)}
+
+  /* ---------- Ana ızgara ---------- */
+  .shell{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:12px;padding:12px 14px;max-width:1560px;margin:0 auto}
+  @media(max-width:1050px){.shell{grid-template-columns:1fr}}
+
+  .panel{background:var(--panel);border:1px solid var(--cizgi);border-radius:6px;overflow:hidden}
+  .p-baslik{display:flex;align-items:center;justify-content:space-between;gap:10px;
+    padding:10px 14px;border-bottom:1px solid var(--cizgi);font-size:11px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--soluk)}
+  .p-baslik b{color:var(--metin);font-weight:600}
+
+  /* ---------- Grafik ---------- */
+  .grafikSarma{position:relative;background:var(--bg)}
+  canvas{display:block;width:100%}
+  #anaCanvas{cursor:crosshair}
+  .okuma{position:absolute;top:8px;left:12px;font-size:11px;color:var(--soluk);pointer-events:none;line-height:1.7;background:rgba(11,14,17,.75);padding:6px 9px;border-radius:4px;border:1px solid var(--cizgi)}
+  .okuma b{color:var(--metin);font-weight:500}
+  .legends{position:absolute;top:8px;right:12px;display:flex;gap:14px;font-size:10px;color:var(--soluk);pointer-events:none}
+  .legends i{font-style:normal;display:inline-block;width:14px;height:2px;vertical-align:middle;margin-right:5px}
+
+  /* ---------- Kenar sütunu ---------- */
+  .kenar{display:flex;flex-direction:column;gap:12px}
+  .statlar{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--cizgi)}
+  .stat{padding:12px 14px;border-bottom:1px solid var(--cizgi)}
+  .stat:nth-child(odd){border-right:1px solid var(--cizgi)}
+  .stat .s-etiket{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--soluk);margin-bottom:5px}
+  .stat .s-deger{font-size:17px;font-weight:600;letter-spacing:.01em}
+  .pozisyon-alani{padding:14px}
+  .yok{color:var(--cok-soluk);font-size:12px;text-align:center;padding:16px 0}
+  .poz-satir{display:flex;justify-content:space-between;font-size:12px;padding:4px 0}
+  .poz-satir span:first-child{color:var(--soluk)}
+  .strateji-alan{padding:14px;display:flex;flex-direction:column;gap:8px}
+  .strateji-alan select{width:100%}
+  .ipucu{font-size:10.5px;color:var(--cok-soluk);line-height:1.6}
+  .logSarma{max-height:300px;overflow-y:auto;padding:8px 0}
+  .log-satir{display:flex;gap:10px;padding:5px 14px;font-size:11.5px;border-bottom:1px solid rgba(30,37,44,.5)}
+  .log-satir .saat{color:var(--cok-soluk);flex:none}
+  .log-al{color:var(--yesil)} .log-sat{color:var(--kirmizi)} .log-bilgi{color:var(--soluk)}
+
+  /* ---------- Backtest ---------- */
+  .bt-panel{grid-column:1 / -1}
+  .bt-govde{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:0}
+  @media(max-width:1050px){.bt-govde{grid-template-columns:1fr}}
+  .bt-metrikler{display:grid;grid-template-columns:1fr 1fr;border-left:1px solid var(--cizgi)}
+  .bt-metrikler .stat{border-right:0}
+
+  /* ---------- Alt durum çubuğu ---------- */
+  .durum-cubuk{position:fixed;bottom:0;left:0;right:0;height:28px;background:var(--panel);
+    border-top:1px solid var(--cizgi);display:flex;align-items:center;gap:20px;padding:0 18px;font-size:10.5px;color:var(--soluk);z-index:20}
+  .durum-cubuk .ayrac{width:1px;height:12px;background:var(--cizgi2)}
+
+  /* ---------- Toast ---------- */
+  .toastlar{position:fixed;bottom:42px;right:18px;z-index:90;display:flex;flex-direction:column;gap:8px}
+  .toast{background:var(--panel2);border:1px solid var(--cizgi2);border-left:3px solid var(--sari);
+    color:var(--metin);padding:10px 16px;border-radius:5px;font-size:12px;animation:tGir .25s ease}
+  .toast.toplu{border-left-color:var(--kirmizi)} .toast.satti{border-left-color:var(--yesil)}
+  @keyframes tGir{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<header class="ustbar">
+  <div class="marka">O<i>TO</i>MAT<small>Freqtrade modeli · alım-satım botu</small></div>
+  <div class="canli"><span class="led" id="led"></span><span id="baglantiDurum">bağlanıyor…</span></div>
+  <div class="bosluk"></div>
+  <span class="fiyat" id="canliFiyat">—</span>
+  <select id="sembolSec">
+    <option value="BTCUSDT">BTC/USDT</option>
+    <option value="ETHUSDT">ETH/USDT</option>
+    <option value="SOLUSDT">SOL/USDT</option>
+    <option value="BNBUSDT">BNB/USDT</option>
+    <option value="XRPUSDT">XRP/USDT</option>
+    <option value="AVAXUSDT">AVAX/USDT</option>
+  </select>
+  <select id="periyotSec">
+    <option value="5m">5 dk</option>
+    <option value="15m" selected>15 dk</option>
+    <option value="1h">1 saat</option>
+    <option value="4h">4 saat</option>
+    <option value="1d">1 gün</option>
+  </select>
+  <button class="btn acilabilir" id="botBtn">▶ Botu Başlat</button>
+</header>
+
+<div class="shell">
+
+  <!-- Grafik -->
+  <div class="panel">
+    <div class="p-baslik"><span>Canlı Grafik · <b id="grafikBaslik">BTCUSDT 15m</b></span><span id="mumSayisi">—</span></div>
+    <div class="grafikSarma">
+      <canvas id="anaCanvas" height="520"></canvas>
+      <div class="okuma" id="okuma">imleci grafiğe getirin</div>
+      <div class="legends">
+        <span><i style="background:#F0B90B"></i>EMA20</span>
+        <span><i style="background:#5BC0EB"></i>EMA50</span>
+        <span><i style="background:#5A6472"></i>Bollinger</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Kenar sütunu -->
+  <aside class="kenar">
+    <div class="panel">
+      <div class="p-baslik"><span>Bot Durumu · <b id="botDurumYazi">DURDU</b></span></div>
+      <div class="statlar">
+        <div class="stat"><div class="s-etiket">Özsermaye</div><div class="s-deger" id="stOzsermaye">$10 000</div></div>
+        <div class="stat"><div class="s-etiket">Serbest Bakiye</div><div class="s-deger" id="stBakiye">$10 000</div></div>
+        <div class="stat"><div class="s-etiket">Gerçekleşen P&L</div><div class="s-deger" id="stPnl">—</div></div>
+        <div class="stat"><div class="s-etiket">İşlem / Kazanma</div><div class="s-deger" id="stIslem">0 / —</div></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="p-baslik"><span>Açık Pozisyon</span><span id="pozEtiket" style="color:var(--yesil)">—</span></div>
+      <div class="pozisyon-alani" id="pozisyonAlani"><div class="yok">bot beklemede — pozisyon yok</div></div>
+    </div>
+
+    <div class="panel">
+      <div class="p-baslik"><span>Strateji</span></div>
+      <div class="strateji-alan">
+        <select id="stratejiSec">
+          <option value="rsi">RSI Aşırı Alım-Satım (RSI 30/70)</option>
+          <option value="macd" selected>MACD Sinyal Kesişimi</option>
+          <option value="boll">Bollinger + RSI (kombine)</option>
+          <option value="oylama">Oylama (3 strateji ≥ 2 oy)</option>
+        </select>
+        <p class="ipucu" id="stratejiIpuclari">Sinyaller yalnızca <b>kapanmış</b> mumlar üzerinden, mum kapanışında bir kez değerlendirilir — bu, gerçek botlardaki lookahead hatasını engeller.</p>
+        <button class="btn" id="strokteste">Bu parite + periyot için geçmişe dönük test</button>
+      </div>
+    </div>
+
+    <div class="panel" style="flex:1">
+      <div class="p-baslik"><span>İşlem Günlüğü</span><span id="logSayi">0</span></div>
+      <div class="logSarma" id="logSarma"></div>
+    </div>
+  </aside>
+
+  <!-- Backtest -->
+  <div class="panel bt-panel">
+    <div class="p-baslik"><span>Geçmişe Dönük Test (Backtest)</span><span id="btOzet">henüz test yapılmadı</span></div>
+    <div class="bt-govde">
+      <div class="grafikSarma" style="background:var(--panel)"><canvas id="btCanvas" height="200"></canvas></div>
+      <div class="bt-metrikler">
+        <div class="stat"><div class="s-etiket">Getiri</div><div class="s-deger" id="btGetiri">—</div></div>
+        <div class="stat"><div class="s-etiket">İşlem Sayısı</div><div class="s-deger" id="btIslem">—</div></div>
+        <div class="stat"><div class="s-etiket">Kazanma Oranı</div><div class="s-deger" id="btKazanc">—</div></div>
+        <div class="stat"><div class="s-etiket">Maks. Düşüş</div><div class="s-deger" id="btDusus">—</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="durum-cubuk">
+  <span id="durum1">veri kaynağı: Binance genel API (gerçek fiyat)</span>
+  <span class="ayrac"></span>
+  <span id="durum2">emir modu: paper-trading (simülasyon)</span>
+  <span class="ayrac"></span>
+  <span id="durum3">bot: beklemede</span>
+</div>
+<div class="toastlar" id="toastlar"></div>
+
+<script>
+/* =============================================================
+   OTOMAT — Freqtrade mimarisinden uyarlanmış tarayıcı botu
+   Gerçek veri: Binance genel API + canlı WebSocket
+   Emirler: paper-trading (bakiye riske girmez)
+   ============================================================= */
+const $ = s => document.querySelector(s);
+const fmt = n => n==null ? '—' : Number(n).toLocaleString('tr-TR',{minimumFractionDigits:2,maximumFractionDigits:2});
+const fmtK = n => n>=1000 ? n.toLocaleString('tr-TR',{maximumFractionDigits:0}) : n.toFixed(2);
+
+/* ---------- Durum ---------- */
+let S = {
+  sembol:'BTCUSDT', periyot:'15m',
+  mumlar: [],           // {t,o,h,l,c,v}
+  ws:null, botAcik:false,
+  bakiye:10000, pozisyon:null, tamamlanan:[], // tamamlanan: {giris,cikis,pnl}
+  sonFiyat:null, strateji:'macd'
+};
+
+/* ---------- Göstergeler ---------- */
+function emaDizi(a,p){const k=2/(p+1);const r=[];let e=null;for(let i=0;i<a.length;i++){e=e===null?a[i]:a[i]*k+e*(1-k);r.push(e)}return r}
+function rsiDizi(a,p=14){
+  const r=[null];let ag=null,al=null;
+  for(let i=1;i<a.length;i++){
+    const d=a[i]-a[i-1],g=Math.max(d,0),l=Math.max(-d,0);
+    if(i<=p){ if(i===p){ag/=p;al/=p;r.push(100-100/(1+(al===0?100:ag/al)))} else {ag=(ag||0)+g;al=(al||0)+l;r.push(null)} }
+    else { ag=(ag*(p-1)+g)/p; al=(al*(p-1)+l)/p; r.push(100-100/(1+(al===0?100:ag/al))) }
+  } return r;
+}
+function gostergeler(mumlar){
+  const kapanis = mumlar.map(m=>m.c);
+  const rsi = rsiDizi(kapanis);
+  const m12 = emaDizi(kapanis,12), m26 = emaDizi(kapanis,26);
+  const macd = kapanis.map((_,i)=>m12[i]-m26[i]);
+  const sig = emaDizi(macd,9);
+  const b20 = [],ust=[],alt=[];
+  for(let i=0;i<kapanis.length;i++){
+    if(i<19){b20.push(null);ust.push(null);alt.push(null);continue}
+    let s=0;for(let j=i-19;j<=i;j++)s+=kapanis[j];
+    const ort=s/20;let v=0;for(let j=i-19;j<=i;j++)v+=(kapanis[j]-ort)**2;
+    const sd=Math.sqrt(v/20);
+    b20.push(ort);ust.push(ort+2*sd);alt.push(ort-2*sd);
+  }
+  return {rsi,macd,sig,ema20:emaDizi(kapanis,20),ema50:emaDizi(kapanis,50),b20,ust,alt};
+}
+
+/* ---------- Stratejiler: mum kapanışında sinyal ---------- */
+function stratejiSinyal(g,i){
+  if(i<55) return null;
+  const st=S.strateji, sinyaller=[];
+  const rsiG=(alt,ust)=>{const p=g.rsi[i-1],n=g.rsi[i];if(p==null||n==null)return null;
+    return (p<alt&&n>alt)?'AL':(p>ust&&n<ust)?'SAT':null};
+  const macdG=()=>g.macd[i-1]<=g.sig[i-1]&&g.macd[i]>g.sig[i]?'AL':(g.macd[i-1]>=g.sig[i-1]&&g.macd[i]<g.sig[i])?'SAT':null;
+  const bollG=()=>{const c=S.mumlar[i].c;
+    return (c<g.alt[i]&&g.rsi[i]<35)?'AL':(c>g.ust[i]&&g.rsi[i]>65)?'SAT':null};
+  if(st==='rsi') sinyaller.push(rsiG(30,70));
+  if(st==='macd') sinyaller.push(rsiG(30,70)&&null || macdG());
+  if(st==='boll') sinyaller.push(bollG());
+  if(st==='oylama'){ sinyaller.push(rsiG(30,70),macdG(),bollG());
+    const al=sinyaller.filter(x=>x==='AL').length, sat=sinyaller.filter(x=>x==='SAT').length;
+    return al>=2?'AL':sat>=2?'SAT':null;
+  }
+  return sinyaller.find(x=>x)||null;
+}
+let sonGosterge=null, sonSinyalIdx=-1, sonCizilenSinyaller=[];
+
+/* ---------- API ---------- */
+async function mumlariCek(){
+  $("#baglantiDurum").textContent='veri çekiliyor…';
+  const r = await fetch(`https://api.binance.com/api/v3/klines?symbol=${S.sembol}&interval=${S.periyot}&limit=500`);
+  if(!r.ok) throw new Error('API hatası');
+  const h = await r.json();
+  S.mumlar = h.map(m=>({t:m[0],o:+m[1],h:+m[2],l:+m[3],c:+m[4],v:+m[5]}));
+  S.sonFiyat = S.mumlar.at(-1).c;
+  sonGosterge = gostergeler(S.mumlar);
+  sinyalleriHesapla();
+  $("#baglantiDurum").textContent='veri yüklendi';
+  guncelle();
+}
+function sinyalleriHesapla(){
+  sonCizilenSinyaller=[];
+  const g=sonGosterge;
+  for(let i=55;i<S.mumlar.length;i++){
+    const s=stratejiSinyal(g,i);
+    if(s) sonCizilenSinyaller.push({i,tur:s,fiyat:S.mumlar[i].c});
+  }
+}
+function wsBaglan(){
+  if(S.ws) S.ws.close();
+  const url=`wss://stream.binance.com:9443/ws/${S.sembol.toLowerCase()}@kline_${S.periyot}`;
+  S.ws=new WebSocket(url);
+  S.ws.onopen=()=>{$("#led").classList.add('acik');$("#baglantiDurum").textContent=`canlı · ${S.sembol}`};
+  S.ws.onclose=()=>{$("#led").classList.remove('acik');setTimeout(wsBaglan,2000)};
+  S.ws.onerror=()=>S.ws.close();
+  S.ws.onmessage=e=>{
+    const k=JSON.parse(e.data).k;
+    const mum={t:k.t,o:+k.o,h:+k.h,l:+k.l,c:+k.c,v:+k.v};
+    const son=S.mumlar.at(-1);
+    if(son && k.t===son.t){ S.mumlar[S.mumlar.length-1]=mum }
+    else if(k.t>son.t){ 
+      // önceki mum KAPANDI → bot karar anı
+      S.mumlar.push(mum);
+      if(S.mumlar.length>600)S.mumlar.shift();
+      sonGosterge=gostergeler(S.mumlar);
+      sinyalleriHesapla();
+      mumKapandi(S.mumlar.length-1);
+    }
+    S.sonFiyat=mum.c;
+    guncelle();
+  };
+}
+
+/* ---------- İşlem motoru (paper trading) ---------- */
+function mumKapandi(idx){
+  if(!S.botAcik) return;
+  const sinyal = stratejiSinyal(sonGosterge, idx);
+  if(!sinyal) return;
+  const fiyat = S.mumlar[idx].c;
+  if(sinyal==='AL' && !S.pozisyon){
+    const miktar = S.bakiye*0.98/fiyat;
+    S.pozisyon={giris:fiyat,miktar,zaman:new Date()};
+    log('AL',`ALIM · $${fmt(fiyat)} · ${miktar.toFixed(6)} ${S.sembol.replace('USDT','')} · bakiyenin %98'i`);
+    toast(`${S.sembol} ALIM @ $${fmt(fiyat)}`,'toplu');
+  } else if(sinyal==='SAT' && S.pozisyon){
+    const cikis=fiyat*(1-0.001); // %0.1 komisyon
+    const pnl=(cikis-S.pozisyon.giris)*S.pozisyon.miktar;
+    S.bakiye+=S.pozisyon.miktar*cikis;
+    S.tamamlanan.push({pnl});
+    log('SAT',`SATIM · $${fmt(fiyat)} · P&L ${pnl>=0?'+':''}$${fmt(pnl)}`);
+    toast(`${S.sembol} SATIM @ $${fmt(fiyat)} — P&L ${pnl>=0?'+':''}$${fmt(pnl)}`,'satti');
+    S.pozisyon=null;
+  }
+}
+function acilabilirPnl(){
+  return S.pozisyon ? (S.sonFiyat-S.pozisyon.giris)*S.pozisyon.miktar : 0;
+}
+
+/* ---------- Grafik çizimi ---------- */
+const anaC=$('#anaCanvas'), anaX=anaC.getContext('2d');
+const rsiC=$('#anaCanvas'), rsiH=110; // RSI panelini aynı canvas'ın altına çizerim
+function boyutla(c){const dpr=window.devicePixelRatio||1;const w=c.parentElement.clientWidth;
+  c.width=w*dpr;c.height=c.clientHeight*dpr;c.style.width=w+'px';c.getContext('2d').setTransform(dpr,0,0,dpr,0,0);return w}
+let mouse=null;
+
+function grafigiCiz(){
+  const W=boyutla(anaC); const H=520, rsiTop=H-rsiH, fiyatH=rsiTop-30;
+  anaX.clearRect(0,0,W,H);
+  const N=Math.min(130,S.mumlar.length), basla=S.mumlar.length-N;
+  const mumlar=S.mumlar.slice(basla), g=sonGosterge;
+  if(!g) return;
+  const cw=W/N, mx=Math.max(...mumlar.map(m=>m.h)), mn=Math.min(...mumlar.map(m=>m.l));
+  const pd=(mx-mn)||1, y=v=>10+((mx-v)/pd)*(fiyakH-20); let fiyakH=fiyatH; const Y=v=>10+((mx-v)/pd)*(fiyatH-20);
+
+  // ızgara
+  anaX.strokeStyle='#151A20';anaX.lineWidth=1;
+  for(let i=0;i<=5;i++){const yy=10+i*(fiyatH-10)/5;anaX.beginPath();anaX.moveTo(0,yy);anaX.lineTo(W,yy);anaX.stroke();
+    anaX.fillStyle='#5A6472';anaX.font='10px IBM Plex Mono';anaX.fillText(fmtK(mx-pd*i/5),4,yy+11)}
+
+  // Bollinger
+  anaX.strokeStyle='rgba(90,100,114,.5)';anaX.beginPath();
+  ust.forEach((v,k)=>{if(v==null)return;const i=k-basla;if(i<0)return;const x=i*cw+cw/2;i===0?anaX.moveTo(x,Y(v)):anaX.lineTo(x,Y(v))});
+  anaX.stroke();anaX.beginPath();
+  g.alt.forEach((v,k)=>{if(v==null)return;const i=k-basla;if(i<0)return;const x=i*cw+cw/2;i===0?anaX.moveTo(x,Y(v)):anaX.lineTo(x,Y(v))});
+  anaX.stroke();
+
+  // mumlar + hacim
+  const vmax=Math.max(...mumlar.map(m=>m.v))||1;
+  mumlar.forEach((m,i)=>{
+    const x=i*cw+cw/2, up=m.c>=m.o;
+    anaX.fillStyle=up?'rgba(14,203,129,.35)':'rgba(246,70,93,.35)';
+    anaX.fillRect(i*cw+1,fiyatH-2+((rsiTop-40)*(1-m.v/vmax)),cw-2,(rsiTop-40)*(m.v/vmax)+2);
+    anaX.strokeStyle=up?'#0ECB81':'#F6465D';anaX.fillStyle=up?'#0ECB81':'#F6465D';
+    anaX.lineWidth=1;
+    anaX.beginPath();anaX.moveTo(x,Y(m.h));anaX.lineTo(x,Y(m.l));anaX.stroke();
+    const yo=Y(Math.max(m.o,m.c)), yh=Math.abs(Y(m.o)-Y(m.c))||1;
+    anaX.fillRect(x-Math.max(1,cw*0.32),yo,Math.max(2,cw*0.64),yh);
+  });
+
+  // EMA çizgileri
+  const cizgi=(arr,renk)=>{anaX.strokeStyle=renk;anaX.lineWidth=1.4;anaX.beginPath();let f=true;
+    arr.forEach((v,k)=>{if(v==null)return;const i=k-basla;if(i<0)return;const x=i*cw+cw/2;f?(anaX.moveTo(x,Y(v)),f=false):anaX.lineTo(x,Y(v))});anaX.stroke()};
+  cizgi(g.ema20,'#F0B90B'); cizgi(g.ema50,'#5BC0EB');
+
+  // sinyal okları
+  sonCizilenSinyaller.forEach(s=>{
+    const i=s.i-basla; if(i<0||i>=N) return;
+    const x=i*cw+cw/2;
+    anaX.fillStyle=s.tur==='AL'?'#0ECB81':'#F6465D';
+    anaX.beginPath();
+    if(s.tur==='AL'){anaX.moveTo(x-6,Y(s.fiyat)+16);anaX.lineTo(x+6,Y(s.fiyat)+16);anaX.lineTo(x,Y(s.fiyat)+4)}
+    else{anaX.moveTo(x-6,Y(s.fiyat)-16);anaX.lineTo(x+6,Y(s.fiyat)-16);anaX.lineTo(x,Y(s.fiyat)-4)}
+    anaX.closePath();anaX.fill();
+  });
+
+  // son fiyat çizgisi
+  const yy=Y(S.sonFiyat);
+  anaX.strokeStyle='rgba(240,185,11,.55)';anaX.setLineDash([4,4]);
+  anaX.beginPath();anaX.moveTo(0,yy);anaX.lineTo(W,yy);anaX.stroke();anaX.setLineDash([]);
+  anaX.fillStyle='#F0B90B';anaX.fillRect(W-74,yy-9,74,18);
+  anaX.fillStyle='#0B0E11';anaX.font='600 10px IBM Plex Mono';anaX.fillText(fmtK(S.sonFiyat),W-70,yy+3);
+
+  // ---- RSI paneli ----
+  anaX.strokeStyle='#1E252C';anaX.beginPath();anaX.moveTo(0,rsiTop);anaX.lineTo(W,rsiTop);anaX.stroke();
+  anaX.fillStyle='#5A6472';anaX.font='9px IBM Plex Mono';anaX.fillText('RSI 14',6,rsiTop+13);
+  const rY=v=>rsiTop+14+((100-v)/100)*(rsiH-22);
+  [30,50,70].forEach(l=>{anaX.strokeStyle=l===50?'#151A20':'rgba(90,100,114,.3)';
+    anaX.setLineDash(l===50?[]:[3,4]);anaX.beginPath();anaX.moveTo(0,rY(l));anaX.lineTo(W,rY(l));anaX.stroke();anaX.setLineDash([])});
+  anaX.strokeStyle='#B48CE0';
+  anaX.strokeStyle='#8FA3BF';anaX.lineWidth=1.3;anaX.beginPath();let fr=true;
+  g.rsi.forEach((v,k)=>{if(v==null)return;const i=k-basla;if(i<0||i>=N)return;const x=i*cw+cw/2;fr?(anaX.moveTo(x,rY(v)),fr=false):anaX.lineTo(x,rY(v))});
+  anaX.stroke();
+
+  // çapraz imleç
+  if(mouse && mouse.y<fiyatH){
+    anaX.strokeStyle='rgba(222,227,234,.25)';anaX.setLineDash([3,3]);
+    anaX.beginPath();anaX.moveTo(mouse.x,0);anaX.lineTo(mouse.x,fiyatH);anaX.moveTo(0,mouse.y);anaX.lineTo(W,mouse.y);anaX.stroke();anaX.setLineDash([]);
+    const idx=basla+Math.floor(mouse.x/cw); const m=S.mumlar[Math.max(0,Math.min(S.mumlar.length-1,idx))];
+    if(m)$('#okuma').innerHTML=`<b>${new Date(m.t).toLocaleString('tr-TR')}</b><br>A <b style="color:#0ECB81">${fmtK(m.o)}</b> · Y <b>${fmtK(m.h)}</b><br>D <b style="color:#F6465D">${fmtK(m.l)}</b> · K <b>${fmtK(m.c)}</b><br>Hacim <b>${fmtK(m.v)}</b>`;
+  }
+}
+anaC.addEventListener('mousemove',e=>{const r=anaC.getBoundingClientRect();mouse={x:e.clientX-r.left,y:e.clientY-r.top};anaC._h=520;grafigiCiz()});
+anaC.addEventListener('mouseleave',()=>{mouse=null;$('#okuma').textContent='imleci grafiğe getirin';grafigiCiz()});
+window.addEventListener('resize',()=>{anaC.style.height='520px';grafigiCiz();btCiz()});
+
+/* ---------- Backtest ---------- */
+function backtest(){
+  const g=sonGosterge, sonuc={es:[10000]}, islemler=[]; let bakiye=10000;
+  let zirve=10000, maxDusus=0;
+  for(let i=55;i<S.mumlar.length;i++){
+    // kaba güncelleme: sinyal yoksa pozisyonu taşı
+    const s=satriskBak(g,i);
+    if(s==='AL'&&!sonuc.poz){sonuc.poz=S.mumlar[i].c}
+    if(s==='SAT'&&sonuc.poz){
+      const c=S.mumlar[i].c*(1-0.001);
+      bakiye*= c/sonuc.poz; islemler.push(c>sonuc.poz);
+      sonuc.poz=null;
+    }
+    const anlik = sonuc.poz? bakiye*(S.mumlar[i].c/sonuc.poz) : bakiye;
+    zirve=Math.max(zirve,anlik);
+    maxDusus=Math.max(maxDusus,(zirve-anlik)/zirve*100);
+    sonuc.es.push(anlik);
+  }
+  const getiri=(bakiye/10000-1)*100;
+  $('#btGetiri').textContent=(getiri>=0?'+':'')+getiri.toFixed(2)+'%';
+  $('#btGetiri').style.color=getiri>=0?'var(--yesil)':'var(--kirmizi)';
+  $('#btIslem').textContent=islemler.length;
+  const k=islemler.filter(Boolean).length;
+  $('#btKazanc')=islemler.length?`${(k/islemler.length*100).toFixed(0)}% (${k}/${islemler.length})`:'—';
+  $('#btDusus').textContent='-'+maxDusus.toFixed(2)+'%';
+  $('#btOzet').textContent=`${S.sembol} · ${S.periyot} · son ${S.mumlar.length} mum`;
+  btEs=sonuc.es; btCiz();
+  toast('Backtest tamamlandı: '+(getiri>=0?'+':'')+getiri.toFixed(2)+'% getiri');
+}
+let btEs=[];
+function satriskBak(g,i){ // backtest için sinyal (görsel listeden bağımsız)
+  const kayit=sonCizilenSinyaller.find(s=>s.i===i); return kayit?kayit.tur:null;
+}
+function btCiz(){
+  const c=$('#btCanvas');const W=boyutla(c);const ctx=c.getContext('2d');
+  ctx.clearRect(0,0,W,200); if(!btEs.length)return;
+  const mx=Math.max(...btEs),mn=Math.min(...btEs),pd=(mx-mn)||1;
+  ctx.strokeStyle='#151A20';for(let i=0;i<=3;i++){ctx.beginPath();ctx.moveTo(0,i*50+25);ctx.lineTo(W,i*50+25);ctx.stroke()}
+  ctx.strokeStyle=$('#btGetiri').style.color||'#F0B90B';ctx.lineWidth=1.6;ctx.beginPath();
+  btEs.forEach((v,i)=>{const x=i/(btEs.length-1)*W,y=175-((v-mn)/pd)*150;i?ctx.lineTo(x,y):ctx.moveTo(x,y)});
+  ctx.stroke();ctx.fillStyle='#8792A0';ctx.font='10px IBM Plex Mono';
+  ctx.fillText('özsermaye eğrisi — başlangıç $10 000',8,16);
+  ctx.fillText('$'+fmt(mx),8,186);
+}
+
+/* ---------- Arayüz güncelleme ---------- */
+function guncelle(){
+  $('#canliFiyat').textContent='$'+fmtK(S.sonFiyat);
+  $('#canliFiyat').className='fiyat '+(S.mumlar.length>1&&S.sonFiyat>=S.mumlar[0].c?'up':'down');
+  $('#grafikBaslik').textContent=`${S.sembol} ${S.periyot}`;
+  $('#mumSayisi').textContent=`${S.mumlar.length} mum · ${sonCizilenSinyaller.length} sinyal`;
+  const ozt=S.bakiye+acilabilirPnl();
+  $('#stOzsermaye').textContent='$'+fmt(ozt);
+  $('#stBakiye').textContent='$'+fmt(S.bakiye);
+  const toplamPnl=S.tamamlanan.reduce((t,x)=>t+x.pnl,0);
+  const pnlEl=$('#stPnl'); pnlEl.textContent=(toplamPnl||acilabilirPnl()?(toplamPnl+acilabilirPnl()>=0?'+':''):'')+'$'+fmt(toplamPnl+acilabilirPnl());
+  pnlEl.style.color=(toplamPnl+acilabilirPnl())>=0?'var(--yesil)':'var(--kirmizi)';
+  const kazan=S.tamamlanan.filter(t=>t.pnl>0).length;
+  $('#stIslem').textContent=`${S.tamamlanan.length} / ${S.tamamlanan.length?Math.round(kazan/S.tamamlanan.length*100)+'%':'—'}`;
+  // pozisyon kartı
+  const pa=$('#pozisyonAlani'), et=$('#pozEtiket');
+  if(S.pozisyon){
+    const upnl=acilabilirPnl();
+    et.textContent='LONG';et.style.color='var(--yesil)';
+    pa.innerHTML=`<div class="poz-satir"><span>Giriş</span><span>$${fmt(S.pozisyon.giris)}</span></div>
+      <div class="poz-satir"><span>Miktar</span><span>${S.pozisyon.miktar.toFixed(6)}</span></div>
+      <div class="poz-satir"><span>Anlık P&L</span><span style="color:${upnl>=0?'var(--yesil)':'var(--kirmizi)'}">${upnl>=0?'+':''}$${fmt(upnl)}</span></div>
+      <div class="poz-satir"><span>Açılış</span><span>${S.pozisyon.zaman.toLocaleTimeString('tr-TR')}</span></div>`;
+  } else { et.textContent='—';et.style.color='var(--soluk)';
+    pa.innerHTML='<div class="yok">bot beklemede — pozisyon yok</div>'}
+  $('#durum3').textContent='bot: '+(S.botAcik?'çalışıyor — '+S.strateji+' stratejisi':'beklemede');
+  anaC.style.height='520px';grafigiCiz();
+}
+
+/* ---------- Günlük & toast ---------- */
+function log(tur,mesaj){
+  const d=document.createElement('div');d.className='log-satir';
+  const cls=tur==='AL'?'log-al':tur==='SAT'?'log-sat':'log-bilgi';
+  d.innerHTML=`<span class="saat">${new Date().toLocaleTimeString('tr-TR')}</span><span class="${cls}">${mesaj}</span>`;
+  $('#logSarma').prepend(d);
+  $('#logSayi').textContent=(+$('#logSayi').textContent||0)+1;
+}
+function toast(mesaj,tur){
+  const t=document.createElement('div');t.className='toast '+(tur||'');t.textContent=mesaj;
+  $('#toastlar').appendChild(t);setTimeout(()=>{t.style.opacity=0;t.style.transition='opacity .3s';setTimeout(()=>t.remove(),300)},3200);
+}
+
+/* ---------- Etkileşim ---------- */
+$('#botBtn').onclick=()=>{
+  S.botAcik=!S.botAcik;
+  $('#botBtn').textContent=S.botAcik?'■ Botu Durdur':'▶ Botu Başlat';
+  $('#botBtn').className='btn '+(S.botAcik?'kapatilabilir':'acilabilir');
+  $('#botDurumYazi').textContent=S.botAcik?'ÇALIŞIYOR':'DURDU';
+  $('#botDurumYazi').style.color=S.botAcik?'var(--yesil)':'var(--metin)';
+  if(S.botAcik){
+    if(!S.pozisyon&&!S.tamamlanan.length){log('bilgi','bot başlatıldı · sinyaller kapanan mumlarda değerlendirilecek · başlangıç bakiyesi $10 000')}
+    toast('Bot çalışıyor — '+$('#stratejiSec').selectedOptions[0].text);
+  } else toast('Bot durduruldu');
+};
+$('#stratejiSec').onchange=e=>{
+  S.strateji=e.target.value;
+  sonGosterge=gostergeler(S.mumlar);
+  sinyalleriHesapla(); guncelle();
+  const aciklama={rsi:'RSI 30 seviyesini yukarı kırınca alır, 70'i aşağı kırınca satar.',
+    macd:'MACD çizgisinin sinyal çizgisini yukarı kesmesi alım, aşağı kesmesi satım sinyalidir.',
+    boll:'Fiyat alt bandın altında + RSI<35 iken alır; üst bant + RSI>65 iken satar.',
+    oylama:'Üç stratejinin en az ikisi aynı yönde sinyal verirse işlem yapar.'}[S.strateji];
+  $('#stratejiIpuclari').textContent=aciklama+' Sinyaller yalnızca kapanmış mumlar üzerinden değerlendirilir.';
+};
+$('#sembolSec').onchange=async e=>{S.sembol=e.target.value;await yenidenBasla('parite değişti: '+S.sembol)};
+$('#periyotSec').onchange=async e=>{S.periyot=e.target.value;await yenidenBasla('periyot değişti: '+S.periyot)};
+$('#strokteste').onclick=backtest;
+
+async function yenidenBasla(neden){
+  log('bilgi',neden+' — geçmiş veriler yeniden yükleniyor');
+  try{await mumlariCek();wsBaglan()}catch(err){toast('Veri alınamadı: '+err.message)}
+}
+
+/* ---------- Başlangıç ---------- */
+(async()=>{
+  try{
+    await mumlariCek();
+    wsBaglan();
+    log('bilgi','OTOMAT hazır · veriler Binance genel API üzerinden gerçek zamanlı');
+    log('bilgi','emirler paper-trading modunda: bakiye simülasyondur, gerçek para kullanılmaz');
+  }catch(e){ $('#baglantiDurum').textContent='bağlantı hatası'; toast('Başlangıç hatası: '+e.message) }
+})();
+</script>
+</body>
+</html>

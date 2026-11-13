@@ -1,0 +1,14 @@
+{
+  "duration_sec": 600.0,
+  "venue": "gateio",
+  "market": "USDT perpetual",
+  "interval": "5m",
+  "symbols": 20,
+  "strategy": "trend",
+  "source": "acarbot-system (1).html",
+  "real_orders": 0,
+  "council_mode": "RULE_BASED_QUANT",
+  "fees_bps_per_side": 5.5,
+  "slippage_bps_per_side": 2,
+  "real_money_approved": false
+}

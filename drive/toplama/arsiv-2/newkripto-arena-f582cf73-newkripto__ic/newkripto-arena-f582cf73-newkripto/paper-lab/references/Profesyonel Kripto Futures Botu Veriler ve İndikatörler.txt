@@ -1,0 +1,133 @@
+
+
+===== SAYFA 1 =====
+
+Profesyonel Kripto Futures Botu: Kullanılacak
+Veriler ve İndikatörler
+Önemli not: Hiçbir indikatör tek başına kazandırmaz. Profesyonel botlarda edge (avantaj)
+genelde veri çeşitliliği + rejim tespiti + risk yönetimi + düşük maliyetli işlem
+birleşiminden gelir. İndikatörler sadece girdidir.
+1. Piyasa Rejimi Tespiti (Botun Beyni)
+Bot önce "piyasa şu an hangi modda?" sorusunu cevaplamalı, çünkü trend stratejisi range
+piyasada, range stratejisi trend piyasada zarar ettirir.
+ADX (+DI / -DI): Trend gücü (25 üstü trend, 20 altı yatay)
+Choppiness Index: Yatay/trendli ayrımı
+Hurst Exponent: Trend mi mean-reversion mı eğilimi
+Bollinger Band Width / Keltner Squeeze: Sıkışma ve patlama öncesi tespiti
+Realized Volatility / Parkinson / Garman-Klass volatilite: Volatilite rejimi
+HMM (Hidden Markov Model) veya k-means ile rejim sınıflandırma
+BTC dominansı ve BTC korelasyonu: Altcoin işlemlerinde BTC rejimi filtre olarak
+2. Trend İndikatörleri
+EMA (9/21/50/100/200) ve EMA ribbon
+Supertrend
+Ichimoku Cloud
+Parabolic SAR
+VWAP (günlük, haftalık, anchored VWAP)
+Donchian Channel (breakout)
+Linear Regression Channel
+Hull MA, KAMA (Kaufman Adaptive MA): Gecikmesi düşük/adaptif ortalamalar
+3. Momentum / Osilatörler
+RSI (özellikle divergence tespiti)
+Stochastic RSI
+MACD (histogram eğimi ve divergence)
+CCI, Williams %R
+Profesyonel Kripto Futures Botu: Veriler ve İndikatörler
+Page 1 of 4
+
+===== SAYFA 2 =====
+
+ROC (Rate of Change)
+TSI (True Strength Index)
+Awesome Oscillator
+4. Volatilite ve Stop/Hedef Belirleme
+ATR: Dinamik stop-loss, pozisyon büyüklüğü, take-profit
+Bollinger Bands (%B)
+Keltner Channel
+Chandelier Exit
+Implied Volatility / DVOL (Deribit): Beklenen volatilite
+5. Hacim ve Order Flow (Profesyonel Fark Burada Başlar)
+Volume Profile (POC, VAH, VAL, HVN/LVN): Önemli destek/direnç seviyeleri
+OBV, CMF, MFI, Accumulation/Distribution
+CVD (Cumulative Volume Delta): Gerçek alıcı/satıcı baskısı
+Footprint / delta analizi
+Order Book Imbalance (bid/ask derinliği dengesizliği)
+Order book heatmap / likidite duvarları
+Tape reading: Agresif market emirleri, büyük işlem tespiti
+Spoofing / iceberg emir tespiti (ileri seviye)
+6. Futures'a Özgü Veriler (Kripto İçin Kritik)
+Funding Rate: Aşırı pozitif = long kalabalık (short fırsatı), aşırı negatif = tersi
+Open Interest (OI): Fiyat + OI kombinasyonu:
+Fiyat↑ + OI↑ = güçlü trend
+Fiyat↑ + OI↓ = short squeeze, zayıf hareket
+Fiyat↓ + OI↑ = yeni short'lar, düşüş devamı
+Fiyat↓ + OI↓ = long tasfiyesi
+Likidasyon verileri ve heatmap (Coinglass vb.): Likidite avı bölgeleri
+Long/Short Ratio (genel hesap ve top trader ayrı)
+Basis / Premium Index: Futures-spot farkı
+Taker Buy/Sell Ratio
+Perp vs Quarterly futures spread
+Profesyonel Kripto Futures Botu: Veriler ve İndikatörler
+Page 2 of 4
+
+===== SAYFA 3 =====
+
+Opsiyon verileri: Max pain, put/call ratio, gamma exposure, skew (Deribit)
+Cross-exchange funding farkları ve fiyat farkları
+7. Market Yapısı / Fiyat Aksiyonu
+Destek/direnç, swing high/low, market structure (HH/HL, LH/LL), BOS/CHoCH
+Fibonacci retracement / extension
+Pivot noktaları
+Order block, Fair Value Gap, likidite sweep (SMC mantığı)
+Mum formasyonları (engulfing, pin bar): Tek başına zayıf, konumla birlikte işe yarar
+Multi-timeframe analiz: Üst zaman diliminde yön, alt zaman diliminde giriş
+8. On-chain Veriler
+Exchange inflow/outflow (borsaya giren/çıkan coin)
+Whale transfer takibi
+Stablecoin arzı ve borsa stablecoin rezervleri
+MVRV, NUPL, SOPR (özellikle BTC için makro döngü)
+Miner flow, hash rate
+9. Makro ve Duygu Verileri
+Fear & Greed Index
+DXY, ABD 10Y tahvil faizi, S&P500/Nasdaq korelasyonu
+Ekonomik takvim: FOMC, CPI, NFP (bu saatlerde bot pozisyonu kapatmalı veya
+durmalı)
+Spot ETF akışları (BTC/ETH)
+Sosyal medya/haber duygu analizi: Twitter/X, Telegram, NLP ile
+Google Trends
+Token unlock takvimi (altcoinler için)
+10. Risk Yönetimi (Aslında En Önemli Kısım)
+Pozisyon büyüklüğü: Sabit % risk (işlem başına bakiyenin %0.5-1'i), ATR bazlı
+Kelly Criterion (genelde yarım Kelly veya daha az)
+Maksimum kaldıraç sınırı (profesyoneller genelde düşük kaldıraç kullanır)
+Günlük/haftalık maksimum kayıp limiti (circuit breaker)
+Profesyonel Kripto Futures Botu: Veriler ve İndikatörler
+Page 3 of 4
+
+===== SAYFA 4 =====
+
+Korelasyon kontrolü: 5 altcoin long = aslında tek bir BTC bahsi
+Likidasyon fiyatı ile stop mesafesi kontrolü
+Slippage, komisyon ve funding maliyeti modellemesi
+Trailing stop / kısmi kâr alma / break-even mantığı
+11. Bot Altyapısı ve Test
+Walk-forward analiz ve out-of-sample test (overfitting en büyük düşman)
+Monte Carlo simülasyonu
+Gerçekçi backtest: Slippage, fee, funding dahil
+Paper trading, sonra küçük sermaye ile canlı
+Metrikler: Sharpe, Sortino, Calmar, max drawdown, profit factor, expectancy
+Latency, API hata yönetimi, bağlantı kopması ve emir tekrarı koruması
+ML katmanı (opsiyonel): XGBoost/LightGBM ile feature'lardan sinyal skoru, meta-
+labeling
+Parçaları Nasıl Birleştirirdim?
+1. Rejim filtresi: ADX + volatilite + BTC trendi → trade edilebilir mi?
+2. Yön (üst TF): EMA 50/200 + market structure + anchored VWAP
+3. Konum/seviye: Volume profile + likidasyon kümeleri + destek/direnç
+4. Tetik (alt TF): CVD/order book imbalance + RSI divergence veya breakout onayı
+5. Futures teyidi: Funding + OI + long/short oranı ile "kalabalık hangi tarafta?" kontrolü
+6. Risk: ATR stop, %1 risk, günlük zarar limiti, ekonomik takvimde duraklama
+Uyarı
+Bu bilgiler eğitim amaçlıdır, yatırım tavsiyesi değildir. Ben bir finansal danışman değilim.
+Kaldıraçlı futures işlemleri hesabın tamamını kaybettirebilir. Bir stratejiyi mutlaka uzun
+süre backtest edip paper trade ile doğrulamadan gerçek parayla çalıştırma.
+Profesyonel Kripto Futures Botu: Veriler ve İndikatörler
+Page 4 of 4

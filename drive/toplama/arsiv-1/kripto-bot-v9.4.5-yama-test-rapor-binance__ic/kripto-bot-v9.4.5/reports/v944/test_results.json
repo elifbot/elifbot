@@ -1,0 +1,42 @@
+{
+  "version": "9.4.4",
+  "release_type": "Phase1 correctness and read-only telemetry",
+  "created_at_utc": "2026-11-03T10:32:37.766032+00:00",
+  "regression_tests_passed_host": 140,
+  "host_test_duration_sec": 14.46,
+  "regression_tests_passed_docker": 140,
+  "docker_test_duration_sec": 14.49,
+  "initial_docker_regression": {
+    "passed": 139,
+    "failed": 1,
+    "cause": "Cross-Python AST dump serialization in new test, corrected with canonical AST serializer; runtime source unchanged"
+  },
+  "old_code_red_test": {
+    "passed": 3,
+    "failed": 5
+  },
+  "docker_no_cache_build": true,
+  "docker_image_id": "sha256:2a6ab2c2e700db6cdc225fb32e54c3468e3a2c8afb76415aadd0434b17c633a3",
+  "docker_pip_check": "No broken requirements found.",
+  "docker_builtin_healthcheck": "healthy in synthetic fixture; not live connectivity evidence",
+  "docker_synthetic_health_fixture_finished": true,
+  "controlled_pending_http_verified": true,
+  "controlled_health_sample_count": 33,
+  "controlled_health_status_counts": {
+    "200": 17,
+    "503": 16
+  },
+  "controlled_pending_tables": 4,
+  "pending_in_flight_observed_live": false,
+  "natural_fill_close_cycle_verified": false,
+  "strategy_rules_changed": false,
+  "config_semantics_changed_except_version": false,
+  "strict_recovery_changed": false,
+  "real_money_approved": false,
+  "operational_readiness_approved": false,
+  "new_long_paper_run_started": false,
+  "strategy_research_started": false,
+  "canonical_report": "reports/v944/FINAL_REPORT.md",
+  "canonical_freeze": "reports/v944/source_freeze.json",
+  "source_frozen_files": 97
+}

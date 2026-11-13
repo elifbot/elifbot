@@ -1,0 +1,18 @@
+{
+  "version": "9.4.3",
+  "release_type": "health_telemetry_patch_only",
+  "approved_for_real_money": false,
+  "strategy_rules_changed": false,
+  "strict_recovery_changed": false,
+  "regression_tests_passed": 121,
+  "health_grace_sec": 15,
+  "live_status": "COMPLETED",
+  "live_operational_checks_passed": true,
+  "live_http_sample_counts": {
+    "200": 59
+  },
+  "historical_profitability_revalidated": false,
+  "previous_negative_research_status_preserved": true,
+  "canonical_freeze": "reports/v943_freeze_manifest.json",
+  "canonical_report": "reports/v943_final_report.md"
+}

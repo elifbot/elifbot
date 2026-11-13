@@ -1,0 +1,288 @@
+{
+  "status": "COMPLETED",
+  "mode": "observe",
+  "strategy": "trend",
+  "started_utc": "2026-11-05T20:41:02Z",
+  "finished_utc": "2026-11-05T20:41:09Z",
+  "active_sec": 7.0,
+  "requested_sec": 2.0,
+  "council_mode": "RULE_BASED_QUANT",
+  "coverage": {
+    "binance_usdm": {
+      "total": 942,
+      "executable": 522,
+      "rejected": 420,
+      "reasons": {
+        "TRADIFI": 234,
+        "durum=SETTLING": 137,
+        "settlement=USDC": 38,
+        "vadeli/teslimat": 4,
+        "settlement=USD1": 3,
+        "settlement=U": 2,
+        "settlement=BTC": 1,
+        "durum=PENDING_TRADING": 1
+      }
+    },
+    "binance_coinm": {
+      "total": 30,
+      "executable": 0,
+      "rejected": 30,
+      "reasons": {
+        "vadeli/teslimat": 10,
+        "settlement=BTC": 1,
+        "settlement=AAVE": 1,
+        "settlement=ADA": 1,
+        "settlement=AVAX": 1,
+        "settlement=BCH": 1,
+        "settlement=BNB": 1,
+        "settlement=DOGE": 1,
+        "settlement=DOT": 1,
+        "settlement=ETC": 1,
+        "settlement=ETH": 1,
+        "settlement=FIL": 1,
+        "settlement=LINK": 1,
+        "settlement=LTC": 1,
+        "settlement=NEAR": 1,
+        "settlement=SOL": 1,
+        "settlement=SUI": 1,
+        "settlement=TRX": 1,
+        "settlement=UNI": 1,
+        "settlement=XLM": 1,
+        "settlement=XRP": 1
+      }
+    },
+    "okx_swap": {
+      "total": 540,
+      "executable": 510,
+      "rejected": 30,
+      "reasons": {
+        "kripto dışı dayanak": 15,
+        "settlement=BTC": 1,
+        "settlement=ETH": 1,
+        "settlement=SOL": 1,
+        "settlement=DOGE": 1,
+        "settlement=XRP": 1,
+        "settlement=BCH": 1,
+        "settlement=ADA": 1,
+        "settlement=DOT": 1,
+        "settlement=ETC": 1,
+        "settlement=FIL": 1,
+        "settlement=HYPE": 1,
+        "settlement=LINK": 1,
+        "settlement=LTC": 1,
+        "settlement=SUI": 1,
+        "settlement=UNI": 1
+      }
+    },
+    "okx_futures": {
+      "total": 287,
+      "executable": 0,
+      "rejected": 287,
+      "reasons": {
+        "X-PERP": 259,
+        "vadeli/teslimat sözleşmesi": 16,
+        "settlement=BTC": 6,
+        "settlement=ETH": 6
+      }
+    },
+    "gateio_usdt": {
+      "total": 1080,
+      "executable": 1080,
+      "rejected": 0,
+      "reasons": {}
+    },
+    "gateio_btc": {
+      "total": 1,
+      "executable": 0,
+      "rejected": 1,
+      "reasons": {
+        "inverse": 1
+      }
+    },
+    "_totals": {
+      "total": 2880,
+      "executable": 2112,
+      "rejected": 768,
+      "coverage_pct": 73.33
+    }
+  },
+  "counters": {
+    "instruments_total": 2880,
+    "instruments_paper_eligible": 2112,
+    "warmup_symbols": 200,
+    "warmup_ready": 200,
+    "measured_rows": 200,
+    "bars_evaluated": 0,
+    "council_offline_error": 1
+  },
+  "measure": {
+    "now_ms": 1793911267893,
+    "breadth": {
+      "available": true,
+      "up": 33,
+      "down": 160,
+      "ratio": 0.17098445595854922,
+      "sample": 193
+    },
+    "flow_symbols": 60,
+    "funding_symbols": 40
+  },
+  "measured_rows": 200,
+  "top_volume": [
+    {
+      "market": "binance_usdm",
+      "symbol": "BTCUSDT",
+      "quote_volume": 19469814.9656,
+      "atr_pct": 0.2498,
+      "spread_bps": 0.013,
+      "flow_pressure": -0.0676839509905589,
+      "funding_rate": 0.0001
+    },
+    {
+      "market": "binance_usdm",
+      "symbol": "ETHUSDT",
+      "quote_volume": 18730285.60262,
+      "atr_pct": 0.3064,
+      "spread_bps": 0.044,
+      "flow_pressure": 0.33658633528432147,
+      "funding_rate": 8.801e-05
+    },
+    {
+      "market": "okx_swap",
+      "symbol": "BTC-USDT-SWAP",
+      "quote_volume": 11856504.31924,
+      "atr_pct": 0.2506,
+      "spread_bps": 0.013,
+      "flow_pressure": -0.1972394613390153,
+      "funding_rate": 8.14874872293e-05
+    },
+    {
+      "market": "binance_usdm",
+      "symbol": "ZECUSDT",
+      "quote_volume": 8653473.27162,
+      "atr_pct": 0.8294,
+      "spread_bps": 0.08,
+      "flow_pressure": -0.49676144623904894,
+      "funding_rate": 0.0001
+    },
+    {
+      "market": "okx_swap",
+      "symbol": "ETH-USDT-SWAP",
+      "quote_volume": 6211812.4246,
+      "atr_pct": 0.3112,
+      "spread_bps": 0.044,
+      "flow_pressure": 0.49444000748465045,
+      "funding_rate": -7.54062056529e-05
+    },
+    {
+      "market": "okx_swap",
+      "symbol": "ZEC-USDT-SWAP",
+      "quote_volume": 4641853.1269,
+      "atr_pct": 0.8074,
+      "spread_bps": 0.08,
+      "flow_pressure": -0.0996483717833044,
+      "funding_rate": 0.0001
+    },
+    {
+      "market": "binance_usdm",
+      "symbol": "SOLUSDT",
+      "quote_volume": 3629610.4812,
+      "atr_pct": 0.3549,
+      "spread_bps": 1.108,
+      "flow_pressure": 0.30252203636072306,
+      "funding_rate": -7.02e-05
+    },
+    {
+      "market": "binance_usdm",
+      "symbol": "XRPUSDT",
+      "quote_volume": 1699686.38558,
+      "atr_pct": 0.3209,
+      "spread_bps": 0.805,
+      "flow_pressure": 0.23746235058030624,
+      "funding_rate": 0.0001
+    },
+    {
+      "market": "binance_usdm",
+      "symbol": "NEARUSDT",
+      "quote_volume": 1067043.153,
+      "atr_pct": 0.6056,
+      "spread_bps": 2.682,
+      "flow_pressure": 0.23644496623271546,
+      "funding_rate": 0.0001
+    },
+    {
+      "market": "okx_swap",
+      "symbol": "SOL-USDT-SWAP",
+      "quote_volume": 752939.3445,
+      "atr_pct": 0.3565,
+      "spread_bps": 1.108,
+      "flow_pressure": 0.8404497950742899,
+      "funding_rate": -6.70601128201e-05
+    }
+  ],
+  "execution": {
+    "equity_start": "10000",
+    "equity_now": "10000.000000",
+    "realized_net": "0.000000",
+    "fees_paid": "0.000000",
+    "funding_net": "0.000000",
+    "funding_events": 0,
+    "closed_trades": 0,
+    "open_positions": 0,
+    "win_rate_pct": 0.0,
+    "profit_factor": null,
+    "avg_r": 0.0,
+    "max_drawdown": "0.000000",
+    "breaker": false,
+    "breaker_reason": "",
+    "rejects": {},
+    "per_market": {},
+    "open": []
+  },
+  "council_comparison": {
+    "error": "TypeError: float() argument must be a string or a real number, not 'NoneType'"
+  },
+  "ws_stats": {},
+  "market_health": {
+    "binance_usdm": {
+      "reachable": true,
+      "rest_ok": 165,
+      "rest_fail": 0,
+      "last_error": ""
+    },
+    "binance_coinm": {
+      "reachable": true,
+      "rest_ok": 1,
+      "rest_fail": 0,
+      "last_error": ""
+    },
+    "okx_swap": {
+      "reachable": true,
+      "rest_ok": 62,
+      "rest_fail": 83,
+      "last_error": "HTTP 429"
+    },
+    "okx_futures": {
+      "reachable": true,
+      "rest_ok": 1,
+      "rest_fail": 0,
+      "last_error": ""
+    },
+    "gateio_usdt": {
+      "reachable": true,
+      "rest_ok": 135,
+      "rest_fail": 0,
+      "last_error": ""
+    },
+    "gateio_btc": {
+      "reachable": true,
+      "rest_ok": 1,
+      "rest_fail": 0,
+      "last_error": ""
+    }
+  },
+  "errors": [],
+  "real_orders": 0,
+  "paper_only": true,
+  "real_money_approved": false
+}

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bot Masası — ChatGPT &amp; Claude (ücretsiz kota)</title>
+<script src="https://js.puter.com/v2/"></script>
+<style>
+  :root{
+    --bg:#1b1d21; --panel:#24262b; --panel2:#2b2e34; --yazi:#e8e8e8;
+    --soluk:#9aa0a6; --vurgu:#3b6fe0; --yesil:#7bd88f; --sari:#ffd166; --hata:#ff7b72;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{background:var(--bg); color:var(--yazi); font-family:"Segoe UI",system-ui,sans-serif;
+       height:100vh; display:flex; flex-direction:column;}
+  header{background:var(--panel); padding:10px 16px; display:flex; align-items:center;
+         gap:10px; flex-wrap:wrap; border-bottom:1px solid #34373d;}
+  header h1{font-size:16px; font-weight:600;}
+  header .rozet{background:var(--vurgu); color:#fff; font-size:11px; padding:2px 8px;
+                border-radius:10px;}
+  select,input[type=text]{background:var(--panel2); color:var(--yazi); border:0;
+        padding:7px 10px; border-radius:6px; font-size:13px; outline:none;}
+  button{background:var(--vurgu); color:#fff; border:0; padding:8px 16px; border-radius:6px;
+         font-size:13px; cursor:pointer;}
+  button:disabled{opacity:.5; cursor:wait;}
+  button.ikincil{background:var(--panel2);}
+  #kutu{flex:1; overflow-y:auto; padding:16px 10%; display:flex; flex-direction:column; gap:14px;}
+  .balon{max-width:85%; padding:10px 14px; border-radius:12px; line-height:1.55;
+         white-space:pre-wrap; word-wrap:break-word; font-size:14px;}
+  .kullanici{align-self:flex-end; background:#2f57b3; color:#fff; border-bottom-right-radius:3px;}
+  .bot{align-self:flex-start; background:var(--panel); border-bottom-left-radius:3px;}
+  .bot .kim{display:block; color:var(--yesil); font-size:11px; font-weight:700; margin-bottom:4px;}
+  .hata{align-self:flex-start; background:#3a2226; color:var(--hata);
+        border:1px solid var(--hata); border-radius:8px; font-size:13px;}
+  footer{background:var(--panel); padding:12px 10%; display:flex; gap:10px;
+         border-top:1px solid #34373d;}
+  #giris{flex:1; background:var(--panel2); color:var(--yazi); border:0; border-radius:8px;
+         padding:12px; font-size:14px; resize:none; outline:none; font-family:inherit;}
+  .not{font-size:11px; color:var(--soluk); padding:4px 10% 8px; background:var(--panel);}
+  .not b{color:var(--sari);}
+</style>
+</head>
+<body>
+
+<div id="fileUyari" style="display:none;position:fixed;inset:0;background:#1b1d21;z-index:999;
+     padding:40px;text-align:center;">
+  <h2 style="color:#ffd166;">⚠ Bu dosya doğrudan açılamaz (file:// hatası)</h2>
+  <p style="margin:18px auto;max-width:560px;line-height:1.7;">
+    Puter.js güvenlik gereği <b>file://</b> protokolünü kabul etmiyor
+    ("Unsupported Origin" hatasının sebebi bu).<br><br>
+    ✅ <b>En kolay yol:</b> Paketteki <b>BotMasasi.exe</b>'yi çalıştırın →
+    "🌟 Gerçek ChatGPT &amp; Claude" düğmesine basın (bu sayfayı localhost üzerinden açar).<br><br>
+    ✅ Alternatif: Bu klasörde komut satırından <b>python -m http.server 8080</b> çalıştırıp
+    tarayıcıda <b>http://localhost:8080/bot_masasi.html</b> adresini açın.
+  </p>
+</div>
+<script>
+if(location.protocol === 'file:'){
+  document.getElementById('fileUyari').style.display = 'block';
+}
+</script>
+
+<header>
+  <h1>🤖 Bot Masası</h1>
+  <span class="rozet">GERÇEK ChatGPT &amp; Claude</span>
+  <label style="font-size:12px;color:var(--soluk)">Model:</label>
+  <select id="model">
+    <option value="gpt-4o">ChatGPT — gpt-4o</option>
+    <option value="gpt-4o-mini">ChatGPT — gpt-4o-mini (hızlı)</option>
+    <option value="gpt-5.4-nano">ChatGPT — gpt-5.4-nano</option>
+    <option value="claude-sonnet-5">Claude — Sonnet 5</option>
+    <option value="claude-sonnet-4-6">Claude — Sonnet 4.6</option>
+    <option value="deepseek-chat">DeepSeek Chat</option>
+  </select>
+  <input type="text" id="rol" placeholder="Rol / sistem talimatı (isteğe bağlı)…" style="flex:1; min-width:160px;">
+  <button class="ikincil" onclick="temizle()">🗑 Temizle</button>
+</header>
+
+<div class="not">
+  ℹ İlk gönderimde <b>Puter</b> oturum penceresi açılır → <b>ücretsiz hesapla giriş yapın</b>.
+  Günlük ücretsiz kota vardır; kota dolarsa Puter kendi ücretli planını önerir.
+  Pop-up engelliyse izin verin. İnternet gerekir.
+</div>
+
+<div id="kutu"></div>
+
+<footer>
+  <textarea id="giris" rows="1" placeholder="Sorunuzu yazın… (Enter = gönder)"></textarea>
+  <button id="gonderBtn" onclick="gonder()">Gönder ▶</button>
+</footer>
+
+<script>
+const kutu = document.getElementById('kutu');
+const giris = document.getElementById('giris');
+const modelSec = document.getElementById('model');
+const rolGiris = document.getElementById('rol');
+const gonderBtn = document.getElementById('gonderBtn');
+const gecmis = [];   // {role, content}
+
+function balon(sinif, icerik, kim){
+  const d = document.createElement('div');
+  d.className = 'balon ' + sinif;
+  if (kim) { const k = document.createElement('span'); k.className='kim'; k.textContent = kim; d.appendChild(k); }
+  d.appendChild(document.createTextNode(icerik));
+  kutu.appendChild(d);
+  kutu.scrollTop = kutu.scrollHeight;
+  return d;
+}
+
+function temizle(){ gecmis.length = 0; kutu.innerHTML = ''; }
+
+async function gonder(){
+  const soru = giris.value.trim();
+  if(!soru) return;
+  giris.value = '';
+  balon('kullanici', soru);
+  gecmis.push({role:'user', content:soru});
+
+  const mesajlar = [];
+  const rol = rolGiris.value.trim();
+  if(rol) mesajlar.push({role:'system', content:rol});
+  mesajlar.push(...gecmis);
+
+  const model = modelSec.value;
+  const yer = balon('bot', '', model);
+  gonderBtn.disabled = true;
+
+  try{
+    const akis = await puter.ai.chat(mesajlar, {model: model, stream: true});
+    let tam = '';
+    for await (const parca of akis){
+      const t = parca?.text ?? '';
+      if(t){ tam += t; yer.textContent = tam; kutu.scrollTop = kutu.scrollHeight; }
+    }
+    if(!tam.trim()){
+      // akış boşsa akışsız dene
+      const r = await puter.ai.chat(mesajlar, {model: model});
+      tam = r?.message?.content?.map(c => c.text || '').join('') || String(r);
+      yer.textContent = tam;
+    }
+    gecmis.push({role:'assistant', content:tam});
+  }catch(h){
+    yer.className = 'balon hata';
+    yer.textContent = '✖ Hata: ' + (h?.message || h?.error?.message || h) +
+      '\n\nİpuçları: Puter oturum penceresi engellenmiş olabilir; pop-up izni verin. ' +
+      'Günlük ücretsiz kota dolmuşsa yarın tekrar deneyin veya başka model seçin.';
+  }finally{
+    gonderBtn.disabled = false;
+    kutu.scrollTop = kutu.scrollHeight;
+  }
+}
+
+giris.addEventListener('keydown', e => {
+  if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); gonder(); }
+});
+</script>
+</body>
+</html>

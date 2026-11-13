@@ -1,0 +1,67 @@
+# Phoenix Bot v2 yapılandırması
+# Değerlerin açıklamaları README.md'de. Eksik anahtarlar güvenli varsayılanla dolar.
+
+mode: paper            # paper | live   (canlı için ayrıca: python main.py trade --live --yes)
+exchange: binanceusdm  # Binance USDT-M perpetual
+testnet: true          # API bağlandığında ÖNCE testnet (testnet.binancefuture.com anahtarı gerekir)
+
+symbols:
+  - BTC/USDT:USDT
+  - ETH/USDT:USDT
+  - SOL/USDT:USDT
+
+timeframe: "15m"       # paper test için 15m | 30m | 1h — paralel oturumlar: --timeframe ile
+leverage: 5            # taban kaldıraç; motor stop mesafesine göre otomatik düşürür
+margin_mode: isolated  # sıvılaşma riski pozisyonla sınırlı
+paper_equity: 10000    # paper başlangıç sermayesi (USDT)
+
+strategy:
+  score_threshold: 4   # 7 faktörden en az kaçının dönmesi gerektiği
+  ema_fast: 21
+  ema_slow: 55
+  ema_trend: 200
+  rsi_len: 14
+  adx_len: 14
+  adx_min: 20          # trend gücü eşiği
+  atr_len: 14
+  volume_factor: 1.2   # hacim, 20 mum ortalamasının 1.2 katını aşmalı
+  bb_len: 20
+  bb_dev: 2.0
+  min_atr_pct: 0.12    # ölü pazar filtresi: ATR/fiyat % alt sınırı
+  exhaustion_rsi: 73   # RSI ≥ 73 (kırmızı: ≤ 27) ve kırılım yoksa geç giriş reddi
+  mtf_timeframe: "1h"  # üst zaman dilimi trend teyidi
+  mtf_fast: 50
+  mtf_slow: 200
+
+risk:
+  risk_per_trade_pct: 1.0   # işlem başına riske atılan sermaye %
+  max_positions: 3
+  max_same_side: 2          # aynı yönde en fazla kaç pozisyon
+  max_daily_loss_pct: 5.0   # günlük devre kesici
+  max_weekly_loss_pct: 12.0 # haftalık devre kesici
+  max_leverage: 20
+  sl_atr_mult: 1.5          # stop = fiyat ∓ 1.5×ATR (swing daha genişse o seçilir)
+  swing_buffer_atr: 0.2
+  swing_lookback: 20
+  max_stop_pct: 8.0         # stop mesafesi fiyatın %8'ini aşarsa işlem reddi
+  tp1_r: 1.0                # TP1: +1R'de %50 kapat
+  tp1_close_pct: 50
+  tp2_r: 2.0                # TP2: +2R'de kalanı kapat
+  profit_lock:              # MFE kilit merdiveni: [MFE(R), kilit(R)]
+    - [1.0, 0.0]            #   +1R'de stop başabaşa
+    - [1.5, 0.5]            #   +1.5R'de +%0.5R kilit
+  trailing_atr_mult: 1.5    # ATR takip stopu
+  funding_filter_pct: 0.05  # |funding| bu %'yi aşarsa ödeyen tarafa giriş yok
+  cooldown_bars: 3          # zarar sonrası aynı sembolde bekleme (mum sayısı)
+  oi_filter: true           # açık pozisyon (OI) delta vetosu
+  oi_min_delta_pct: -5.0    # OI 4 saatte %5+ çöktüyse giriş yok
+  oi_max_abs_pct: 10.0      # |OIΔ| %10+ = kaos, giriş yok
+  max_slippage_pct: 0.30
+  order_error_limit: 3      # art arda emir hatası → devre kesici
+
+scan:
+  csv: signals.csv
+
+fees:
+  taker: 0.0004             # Binance futures taker komisyonu
+  slippage: 0.0002

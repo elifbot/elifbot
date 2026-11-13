@@ -1,0 +1,107 @@
+{
+  "on_price_tick": {
+    "n": 2643794,
+    "total_inclusive_wall_ms": 15734.732531888087,
+    "max_wall_ms": 7.2227229999271,
+    "max_start_epoch": 1793713225.8577275,
+    "max_end_epoch": 1793713225.8649502,
+    "context": {
+      "symbol": "SUI/USDT",
+      "exchange": "okx"
+    },
+    "kind": "async inclusive wall incl waits",
+    "mean_inclusive_wall_ms": 0.0059515728274926434
+  },
+  "on_trade": {
+    "n": 180242,
+    "total_inclusive_wall_ms": 214663.62470005226,
+    "max_wall_ms": 138.62803799997891,
+    "max_start_epoch": 1793713708.4550834,
+    "max_end_epoch": 1793713708.5937114,
+    "context": {
+      "exchange": "okx",
+      "symbol": "ETH/USDT"
+    },
+    "kind": "async inclusive wall incl waits",
+    "mean_inclusive_wall_ms": 1.190974493736489
+  },
+  "build_state_payload": {
+    "n": 665,
+    "total_inclusive_wall_ms": 2456.5433840014066,
+    "max_wall_ms": 11.737422000010156,
+    "max_start_epoch": 1793713182.1561897,
+    "max_end_epoch": 1793713182.1679273,
+    "context": {},
+    "kind": "sync wall incl IO/descheduling; not CPU",
+    "mean_inclusive_wall_ms": 3.6940502015058745
+  },
+  "acquire_writer_lease": {
+    "n": 166,
+    "total_inclusive_wall_ms": 550.9712030014953,
+    "max_wall_ms": 10.580061999917234,
+    "max_start_epoch": 1793713237.9885664,
+    "max_end_epoch": 1793713237.9991465,
+    "context": {
+      "symbol": "kripto-bot-v94-main"
+    },
+    "kind": "sync wall incl IO/descheduling; not CPU",
+    "mean_inclusive_wall_ms": 3.3191036325391283
+  },
+  "features": {
+    "n": 200,
+    "total_inclusive_wall_ms": 1460.5213340006458,
+    "max_wall_ms": 13.659722000056718,
+    "max_start_epoch": 1793713522.6103785,
+    "max_end_epoch": 1793713522.6240382,
+    "context": {
+      "bar_open_ms": 1793713200000
+    },
+    "kind": "sync wall incl IO/descheduling; not CPU",
+    "mean_inclusive_wall_ms": 7.302606670003229
+  },
+  "evaluate_and_route": {
+    "n": 11499,
+    "total_inclusive_wall_ms": 5270.41813600033,
+    "max_wall_ms": 61.97447800002465,
+    "max_start_epoch": 1793713522.6103106,
+    "max_end_epoch": 1793713522.672285,
+    "context": {
+      "exchange": "binance",
+      "symbol": "PONS/USDT"
+    },
+    "kind": "async inclusive wall incl waits",
+    "mean_inclusive_wall_ms": 0.4583370846160823
+  },
+  "_rows_to_df": {
+    "n": 1337,
+    "total_inclusive_wall_ms": 1798.02194500121,
+    "max_wall_ms": 5.068154000014147,
+    "max_start_epoch": 1793713473.1678927,
+    "max_end_epoch": 1793713473.1729608,
+    "context": {},
+    "kind": "sync wall incl IO/descheduling; not CPU",
+    "mean_inclusive_wall_ms": 1.3448182086770457
+  },
+  "warmup_symbol": {
+    "n": 35,
+    "total_inclusive_wall_ms": 6948.644551999678,
+    "max_wall_ms": 620.9939709999617,
+    "max_start_epoch": 1793713281.944187,
+    "max_end_epoch": 1793713282.5651808,
+    "context": {},
+    "kind": "async inclusive wall incl waits",
+    "mean_inclusive_wall_ms": 198.53270148570508
+  },
+  "market_context": {
+    "n": 150,
+    "total_inclusive_wall_ms": 3335.3232949996254,
+    "max_wall_ms": 48.07945700008531,
+    "max_start_epoch": 1793713522.6241384,
+    "max_end_epoch": 1793713522.6722178,
+    "context": {
+      "bar_open_ms": 1793713200000
+    },
+    "kind": "sync wall incl IO/descheduling; not CPU",
+    "mean_inclusive_wall_ms": 22.235488633330835
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "120m-no-cross-rescue",
+  "control_run": "40065026239",
+  "description": "Baseline strateji ve esikler sabit kalir; capraz kurtarma kapali, eslestirilmis Shadow Lab olcumu acik. Varyantlar emir gondermez. Sure ve piyasa rejimi eski run'lardan farkli oldugu icin tek run nedensellik veya otomatik parametre kaniti degildir.",
+  "overrides": {
+    "risk": {
+      "capraz_kurtarma": false
+    },
+    "shadow_lab": {
+      "aktif": true
+    }
+  },
+  "paper_session_minutes": 120,
+  "do_not_auto_promote": true
+}

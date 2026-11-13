@@ -1,0 +1,7 @@
+# Kurulum: pip install pre-commit && pre-commit install
+# Commit'ten ONCE yerelde gizli bilgi (API anahtari) taramasi yapar.
+repos:
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.18.4        # guncel surumle degistirin
+    hooks:
+      - id: gitleaks

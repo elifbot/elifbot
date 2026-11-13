@@ -1,0 +1,97 @@
+{
+  "method": "15m pullback; 1h/4h EMA20/50; fixed 1R; conservative OHLC",
+  "research_only": true,
+  "live_allowed": false,
+  "start_ms": 1786301700000,
+  "end_ms": 1794077400000,
+  "oos_start_ms": 1792133475000,
+  "split_overlap_excluded": 2,
+  "per_side_cost_assumption": 0.0007,
+  "funding": "UYGULANMADI",
+  "funding_note": "No funding data applied: net estimates EXCLUDE funding.",
+  "execution_note": "15m OHLC, stop-first; 1m/tick, order book, maker fill and portfolio constraints not modelled.",
+  "sample_note": "Shared time range; cross-symbol dependence handled only by day clustering; no point-in-time universe.",
+  "train": {
+    "n": 1016,
+    "days": 60,
+    "mean_gross_r": -0.021236196226354656,
+    "mean_net_r": -0.2877713992137215,
+    "day_bootstrap_95": [
+      -0.37885773047427407,
+      -0.20032676455093656
+    ],
+    "mean_net_r_2x_cost": -0.5543066022010884,
+    "win_rate": 0.4625984251968504
+  },
+  "oos": {
+    "n": 446,
+    "days": 23,
+    "mean_gross_r": 0.03816491996237643,
+    "mean_net_r": -0.27483345687243305,
+    "day_bootstrap_95": [
+      -0.3834551837850187,
+      -0.16485957606235221
+    ],
+    "mean_net_r_2x_cost": -0.5878318337072425,
+    "win_rate": 0.5022421524663677
+  },
+  "all": {
+    "n": 1462,
+    "days": 82,
+    "mean_gross_r": -0.003115199085332724,
+    "mean_net_r": -0.2838245303462696,
+    "day_bootstrap_95": [
+      -0.3527841089536027,
+      -0.21462708886758927
+    ],
+    "mean_net_r_2x_cost": -0.5645338616072065,
+    "win_rate": 0.4746922024623803
+  },
+  "diagnostics": {
+    "ADAUSDTSWAP_5m_25920.csv": {
+      "5m_bars": 25920,
+      "15m_bars": 8639,
+      "dropped_15m": 2,
+      "dropped_1h": 2,
+      "dropped_4h": 2
+    },
+    "BTCUSDTSWAP_5m_25920.csv": {
+      "5m_bars": 25920,
+      "15m_bars": 8639,
+      "dropped_15m": 2,
+      "dropped_1h": 2,
+      "dropped_4h": 2
+    },
+    "DOGEUSDTSWAP_5m_25920.csv": {
+      "5m_bars": 25920,
+      "15m_bars": 8639,
+      "dropped_15m": 2,
+      "dropped_1h": 2,
+      "dropped_4h": 2
+    },
+    "ETHUSDTSWAP_5m_25920.csv": {
+      "5m_bars": 25920,
+      "15m_bars": 8639,
+      "dropped_15m": 2,
+      "dropped_1h": 2,
+      "dropped_4h": 2
+    },
+    "SOLUSDTSWAP_5m_25920.csv": {
+      "5m_bars": 25920,
+      "15m_bars": 8639,
+      "dropped_15m": 2,
+      "dropped_1h": 2,
+      "dropped_4h": 2
+    },
+    "XRPUSDTSWAP_5m_25920.csv": {
+      "5m_bars": 25920,
+      "15m_bars": 8639,
+      "dropped_15m": 2,
+      "dropped_1h": 2,
+      "dropped_4h": 2
+    }
+  },
+  "min_oos": 30,
+  "verdict": "EDGE_KANITLANMADI",
+  "reason": "Araştırma taraması; funding/gerçek maliyet/yürütme ve bağımsız üretim doğrulaması eksik."
+}

@@ -1,0 +1,87 @@
+........................................................................ [ 12%]
+........................................................................ [ 25%]
+........................................................................ [ 37%]
+........................................................................ [ 50%]
+........................................................................ [ 62%]
+........................................................................ [ 75%]
+....................................................FF.................. [ 87%]
+.....................................................................    [100%]
+=================================== FAILURES ===================================
+___________ test_real_indicator_and_flow_together_with_fake_http[1] ____________
+
+tmp_path = PosixPath('/tmp/pytest-of-user/pytest-309/test_real_indicator_and_flow_t0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f1f11581400>
+direction = 1
+
+    @pytest.mark.parametrize('direction',[1,-1])
+    def test_real_indicator_and_flow_together_with_fake_http(tmp_path,monkeypatch,direction):
+        import math
+        b=newbot(tmp_path,monkeypatch);b.indikator_hazir=True
+        now=int(time.time()*1000);key=('okx','FIXTURE-USDT-SWAP')
+        b.eski_v78_motor.okx_connection_change(key[1],True); b.detektor.durum(*key)._flow_start_ms=now-40000
+        for i in range(40):b.akis.ekle(*key,100,100,'buy' if direction==1 else 'sell',now-39000+i*1000)
+        d=b.detektor.durum(*key);d.son_fiyat=100.;d.son_fiyat_ts=now;d.hiz_uzun=1.;d.son_hacim_ts=now;d.ret_2s=0.;d.rvol=2.
+        last=(now//300000-1)*300000;rows=[]
+        for i in range(200):
+            t=last-(199-i)*300000;o=100+direction*i*.03+math.sin(i*.6)*.05;c=o+direction*.05
+            rows.append([str(t),str(o),str(max(o,c)+.06),str(min(o,c)-.06),str(c),'3000' if i>195 else '1000','0','0','1'])
+        class Response:
+            async def __aenter__(self):return self
+            async def __aexit__(self,*a):return None
+            def raise_for_status(self):pass
+            async def json(self):return {'code':'0','data':rows}
+        class FakeSession:
+            def get(self,*a,**k):return Response()
+        b._oturum=FakeSession();m=b.eski_v78_motor
+        monkeypatch.setattr(legacy,'giris_karari',lambda *a,**k:(True,'synthetic_pass',{}))
+        b._zengin_sinyali_degerlendir=AsyncMock(return_value={'accepted':False,'reasons':['synthetic_risk_reject']})
+        capture=[];m.record=lambda row:capture.append(row)
+        async def go():
+            await m.cycle()
+            if b._akis_gorevler:await asyncio.gather(*list(b._akis_gorevler))
+        asyncio.run(go())
+>       assert m.stats['candle_fetch_ok']==1 and m.stats['dispatched']==1
+E       assert (0 == 1)
+
+tests/test_v4_v78_entegrasyon.py:102: AssertionError
+___________ test_real_indicator_and_flow_together_with_fake_http[-1] ___________
+
+tmp_path = PosixPath('/tmp/pytest-of-user/pytest-309/test_real_indicator_and_flow_t1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f1f10a82e40>
+direction = -1
+
+    @pytest.mark.parametrize('direction',[1,-1])
+    def test_real_indicator_and_flow_together_with_fake_http(tmp_path,monkeypatch,direction):
+        import math
+        b=newbot(tmp_path,monkeypatch);b.indikator_hazir=True
+        now=int(time.time()*1000);key=('okx','FIXTURE-USDT-SWAP')
+        b.eski_v78_motor.okx_connection_change(key[1],True); b.detektor.durum(*key)._flow_start_ms=now-40000
+        for i in range(40):b.akis.ekle(*key,100,100,'buy' if direction==1 else 'sell',now-39000+i*1000)
+        d=b.detektor.durum(*key);d.son_fiyat=100.;d.son_fiyat_ts=now;d.hiz_uzun=1.;d.son_hacim_ts=now;d.ret_2s=0.;d.rvol=2.
+        last=(now//300000-1)*300000;rows=[]
+        for i in range(200):
+            t=last-(199-i)*300000;o=100+direction*i*.03+math.sin(i*.6)*.05;c=o+direction*.05
+            rows.append([str(t),str(o),str(max(o,c)+.06),str(min(o,c)-.06),str(c),'3000' if i>195 else '1000','0','0','1'])
+        class Response:
+            async def __aenter__(self):return self
+            async def __aexit__(self,*a):return None
+            def raise_for_status(self):pass
+            async def json(self):return {'code':'0','data':rows}
+        class FakeSession:
+            def get(self,*a,**k):return Response()
+        b._oturum=FakeSession();m=b.eski_v78_motor
+        monkeypatch.setattr(legacy,'giris_karari',lambda *a,**k:(True,'synthetic_pass',{}))
+        b._zengin_sinyali_degerlendir=AsyncMock(return_value={'accepted':False,'reasons':['synthetic_risk_reject']})
+        capture=[];m.record=lambda row:capture.append(row)
+        async def go():
+            await m.cycle()
+            if b._akis_gorevler:await asyncio.gather(*list(b._akis_gorevler))
+        asyncio.run(go())
+>       assert m.stats['candle_fetch_ok']==1 and m.stats['dispatched']==1
+E       assert (0 == 1)
+
+tests/test_v4_v78_entegrasyon.py:102: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_v4_v78_entegrasyon.py::test_real_indicator_and_flow_together_with_fake_http[1]
+FAILED tests/test_v4_v78_entegrasyon.py::test_real_indicator_and_flow_together_with_fake_http[-1]
+2 failed, 571 passed in 50.34s

@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+.env
+*.log
+
+# büyük ham veri (GitHub Release'e taşınır, repoya girmez)
+data/raw/
+data/*.zip
+drive/*.zip
+
+# koşu çıktıları: rapor + jurnal tutulur, geçici dosyalar tutulmaz
+runs/*/durum.json.tmp

@@ -1,0 +1,9 @@
+{
+  "name": "kriptobot-panel",
+  "version": "1.0.0",
+  "description": "KriptoBot Panel - GLM yedek köprüsü için (opsiyonel): npm install",
+  "type": "module",
+  "dependencies": {
+    "z-ai-web-dev-sdk": "^1.0.0"
+  }
+}

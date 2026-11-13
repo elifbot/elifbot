@@ -1,0 +1,28 @@
+{
+  "status": "failed",
+  "required_both": true,
+  "per_exchange": {
+    "binance": 741,
+    "okx": 507
+  },
+  "public_rest_urls": {
+    "binance": "https://www.binance.com/fapi/v1"
+  },
+  "samples": {
+    "okx": {
+      "ohlcv_rows": 5,
+      "ohlcv_last_close": 80689.1,
+      "ticker_last": 80689.1,
+      "bid": 80689.0,
+      "ask": 80689.1,
+      "funding_rate": 5.64576373411e-05,
+      "open_interest": 2461910108.617481
+    }
+  },
+  "errors": {
+    "binance_sample": "RuntimeError: Eksik Futures veri örneği: {'ohlcv_rows': 5, 'ohlcv_last_close': 80683.9, 'ticker_last': 80684.0, 'bid': 0.0, 'ask': 0.0, 'funding_rate': 3.155e-05, 'open_interest': 93123.11}"
+  },
+  "missing": [
+    "binance"
+  ]
+}

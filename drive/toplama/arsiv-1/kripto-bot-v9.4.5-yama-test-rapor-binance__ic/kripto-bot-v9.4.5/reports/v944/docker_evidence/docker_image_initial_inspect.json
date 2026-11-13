@@ -1,0 +1,88 @@
+[
+    {
+        "Id": "sha256:17821aef07894147c5b074ae11d1350e5e39c9d880dc0d31371a843d6fef2c28",
+        "RepoTags": [
+            "kripto-bot:v944-phase1"
+        ],
+        "RepoDigests": [],
+        "Parent": "sha256:d403d1c8522e26e094ade86ad0243a584536e3570043d36cdea0cd13533fccab",
+        "Comment": "",
+        "Created": "2026-11-03T10:27:12.298825868Z",
+        "DockerVersion": "26.1.5+dfsg1",
+        "Author": "",
+        "Config": {
+            "Hostname": "",
+            "Domainname": "",
+            "User": "",
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "ExposedPorts": {
+                "8080/tcp": {}
+            },
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "LANG=C.UTF-8",
+                "GPG_KEY=7169605F62C751356D054A26A821E680E5FA6305",
+                "PYTHON_VERSION=3.12.16",
+                "PYTHON_SHA256=b5796915dc45ff745cfb4e990a7e7c93d6f546328a102ce31448d69ebc37575c"
+            ],
+            "Cmd": [
+                "python",
+                "-m",
+                "src.live_runner",
+                "--config",
+                "configs/v9-canonical-production.json",
+                "--port",
+                "8080"
+            ],
+            "Healthcheck": {
+                "Test": [
+                    "CMD-SHELL",
+                    "python -c \"import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/health', timeout=4).read()\" || exit 1"
+                ],
+                "Interval": 20000000000,
+                "Timeout": 5000000000,
+                "StartPeriod": 25000000000,
+                "Retries": 3
+            },
+            "Image": "sha256:d403d1c8522e26e094ade86ad0243a584536e3570043d36cdea0cd13533fccab",
+            "Volumes": null,
+            "WorkingDir": "/app",
+            "Entrypoint": null,
+            "OnBuild": null,
+            "Labels": null
+        },
+        "Architecture": "amd64",
+        "Os": "linux",
+        "Size": 442588831,
+        "GraphDriver": {
+            "Data": {
+                "LowerDir": "/var/lib/docker/overlay2/5d074060dd4141eac93704244aa86075f9df942c552d6cbee72c4649a269bf82/diff:/var/lib/docker/overlay2/4a6241e833daf47e5e33e2796e619962ca9738f57b15dc95d838994885550759/diff:/var/lib/docker/overlay2/2b000e25a690771e3c8dc51a3482488ffbc42731954fe55c90cc5c117530f918/diff:/var/lib/docker/overlay2/bea7a0afdc5fed4f903a262907e379b53d0ee8ec757bfa6cdf481fe91d12bd91/diff:/var/lib/docker/overlay2/55e9f0789f58ce87e0c07ac778c84e6a26da9dbcce341bfb9aeba1dcceb7463e/diff:/var/lib/docker/overlay2/99aa71828a74e5ed4ca6ce74efeb6bf50af0596b5ef71fd8eabfbc416475a68c/diff:/var/lib/docker/overlay2/bbd069c290406c5e4be8aacbff8daf05fc2e90ed1138d2d1e03c81cf86dfc63b/diff",
+                "MergedDir": "/var/lib/docker/overlay2/217f6c81116d2af7727c586f7b468947febd222dee1118dbe718fa138c4854b6/merged",
+                "UpperDir": "/var/lib/docker/overlay2/217f6c81116d2af7727c586f7b468947febd222dee1118dbe718fa138c4854b6/diff",
+                "WorkDir": "/var/lib/docker/overlay2/217f6c81116d2af7727c586f7b468947febd222dee1118dbe718fa138c4854b6/work"
+            },
+            "Name": "overlay2"
+        },
+        "RootFS": {
+            "Type": "layers",
+            "Layers": [
+                "sha256:a5d6d345f6afa08d7c31272055746d60a838b290bfcc82c0a23e8e984d61a933",
+                "sha256:fab99bd4639aec48a77ec4d2e3564c0907e0e1e962bbf773219a0b503a168955",
+                "sha256:bca572b9549074f7cbc5f2d9d29f589038ff21c5f68cef2965167a33f177a9c0",
+                "sha256:cae4cb2b5e819765b847e67faa443b377607452f2ec949d142cad15d9d7ea0b3",
+                "sha256:85910ff527d426403d6f7a21bb61c398d189d9bd858127bb3464798ac2a1b79b",
+                "sha256:04cb3a99593eab3c7ac66829b3d8e0e7dc8b0336ac59ef1f40d4d4dd1bb69100",
+                "sha256:20609fedf8c03a6bd57ca5d7966f1d1218d24f69b6f67505a4963f40a975bb95",
+                "sha256:3cfca03e93228e9ecdea12a36edf69e369a3aeb024201cb883f7b26b8441803c"
+            ]
+        },
+        "Metadata": {
+            "LastTagTime": "2026-11-03T10:27:12.310552609Z"
+        }
+    }
+]

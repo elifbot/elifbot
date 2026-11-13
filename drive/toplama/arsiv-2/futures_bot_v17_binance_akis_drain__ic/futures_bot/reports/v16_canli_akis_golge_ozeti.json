@@ -1,0 +1,51 @@
+{
+  "test": {
+    "sure_sn": 606,
+    "exit_code": 0,
+    "acik_pozisyon": 0,
+    "kayit_hatalari": 0,
+    "akis_veri_hatalari": 0,
+    "akis_golge_hatalari": 0,
+    "akis_golge_mum_hatalari": 0,
+    "gercek_okx_trade": 126849
+  },
+  "ana_tum": {
+    "islem": 43,
+    "net_usdt": -4.9837410178,
+    "kazanc": 21,
+    "brut_usdt": 5.777652371,
+    "ucret_usdt": 10.7613933889
+  },
+  "ana_okx": {
+    "islem": 20,
+    "net_usdt": -14.8394140653,
+    "kazanc": 8,
+    "brut_usdt": -9.835775864,
+    "ucret_usdt": 5.0036382012
+  },
+  "golge": {
+    "islem": 15,
+    "net_usdt": -17.306087928473467,
+    "kazanc": 3,
+    "brut_usdt": -13.551975794209547,
+    "ucret_usdt": 3.7541121342639205
+  },
+  "golge_kapanis_nedenleri": {
+    "disaster_2atr": 6,
+    "chandelier_3atr": 1,
+    "session_end": 8
+  },
+  "golge_ortalama": {
+    "bekleme_sn": 34.657466666666664,
+    "tutma_sn": 165.84333333333333,
+    "mfe_pct": 0.3412587950366171,
+    "mae_pct": 0.6171522324287348
+  },
+  "eslesen_13_sinyal": {
+    "eslesen": 13,
+    "baseline_net": -1.4684447065999997,
+    "golge_net": -14.067385275102229,
+    "eslesmeyen_golge": 2
+  },
+  "karar": "Aday üretime alınmadı; --akis-golge varsayılan kapalı araştırma modudur."
+}

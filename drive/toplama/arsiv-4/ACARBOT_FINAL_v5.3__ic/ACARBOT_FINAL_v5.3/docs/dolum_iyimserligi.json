@@ -1,0 +1,8 @@
+{
+  "toplimit_dolum": 39,
+  "ttl_disi_dolum": 3,
+  "ttl_disi_oran": 0.0769,
+  "ttl_ms": 300000,
+  "kaba_bar_ms": 300000,
+  "uyari": "Backtest bekleyen limiti sonraki 5m mumun TÜM aralığıyla denetler; emir gerçekte TTL kadar yaşar. ttl_disi_dolum > 0 ise canlıda bu dolumların bir kısmı HİÇ olmazdı."
+}

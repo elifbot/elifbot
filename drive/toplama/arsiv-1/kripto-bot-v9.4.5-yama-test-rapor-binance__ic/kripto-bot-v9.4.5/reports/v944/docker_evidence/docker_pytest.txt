@@ -1,0 +1,26 @@
+........................................................................ [ 51%]
+.......................F............................................     [100%]
+=================================== FAILURES ===================================
+______________ test_only_reporting_and_run_status_methods_changed ______________
+
+    def test_only_reporting_and_run_status_methods_changed():
+        old=json.loads((ROOT/'reports/v944/v943_runner_method_ast_hashes.json').read_text())
+        cls=next(x for x in ast.parse((ROOT/'src/live_runner.py').read_text()).body if isinstance(x,ast.ClassDef) and x.name=='DualVenueLiveRunner')
+        new={n.name:hashlib.sha256(ast.dump(n,include_attributes=False).encode()).hexdigest() for n in cls.body if isinstance(n,(ast.FunctionDef,ast.AsyncFunctionDef))}
+        assert set(old)==set(new)
+>       assert {n for n,h in old.items() if new[n]!=h}=={'run','build_state_payload'}
+E       AssertionError: assert {'__init__', ...1m_rows', ...} == {'build_state_payload', 'run'}
+E         
+E         Extra items in the left set:
+E         'binance_ws_loop'
+E         'warmup_all'
+E         '_binance_single_ws'
+E         '_fetch_candles_best_source'
+E         '_fetch_okx_candles'...
+E         
+E         ...Full output truncated (13 lines hidden), use '-vv' to show
+
+tests/test_v944_invariants.py:17: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_v944_invariants.py::test_only_reporting_and_run_status_methods_changed
+1 failed, 139 passed in 14.64s

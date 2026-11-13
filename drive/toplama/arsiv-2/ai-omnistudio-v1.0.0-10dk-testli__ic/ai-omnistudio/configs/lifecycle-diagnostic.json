@@ -1,0 +1,55 @@
+{
+  "run": {
+    "mode": "PAPER",
+    "profile": "lifecycle-diagnostic",
+    "duration_sec": 240,
+    "drain_sec": 40,
+    "warmup_sec": 40,
+    "venues": [
+      "binance_vision",
+      "gateio"
+    ],
+    "symbols_per_venue": 60,
+    "out_dir": "runs",
+    "use_websocket": true
+  },
+  "detector": {
+    "ret_min_pct": 0.05,
+    "rvol_min": 1.05,
+    "min_volume_usd": 500,
+    "min_volume_24h_usd": 50000,
+    "context_enabled": false,
+    "min_breadth_ratio": 0.0,
+    "cooldown_ms": 5000
+  },
+  "policy": {
+    "strategy": "fade",
+    "max_spread_bps": 60.0,
+    "max_price_deviation_bps": 200.0,
+    "require_mtf": false,
+    "max_choppiness": 95.0,
+    "max_extension_atr": 30.0,
+    "max_contra_flow": 100.0,
+    "min_edge_ratio": 1.0,
+    "one_attempt_per_closed_bar": false
+  },
+  "risk": {
+    "max_open_positions": 5,
+    "atr_stop_mult": 0.8,
+    "atr_tp_mult": 1.0,
+    "max_hold_sec": 100,
+    "daily_loss_limit_pct": 20.0,
+    "max_consecutive_losses": 50
+  },
+  "paper": {
+    "maker_timeout_sec": 30,
+    "require_trade_through": false
+  },
+  "council": {
+    "enabled": true,
+    "veto_enabled": true,
+    "min_consensus_score": 0.0,
+    "max_spread_bps": 100.0,
+    "max_members": 20
+  }
+}

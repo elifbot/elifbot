@@ -1,0 +1,4 @@
+# Ilk kurulumdan sonra `pip freeze > requirements.lock` ile surumleri sabitleyin.
+pyyaml>=6
+websockets>=12
+ccxt>=4   # sadece testnet/live emir icin gerekli; paper modda kullanilmaz

@@ -1,0 +1,19 @@
+{
+  "main_package": "kripto-bot-v9.5.2-PAPER-RC1-mild-kod-test-rapor.zip",
+  "bytes": 5780217,
+  "sha256": "1679f75fe6be8a1ff3f22380c389715d7397e3c61b6f83b8e10eae64adeb9c31",
+  "sealed_files": 347,
+  "compiled_python_files": 106,
+  "zip_crc_ok": true,
+  "payload_hashes_ok": true,
+  "external_models": 0,
+  "real_money_enabled": false,
+  "fresh_extract_test": "259 passed in 32.94s",
+  "fresh_extract_integrity": {
+    "ok": true,
+    "checked_files": 347,
+    "errors": [],
+    "scope": "sealed files only; not profitability, authenticity signature, live approval or permission to run old session DBs"
+  },
+  "checked_utc": "2026-11-03T19:46:20.067771+00:00"
+}

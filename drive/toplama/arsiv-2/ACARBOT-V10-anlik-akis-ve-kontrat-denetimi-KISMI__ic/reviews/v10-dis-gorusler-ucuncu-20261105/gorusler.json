@@ -1,0 +1,190 @@
+{
+  "timestamp_utc": "2026-11-05T12:15:31.624820+00:00",
+  "models_attempted": 7,
+  "models_ok": 5,
+  "note": "Yanıtlar dış modellerin görüşüdür; otomatik emir onayı değildir. Sağlayıcı model etiketi kimlik doğrulaması sayılmaz.",
+  "results": [
+    {
+      "provider": "Kilo",
+      "requested_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+      "endpoint": "https://api.kilo.ai/api/gateway/chat/completions",
+      "sent_files": [
+        "acarbot/strategy.py",
+        "acarbot/ledger.py",
+        "acarbot/runner.py"
+      ],
+      "prompt_sha256": "e31380193cd7faf0463cf519c1df28f97b0cf2e65878eb0d670634187bc0d95c",
+      "http_status": 200,
+      "status": "OK",
+      "response_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+      "answer": "### 1. `acarbot/strategy.py` – `decide()` fonksiyonu: **RSI Hesaplama Verimliliği ve Yanlış Sinyal Riski (O(n²) Karmaşıklık)**\n**Neden:** `one(i)` iç fonksiyonu her çağrıldığında `rsi(v[:i+1])` ve `rsi(v[:i])` şeklinde **yeni dilimler (slices) oluşturup baştan sona RSI hesaplıyor**. `confirm=2` için son 3 mumda bu fonksiyon 3 kez çağrılır; her çağrımda ~250 elemanlı dizi kopyalanıp RSI hesaplanır. Bu, `O(n²)` zaman karmaşıklığına yol açar (250 mum için ~187.500 işlem yerine ~62.500 işlem yeterli). Ayrıca `rsi` fonksiyonu (görülmediği için) `NaN` döndürebiliyorsa `prev is not None` kontrolü yetersiz kalır; `isfinite(prev)` kontrolü yoksa `prev < 35` karşılaştırması `TypeError` fırlatır veya sessizce `False` döner.\n**Düzeltme:** `decide` girişinde **tek seferde** `rsi_series = rsi(v)` (tüm dizi için vektörel/iteratif tek geçiş) hesaplayın ve `one(i)` içinde `rsi_series[i]`, `rsi_series[i-1]` indeksleyin. `rsi` fonksiyonunu `List[float]` döndürecek şekilde güncelleyin (veya `talib`/`pandas_ta` kullanın). `prev` kontrolüne `isfinite(prev)` ekleyin.\n\n### 2. `acarbot/strategy.py` – `decide()` fonksiyonu: **Bollinger Bantları \"Future Leak\" (İleriye Bakma) ve Mantık Hatası**\n**Neden:** `strategy=='bolldon'` dalında `upper, lower = bollinger(v[:i+1])` kullanılarak **şu anki (kapanmamış/hesaplanıyor) mumun kapanışı `v[i]` bant hesaplamasına dahil ediliyor**. Bu, stratejinin kendi tetikleyeceği fiyatı kullanarak bantları çizmesine yol açar (lookahead bias). Doğru mantık `bollinger(v[:i])` (önceki kapanmış mumlar) olmalıdır. Ayrıca `bolldon` mantığı (`px < pl and x > lower`) \"alt banda dokunup geri döndü\" anlamına gelirken, `bollkir` mantığı (`x > upper`) \"bantı yukarı kırdı\" anlamına geliyor; iki strateji ters mantıkla çalışıyor olabilir, bu da strateji tanımı karışıklığına yol açar.\n**Düzeltme:** `bolldon` dalında `bollinger(v[:i])` kullanın. Strateji isimlerini ve mantıklarını (kırılım vs. geri dönüş) netleştirin; `bollkir` için `v[:i]` bazlı bant kırılımı, `bolldon` için `v[:i]` bazlı bant temasından dönüş kullanın.\n\n### 3. `acarbot/ledger.py` – `on_quote()` fonksiyonu: **Trailing Stop Mantığında Yön Hatası (SHORT Pozisyonlarda Stop Yükseliyor)**\n**Neden:** Trailing stop güncellemesinde `trailing = executable - side.sign * p.initial_risk_distance` formülü kullanılıyor. `Side.SHORT` için `side.sign == -1` olduğunda formül `executable - (-1)*dist = executable + dist` olur. Bu, fiyat düştükçe (kazanç sağladıkça) stop seviyesinin **yukarı (riskli yönde) çekilmesi** demektir. Doğru mantık: LONG için stop yukarı, SHORT için stop aşağı çekilmelidir. Mevcut kod SHORT pozisyonları korumaz, tersine riski artırır.\n**Düzeltme:** Yön bağımsız formül: `trailing_long = executable - dist`, `trailing_short = executable + dist`. Veya `trailing = executable - side.sign * dist` yerine `trailing = executable + side.sign * dist` kullanın (LONG:+1 -> yukarı, SHORT:-1 -> aşağı). `min/max` seçimlerini de yönüne göre tersine çevirin: `p.stop = max(p.stop, be, trailing) if LONG else min(p.stop, be, trailing)`.\n\n### 4. `acarbot/runner.py` – `run()` fonksiyonu: **Funding Kaçınma Mantığında Yarım Saatlik Pencere ve Veri Bütünlüğü Riski**\n**Neden:** `ms() >= f['next_ms'] - 180000` (3 dakika) kontrolü ile pozisyon kapatılıyor. Gate.io USDT perpetual funding **her 8 saatte bir** (00:00, 08:00, 16:00 UTC) gerçekleşir. Funding oranı önceden belli olsa bile, **son 3 dakikadaki fiyat hareketi (mark price) funding ödemesini belirler**. 3 dakika öncesinde kapanmak \"kaçınma\" değil, **funding oranını kilitleyen pencereye girmeden çıkma** girişimidir; ancak bu pencere borsada genellikle **30-60 saniyedir**, 3 dakika değil. 3 dakika öncesinde çıkarsanız pozisyonu gereksiz yere kapatırsınız, 30 saniye kalsanız funding ödersiniz/alırsınız. Ayrıca `funding` verisi `get_f` hata verirse `None` kalır; `f['next_ms']` erişimi `TypeError` fırlatır (kodda `if not f ...` kontrolü var ama `get_f` hata loglayıp `funding[s]` yazmadığı için `KeyError` riski de vardır).\n**Düzeltme:** Pencereyi borsa spesifikasyonuna göre (Gate.io için ~30-60 sn) ayarlayın veya funding anından **önceki kapanmış mumda** (5dk mum kapanışı funding anına yakınsa) pozisyon açmamayı tercih edin. `get_f` hata durumunda `funding[s] = None` atayın ve `run` içinde `f is None` kontrolü yapın.\n\n### 5. `acarbot/runner.py` – `run()` fonksiyonu: **Edge (Marljin) Hesaplamasında Spread ve Slippage Çift Sayımı / Yanlış Maliyet Modeli**\n**Neden:** `cost = 11 + 4 + q.spread_bps` satırında: `11` (taker fee 5.5bps * 2 taraf = 11bps) + `4` (slippage 2bps * 2 taraf = 4bps) + `q.spread_bps` (anlık bid-ask spread). **Hata:** `q.spread_bps` zaten `ask - bid` farkını içerir. Taker emri verirken **spread'i ödersiniz** (bid'de satarsınız, ask'ta alırsınız). Slippage (`slip_bps=2`) ise **spread'in üzerine** eklenen ekstra kaymadır. Mevcut formül `spread + slippage*2 + fee*2` yaparak spread'i bir kez, slippage'i iki kez sayıyor. Doğru gidiş-dönüş maliyeti: `spread_bps +",
+      "usage": {
+        "prompt_tokens": 5679,
+        "completion_tokens": 1800,
+        "total_tokens": 7479,
+        "cost": 0,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0,
+          "upstream_inference_prompt_cost": 0,
+          "upstream_inference_completions_cost": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      }
+    },
+    {
+      "provider": "Kilo",
+      "requested_model": "nvidia/nemotron-3.5-super-vl:free",
+      "endpoint": "https://api.kilo.ai/api/gateway/chat/completions",
+      "sent_files": [
+        "acarbot/strategy.py",
+        "acarbot/ledger.py",
+        "acarbot/runner.py"
+      ],
+      "prompt_sha256": "e31380193cd7faf0463cf519c1df28f97b0cf2e65878eb0d670634187bc0d95c",
+      "http_status": 200,
+      "status": "OK",
+      "response_model": "nvidia/nemotron-3.5-super-vl:free",
+      "answer": "Aşağıda kod incelenmesi sonucu tespit edilen en önemli 6 somut hata ve riskli tasarım kararı listelenmiştir. Sadece prompt içinde verilen kod baz alınmıştır; dışarıdaki modüllerin (omnistudio vb.) içeriği varsayılmamıştır.\n\n---\n\n### 1. `acarbot/runner.py` — `get_f` fonksiyonu: `market._get` özel metoduna doğrudan erişim\n**Neden:** `get_f` içinde `await market._get(...)` çağrısı yapılıyor. `_get` özel (private) bir metod olduğu için `MarketData` sınıfının dış kod tarafından çağırılması kapsüllemeyi bozar ve sınıfın iç implementasyonu değişirse (ör. metod adı, imza, rate-limit mantığı) çalışmayı durdurur. Ayrıca `d['funding_next_apply']` ve `d['funding_rate']` anahtarları doğrudan erişiliyor; API yanıtı bu anahtarları içermiyorsa `KeyError` fırlatır ve `get_f` hata yakalama bloğunda sessizce `funding_error` sayar, ama veri eksikliği ileride `KeyError` veya `None` referans hatası olarak ortaya çıkabilir.\n**Düzeltme:** `MarketData` sınıfında funding verisini döndüren resmi, açık bir metod (ör. `market.funding(...)`) kullanılmalı; yanıt sözlüğü `.get()` ile kontrol edilmeli ve eksik anahtar durumunda açık bir hata veya varsayılan değer dönmeli.\n\n---\n\n### 2. `acarbot/runner.py` — `get_c` ve `get_q` fonksiyonlarında boş yanıtların sessizce yutulması\n**Neden:** `if data:` ve `if q:` kontrolleri sonrası başarısız veya boş yanıtlar sadece sayaçta artırılıyor (`candle_fetch_error`, `quote_error`), ancak hangi sembol için ne oldu, HTTP durum kodu nedir veya yanıt neydi gibi ayrıntılar loglanmıyor. Bu, veri eksikliğini görünmez kılar ve debug süresini uzatır.\n**Düzeltme:** Hata durumunda sembol, zaman damgası ve mümkünse HTTP durumu/yanıt örneği birlikte `write(log, ...)` ile kaydedilmeli; sadece sayaç artırmak yetersizdir.\n\n---\n\n### 3. `acarbot/runner.py` — `while` döngüsünde `gap > 45` olduğunda `RuntimeError` fırlatılması\n**Neden:** `await asyncio.gather(*(get_q(s) for s in syms))` çağrısı 20 sembol için sıralı veya eşzamanlı olarak uzun sürebilir. Döngü başındaki `gap` kontrolü, bir turun tamamlanması süresini ölçer; ağ gecikmesi veya API yanıt yavaşlığı sonucu bu süre 45 saniyeyi geçerse çalışan bot `RuntimeError` ile çöküp tüm işlemi sonlandırır. Bu, geçici bir ağ titremesini kritik hata olarak görür.\n**Düzeltme:** Büyük bir `gap`’ı hata olarak fırlatmak yerine loglamalı ve işleme devam etmelidir; sadece sürekli veya eşik üstü tekrarlayan durumlarda (ör. 3 ardışık tur) durdurma kararı alınmalıdır.\n\n---\n\n### 4. `acarbot/strategy.py` — `decide` fonksiyonunda `one(i)` içinde RSI’nin tekrar tekrar hesaplanması\n**Neden:** `one(i)` içindeki `rsirev` ve `kombin` dallarında `rsi(v[:i+1])` ve `rsi(v[:i])` her bar için sıfırdan hesaplanıyor. 250+ mumlu veri setinde bu, O(n²) karmaşıklık oluşturur ve çalışma zamanını gereksiz yere uzatır. Ayrıca `one(i-j)` çağrısıyla onaylama (confirmation) adımında bu hesaplamalar tekrar ediyor.\n**Düzeltme:** RSI dizisi `decide` başında bir kez hesaplanıp `one(i)` içinde dizi üzerinden indeksle erişilmelidir (ör. `rsi_series[i]`), bu sayede karmaşıklık O(n)’a düşer.\n\n---\n\n### 5. `acarbot/ledger.py` — `on_quote` içinde stop/target ve breakeven kontrollerinin aynı quote ile sırayla değerlendirilmesi\n**Neden:** `on_quote` metodunda önce stop-loss, sonra take-profit ve sonrasında breakeven/trailing stop kontrolü tek bir quote üzerinden yapılıyor. Fiyat aynı anda hem stop hem hedefi geçerse (çok dar spread veya ani fırtına hareketinde), stop önce tetiklenip pozisyon kapatılır ve take-profit fırsatı kaçırılır. Ayrıca breakeven güncellemesi aynı quote ile aynı turda uygulanıp sonraki kontrolleri etkileyebilir; bu, gerçek emir akışında mümkün olmayan sıralı davranışa yol açar.\n**Düzeltme:** Her bir olay (stop, hedef, breakeven) ayrı ayrı değerlendirilmeli ve aynı fiyat seviyesinde birden fazla tetikleme durumu için öncelik kuralı (ör. önce en zararlı olan) tanımlanmalı.\n\n---\n\n### 6. `acarbot/runner.py` — `run` fonksiyonunda `out.mkdir(parents=True, exist_ok=False)` kullanımı\n**Neden:** Çıktı dizini zaten varsa `FileExistsError` fırlatılır ve bot çalışmaya başlamadan çöker. PAPER ortamında tekrar tekrar test çalıştırıldığında bu, operasyonel bir engel oluşturur.\n**Düzeltme:** `exist_ok=True` kullanılmalı veya dizin mevcutsa benzersiz bir alt dizin (zaman damgalı) oluşturulmalıdır.",
+      "usage": {
+        "prompt_tokens": 5679,
+        "completion_tokens": 1369,
+        "total_tokens": 7048,
+        "cost": 0,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0,
+          "upstream_inference_prompt_cost": 0,
+          "upstream_inference_completions_cost": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      }
+    },
+    {
+      "provider": "Kilo",
+      "requested_model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+      "endpoint": "https://api.kilo.ai/api/gateway/chat/completions",
+      "sent_files": [
+        "acarbot/strategy.py",
+        "acarbot/ledger.py",
+        "acarbot/runner.py"
+      ],
+      "prompt_sha256": "e31380193cd7faf0463cf519c1df28f97b0cf2e65878eb0d670634187bc0d95c",
+      "http_status": 200,
+      "status": "OK",
+      "response_model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+      "answer": "**Dosya:** `acarbot/strategy.py`  \n**Hata 1 – `ema_series` fonksiyonunda dönüşüm hatası**  \n- **Neden:** Fonksiyon `v` listesi boş ya da `period < 1` ise `[]` döndürür, fakat sonra `result = [v[0]]` satırı hata (`IndexError`) oluşturur.  \n- **Düzeltme:** `v` listesi boşsa ya da `period < 1` ise doğrudan `[]` döndürün; aynı zamanda `period` pozitif bir tam sayı olmalı.  \n\n**Hata 2 – `bollinger` fonksiyonunda `None` dönüşüm hatası**  \n- **Neden:** `len(v) < period` koşulu `None` döndürür, fakat `bollinger` içinde `mean = sum(w)/period` ve `sd = sqrt(...)` işlemleri bu `None` değerle calışır → `TypeError`.  \n- **Düzeltme:** `None` döndüğünde fonksiyonun `None` döndürmesini beklediği gibi, `bollinger` çağrısı öncesi `len(v) >= period` kontrolü yeterli; aksi takdirde `None` döndürün ve kullanıcı kodunda `None` kontrolü yapmalısınız.  \n\n**Hata 3 – `decide` fonksiyonunda `c[-1].open_ms` referansı olmadan `CANDLE_GAP` hata**  \n- **Neden:** `any(c[i].open_ms - c[i-1].open_ms != 300000 for i in range(1,len(c)))` ifadesi `c[-1].open_ms` yerine `c[i].open_ms` kullanılmalı; hata mesajı `CANDLE_GAP` doğru olsa da `c[-1].open_ms` yerine `c[i].open_ms` kullanılmıyor, bu durumda hata fırlatılmaz ve hatalı pozisyonlar devam edebilir.  \n- **Düzeltme:** Döngüyü `range(1, len(c))` yerine `range(1, len(c))` tutup, hata mesajını `c[i].open_ms` olarak değiştirin (örnek: `return Result(None, 'CANDLE_GAP', c[i].open_ms)`).  \n\n**Hata 4 – `decide` içinde `slow` EMA tanımlaması eksik**  \n- **Neden:** `slow=ema_series(v,200)` satırı tanımlıyor, fakat `ema_series` fonksiyonu `period` parametresi alıyor; `slow` doğru hesaplanıyor, ancak `one(i)` içinde `slow[i]` erişimi yok. `slow` listesi `v` uzunluğunda değil, sadece `period` uzunluğunda; `i` indeksleri `len(c)-1`’ye kadar geniş olabilir → `IndexError`.  \n- **Düzeltme:** `slow` ve diğer EMA’ların uzunluklarını `len(c)` yapın; yani `ema_series(v, period)` çağrısını `ema_series(v, period)` yerine `ema_series(v, period)` ile aynı kalmalı, fakat `slow` listesi `len(c)` uzunluğunda olmalı. En kolay çözüm: `slow = ema_series(v, 200)` yerine `slow = ema_series(v, 200)` (aynı kalır) ve `one(i)` içinde `if i >= len(slow): return None` kontrolü ekleyin.  \n\n**Hata 5 – `decide` içinde `rsi` çağrısı `rsi(v[:i+1])` yerine `rsi(v[:i])` olmalı**  \n- **Neden:** `rsi` fonksiyonu en az bir veri noktası almalı; `v[:i+1]` içinde `i` indeksli son eleman dahildir, `i=0` olduğunda `v[:1]` (tek eleman) geçerlidir, fakat `prev = rsi(v[:i])` içinde `i=0` ise `v[:0]` boş listesi ve `rsi([])` hata fırlatır.  \n- **Düzeltme:** `prev = rsi(v[:i]) if i > 0 else None` şeklinde değiştirin; `i == 0` olduğunda `prev` None olmalı.  \n\n**Hata 6 – `decide` içinde `confirm` parametresi `n=1` ise `any(one(i-j)!=side for j in range(n))` her zaman `j=0` olur ve `one(i)!=side` kontrolü `i` aynı kalır; bu durumda `confirmation` hatası her zaman geçerli. **Doğru davranış** `n` parametresi `confirm` (varsayılan 2) olduğunda, `j` değerleri 0 ve 1 olmalı; şu an kod `n=1` ise `confirmation` hatası yanlış olabilir.  \n- **Düzeltme:** `n = 1 if strategy in ('rsirev','bolldon') else confirm` satırını `n = confirm if strategy in ('rsirev','bolldon') else confirm` ya da doğrudan `n = confirm` yapın; `confirm` parametresi zaten `2` olarak varsayılan olduğundan `n` her zaman `2` olmalı.  \n\n**Özetle:** Yukarıdaki hatalar kodu çökertebileceği için `strategy.py` dosyasında en az altı somut hatayı (yukarıdaki 6) düzeltmeniz gerekir. Düzeltmeler, fonksiyonların giriş parametrelerini ve listelerdeki indeks sınırlarını kontrolleyerek, `None`/`IndexError` ve mantıksal tutarsızlık risklerini ortadan kaldırır.",
+      "usage": {
+        "prompt_tokens": 5678,
+        "completion_tokens": 1360,
+        "total_tokens": 7038,
+        "cost": 0,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0,
+          "upstream_inference_prompt_cost": 0,
+          "upstream_inference_completions_cost": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      }
+    },
+    {
+      "provider": "OVHcloud",
+      "requested_model": "Meta-Llama-3_3-70B-Instruct",
+      "endpoint": "https://oai.endpoints.kepler.ai.cloud.ovh.net/v1/chat/completions",
+      "sent_files": [
+        "acarbot/strategy.py",
+        "acarbot/ledger.py",
+        "acarbot/runner.py"
+      ],
+      "prompt_sha256": "e31380193cd7faf0463cf519c1df28f97b0cf2e65878eb0d670634187bc0d95c",
+      "http_status": 400,
+      "status": "ERROR",
+      "error": "{\"message\":\"feature 'reasoning_effort for this model' is not currently supported\"}"
+    },
+    {
+      "provider": "OVHcloud",
+      "requested_model": "gpt-oss-120b",
+      "endpoint": "https://oai.endpoints.kepler.ai.cloud.ovh.net/v1/chat/completions",
+      "sent_files": [
+        "acarbot/strategy.py",
+        "acarbot/ledger.py",
+        "acarbot/runner.py"
+      ],
+      "prompt_sha256": "e31380193cd7faf0463cf519c1df28f97b0cf2e65878eb0d670634187bc0d95c",
+      "http_status": 400,
+      "status": "ERROR",
+      "error": "{\"message\":\"feature 'reasoning_effort None for this model' is not currently supported\"}"
+    },
+    {
+      "provider": "OVHcloud",
+      "requested_model": "Qwen3.5-397B-A17B",
+      "endpoint": "https://oai.endpoints.kepler.ai.cloud.ovh.net/v1/chat/completions",
+      "sent_files": [
+        "acarbot/strategy.py",
+        "acarbot/ledger.py",
+        "acarbot/runner.py"
+      ],
+      "prompt_sha256": "e31380193cd7faf0463cf519c1df28f97b0cf2e65878eb0d670634187bc0d95c",
+      "http_status": 200,
+      "status": "OK",
+      "response_model": "Qwen3.5-397B-A17B",
+      "answer": "Bir bağımsız yazılım ve risk denetçisi olarak, sağlanan `acarbot` kod tabanını inceledim. Kod, gerçek para içermeyen bir \"paper trading\" (sanal işlem) simülasyonu olsa da, stratejik mantık hataları, veri tutarsızlıkları ve kritik risk yönetimi eksiklikleri içermektedir. Aşağıda, önem sırasına göre en kritik 6 somut hata veya riskli tasarım kararı listelenmiştir.\n\n### 1. Strateji Mantık Hatası: Bollinger Bantları \"Dönüş\" Stratejisinde Yanlış Koşul (`strategy.py` - `decide` > `one` fonksiyonu)\n\n*   **Dosya/İşlev:** `acarbot/strategy.py`, `decide` fonksiyonu içindeki `one` iç fonksiyonu, özellikle `strategy=='bolldon'` bloğu.\n*   **Hata/Risk:** Kodda `bolldon` (Bollinger Dönüş) stratejisi için şu koşul yazılmış:\n    `return Side.LONG if px<pl and x>lower else Side.SHORT if px>pu and x<upper else None`\n    Burada `px` (önceki mum kapanışı) alt bandın (`pl`) altında iken, `x` (mevcut mum kapanışı) yine alt bandın (`lower`) *üzerinde* ise LONG sinyali veriliyor. Ancak `lower` ve `pl` aynı hesaplamayla (veya çok benzer) türetiliyor. Mantıksal olarak bir mum bandın dışına çıkıp (breakout) tekrar içine döndüğünde (reversion) işlem alınmalıdır.\n    Sorun şudur: `x > lower` koşulu, fiyatın hala bandın üzerinde olduğunu söyler, ancak `px < pl` koşulu önceki mumun bandın altında olduğunu söyler. Bu doğru bir \"içeri dönüş\" mantığı gibi dursa da, değişken isimlendirmesi ve `bollinger` fonksiyonunun her çağrıda `v[:i+1]` ve `v[:i]` ile farklı pencereler kullanması nedeniyle **tutarsız bant değerleri** karşılaştırılmaktadır. Daha kritiği, `bolldon` stratejisi için `x < upper` (SHORT için) koşulu, fiyatın üst bandın *altında* olmasını şart koşarken, `px > pu` önceki mumun üstünde olmasını ister. Bu mantık doğrudur ancak `bollinger` fonksiyonu her `i` indeksi için yeniden hesaplandığında, bant genişliği değiştiği için `px`'in `pu`'ya göre durumu ile `x`'in `upper`'a göre durumu aynı referans çerçevesinde olmayabilir.\n    **Asıl Kritik Hata:** `bollkir` (Kırılım) stratejisinde `x > upper` (fiyat üst bandı kırdı) deniliyor ancak `bolldon` (Dönüş) stratejisinde `px < pl` (önceki alt bandın altındaydı) ve `x > lower` (şimdi üstünde) deniliyor. Eğer `lower` ve `pl` aynı anda hesaplanırsa sorun yok, ancak kodda `upper, lower = bollinger(v[:i+1])` ve hemen üstünde `pu, pl = bollinger(v[:i])` çağrıları var. Bu, **dinamik bant genişliği nedeniyle \"hayalet sinyal\" üretebilir.** Fiyat hareket etmese bile bant daraldığı için sinyal oluşabilir.\n*   **Düzeltme Önerisi:** Bollinger bantları tek bir pencere üzerinde hesaplanmalı ve önceki/şu anki fiyatlar aynı bant değerleriyle karşılaştırılmalıdır. `v[:i]` ve `v[:i+1]` için ayrı ayrı `bollinger` çağırmak yerine, tüm seri için bir kez hesaplanıp indekslenmelidir.\n    ```python\n    # Düzeltme: Tüm seri için bantları bir kez hesapla\n    all_uppers, all_lowers = [], []\n    for k in range(len(v)):\n        u, l = bollinger(v[:k+1])\n        if u is None: all_uppers.append(None); all_lowers.append(None)\n        else: all_uppers.append(u); all_lowers.append(l)\n    \n    # Karşılaştırmayı aynı referansla yap\n    if strategy == 'bolldon':\n        prev_lower = all_lowers[i-1] if i > 0 else None\n        curr_lower = all_lowers[i]\n        # ... karşılaştırma ...\n    ```\n\n### 2. Veri Tutarlılığı ve Sahtecilik Riski: Mum Aralığı Kontrolünde Sert Kodlama (`strategy.py` - `decide` fonksiyonu)\n\n*   **Dosya/İşlev:** `acarbot/strategy.py`, `decide` fonksiyonu.\n*   **Hata/Risk:** Kodda `if any(c[i].open_ms - c[i-1].open_ms != 300000 ...)` şeklinde **sert kodlanmış (hardcoded)** `300000` (5 dakika) kontrolü bulunmaktadır. Ancak fonksiyon imzasında `interval_ms=300000` parametresi vardır ve `closed_candles` fonksiyonu da bu parametreyi kullanır. `decide` fonksiyonu bu parametreyi görmezden gelerek doğrudan sayıya bakmaktadır.\n    Eğer bu kod gelecekte 1 dakikalık veya 1 saatlik stratejiler için yeniden yapılandırılırsa ve `interval_ms` değiştirilirse, `decide` fonksiyonu hala 5 dakika arayacak ve tüm verileri `CANDLE_GAP` hatasıyla reddedecektir. Bu, kodun genişletilebilirliğini sıfıra indirir ve sessizce stratejinin çalışmamasına neden olur.\n*   **Düzeltme Önerisi:** Sihirli sayı (`300000`) yerine fonksiyona geçirilen `interval_ms` parametresi veya `closed_candles` içinde kullanılan sabit kullanılmalıdır.\n    ```python\n    # Hatalı: != 300000\n    # Doğru: != interval_ms\n    if any(c[i].open_ms - c[i-1].open_ms != interval_ms for i in range(1,len(c))):\n        return Result(None, 'CANDLE_GAP', c[-1].open_ms)\n    ```\n\n### 3. Risk Yönetimi Mantık Hatası: Zarar Durdur (Stop-Loss) Kaydırma Algoritması (`ledger.py` - `on_quote` metodu)\n\n*   **Dosya/İşlev:** `acarbot/ledger.py`, `on_quote` metodu.\n*   **Hata/Risk:** Kod, pozisyon kâra geçtiğinde stop seviyesini güncellemeye çalışır:\n    `p.stop=max(p.stop,be,trailing) if side is Side.LONG else min(p.stop,be,trailing)`\n    Buradaki mantık hatası şudur: `trailing` hesaplaması `executable - side.sign * p.initial_risk_distance` şeklindedir.\n    LONG pozisyonda: Fiyat yükseldikçe `trailing` artar. `max` fonksiyonu ile eski stop, başabaş (be) ve trailing arasından en yükseği seçilir. Bu doğru görünür.\n    ANCAK, `initial_risk_distance` giriş anındaki risk mesafesidir. Eğer piyasa çok hızlı hareket ederse ve ardından sert bir düzeltme yaparsa, `trailing` stop'u fiyatın çok gerisinde bırakabilir. Daha önemlisi, **`be` (başabaş) hesaplaması**: `p.entry * (1 + side.sign * (self.fee*2 + self.slip*2))`.\n    LONG için `side.sign` +1'dir. Formül:",
+      "usage": {
+        "prompt_tokens": 5385,
+        "completion_tokens": 1800,
+        "total_tokens": 7185
+      }
+    },
+    {
+      "provider": "OVHcloud",
+      "requested_model": "Qwen3.5-9B",
+      "endpoint": "https://oai.endpoints.kepler.ai.cloud.ovh.net/v1/chat/completions",
+      "sent_files": [
+        "acarbot/strategy.py",
+        "acarbot/ledger.py",
+        "acarbot/runner.py"
+      ],
+      "prompt_sha256": "e31380193cd7faf0463cf519c1df28f97b0cf2e65878eb0d670634187bc0d95c",
+      "http_status": 200,
+      "status": "OK",
+      "response_model": "Qwen3.5-9B",
+      "answer": "İstediğin gibi, bağımsız bir yazılım ve risk denetçisi perspektifiyle `acarbot` projesindeki kodu inceledim. Kodun \"Paper\" (sanal) tabanlı olduğu ve gerçek emir göndermediği belirtilmiş olsa bile, mimarideki tasarım hataları, veri tutarsızlıkları ve risk yönetimi boşlukları, gerçek bir üretim ortamında ciddi kayıplara veya sistem çökmelerine yol açabilir.\n\nİşte en kritik 6 somut hata ve riskli tasarım kararı:\n\n### 1. Fonlama (Funding) Verisi Eksikliği ve Pozisyon Yönetimi Riski\n*   **Dosya:** `acarbot/runner.py`\n*   **İlgili İşlev:** `get_f`, `on_quote` (Ledger içindeki fonlama mantığı), `run` fonksiyonu içindeki döngü.\n*   **Neden:** Kod, fonlama oranını (`funding_rate`) ve sonraki uygulama zamanını (`funding_next_apply`) çeker ancak bu veriyi pozisyon açma kararında veya pozisyon açıkken risk hesaplamasında **kullanmaz**. `Ledger` sınıfında `on_quote` fonksiyonunda pozisyonun fonlama ödemelerinden etkilenip etkilenmediği kontrol edilmez. USDT perpetual piyasalarda yüksek fonlama oranları (örneğin %0.1/gün), kısa sürede marj çağrısı (margin call) veya likidasyon riski yaratır. Kod, \"FUNDING_AVOIDANCE\" ile pozisyonu kapatmaya çalışsa da, bu mantık sadece belirli bir zaman penceresinde çalışır ve sürekli bir risk takibi değildir.\n*   **Düzeltme Önerisi:** `Ledger` sınıfına fonlama oranını ve sonraki ödeme zamanını takip eden bir alan ekleyin. Her pozisyon açıldığında ve fiyat güncellendiğinde, pozisyonun net değerini (entry price, current price, funding rate, time to next funding) hesaplama yapın. Eğer beklenen fonlama maliyeti, stop-loss veya kâr hedefinden daha yüksekse, işlem açılmasını engelleyin veya mevcut pozisyonu erken kapatın.\n\n### 2. Mum Verisi Tutarlılığı ve \"Stale Candle\" Kontrolü Hatası\n*   **Dosya:** `acarbot/strategy.py`\n*   **İlgili İşlev:** `decide` fonksiyonu içindeki `STALE_CANDLE` kontrolü.\n*   **Neden:** Kod, son mumun kapanış zamanından şu anki zamana kadar geçen süreyi kontrol eder: `if now_ms - (c[-1].open_ms + 300000) > 90000`. Bu mantık hatalıdır. Eğer bir mum 300 saniye (5 dakika) önce açıldıysa ve şu an 90 saniye geçtiyse, toplam süre 390 saniyedir. Kod, `now_ms - (open_ms + interval)` farkını hesaplar. Eğer bu fark 90 saniyeden büyükse \"eski mum\" uyarısı verir. Ancak, eğer bir mum 5 dakika 10 saniye önce açıldıysa ve şu an 10 saniye geçtiyse, fark 90 saniyedir ve uyarı tetiklenir. Bu durum, mumun henüz tam kapanmamış olmasına rağmen (veya çok yeni kapanmış olmasına rağmen) işlemi engeller. Ayrıca, `closed_candles` fonksiyonu `c.closed` ve `open_ms + interval <= now_ms` koşullarını kullanır. Eğer `now_ms` çok büyükse (örneğin sistem saati kayması veya network gecikmesi), tüm mumlar \"kapanmış\" olarak kabul edilir ancak `decide` fonksiyonu bu mumları \"eski\" olarak reddeder. Bu, stratejinin çalışmasını tamamen durdurabilir.\n*   **Düzeltme Önerisi:** `STALE_CANDLE` kontrolünü, son mumun kapanış zamanından şu anki zamana kadar geçen süreyi (`now_ms - c[-1].close_ms`) kontrol ederek yeniden yazın. Eğer bu süre, mum intervalinden (300000 ms) çok büyükse (örneğin 2x veya 3x), veri akışında bir sorun olduğunu varsayın. Ayrıca, `closed_candles` fonksiyonundaki `c.closed` kontrolünün, verinin gerçekten kapanmış olup olmadığını doğruladığından emin olun; bazı API'ler mumu kapanmış olarak işaretlemese bile zaman kontrolü yapabilir.\n\n### 3. RSI Hesaplama Hatası (İndeks Dışı Kullanım)\n*   **Dosya:** `acarbot/strategy.py`\n*   **İlgili İşlev:** `decide` fonksiyonu içindeki `rsirev` ve `kombin` stratejileri.\n*   **Neden:** Kod, `rsi(v[:i+1])` ve `rsi(v[:i])` çağrıları yaparak RSI değerini hesaplar. Ancak, `rsi` fonksiyonu (omnistudio kütüphanesinden) muhtemelen bir liste alır ve son elemanı döner. Eğer `rsi` fonksiyonu, verilen listenin uzunluğuna göre farklı sonuçlar dönerse (örneğin, listenin son elemanını kullanmazsa veya yanlış indeks kullanırsa), `prev` değişkeni beklenen değeri vermez. Özellikle `rsirev` stratejisinde, `prev` değeri `v[:i]` (yani `i`'nci mumdan önceki veriler) üzerinden hesaplanır. Eğer `rsi` fonksiyonu, listenin son elemanını kullanmazsa, `prev` değeri `i-1`'inci mumun RSI'si olur. Bu durumda, `prev` değeri `i-1`'inci mumun kapanış fiyatına göre hesaplanır, ancak `i`'nci mumun kapanış fiyatı henüz hesaplanmamıştır. Bu, stratejinin yanlış sinyaller üretmesine neden olabilir.\n*   **Düzeltme Önerisi:** `rsi` fonksiyonunun dokümantasyonunu kontrol edin ve nasıl çalıştığını doğrulayın. Eğer `rsi` fonksiyonu, verilen listenin son elemanını kullanıyorsa, `prev` değeri için `v[:i]` yerine `v[:i-1]` kullanılmalıdır. Ayrıca, `rsi` fonksiyonunun, listenin uzunluğu yeterli değilse `None` döndürdüğünden emin olun. Eğer `rsi` fonksiyonu, listenin son elemanını kullanmıyorsa, `prev` değeri için `v[:i]` yerine `v[:i-1]` kullanılmalıdır.\n\n### 4. Likidite ve Emir Derinliği Varsayımı\n*   **Dosya:** `acarbot/ledger.py`\n*   **İlgili İşlev:** `open` fonksiyonu.\n*   **Neden:** Kod, `slip_bps` (slipaj) parametresi kullanarak varsayımsal bir fiyat hesaplar: `px=(q.ask if side is Side.LONG else q.bid)*(1+self.slip*side.sign)`. Ancak, bu slipaj sabittir ve piyasa koşullarına (likidite seviyesine) göre değişmez. Likidite düşük olduğunda (örneğin, az işlem gören bir coin), gerçek slipaj çok daha yüksek olabilir. Kod, bu yüksek slipajı hesaba katmaz ve işlemi açar. Bu durumda, gerçek piyasa koşullarında işlem açıldığında, beklenen fiyat yerine çok daha kötü bir fiyata girilir. Ayrıca, `Ledger` sınıfı, emir defterinin (order book) derinliğini kontrol etmez. Eğer piyasa derinliği yetersizse, emir tam olarak doldurulamaz veya fiyat çok hızlı hareket eder.\n*   **Düzeltme Önerisi:** Slipaj hesaplamasını, piyasa der",
+      "usage": {
+        "prompt_tokens": 5385,
+        "completion_tokens": 1800,
+        "total_tokens": 7185
+      }
+    }
+  ]
+}

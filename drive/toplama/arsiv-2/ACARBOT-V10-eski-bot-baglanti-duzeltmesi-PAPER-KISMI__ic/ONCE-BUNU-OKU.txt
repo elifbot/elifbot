@@ -1,0 +1,2 @@
+ACARBOT V10 — eski bot bağlantı düzeltmesi: önce acarbot/GECMIS_BOT_DUZELTME_RAPORU.md okuyun.
+KISMİ, yalnız PAPER; gerçek para onayı yok.

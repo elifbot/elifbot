@@ -1,0 +1,92 @@
+{
+  "schema": "three-run-metrics-v1",
+  "comparable_as_one_portfolio": false,
+  "reason": "Different code versions, durations, exchange coverage, accounting quality, closeout cohorts and starting balances; do not sum net PnL as a single portfolio result.",
+  "experiments": [
+    {
+      "run_id": 39969507314,
+      "starting_balance_usdt": 100000.0,
+      "duration_hours": 5.91667,
+      "entries_primary": 160,
+      "close_records_total": 1032,
+      "close_records_primary": 160,
+      "duplicate_close_records": 872,
+      "reported_cash_net_usdt": -796.2,
+      "primary_gross_pnl_usdt": -57.47,
+      "primary_approx_net_sensitivity_usdt": -113.36,
+      "primary_win_rate_pct": 51.25,
+      "primary_profit_factor": 0.783,
+      "cross_rescue_primary_count": 119,
+      "cross_rescue_gross_usdt": -75.67,
+      "cross_rescue_approx_net_usdt": -117.32,
+      "orderflow_exit_count": 7,
+      "orderflow_exit_gross_usdt": 49.29,
+      "natural_close_cohort_complete": false,
+      "exchanges": [
+        "okx"
+      ],
+      "source": "analysis/run_39969507314/GENEL_ANALIZ.md"
+    },
+    {
+      "run_id": 40077757773,
+      "starting_balance_usdt": 100000.0,
+      "duration_hours": 2.0,
+      "entries": 85,
+      "closes": 85,
+      "open_positions_at_closeout": 0,
+      "gross_pnl_usdt": 72.92493237319974,
+      "fees_usdt": 29.77351839332429,
+      "funding_usdt": 0.15820496812243254,
+      "net_pnl_usdt": 43.30961894799792,
+      "win_rate_pct": 45.88235294117647,
+      "profit_factor": 1.6202352499426582,
+      "median_net_all_usdt": -0.1437506431840752,
+      "natural_bot_close_count": 30,
+      "natural_bot_net_usdt": 95.60308470400031,
+      "natural_bot_profit_factor": 36.07,
+      "natural_bot_median_net_usdt": 2.2388102392226017,
+      "session_end_close_count": 55,
+      "orderflow_exit_count": 20,
+      "orderflow_exit_net_usdt": 98.01,
+      "trailing_exit_count": 10,
+      "trailing_exit_net_usdt": -2.41,
+      "top2_natural_bot_share_pct": 50.3,
+      "exchanges": [
+        "binance",
+        "okx"
+      ],
+      "source": "analysis/run_40077757773/sonuc-ozeti.md"
+    },
+    {
+      "run_id": 40090692312,
+      "starting_balance_usdt": 1000.0,
+      "duration_minutes": 60,
+      "shadow_variants": 6,
+      "status": "completed-success",
+      "entries": 9,
+      "closes": 9,
+      "net_pnl_usdt": -3.047808707782033,
+      "source": "analysis/run_40090692312/",
+      "open_positions": 0,
+      "duplicate_close_records": 0,
+      "gross_pnl_usdt": 0.10269250694022544,
+      "fees_usdt": 3.1505012147222584,
+      "funding_usdt": 0.0,
+      "profit_factor": 0.2583842330300485,
+      "wins": 2,
+      "losses": 7,
+      "closeout_completed": true,
+      "insurance_close_count": 9,
+      "natural_close_count": 0,
+      "exchanges": [
+        "binance",
+        "okx"
+      ],
+      "shadow_flow_accepted": 0,
+      "shadow_flow_rejected": 9,
+      "shadow_technical_harmony_accepted": 8,
+      "shadow_technical_harmony_rejected": 1,
+      "evidence_path": "analysis/run_40090692312/"
+    }
+  ]
+}

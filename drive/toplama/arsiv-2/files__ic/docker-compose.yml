@@ -1,0 +1,30 @@
+services:
+  kripto-bot:
+    build: .
+    container_name: kripto-bot
+    user: "appuser"
+    init: true                      # zombi süreç / sinyal iletimi (SIGTERM ile düzgün kapanış)
+    stop_grace_period: 30s
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    env_file:
+      - .env
+    ports:
+      # Yalnızca sunucunun kendisinden erişilir. Docker, UFW'yi atlayarak portu
+      # internete açar; bu yüzden 127.0.0.1'e bağlıyoruz. Uzaktan erişim: SSH tüneli.
+      - "127.0.0.1:8501:8501"
+      - "127.0.0.1:8502:8502"
+    volumes:
+      - kripto-data:/app/data       # bot_state.db, arşivler, kelly_stats vb. yeniden build'de kaybolmaz
+    mem_limit: 1g
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+volumes:
+  kripto-data:

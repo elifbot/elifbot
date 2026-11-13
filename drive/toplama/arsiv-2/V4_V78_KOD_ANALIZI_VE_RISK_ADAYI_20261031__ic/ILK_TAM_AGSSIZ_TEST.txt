@@ -1,0 +1,29 @@
+........................................................................ [ 12%]
+........................................................................ [ 25%]
+........................................................................ [ 38%]
+.................................................................F...... [ 51%]
+........................................................................ [ 64%]
+........................................................................ [ 77%]
+........................................................................ [ 90%]
+...................................................                      [100%]
+=================================== FAILURES ===================================
+________________________ test_acilis_kapisi_ve_ayni_yon ________________________
+
+bot_yap = <function bot_yap.<locals>._yap at 0x7f1866d3c180>
+
+    def test_acilis_kapisi_ve_ayni_yon(bot_yap):
+        b=bot_yap(acilis_kap_10dk=2, ayni_yon_kap=0)
+        assert b._pozisyon_ac(_s("AUSDT"))=="acildi"
+        assert b._pozisyon_ac(_s("BUSDT"))=="acildi"
+        assert b._pozisyon_ac(_s("CUSDT"))=="engel:acilis_kapi_10dk"
+        b2=bot_yap(ayni_yon_kap=1, acilis_kap_10dk=0)
+>       assert b2._pozisyon_ac(_s("AUSDT"))=="acildi"
+E       AssertionError: assert 'engel:cift_b...inance:AUSDT)' == 'acildi'
+E         
+E         - acildi
+E         + engel:cift_borsa (binance:AUSDT)
+
+tests/test_v19_iyilestirmeler.py:55: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_v19_iyilestirmeler.py::test_acilis_kapisi_ve_ayni_yon - Ass...
+1 failed, 554 passed in 51.85s

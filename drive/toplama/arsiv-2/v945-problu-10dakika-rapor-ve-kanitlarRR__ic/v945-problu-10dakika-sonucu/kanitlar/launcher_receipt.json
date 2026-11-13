@@ -1,0 +1,15 @@
+{
+  "runner_exit_ok": true,
+  "started_epoch": 1793713142.8285413,
+  "phase": "COMPLETED",
+  "probe": {
+    "failed": null,
+    "calls": 2838090,
+    "windows": 573,
+    "recorder_ns_total": 4563977551,
+    "log_write_ns_total": 80023991,
+    "log_write_ns_max": 543807,
+    "scope": "Measured recorder aggregation+JSONL writes only; excludes all clock/wrapper overhead. Not total probe overhead."
+  },
+  "finished_epoch": 1793713751.1491551
+}

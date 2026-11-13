@@ -1,0 +1,82 @@
+# PHOENIX FINAL v3.0 yapılandırması
+# 4 bot sisteminin en iyi ayarları birleştirildi; güvenlik varsayılanları katıdır.
+
+market:
+  symbols: [BTC/USDT:USDT, ETH/USDT:USDT, SOL/USDT:USDT]
+  timeframe: "1h"
+  htf_timeframes: ["1h", "4h"]        # HTF oybirliği filtresi (FUSION_PRO)
+  warmup: 400
+  data_failover: [binance, okx, bybit]  # kamu veri yedeklemesi (AcarBot fikri)
+  max_spread_bps: 8.0
+  funding_guard_sec: 600              # funding saatine ±10 dk giriş yasak (FUSION_PRO)
+  stale_sec: 120
+
+strategy:
+  score_threshold: 4.5                # 8 faktör toplam ±10.5 üzerinden
+  side_gap: 2.0                       # karşı yön baskınlık farkı (Phoenix)
+  w_ema: 1.5
+  w_macd: 1.0
+  w_rsi: 0.75
+  w_adx: 1.0
+  w_volume: 0.75
+  w_vwap: 0.5
+  w_supertrend: 0.75
+  w_boll: 0.5
+  adx_trend: 20.0
+  atrp_high: 1.8                      # ATR/fiyat (YÜZDE) — HIGH_VOL rejimi
+  atrp_low: 0.12                      # LOW_VOL rejimi (YÜZDE)
+  th_high_vol: 0.5
+  th_range: 1.0
+  max_chop: 62.0                      # choppiness vetosu (sentez)
+  volume_z_min: -0.5
+  min_bb_width_pct: 0.15              # bant sıkışması vetosu (FUSION_PRO)
+  min_edge_ratio: 2.0                 # hedef hareket ≥ 2× gidiş-dönüş maliyet (sentez)
+  rsi_len: 14
+  adx_len: 14
+  ema_fast: 20
+  ema_mid: 50
+  ema_slow: 200
+  allow_short: true
+
+risk:
+  paper_equity: 10000.0
+  risk_per_trade_pct: 0.5             # işlem başına sermayenin %0.5'i
+  leverage_base: 5                    # sakin piyasada 5x
+  leverage_min: 2
+  atrp_lev_high: 1.5                  # ATR% (YÜZDE) üstünde kaldıraç 3x'e iner (AcarBot fikri)
+  atrp_lev_extreme: 3.0               # aşırı oynaklıkta 2x
+  max_notional_per_trade: 1000.0
+  max_positions: 3
+  max_same_side: 2
+  max_gross_pct: 120.0
+  min_liq_pct: 10.0
+  mmr: 0.005
+  margin_mode: isolated               # cross değil: tek pozisyon tek teminat (Phoenix)
+  daily_loss_pct: 3.0                 # günlük devre kesici
+  max_consec_losses: 4                # 4 ardışık kayıp → duraksama (sentez)
+  loss_pause_bars: 60
+  equity_halt_pct: 25.0               # sermaye tabanından %25 zarar = kalıcı duruş
+  cooldown_bars: 5
+  taker_bps: 5.0
+  slip_bps: 2.0
+  spread_bps: 2.0
+  funding_bps_8h: 1.0
+
+exit:
+  stop_atr: 1.5                       # SL = 1.5×ATR (Phoenix)
+  tp_r: 2.0                           # TP = 2R
+  tp1_r: 1.0                          # +1R'de %35 kısmi kâr (FUSION_PRO)
+  tp1_fraction: 0.35
+  breakeven_r: 0.8                    # +0.8R'de başaboya
+  trail_atr: 1.8                      # runner iz süren stop
+  max_hold_bars: 30                   # 30 mum = 7.5 saat (sentez)
+
+exec:
+  engine: dry                         # dry → testnet → live (SIRAYLA!)
+  testnet: true
+  leverage: 5
+  loop_sec: 30
+  state_file: data/state.json
+  journal_file: data/journal.jsonl
+  log_file: data/bot.log
+  kill_file: data/STOP                # bu dosyayı yaratın → yeni giriş durur (AcarBot /kill)

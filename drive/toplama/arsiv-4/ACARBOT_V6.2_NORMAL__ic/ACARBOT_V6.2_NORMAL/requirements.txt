@@ -1,0 +1,6 @@
+# ACARBOT v6.2 — çalışma bağımlılıkları
+# Test aracı için: pip install -r requirements-dev.txt
+websockets==16.0
+
+# tools.entry_edge ve testler için
+numpy>=1.26,<3

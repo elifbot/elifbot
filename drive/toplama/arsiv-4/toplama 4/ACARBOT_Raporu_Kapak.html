@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  @page { size: 794px 1123px; margin: 0; }
+  :root {
+    --c-bg: #f5f5f4;
+    --c-accent: #93761f;
+    --c-mid: #6c603e;
+    --c-text: #272623;
+    --c-muted: #85837b;
+    --c-border: #c7bfa9;
+  }
+  html, body {
+    margin: 0; padding: 0;
+    width: 794px; height: 1123px;
+    background: var(--c-bg);
+    font-family: 'Inter', sans-serif;
+    color: var(--c-text);
+  }
+  @media screen {
+    html { height: auto; display: flex; justify-content: center; min-height: 100vh; background: var(--c-bg); }
+    body { transform-origin: top center; scale: min(1, calc(100vw / 794), calc(100vh / 1123)); margin: 0 auto; box-shadow: 0 0 60px rgba(0,0,0,0.12); }
+  }
+  .cover { width: 794px; height: 1123px; position: relative; border: none; outline: none; box-shadow: none; }
+
+  /* Layer 1 - arka plan izgarasi (kilitlemeli) */
+  .layer-bg {
+    position: absolute; inset: 0; overflow: hidden; z-index: 1;
+    background-image:
+      repeating-linear-gradient(0deg, rgba(147,118,31,0.05) 0 0.5px, transparent 0.5px 50px),
+      repeating-linear-gradient(90deg, rgba(147,118,31,0.05) 0 0.5px, transparent 0.5px 50px);
+  }
+
+  /* Layer 2 - sol kalın çapa çizgisi */
+  .layer-line { position: absolute; inset: 0; z-index: 2; }
+  .anchor-line {
+    position: absolute;
+    left: 95px; top: 112px; bottom: 112px;
+    width: 8px; background: var(--c-accent);
+  }
+
+  /* Layer 3 - içerik */
+  .layer-content { position: absolute; inset: 0; z-index: 3; }
+  .kicker {
+    position: absolute; left: 150px; top: 168px;
+    font-size: 15pt; font-weight: 400; letter-spacing: 4px;
+    color: var(--c-mid); opacity: 0.62; text-transform: uppercase;
+    font-family: 'Inter', sans-serif;
+  }
+  .hero {
+    position: absolute; left: 150px; top: 292px;
+    font-family: 'Playfair Display', 'Inter', serif;
+    font-size: 62pt; font-weight: 900; line-height: 1.15;
+    color: var(--c-text); max-width: 560px;
+  }
+  .hero-sub {
+    position: absolute; left: 150px; top: 405px;
+    font-family: 'Playfair Display', 'Inter', serif;
+    font-size: 30pt; font-weight: 400; line-height: 1.2;
+    color: var(--c-mid); max-width: 560px;
+  }
+  .summary {
+    position: absolute; left: 150px; top: 545px;
+    max-width: 460px;
+    font-size: 16.5pt; font-weight: 400; line-height: 1.6;
+    color: var(--c-text); opacity: 0.85;
+  }
+  .meta {
+    position: absolute; left: 150px; top: 800px;
+    font-size: 17pt; font-weight: 500; color: var(--c-text); line-height: 1.55;
+  }
+  .meta .sub { font-size: 13pt; font-weight: 400; color: var(--c-muted); }
+  .footer {
+    position: absolute; left: 150px; top: 1006px;
+    font-size: 12.5pt; font-weight: 400; letter-spacing: 3px;
+    color: var(--c-muted); opacity: 0.75; text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+  <div class="cover">
+    <div class="layer-bg"></div>
+    <div class="layer-line"><div class="anchor-line"></div></div>
+    <div class="layer-content">
+      <div class="kicker">Arşiv Veri Analizi Raporu</div>
+      <div class="hero">ACARBOT</div>
+      <div class="hero-sub">Veri Bilimi</div>
+      <div class="summary">
+        5.482 dosyalık arşivin tam analizi: 60.975 tarihsel işlem, 3.000 kombinasyonluk
+        parametre taraması ve 115 işlemlik out-of-sample doğrulamayla mükemmel inşanın
+        veriye dayalı tanımı.
+      </div>
+      <div class="meta">
+        Z.ai Veri Analizi<br>
+        <span class="sub">6 Kasım 2026 · v3.7 VERİ ONAYLI profili ekinde</span>
+      </div>
+      <div class="footer">60.975 işlem · 240 kombinasyon · 115 OOS işlem</div>
+    </div>
+  </div>
+</body>
+</html>

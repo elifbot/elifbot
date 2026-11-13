@@ -1,0 +1,56 @@
+name: paper-control
+
+on:
+  push:
+    branches:
+      - "arena/**"
+      - main
+    paths:
+      - configs/paper-stop-request.json
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: "Sonlandırılacak paper Actions run ID"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+  cancel-paper-run:
+    name: Paper run sonlandırma isteği
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      RUN_ID: ${{ inputs.run_id || '' }}
+    steps:
+      - name: Kodu indir
+        uses: actions/checkout@v7
+
+      - name: İstek kimliğini doğrula
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          run_id = os.environ.get("RUN_ID", "").strip()
+          if not run_id:
+              request = json.loads(
+                  Path("configs/paper-stop-request.json").read_text(encoding="utf-8")
+              )
+              run_id = str(request.get("run_id", "")).strip()
+          if not run_id.isdigit() or int(run_id) <= 0:
+              raise SystemExit("Geçerli bir sayısal run_id gerekli")
+          with open(os.environ["GITHUB_ENV"], "a", encoding="utf-8") as handle:
+              handle.write(f"RUN_ID={run_id}\n")
+          print(f"Sonlandırma isteği hazır: run_id={run_id}")
+          PY
+
+      - name: Paper run'ı sonlandır
+        run: |
+          gh run cancel "$RUN_ID"
+          gh run view "$RUN_ID" --json status,conclusion,url

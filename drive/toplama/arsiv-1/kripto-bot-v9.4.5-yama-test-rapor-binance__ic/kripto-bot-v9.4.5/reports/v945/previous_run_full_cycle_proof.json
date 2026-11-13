@@ -1,0 +1,20 @@
+[
+  {
+    "symbol": "DOT/USDT",
+    "position_id": "fb05fc095dfb49609a0056117234f988",
+    "entry_operation_id": "210066f010fd4292a6944efc4fdfacc5",
+    "close_operation_id": "d5b757bf7ddb45b59a8f1d3f598c01a0",
+    "entry_qty": 532.4530110217773,
+    "closed_qty": 532.4530110217773,
+    "entry_price": 0.939,
+    "exit_price": 0.9419,
+    "close_reason": "KÂR KİLİDİ STOPU",
+    "net_pnl_usdt": 1.3438155582769893,
+    "position_id_link_sources_expected_meta_of_operations": [
+      "91b4d580135f409d9f6e056a20a0d017",
+      "f3b678dcee984e679d5b08e4550043fa",
+      "e46b4e89048c45289fd4340d51f927a3"
+    ],
+    "remaining_position_absent": true
+  }
+]

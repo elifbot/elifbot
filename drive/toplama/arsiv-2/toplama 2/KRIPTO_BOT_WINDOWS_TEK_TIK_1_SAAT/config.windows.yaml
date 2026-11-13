@@ -1,0 +1,275 @@
+genel:
+  borsalar:
+  - binance
+  - okx
+  semboller:
+  - BTC/USDT
+  - ETH/USDT
+  - SOL/USDT
+  zaman_dilimi: 5m
+  mod: paper
+  short_izni: true
+  kaldıraç: 10
+paper:
+  bakiye: 100000.0
+  gercekci_yurutme: true
+  funding_aktif: true
+mtf_filtre:
+  aktif: true
+  zaman_dilimleri:
+  - 1h
+  - 4h
+  dusus_engelleme_esigi: -15.0
+  yukselis_engelleme_esigi: 15.0
+bildirimler:
+  telegram_aktif: true
+  whatsapp_aktif: true
+  telegram_periyodik_rapor: true
+  telegram_detayli_rapor: false
+  balina_uyarilari: false
+  telegram_rapor_araligi_sn: 300
+  telegram_ilk_rapor_gecikmesi_sn: 10
+  discord_aktif: true
+  pagerduty_aktif: true
+  sadece_kritik_pagerduty: true
+failover:
+  aktif: true
+  timeout_esigi: 3
+  soguma_saniye: 300
+veritabani:
+  dosya: bot_state.db
+  wal_modu: true
+  cop_toplayici_saniye: 86400
+  max_islem_gecmisi: 2000
+  max_equity_gecmisi: 2000
+  max_arbitraj_gecmisi: 1000
+health_check:
+  aktif: true
+  host: 127.0.0.1
+  port: 8502
+risk:
+  marj_modu: cross
+  capraz_max_kullanim_yuzde: 95.0
+  capraz_min_serbest_usdt: 50.0
+  firsat_takasi_aktif: true
+  firsat_takasi_min_dakika: 8.0
+  stop_modeli: marj
+  marj_zarar_orani: 0.8
+  marj_stop_likidasyon_tamponu: 0.85
+  stop_loss_yuzde: 5.0
+  erken_kar_kilit_tetik: 0.5
+  erken_kar_kilit_seviye: 0.12
+  zirve_kar_koruma_min_usdt: 1.75
+  zirve_kar_koruma_orani: 0.48
+  atr_trailing_carpani: 2.2
+  kar_kilit_tetikleyici: 0.9
+  kar_kilit_seviyesi: 0.3
+  trailing_yuzde: 1.5
+  kasa_giris_yuzde: 5.0
+  dinamik_kaldirac: false
+  atr_yuksek_oynaklik_yuzde: 1.5
+  atr_asiri_oynaklik_yuzde: 3.0
+  max_kayma_yuzde: 0.3
+  islem_basina_risk_yuzde: 1.0
+  max_pozisyon: 3
+  paper_genis_pozisyon_limiti: true
+  paper_max_pozisyon: 1000
+  paper_ayni_yon_max_pozisyon: 25
+  sinirsiz_ekleme: false
+  ekleme_min_kar_yuzde: 0.25
+  capraz_kurtarma: false
+  kurtarma_min_zarar_yuzde: 0.5
+  gunluk_max_zarar_yuzde: 5.0
+  mola_saniye: 300
+  max_kademe: 1
+  mutlak_max_pozisyon: 6
+  ayni_yon_max_pozisyon: 4
+  toplam_marj_tavani_yuzde: 60.0
+  haftalik_max_zarar_yuzde: 12.0
+  likidasyon_stop_tamponu: 0.7
+islem_plani:
+  aktif: false
+  atr_stop_katsayi: 1.5
+  swing_mum: 20
+  swing_atr_buffer: 0.2
+  max_stop_yuzde: 12.0
+  tp1_r: 1.0
+  tp2_r: 2.0
+  tp1_kapatma_orani: 0.5
+cikis:
+  kosan_kar: true
+  net_basabas_aktif: true
+  net_kar_tamponu_usdt: 0.05
+  orderflow_kontrol_saniye: 1.0
+  orderflow_min_kar_yuzde: 0.45
+  orderflow_orani: 1.5
+  orderflow_min_usdt: 1000.0
+  orderflow_min_geri_cekilme_yuzde: 0.05
+  erken_bozulma_cikisi_aktif: false
+  erken_bozulma_min_dakika: 18.0
+  erken_bozulma_uzatilan_dakika: 25.0
+  erken_bozulma_min_zarar_yuzde: 0.25
+  erken_bozulma_ters_skor: 12.0
+shadow_lab:
+  aktif: false
+  sanal_kasa_usdt: 100000.0
+  net_kar_tamponu_usdt: 0.0
+  max_karsi_teknik_bilesen: 1
+  range_akis_girisine_izin: false
+  flow:
+    referans_notional_usdt: 1000.0
+    referans_cvd_usdt: 100.0
+    min_islem_sayisi: 5
+    min_kapsama_saniye: 60.0
+    max_defter_yasi_saniye: 10.0
+  volatility:
+    min_bb_genisligi_yuzde: 0.2
+    min_atr_yuzde: 0.0
+  portfolio:
+    ayni_yon_max_pozisyon: 50
+    korelasyon_esik: 0.8
+    korelasyon_max_pozisyon: 3
+    korelasyon_min_ortak_getiri: 20
+  pdf_confluence:
+    aktif: false
+    min_aligned_families: 4
+    max_opposed_families: 2
+  pdf_v3_confluence:
+    aktif: false
+    min_aligned_signals: 2
+    max_opposed_signals: 2
+pdf_v2:
+  aktif: false
+pdf_v3:
+  aktif: true
+  turev_istihbarat_aktif: true
+  turev_cache_sn: 180.0
+  asiri_kalabalik_engeli: true
+sigorta:
+  max_ardisik_yetki_hatasi: 3
+  max_ardisik_emir_hatasi: 3
+  gunluk_max_zarar_yuzde: 5.0
+  ws_kopma_saniye: 10.0
+  flash_crash_yuzde: 8.0
+  global_sok_sembolleri:
+  - BTC/USDT
+  - ETH/USDT
+  altcoin_sok_mola_saniye: 900.0
+boyutlandirma:
+  mod: sabit_usdt
+  sabit_marj_usdt: 50.0
+  kasa_yuzde: 5.0
+  kaldirac: 10
+  atr_periyot: 14
+  atr_katsayi: 1.5
+  kelly_kesir: 0.5
+  kelly_min_risk: 0.25
+  kelly_max_risk: 2.0
+  kelly_min_islem: 20
+emirler:
+  giris_tipi: maker
+  maker_zaman_asimi_sn: 3.0
+  max_kayma_yuzde: 0.3
+  komisyon_maker_yuzde: 0.02
+  komisyon_taker_yuzde: 0.05
+  borsa_korumasi: true
+makine_ogrenmesi:
+  aktif: true
+  ufuk_mum: 3
+  min_egitim_mumu: 80
+  yeniden_egitim_araligi: 15
+sinyal:
+  agirlik_indikator: 0.4
+  agirlik_para_akisi: 0.3
+  agirlik_haber: 0.15
+  agirlik_ml: 0.15
+  long_esik: 55
+  short_esik: -55
+  cikis_esik: 15
+  rejim_bazli: true
+  supertrend_iz_takibi: true
+  breakout_hacim_z_esik: 1.5
+  breakout_akim_onayi: true
+  orderflow_onayi: true
+  para_akisi_tetik: true
+  para_akisi_esik: 50
+  tetik_indikator_min: 10
+  tetik_min_toplam: 15
+  min_bb_genisligi_yuzde: 0.2
+  min_atr_yuzde: 0.1
+  ikiz_varlik_korumasi: true
+  tukenme_korumasi_aktif: true
+  short_min_rsi: 27.0
+  short_min_mfi: 18.0
+  long_max_rsi: 75.0
+  long_max_mfi: 82.0
+  yatay_akis_engeli_aktif: true
+  teknik_uyum_aktif: true
+  max_karsit_teknik_bilesen: 2
+  min_teknik_skor: 20.0
+  likidasyon_miknatis_aktif: true
+  likidasyon_miknatis_mesafe_yuzde: 0.18
+  likidasyon_miknatis_akis_istisna: 68.0
+para_akisi:
+  balina_esik_usdt: 100000
+  likidasyon_squeeze_usdt: 50000
+  emir_defteri_kademe: 20
+  pencere_saniye: 300
+  hacim_patlama_katsayi: 2.5
+  divergence_min_fiyat_yuzde: 0.05
+  absorption_min_usdt: 25000
+  absorption_oran: 1.5
+  vpvr_pencere_saniye: 21600
+  vpvr_bin: 48
+  squeeze_min_tekil_usdt: 25000.0
+  squeeze_bildirim_mola_sn: 300.0
+  baslangic_isinma_saniye: 35.0
+  hafif_akis_teyidi_aktif: true
+  min_hafif_kapsama_saniye: 10.0
+  min_hafif_islem_sayisi: 2
+  min_hafif_notional_usdt: 100.0
+  canli_akis_guveni_aktif: false
+  anlik_akis_tetik_aktif: true
+  anlik_tetik_min_kapsama_saniye: 12.0
+  anlik_tetik_min_notional_usdt: 200.0
+  min_kapsama_saniye: 60.0
+  min_islem_sayisi: 10
+  min_notional_usdt: 2500.0
+  max_defter_yasi_saniye: 15.0
+  referans_notional_usdt: 2500.0
+  referans_cvd_usdt: 250.0
+futures:
+  tum_pariteler: true
+  kripto_disi_filtre: true
+  min_kaldirac: 10
+  ws_grup_boyutu: 50
+  ws_derinlik_guncelleme_ms: 500
+  tarama_araligi_saniye: 90
+  tarama_paralellik: 8
+  max_parite: 100
+arbitraj:
+  aktif: false
+  min_net_kar_yuzde: 0.08
+  islem_tutari_usdt: 1000.0
+  mola_saniye: 10.0
+haberler:
+  kaynaklar:
+  - https://www.coindesk.com/arc/outboundfeeds/rss/
+  - https://cointelegraph.com/rss
+  kontrol_saniye: 60
+  veto_guc: true
+  korku_acgozluluk: true
+  korku_veto_alt: 15
+  acgozluluk_long_veto_ust: 85
+optimizasyon:
+  otomatik_params: false
+  oos_egitim_orani: 0.7
+  params_dosyasi: params_best.json
+panel:
+  aktif: true
+  host: 127.0.0.1
+  port: 8501
+hiz:
+  mum_yenileme_saniye: 15
+  reconnect_saniye: 5
+  ws_ping_saniye: 15

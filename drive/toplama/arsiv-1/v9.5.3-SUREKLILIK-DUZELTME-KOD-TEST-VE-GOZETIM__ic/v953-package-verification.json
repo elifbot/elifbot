@@ -1,0 +1,17 @@
+{
+  "main_package": "kripto-bot-v9.5.3-PAPER-RC1-kod-test-rapor.zip",
+  "bytes": 5832522,
+  "sha256": "455a575c9c33454ef61dc2346f0d7a113db7002198731277e41dfd141552b41b",
+  "sealed_files": 363,
+  "compile_count": 107,
+  "zip_crc_ok": true,
+  "payload_hashes_ok": true,
+  "fresh_extract_test": "271 passed in 29.99s",
+  "host_clock_fixed_claim": false,
+  "fresh_extract_integrity": {
+    "ok": true,
+    "checked_files": 363,
+    "errors": [],
+    "scope": "sealed files only; not profitability, authenticity signature, live approval or permission to run old session DBs"
+  }
+}

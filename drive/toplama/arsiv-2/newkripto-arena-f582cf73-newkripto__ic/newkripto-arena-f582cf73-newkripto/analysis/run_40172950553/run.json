@@ -1,0 +1,26 @@
+{
+  "run_id": 40172950553,
+  "paper_job_result": "cancelled",
+  "files": [
+    "preflight.json",
+    "paper-session.txt",
+    "partial-gunluk.txt",
+    "partial-oturum-analizi.json",
+    "partial-islem-gecmisi.json",
+    "partial-shadow-analysis.json",
+    "partial-shadow-report.md",
+    "partial-cohort-report.md",
+    "partial-cohort-report.json",
+    "partial-shadow-review.md",
+    "partial-shadow-review.json"
+  ],
+  "partial_files": [
+    "partial-gunluk.txt",
+    "partial-oturum-analizi.json",
+    "partial-islem-gecmisi.json",
+    "partial-shadow-analysis.json",
+    "partial-shadow-report.md"
+  ],
+  "partial_only": true,
+  "note": "Erken durdurma/ara checkpoint kanıtı; planlı closeout veya nihai Shadow raporu değildir."
+}

@@ -1,0 +1,65 @@
+# ============ KriptoBot Yapılandırması ============
+
+# --- Telegram (zorunlu) ---
+# @BotFather'dan aldığın token buraya:
+# (Telegram sürümü kaldırıldı — masaüstü panel)
+# Senin Telegram kullanıcı ID'n (admin için; @userinfobot öğrenebilir)
+
+# --- EVREN LLM (SAYZEK) — OpenAI uyumlu, tek anahtarla çok model ---
+EVREN_API_KEY=
+EVREN_BASE_URL=https://evren-llmapi.ssyz.org.tr/v1
+
+# --- Diğer sağlayıcılar (opsiyonel — eklersen otomatik aktifleşir) ---
+OPENAI_API_KEY=
+ANTHROPIC_API_KEY=
+GEMINI_API_KEY=
+DEEPSEEK_API_KEY=
+DASHSCOPE_API_KEY=
+MISTRAL_API_KEY=
+GROQ_API_KEY=
+OPENROUTER_API_KEY=
+OPENROUTER_MODEL=openai/gpt-4o-mini
+
+# --- Ollama (senin bilgisayarında yerel model) ---
+OLLAMA_MODEL=llama3.2
+
+# --- Özel endpoint (herhangi bir OpenAI-uyumlu adres) ---
+CUSTOM_BASE_URL=
+CUSTOM_MODEL=
+CUSTOM_API_KEY=
+
+# --- Tarama / alarm ayarları ---
+SCAN_INTERVAL_MIN=15
+STRONG_ALERT_SCORE=45
+ALERT_COOLDOWN_H=2
+
+# ================================================================
+# --- OTO İŞLEM: AI botların OTOMATİK pozisyon açıp kapatması ---
+# ================================================================
+# mod: kagit = simülasyon (para riski YOK, önerilen başlangıç)
+#      testnet = borsa test ağı (sahte para, gerçek API akışı)
+#      gercek  = GERÇEK EMİRLER — kendi paranla, tüm riski sen taşırırsın!
+TRADE_MODE=kagit
+TRADE_EXCHANGE=binance
+
+# --- Binance Futures API (gerçek/testnet modda gerekli) ---
+BINANCE_API_KEY=
+BINANCE_API_SECRET=
+
+# --- OKX Swap API (gerçek/demo modda gerekli) ---
+OKX_API_KEY=
+OKX_API_SECRET=
+OKX_PASSPHRASE=
+
+# --- Risk kapıları ---
+RISK_POS_PCT=10
+RISK_MAX_POSITIONS=3
+RISK_MAX_LEVERAGE=5
+RISK_DAILY_LOSS_PCT=5
+RISK_MIN_GUVEN=65
+SCAN_MAX_SYMBOLS=40
+MIN_VOLUME_USDT=20000000
+OTO_MAX_ADAY=2
+POS_TIMEOUT_H=24
+POS_COOLDOWN_H=4
+PAPER_BALANCE=1000

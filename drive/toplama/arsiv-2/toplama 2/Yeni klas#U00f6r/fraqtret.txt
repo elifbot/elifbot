@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OTOMAT-F — Futures Long/Short Terminali</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#08090C; --panel:#101318; --panel2:#151A21; --cizgi:#1D232C; --cizgi2:#2A323E;
+    --metin:#E2E7EE; --soluk:#8A94A2; --cok-soluk:#545E6C;
+    --turuncu:#F7A600; --yesil:#0ECB81; --kirmizi:#F6465D; --mavi:#4FA8E0; --mor:#9B7EE0;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--metin);font-family:'IBM Plex Mono',monospace;font-size:13px}
+  ::-webkit-scrollbar{width:8px}::-webkit-scrollbar-thumb{background:var(--cizgi2);border-radius:4px}
+
+  .ustbar{display:flex;align-items:center;gap:12px;padding:0 16px;height:56px;border-bottom:1px solid var(--cizgi);
+    background:var(--panel);position:sticky;top:0;z-index:20;flex-wrap:wrap}
+  .marka{font-family:'Space Grotesk';font-weight:700;font-size:17px;letter-spacing:.1em}
+  .marka i{font-style:normal;color:var(--turuncu)}
+  .marka small{display:block;font-family:'IBM Plex Mono';font-weight:400;font-size:8.5px;letter-spacing:.18em;color:var(--soluk)}
+  select,.giris{background:var(--panel2);border:1px solid var(--cizgi2);color:var(--metin);font-family:inherit;
+    font-size:12px;border-radius:4px;padding:7px 9px;cursor:pointer}
+  select:focus{outline:none;border-color:var(--turuncu)}
+  .etiketGrup{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--soluk);letter-spacing:.08em}
+  .canli{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--soluk);margin-left:auto}
+  .led{width:8px;height:8px;border-radius:50%;background:var(--cok-soluk)}
+  .led.acik{background:var(--yesil);box-shadow:0 0 7px rgba(14,203,129,.8);animation:nbp 1.5s infinite}
+  @keyframes nbp{50%{opacity:.4}}
+  .fiyat{font-size:15px;font-weight:600}
+  .btn{border:1px solid var(--cizgi2);background:var(--panel2);color:var(--metin);font-family:inherit;font-size:12px;
+    font-weight:600;padding:8px 16px;border-radius:4px;cursor:pointer}
+  .btn.acik{border-color:var(--yesil);color:var(--yesil)}
+  .btn.acik:hover{background:rgba(14,203,129,.12)}
+  .btn.kapali{border-color:var(--kirmizi);color:var(--kirmizi)}
+  .btn.kapali:hover{background:rgba(246,70,93,.12)}
+  .btn:not(:disabled):hover{border-color:var(--soluk)}
+
+  .shell{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:12px;padding:12px 14px;max-width:1560px;margin:0 auto}
+  @media(max-width:1050px){.shell{grid-template-columns:1fr}}
+  .panel{background:var(--panel);border:1px solid var(--cizgi);border-radius:6px;overflow:hidden}
+  .pb{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid var(--cizgi);
+    font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--soluk)}
+  .pb b{color:var(--metin);font-weight:600}
+  .grafikSarma{position:relative}
+  canvas{display:block;width:100%}
+  .legend{position:absolute;top:8px;right:12px;display:flex;gap:13px;font-size:10px;color:var(--soluk);pointer-events:none}
+  .legend i{font-style:normal;display:inline-block;width:13px;height:2px;background:var(--cizgi2);vertical-align:middle;margin-right:5px}
+  .okuma{position:absolute;top:8px;left:12px;font-size:11px;color:var(--soluk);pointer-events:none;line-height:1.65;
+    background:rgba(8,9,12,.8);padding:6px 10px;border-radius:4px;border:1px solid var(--cizgi)}
+  .okuma b{color:var(--metin);font-weight:500}
+
+  .kenar{display:flex;flex-direction:column;gap:12px}
+  .statlar{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--cizgi)}
+  .stat{padding:11px 13px;border-bottom:1px solid var(--cizgi)}
+  .stat:nth-child(odd){border-right:1px solid var(--cizgi)}
+  .st{font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--cok-soluk);margin-bottom:5px}
+  .sv{font-size:16px;font-weight:600}
+  .pozlar{padding:0;max-height:240px;overflow-y:auto}
+  .poz{border-bottom:1px solid var(--cizgi);padding:11px 13px}
+  .poz-ust{display:flex;justify-content:space-between;font-size:11px;letter-spacing:.08em;margin-bottom:7px}
+  .taraf{font-weight:700;font-size:11px;padding:3px 8px;border-radius:3px}
+  .taraf.LONG{background:rgba(14,203,129,.14);color:var(--yesil)}
+  .taraf.SHORT{background:rgba(246,70,93,.14);color:var(--kirmizi)}
+  .pz{display:flex;justify-content:space-between;font-size:11.5px;padding:2.5px 0}
+  .pz span:first-child{color:var(--soluk)}
+  .yok{color:var(--cok-soluk);text-align:center;padding:18px 0;font-size:12px}
+  .stratejiAlan{padding:13px;display:flex;flex-direction:column;gap:8px}
+  .ipucu{font-size:10.5px;color:var(--cok-soluk);line-height:1.65}
+  .logSarma{max-height:250px;overflow-y:auto}
+  .ls{display:flex;gap:9px;padding:5px 13px;font-size:11.5px;border-bottom:1px solid rgba(29,35,44,.6)}
+  .ls .saat{color:var(--cok-soluk);flex:none}
+  .lo{color:var(--yesil)} .sh{color:var(--kirmizi)} .bl{color:var(--soluk)} .fl{color:var(--turuncu)}
+
+  .bt-panel{grid-column:1/-1}
+  .bt-govde{display:grid;grid-template-columns:minmax(0,1fr) 320px}
+  @media(max-width:1050px){.bt-govde{grid-template-columns:1fr}}
+  .bt-metrikler{display:grid;grid-template-columns:1fr 1fr;border-left:1px solid var(--cizgi)}
+
+  .altbar{position:fixed;bottom:0;left:0;right:0;height:28px;background:var(--panel);border-top:1px solid var(--cizgi);
+    display:flex;align-items:center;gap:18px;padding:0 16px;font-size:10.5px;color:var(--soluk);z-index:20}
+  .ayr{width:1px;height:12px;background:var(--cizgi2)}
+  .toastlar{position:fixed;bottom:40px;right:16px;z-index:90;display:flex;flex-direction:column;gap:8px}
+  .toast{background:var(--panel2);border:1px solid var(--cizgi2);border-left:3px solid var(--turuncu);padding:10px 15px;
+    border-radius:5px;font-size:12px;animation:tG .25s ease}
+  .toast.LONG{border-left-color:var(--yesil)} .toast.SHORT{border-left-color:var(--kirmizi)}
+  @keyframes tG{from{opacity:0;transform:translateX(14px)}}
+</style>
+</head>
+<body>
+
+<header class="ustbar">
+  <div class="marka">O<i>TO</i>MAT-F<small>USDT-M FUTURES · Freqtrade mimarisi</small></div>
+  <select id="sembolSec">
+    <option>BTCUSDT</option><option>ETHUSDT</option><option>SOLUSDT</option>
+    <option>BNBUSDT</option><option>XRPUSDT</option><option>DOGEUSDT</option>
+  </select>
+  <select id="periyotSec">
+    <option value="5m">5 dk</option><option value="15m" selected>15 dk</option>
+    <option value="1h">1 saat</option><option value="4h">4 saat</option>
+  </select>
+  <div class="etiketGrup">KALDIRAÇ <select id="kaldiracSec"><option>3</option><option>5</option><option selected="selected">10</option><option>20</option></select>x</div>
+  <div class="etiketGrup">MARJİN <select id="marjSec"><option value="0.25">%25</option><option value="0.5">%50</option><option value="1" selected="selected">%100</option></select></div>
+  <span class="canli"><span class="led" id="led"></span><span id="bd">bağlanıyor…</span></span>
+  <span class="fiyat" id="cf">—</span>
+  <button class="btn acik" id="botBtn">▶ BOTU BAŞLAT</button>
+</header>
+
+<div class="shell">
+  <div class="panel">
+    <div class="pb"><span><b id="gBaslik">BTCUSDT · 15m · USDT-M</b></span><span id="mumBilgi">—</span></div>
+    <div class="grafikSarma">
+      <canvas id="anaC" height="540"></canvas>
+      <div class="okuma" id="okuma">imleci grafiğe getirin</div>
+      <div class="legend"><span><i style="background:#F7A600"></i>EMA20</span><span><i style="background:#4FA8E0"></i>EMA50</span><span><i style="background:#9B7EE0"></i>EMA200</span></div>
+    </div>
+  </div>
+
+  <aside class="kenar">
+    <div class="panel">
+      <div class="pb"><span>Cüzdan · <b id="botYazi">DURDU</b></span></div>
+      <div class="statlar">
+        <div class="stat"><div class="st">Cüzdan Bakiyesi</div><div class="sv" id="stBakiye">1 000,00 USDT</div></div>
+        <div class="stat"><div class="st">Özsermaye</div><div class="sv" id="stOz">1 000,00 USDT</div></div>
+        <div class="stat"><div class="st">Gerçekleşen P&L</div><div class="sv" id="stPnl">—</div></div>
+        <div class="stat"><div class="st">İşlem / Kazanan</div><div class="sv" id="stIslem">0 / —</div></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="pb"><span>Açık Pozisyonlar</span><span id="pozAdet">0</span></div>
+      <div class="pozlar" id="pozlar"><div class="yok">pozisyon yok — bot sinyal bekliyor</div></div>
+    </div>
+
+    <div class="panel">
+      <div class="pb"><span>Strateji</span></div>
+      <div class="stratejiAlan">
+        <select id="strSec">
+          <option value="trend" selected>Üçlü EMA Trend Takibi (long/short)</option>
+          <option value="rsirev">RSI Ortalamaya Dönüş (long/short)</option>
+          <option value="killik">EMA + RSI Filtreli (kombine)</option>
+        </select>
+        <p class="ipucu" id="strIp">Fiyat EMA20 > EMA50 > EMA200 dizilimine girince LONG, ters dizilimde SHORT açılır; kesişim çözülünce pozisyon kapanır. Trend takibi stratejisi, futures'ın iki yönlü doğasına uygundur.</p>
+        <p class="ipucu">Pozisyon: <b>izole marjin</b> · komisyon: taker %0,04 · likidasyon, bakım marjı %0,5 ile yaklaşık hesaplanır. Tüm emirler simülasyondur.</p>
+        <button class="btn" id="btBtn">Bu ayarlarla backtest çalıştır</button>
+      </div>
+    </div>
+
+    <div class="panel" style="flex:1">
+      <div class="pb"><span>İşlem Günlüğü</span><span id="lgSayi">0</span></div>
+      <div class="logSarma" id="loglar"></div>
+    </div>
+  </aside>
+
+  <div class="panel bt-panel">
+    <div class="pb"><span>Futures Backtest · Long + Short</span><span id="btOzet">henüz test yapılmadı</span></div>
+    <div class="bt-govde">
+      <div class="grafikSarma"><canvas id="btC" height="210"></canvas></div>
+      <div class="bt-metrikler">
+        <div class="stat"><div class="st">Getiri</div><div class="sv" id="btG">—</div></div>
+        <div class="stat"><div class="st">İşlem</div><div class="sv" id="btI">—</div></div>
+        <div class="stat"><div class="st">Kazanma Oranı</div><div class="sv" id="btK">—</div></div>
+        <div class="stat"><div class="st">Maks. Düşüş</div><div class="sv" id="btD">—</div></div>
+        <div class="stat"><div class="st">Long / Short</div><div class="sv" id="btLS">—</div></div>
+        <div class="stat"><div class="st">En İyi / En Kötü İşlem</div><div class="sv" id="btBest">—</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="altbar">
+  <span>veri: Binance USDT-M Futures (fapi) — gerçek fiyat</span><span class="ayr"></span>
+  <span>emirler: paper-trading — kaldıraç simülasyondur, gerçek para yoktur</span><span class="ayr"></span>
+  <span id="altBilgi">bot: beklemede</span>
+</div>
+<div class="toastlar" id="toastlar"></div>
+
+<script>
+/* =========================================================
+   OTOMAT-F — Freqtrade futures mimarisinden uyarlanmış
+   USDT-M vadeli long/short botu (paper-trading)
+   Mimarisi: sinyal → pozisyon yöneticisi → marjin/PnL motoru
+   ========================================================= */
+const $=s=>document.querySelector(s);
+const F=n=>n==null?'—':Number(n).toLocaleString('tr-TR',{minimumFractionDigits:2,maximumFractionDigits:2});
+
+const KOMISYON=0.0004, BAKIM_MARJI=0.005;   // taker %0,04 · izole marjin bakımı %0,5
+
+let S={
+  sembol:'BTCUSDT', periyot:'15m', kaldirac:10, marjOrani:1,
+  cuzdan:1000, pozlar:[], gecmis:[],
+  mumlar:[], ws:null, acik:false, str:'trend', sonFiyat:null
+};
+
+/* ---------- Göstergeler ---------- */
+function ema(a,p){const k=2/(p+1);let e=null;const r=[];for(const v of a){e=e===null?v:v*k+e*(1-k);r.push(e)}return r}
+function rsiD(a,p=14){const r=[null];let ag=null,al=null;
+  for(let i=1;i<a.length;i++){const d=a[i]-a[i-1],g=Math.max(d,0),l=Math.max(-d,0);
+    if(i<p){ag=(ag||0)+g;al=(al||0)+l;r.push(null)}
+    else if(i===p){ag=(ag-(al===null?0:0))/1; /* первые p */ ag=ag/p;al=al/p;r.push(100-100/(1+(al===0?100:ag/al)))}
+    else{ag=(ag*(p-1)+g)/p;al=(al*(p-1)+l)/p;r.push(100-100/(1+(al===0?100:ag/al)))}}
+  return r}
+function hesapla(){
+  const k=S.mumlar.map(m=>m.c);
+  return{rsi:rsiD(k),e20:ema(k,20),e50:ema(k,50),e200:ema(k,200)};
+}
+
+/* ---------- Strateji: kapanmış mumun indeksine sinyal ---------- */
+function sinyal(g,i){
+  if(i<210) return 'FLAT';
+  const c=S.mumlar[i].c, r=g.rsi[i];
+  const up=c>g.e20[i]&&g.e20[i]>g.e50[i]&&g.e50[i]>g.e200[i];
+  const dn=c<g.e20[i]&&g.e20[i]<g.e50[i]&&g.e50[i]<g.e200[i];
+  if(S.str==='trend')  return up?'LONG':dn?'SHORT':'FLAT';
+  if(S.str==='rsirev'){
+    const rp=g.rsi[i-1];
+    if(rp===null||r===null)return'FLAT';
+    if(rp<35&&r>35)return'LONG';
+    if(rp>65&&r<65)return'SHORT';
+    return'KAPAT';
+  }
+  // kombine: trend yönü + RSI onayı
+  if(up&&r>50&&r<72)return'LONG';
+  if(dn&&r<50&&r>28)return'SHORT';
+  return'FLAT';
+}
+let G=null, cizilen=[];
+
+function tumSinyalleriBul(){
+  cizilen=[];
+  for(let i=210;i<S.mumlar.length;i++){const s=sinyal(G,i);
+    if(s==='LONG'||s==='SHORT')cizilen.push({i,tur:s,f:S.mumlar[i].c})}
+}
+
+/* ---------- Futures motoru ---------- */
+function likidasyonFiyati(taraf,giris,lev){
+  return taraf==='LONG'
+    ? giris*(1-1/lev+BAKIM_MARJI)
+    : giris*(1+1/lev-BAKIM_MARJI);
+}
+function pozAc(taraf,fiyat){
+  const marj=S.cuzdan*S.marjOrani;
+  if(marj<=1)return;
+  const adet=marj*S.kaldirac/fiyat;
+  S.pozlar.push({taraf,giris:fiyat,adet,marj,lev:S.kaldirac,
+    liq:likidasyonFiyati(taraf,fiyat,S.kaldirac),saat:new Date()});
+  log(taraf==='LONG'?'lo':'sh',
+    `${taraf} AÇILDI · ${fiyat.toFixed(2)} · ${adet.toFixed(5)} adet · ${S.kaldirac}x · marjin ${F(marj)} USDT · liq ≈ ${S.pozlar.at(-1).liq.toFixed(2)}`);
+  toast(`${S.sembol} ${taraf} · ${S.kaldirac}x kaldıraç`,taraf);
+}
+function pozKapat(p,fiyat){
+  const brt=p.taraf==='LONG'?(fiyat-p.giris):(p.giris-fiyat);
+  const ham=brt*p.adet;
+  const ucret=(p.giris+fiyat)*p.adet*KOMISYON;           // açılış+kapanış taker ücreti
+  const pnl=ham-ucret;
+  S.cuzdan+=pnl;
+  S.gecmis.push({taraf:p.taraf,pnl,roe:pnl/p.marj*100});
+  log(p.taraf==='LONG'?'sh':'lo',
+    `${p.taraf} KAPANDI · ${fiyat.toFixed(2)} · P&L ${pnl>=0?'+':''}${F(pnl)} USDT · ROE ${pnl>=0?'+':''}${(pnl/p.marj*100).toFixed(1)}%`);
+  toast(`${p.taraf} kapandı · P&L ${pnl>=0?'+':''}${F(pnl)} USDT`,pnl>=0?'LONG':'SHORT');
+}
+function mumKapaninca(idx){
+  if(!S.acik)return;
+  const s=sinyal(G,idx), fiyat=S.mumlar[idx].c;
+  /* Likidasyon kontrolü: fiyat likidasyon eşiğini geçtiyse pozisyon zorla kapanır */
+  S.pozlar=S.pozlar.filter(p=>{
+    const dokundu=(p.taraf==='LONG'&&fiyat<=p.liq)||(p.taraf==='SHORT'&&fiyat>=p.liq);
+    if(dokundu){log('fl',`LİKİDASYON! ${p.taraf} pozisyonu ${p.liq.toFixed(2)} seviyesinde tasfiye edildi`);toast('LİKİDASYON — '+p.taraf,'SHORT')}
+    return !dokundu;
+  });
+  if(s==='FLAT'){ S.pozlar.forEach(p=>pozKapat(p,fiyat)); S.pozlar=[]; return; }
+  if(s==='KAPAT'){ S.pozlar.forEach(p=>pozKapat(p,fiyat)); S.pozlar=[]; return; }
+  // ters sinyal → var olan ters pozisyonları kapat, sonra yeni aç
+  const kalan=[];
+  for(const p of S.pozlar){
+    if(p.taraf!==s)pozKapat(p,fiyat); else kalan.push(p);
+  }
+  S.pozlar=kalan;
+  if(!S.pozlar.length)pozAc(s,fiyat);
+}
+function acikPnl(){
+  return S.pozlar.reduce((t,p)=>{
+    const brt=p.taraf==='LONG'?(S.sonFiyat-p.giris):(p.giris-S.sonFiyat);
+    return t+brt*p.adet;},0);
+}
+
+/* ---------- Veri ---------- */
+async function veriCek(){
+  const r=await fetch(`https://fapi.binance.com/fapi/v1/klines?symbol=${S.sembol}&interval=${S.periyot}&limit=500`);
+  if(!r.ok)throw new Error('API');
+  const h=await r.json();
+  S.mumlar=h.map(m=>({t:m[0],o:+m[1],h:+m[2],l:+m[3],c:+m[4],v:+m[5]}));
+  S.sonFiyat=S.mumlar.at(-1).c;
+  G=hesapla(); tumSinyalleriBul(); $('#bd').textContent='veri yüklendi'; guncelle();
+}
+function ws(){
+  if(S.ws)S.ws.close();
+  S.ws=new WebSocket(`wss://fstream.binance.com/ws/${S.sembol.toLowerCase()}@kline_${S.periyot}`);
+  S.ws.onopen=()=>{$('#led').classList.add('acik');$('#bd').textContent=`CANLI · ${S.sembol} FUTURES`};
+  S.ws.onclose=()=>{$('#led').classList.remove('acik');setTimeout(ws,2000)};
+  S.ws.onerror=()=>S.ws.close();
+  S.ws.onmessage=e=>{
+    const k=JSON.parse(e.data).k;
+    const m={t:k.t,o:+k.o,h:+k.h,l:+k.l,c:+k.c,v:+k.v};
+    const s=S.mumlar.at(-1);
+    if(s&&k.t===s.t)S.mumlar[S.mumlar.length-1]=m;
+    else if(k.t>s.t){S.mumlar.push(m);if(S.mumlar.length>600)S.mumlar.shift();
+      G=hesapla();tumSinyalleriBul();mumKapaninca(S.mumlar.length-1);}
+    S.sonFiyat=m.c;guncelle();
+  };
+}
+
+/* ---------- Grafik ---------- */
+const C=$('#anaC'),X=C.getContext('2d');let mouse=null;
+function boyut(c){const d=window.devicePixelRatio||1,w=c.parentElement.clientWidth;
+  c.width=w*d;c.height=c.clientHeight*d;c.style.width=w+'px';c.getContext('2d').setTransform(d,0,0,d,0,0);return w}
+function ciz(){
+  if(!G)return;
+  const W=boyut(C),H=540,rsiH=105,fH=H-rsiH-8,Y=v=>12+((mx-v)/rg)*(fH-26);
+  X.clearRect(0,0,W,H);
+  const N=Math.min(140,S.mumlar.length),b=S.mumlar.length-N;
+  const ms=S.mumlar.slice(b);
+  const mx=Math.max(...ms.map(m=>m.h)),mn=Math.min(...ms.map(m=>m.l)),rg=(mx-mn)||1,cw=W/N;
+  for(let i=0;i<=5;i++){const y=12+i*(fH-14)/5;X.strokeStyle='#141920';X.beginPath();X.moveTo(0,y);X.lineTo(W,y);X.stroke();
+    X.fillStyle='#545E6C';X.font='9.5px IBM Plex Mono';X.fillText((mx-rg*i/5).toFixed(2),4,y-3)}
+  for(const d of[[G.e20,'#F7A600'],[G.e50,'#4FA8E0'],[G.e200,'#9B7EE0']]){
+    X.strokeStyle=d[1];X.lineWidth=1.4;X.beginPath();let f=1;
+    d[0].forEach((v,k)=>{const i=k-b;if(i<0||v==null)return;f?(X.moveTo(i*cw+cw/2,Y(v)),f=0):X.lineTo(i*cw+cw/2,Y(v))});X.stroke();}
+  const vm=Math.max(...ms.map(m=>m.v))||1;
+  ms.forEach((m,i)=>{const up=m.c>=m.o,x=i*cw+cw/2;
+    X.fillStyle='rgba(90,100,114,.35)';
+    const vh=(H-rsiH-4-(fH))*m.v/vm;X.fillRect(i*cw+1,fH-vh-2,cw-2,vh+2);
+    X.strokeStyle=X.fillStyle=up?'#0ECB81':'#F6465D';X.lineWidth=1;
+    X.beginPath();X.moveTo(x,Y(m.h));X.lineTo(x,Y(m.l));X.stroke();
+    const yo=Y(Math.max(m.o,m.c)),hh=Math.abs(Y(m.o)-Y(m.c))||1;
+    X.fillRect(x-Math.max(1,cw*.3),yo,Math.max(2,cw*.6),hh);});
+  for(const s of cizilen){const i=s.i-b;if(i<0||i>=N)continue;const x=i*cw+cw/2;
+    X.fillStyle=s.tur==='LONG'?'#0ECB81':'#F6465D';X.beginPath();
+    if(s.tur==='LONG'){X.moveTo(x-6,Y(s.f)+17);X.lineTo(x+6,Y(s.f)+17);X.lineTo(x,Y(s.f)+5)}
+    else{X.moveTo(x-6,Y(s.f)-17);X.lineTo(x+6,Y(s.f)-17);X.lineTo(x,Y(s.f)-5)}
+    X.closePath();X.fill();}
+  const yy=Y(S.sonFiyat);
+  X.strokeStyle='rgba(247,166,0,.6)';X.setLineDash([4,4]);X.beginPath();X.moveTo(0,yy);X.lineTo(W,yy);X.stroke();X.setLineDash([]);
+  X.fillStyle='#F7A600';X.fillRect(W-72,yy-8,72,16);X.fillStyle='#08090C';X.font='600 10px IBM Plex Mono';X.fillText(S.sonFiyat.toFixed(2),W-66,yy+4);
+  const rT=H-rsiH;X.strokeStyle='#1D232C';X.beginPath();X.moveTo(0,rT);X.lineTo(W,rT);X.stroke();
+  X.fillStyle='#545E6C';X.fillText('RSI 14',6,rT+12);
+  const rY=v=>rT+8+((100-v)/100)*(rsiH-20);
+  for(const l of[30,70]){X.strokeStyle='rgba(139,148,162,.3)';X.setLineDash([3,4]);X.beginPath();X.moveTo(0,rY(l));X.lineTo(W,rY(l));X.stroke();X.setLineDash([])}
+  X.strokeStyle='#8FA3BF';X.lineWidth=1.3;X.beginPath();let f=1;
+  G.rsi.forEach((v,k)=>{const i=k-b;if(i<0||i>=N||v==null)return;f?(X.moveTo(i*cw+cw/2,rY(v)),f=0):X.lineTo(i*cw+cw/2,rY(v))});X.stroke();
+  if(mouse&&mouse.y<fH){X.strokeStyle='rgba(226,231,238,.22)';X.setLineDash([3,3]);
+    X.beginPath();X.moveTo(mouse.x,0);X.lineTo(mouse.x,fH);X.moveTo(0,mouse.y);X.lineTo(W,mouse.y);X.stroke();X.setLineDash([]);
+    const m=S.mumlar[Math.max(0,Math.min(S.mumlar.length-1,b+Math.floor(mouse.x/cw)))];
+    if(m)$('#okuma').innerHTML=`<b>${new Date(m.t).toLocaleString('tr-TR')}</b><br>A <b>${m.o.toFixed(2)}</b> · Y <b>${m.h.toFixed(2)}</b><br>D <b>${m.l.toFixed(2)}</b> · K <b>${m.c.toFixed(2)}</b>`;}
+}
+C.addEventListener('mousemove',e=>{const r=C.getBoundingClientRect();mouse={x:e.clientX-r.left,y:e.clientY-r.top};ciz()});
+C.addEventListener('mouseleave',()=>{mouse=null;$('#okuma').textContent='imleci grafiğe getirin';ciz()});
+addEventListener('resize',()=>{ciz();btCiz()});
+
+/* ---------- Backtest (long+short, kaldıraçlı) ---------- */
+let btEs=[];
+function backtest(){
+  let cuz=1000,pz=null,zirve=1000,dd=0,n=0,k=0,lo=0,sh=0,best=-1e9,worst=1e9;
+  btEs=[1000];
+  for(let i=210;i<S.mumlar.length;i++){
+    const s=sinyal(G,i),f=S.mumlar[i].c;
+    if(pz&&(pz.taraf==='LONG'?s!=='LONG':s!=='SHORT')){
+      const brt=pz.taraf==='LONG'?(f-pz.g):(pz.g-f);
+      const pnl=brt*pz.adet-(pz.g+f)*pz.adet*KOMISYON;
+      cuz+=pnl;n++;if(pnl>0)k++;best=Math.max(best,pnl);worst=Math.min(worst,pnl);pz=null;
+    }
+    if(!pz&&(s==='LONG'||s==='SHORT')){
+      const marj=cuz*S.marjOrani;if(marj<=1)continue;
+      pz={taraf:s,giris:f,adet:marj*S.kaldirac/f};if(s==='LONG')lo++;else sh++;
+    }
+    const an=pz?cuz+((pz.taraf==='LONG'?(S.mumlar[i].c-pz.giris):(pz.giris-S.mumlar[i].c))*pz.adet):cuz;
+    zirve=Math.max(zirve,an);dd=Math.max(dd,(zirve-an)/zirve*100);
+    btEs.push(an);
+  }
+  const g=(cuz/1000-1)*100;
+  $('#btG').textContent=(g>=0?'+':'')+g.toFixed(2)+'%';$('#btG').style.color=g>=0?'var(--yesil)':'var(--kirmizi)';
+  $('#btI').textContent=n;$('#btK').textContent=n?Math.round(k/n*100)+'%':'—';
+  $('#btD').textContent=n?'-'+dd.toFixed(1)+'%':'—';
+  $('#btLS').textContent=`${lo} / ${sh}`;
+  $('#btBest').innerHTML=`<span style="color:var(--yesil)">${best>-1e9?'+'+best.toFixed(1):'—'}</span> / <span style="color:var(--kirmizi)">${worst<1e9?worst.toFixed(1):'—'}</span>`;
+  $('#btOzet').textContent=`${S.sembol} · ${S.periyot} · ${S.kaldirac}x · ${S.marjOrani*100}% marjin · ${S.mumlar.length} mum`;
+  btCiz();toast('Backtest: '+(g>=0?'+':'')+g.toFixed(2)+'% · '+n+' işlem');
+}
+function btCiz(){
+  const c=$('#btC');const W=boyut(c),x=c.getContext('2d');x.clearRect(0,0,W,210);
+  if(!btEs.length)return;
+  const mx=Math.max(...btEs),mn=Math.min(...btEs),r=(mx-mn)||1;
+  x.strokeStyle='#141920';for(let i=0;i<4;i++){x.beginPath();x.moveTo(0,i*50+15);x.lineTo(W,i*50+15);x.stroke()}
+  x.strokeStyle=btEs.at(-1)>=1000?'#0ECB81':'#F6465D';x.lineWidth=1.6;x.beginPath();
+  btEs.forEach((v,i)=>{const px=i/(btEs.length-1)*W,py=185-((v-mn)/r)*160;i?x.lineTo(px,py):x.moveTo(px,py)});
+  x.stroke();
+  x.strokeStyle='rgba(247,166,0,.35)';x.setLineDash([4,4]);x.beginPath();x.moveTo(0,185-((1000-mn)/r)*160);x.lineTo(W,185-((1000-mn)/r)*160);x.stroke();x.setLineDash([]);
+  x.fillStyle='#8A94A2';x.font='10px IBM Plex Mono';x.fillText('özsermaye (USDT) — turuncu çizgi: başlangıç 1.000',8,14);
+}
+
+/* ---------- Arayüz ---------- */
+function guncelle(){
+  const el=$('#cf');el.textContent=S.sonFiyat.toFixed(2);
+  el.style.color=S.mumlar.length>1&&S.sonFiyat>=S.mumlar[0].c?'var(--yesil)':'var(--kirmizi)';
+  $('#gBaslik').textContent=`${S.sembol} · ${S.periyot} · USDT-M`;
+  $('#mumBilgi').textContent=`${S.mumlar.length} mum · ${cizilen.length} sinyal · ${S.kaldirac}x`;
+  const oz=S.cuzdan+acikPnl();
+  $('#stBakiye').textContent=F(S.cuzdan);$('#stOz').textContent=F(oz);
+  const p=S.gecmis.reduce((t,x)=>t+x.pnl,0)+acikPnl();
+  $('#stPnl').textContent=(p>=0?'+':'')+F(p);$('#stPnl').style.color=p>=0?'var(--yesil)':'var(--kirmizi)';
+  $('#stIslem').textContent=`${S.gecmis.length} / ${S.gecmis.length?Math.round(S.gecmis.filter(x=>x.pnl>0).length/S.gecmis.length*100)+'%':'—'}`;
+  const pl=$('#pozlar');
+  if(!S.pozlar.length)pl.innerHTML='<div class="yok">pozisyon yok — bot sinyal bekliyor</div>';
+  else pl.innerHTML=S.pozlar.map(p=>{
+    const brt=p.taraf==='LONG'?(S.sonFiyat-p.giris):(p.giris-S.sonFiyat);
+    const u=brt*p.adet,roe=u/p.marj*100,danger=S.sonFiyat/p.liq<1.02;
+    return`<div class="poz"><div class="poz-ust"><span class="taraf ${p.taraf}">${p.taraf} · ${p.lev}x</span>
+      <span style="color:var(--soluk)">${p.saat.toLocaleTimeString('tr-TR')}</span></div>
+      <div class="pz"><span>Giriş</span><span>${p.giris.toFixed(2)}</span></div>
+      <div class="pz"><span>Adet</span><span>${p.adet.toFixed(5)}</span></div>
+      <div class="pz"><span>Likidasyon</span><span style="color:${danger?'var(--turuncu)':'var(--soluk)'}">${p.liq.toFixed(2)}${danger?' ⚠':''}</span></div>
+      <div class="pz"><span>P&L / ROE</span><span style="color:${u>=0?'var(--yesil)':'var(--kirmizi)'}">${u>=0?'+':''}${F(u)} · ${roe>=0?'+':''}${roe.toFixed(0)}%</span></div></div>`}).join('');
+  $('#pozAdet').textContent=S.pozlar.length;
+  $('#altBilgi').textContent='bot: '+(S.acik?'çalışıyor · '+S.str+' · '+S.kaldirac+'x kaldıraç':'beklemede');
+  ciz();
+}
+
+/* ---------- Günlük / toast ---------- */
+function log(t,m){
+  const d=document.createElement('div');d.className='ls';
+  d.innerHTML=`<span class="saat">${new Date().toLocaleTimeString('tr-TR')}</span><span class="${t}">${m}</span>`;
+  $('#loglar').prepend(d);$('#lgSayi').textContent=(+$('#lgSayi').textContent||0)+1;
+}
+function toast(m,t){const e=document.createElement('div');e.className='toast '+(t||'');e.textContent=m;
+  $('#toastlar').appendChild(e);setTimeout(()=>{e.style.transition='opacity .3s';e.style.opacity=0;setTimeout(()=>e.remove(),300)},3400)}
+
+/* ---------- Etkileşim ---------- */
+$('#botBtn').onclick=()=>{
+  S.acik=!S.acik;
+  const b=$('#botBtn');
+  b.textContent=S.acik?'■ BOTU DURDUR':'▶ BOTU BAŞLAT';
+  b.className='btn '+(S.acik?'kapali':'acik');
+  $('#botYazi').textContent=S.acik?'ÇALIŞIYOR':'DURDU';
+  $('#botYazi').style.color=S.acik?'var(--yesil)':'var(--metin)';
+  if(S.acik){if(!S.pozlar.length&&!S.gecmis.length){log('bl','futures botu başlatıldı · cüzdan 1.000 USDT · izole marjin · taker %0,04');
+    log('bl','sinyaller yalnızca KAPANMIŞ mumlarda değerlendirilir (lookahead yok)');}
+    toast('Bot çalışıyor · '+S.kaldirac+'x kaldıraç · long/short');}
+  else toast('Bot durduruldu — açık pozisyonlar izlenmeye devam ediyor');
+};
+$('#strSec').onchange=e=>{S.str=e.target.value;G=hesapla();tumSinyalleriBul();guncelle();
+  const t={trend:'Fiyat EMA20>EMA50>EMA200 diziliminde LONG, tersinde SHORT açar; dizilim bozulunca kapanır.',
+    rsirev:'RSI 35’i yukarı kırınca LONG, 65’i aşağı kırınca SHORT; ortalamaya dönünce (KAPAT) pozisyon kapanır.',
+    killik:'Trend dizilimi + RSI 50-72 / 28-50 onay penceresi: hem yön hem zamanlama ister.'}[S.str];
+  $('#strIp').textContent=t;};
+async function yenidenBasla(m){log('bl',m);
+  try{await veriCek();ws()}catch(e){toast('Veri hatası: '+e.message)}}
+$('#sembolSec').onchange=e=>yenidenBasla('parite: '+e.target.value);
+$('#periyotSec').onchange=e=>yenidenBasla('periyot: '+e.target.value);
+$('#kaldiracSec').onchange=e=>{S.kaldirac=+e.target.value;log('bl','kaldıraç '+S.kaldirac+'x olarak ayarlandı (yeni pozisyonlar için)');guncelle()};
+$('#marjSec').onchange=e=>{S.marjOrani=+e.target.value;log('bl','işlem başına marjin: bakiyenin %'+(S.marjOrani*100)+'’ı');guncelle()};
+$('#btBtn').onclick=backtest;
+
+/* ---------- Başlangıç ---------- */
+(async()=>{
+  try{await veriCek();ws();
+    log('bl','OTOMAT-F hazır · veriler Binance USDT-M Futures genel API’sinden gerçek zamanlı');
+    log('bl','bu terminal paper-trading çalıştırır: kaldıraç ve likidasyon simülasyondur, gerçek para yoktur');
+  }catch(e){$('#bd').textContent='bağlantı hatası';toast('Başlangıç hatası: '+e.message)}
+})();
+</script>
+</body>
+</html>

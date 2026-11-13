@@ -1,0 +1,18 @@
+{
+  "durum": "calisiyor",
+  "baslama_utc": "2026-10-29T07:55:40.884725+00:00",
+  "supervisor_pid": 22268,
+  "komut": [
+    "python3",
+    "-u",
+    "ws_bot.py",
+    "--sure-dk",
+    "0.5",
+    "--binance-hacim-kaynagi",
+    "aggtrade"
+  ],
+  "child_pid": 22278,
+  "child_cikis_kodu": null,
+  "sinyal_no": null,
+  "iletilen_sinyaller": []
+}

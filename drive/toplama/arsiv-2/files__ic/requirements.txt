@@ -1,0 +1,14 @@
+# Üst sınırlar: sessiz kırıcı major sürüm yükseltmelerini önler.
+# Testler geçtikten sonra `pip freeze` ile birebir sabitlemeniz önerilir.
+ccxt>=4.2.0,<5
+aiohttp>=3.9.0,<4
+websockets>=12.0,<16
+pandas>=2.0.0,<3
+numpy>=1.26.0,<3
+pyyaml>=6.0,<7
+feedparser>=6.0.11,<7
+python-dotenv>=1.0.0,<2
+requests>=2.31.0,<3
+# Opsiyonel ML (config.yaml > makine_ogrenmesi). Yoksa NumPy GBDT yedeği kullanılır:
+# lightgbm>=4.0,<5
+# xgboost>=2.0,<3

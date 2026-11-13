@@ -1,0 +1,10 @@
+BOT          işlem     net$    ort$   WR%  ort.kaz  ort.kay   K/K başabaş WR     PF   maksDD  en kötü
+------------------------------------------------------------------------------------------------------------
+BOT1_TURBO      46   -28.85   -0.63    65    +4.37   -10.00  0.44         70   0.82   -72.49   -10.00
+BOT3_UC51       22   +23.03   +1.05    82    +3.47    -9.84  0.35         74   1.59   -39.36   -10.23
+BOT4_DORT       36   +35.75   +0.99    78    +3.94    -9.32  0.42         70   1.48   -43.61   -10.44
+BOT5_BES        37   +15.48   +0.42    57    +4.05    -4.35  0.93         52   1.22   -39.84   -10.44
+BOT6_ALTI       70   +55.25   +0.79    70    +5.41   -10.00  0.54         65   1.26   -35.74   -10.00
+
+Not: 'başabaş WR' = bu kazanç/kayıp oranıyla kâra geçmek için gereken isabet oranı.
+     Gerçek WR bunun altındaysa bot uzun vadede kaybeder, kasa artı görünse bile.

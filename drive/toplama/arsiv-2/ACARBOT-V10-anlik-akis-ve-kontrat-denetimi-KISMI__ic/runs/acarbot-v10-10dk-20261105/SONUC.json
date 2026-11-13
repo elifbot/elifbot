@@ -1,0 +1,302 @@
+{
+  "status": "COMPLETED",
+  "error": "",
+  "active_sec": 600.002,
+  "requested_active_sec": 600.0,
+  "total_sec": 612.15,
+  "max_observed_cycle_gap_sec": 12.109,
+  "settings": {
+    "duration_sec": 600.0,
+    "venue": "gateio",
+    "market": "USDT perpetual",
+    "interval": "5m",
+    "symbols": 20,
+    "strategy": "trend",
+    "source": "acarbot-system (1).html",
+    "real_orders": 0,
+    "council_mode": "RULE_BASED_QUANT",
+    "fees_bps_per_side": 5.5,
+    "slippage_bps_per_side": 2,
+    "real_money_approved": false
+  },
+  "counts": {
+    "candle_fetch_ok": 600,
+    "quotes": 2300,
+    "bars_evaluated": 40,
+    "strategy_NO_SIGNAL": 22,
+    "strategy_SIGNAL": 8,
+    "signals": 8,
+    "reject_EDGE_BELOW_COST": 7,
+    "strategy_CONFIRMATION": 3,
+    "strategy_VOLUME_CONFIRMATION": 7,
+    "reject_SPREAD_TOO_WIDE": 1,
+    "fresh_quotes_at_end": 20
+  },
+  "execution": {
+    "open": [],
+    "closed": [],
+    "closed_trades": 0,
+    "realized_net": 0,
+    "equity_realized": 1000,
+    "fees_on_closed": 0.0
+  },
+  "council": {
+    "mode": "RULE_BASED_QUANT",
+    "members": 20,
+    "live_members": 0,
+    "veto_enabled": true,
+    "stats": {
+      "live_calls": 0,
+      "rule_calls": 0,
+      "approved": 0,
+      "vetoed": 0,
+      "quorum_failures": 0,
+      "provider_errors": 0
+    },
+    "adapters": {
+      "openai": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "anthropic": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "google": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "xai": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "deepseek": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "mistral": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "groq": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "together": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "fireworks": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "perplexity": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "cohere": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "openrouter": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "cerebras": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "sambanova": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "hyperbolic": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "deepinfra": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "novita": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "qwen": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "moonshot": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "zhipu": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      }
+    },
+    "honesty_note": "RULE_BASED_QUANT modunda hiçbir YZ çağrısı yapılmaz; çıktı deterministik kural denetimidir."
+  },
+  "market": {
+    "reachable": [
+      "gateio"
+    ],
+    "unreachable": [],
+    "venues": {
+      "gateio": {
+        "venue": "gateio",
+        "reachable": true,
+        "http_status": 200,
+        "error": "",
+        "probe_latency_ms": 385.99,
+        "rest_ok": 3002,
+        "rest_fail": 0,
+        "ws_messages": 0,
+        "ws_reconnects": 0,
+        "last_message_ms": 0
+      }
+    },
+    "rate_limit": {
+      "gateio": {
+        "rate_per_sec": 5.0,
+        "base_rate_per_sec": 5.0,
+        "throttles_429": 0,
+        "queued_waits": 2430,
+        "queued_wait_sec": 467.556
+      }
+    },
+    "data_authenticity": "REAL_MARKET_DATA",
+    "note": "Erişilemeyen uçlar açıkça işaretlenir; sentetik veriye sessizce düşülmez."
+  },
+  "limitations": [
+    "PAPER, gerçek emir yok",
+    "Sadece Gate.io USDT perpetual; Binance/OKX/Bybit test edilmedi",
+    "Taker quote + varsayımsal slipaj, emir defteri derinliği ve gerçek dolum garantisi yok",
+    "Funding öncesi kapanış hedeflenir; funding muhasebesi yok, veri kaybında açık pozisyon belirsiz kalabilir",
+    "10 dakika kârlılık kanıtı değil",
+    "20 gerçek YZ tartışması anahtarsız yapılmadı",
+    "Sabit kripto örneklemi, 800 sembol taraması değil",
+    "HTML grafik, optimizasyon laboratuvarı ve gerçek likidasyon/marjin modeli taşınmadı"
+  ],
+  "real_money_approved": false
+}

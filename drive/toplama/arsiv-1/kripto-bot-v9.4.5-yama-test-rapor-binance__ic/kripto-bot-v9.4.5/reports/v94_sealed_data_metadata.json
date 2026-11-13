@@ -1,0 +1,19 @@
+{
+  "sealed_at_utc": "2026-11-03T06:55:54Z",
+  "sha256": "7fa2396ad91885fafd16781bbb8b2b596a6c19016c1bfcd55eed8285789041d2",
+  "bytes": 1138310,
+  "symbols": [
+    "AVAXUSDT",
+    "BNBUSDT",
+    "BTCUSDT",
+    "DOGEUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "SUIUSDT",
+    "XRPUSDT"
+  ],
+  "bars_per_symbol": 4800,
+  "start_ms": 1791710700000,
+  "end_ms": 1793150699999,
+  "embargo_before_development_ms": 86400000
+}

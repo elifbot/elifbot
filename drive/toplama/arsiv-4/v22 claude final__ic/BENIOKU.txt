@@ -1,0 +1,7 @@
+ACARBOT V22.0.5
+- ACARBOT_V22_5/   : birlesik, duzeltilmis surum (claude_bot 22.0.4 tabanli)
+- ARCHIVE_INPUTS/  : yuklediginiz iki orijinal zip (degistirilmedi)
+Kurallar: 1000 USD kasa | 50 USD NOMINAL giris | 10x (~5 USD teminat) | -20 USD stop | sinirsiz pozisyon
+Once docs/V22_5_BUILD_REPORT.md dosyasini okuyun (stop/tasfiye celiskisi orada).
+Calistirma: cd ACARBOT_V22_5 ; pip install -r requirements.txt ; pytest -q
+LIVE kapali: --live ancak PHOENIX_CONFIRM_LIVE=YES ve indikator TP LIVE'da yazilmadan baslamaz.

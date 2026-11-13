@@ -1,0 +1,12 @@
+{
+  "status": "FINISHED_SUMMARY_FOUND",
+  "counts": {
+    "http_200": 549,
+    "http_503": 0,
+    "http_errors": 0,
+    "pending_http_matches": 0,
+    "db_errors": 0
+  },
+  "max_observer_poll_gap_sec": 1.9993716120000045,
+  "observer_elapsed_monotonic_sec": 604.1292773639999
+}

@@ -1,0 +1,38 @@
+name: ACARBOT v6.2 CI
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      release_verification:
+        description: 'Eksiksiz referans ile yayın kapısını çalıştır (kanıt yoksa başarısız)'
+        type: boolean
+        default: false
+
+jobs:
+  code-and-offline-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install -r requirements-dev.txt
+      - run: python -m ruff check .
+      - run: python -m pytest tests/ -q -ra
+      - name: CI sonuç yorumu
+        run: echo 'Kod testleri strateji kenarı veya canlıya hazır olma kanıtı değildir.'
+
+  release-evidence-gate:
+    if: github.event_name == 'workflow_dispatch' && inputs.release_verification
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install -r requirements.txt
+      - name: Referans ve rapor tutarlılığı (kanıt yoksa başarısız)
+        run: python -m tools.package_release --check-only
+      - name: İşlemsel güvenlik hatırlatması
+        run: echo 'Bu kapı tek başına canlı işleme veya pozitif kenara izin vermez.'

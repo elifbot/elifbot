@@ -1,0 +1,91 @@
+d824b72a2d9b404269bbf2af4e2a6fe6b4362ceb	2026-10-24T11:38:50+00:00	chore: record futures connectivity matrix [skip ci]
+1804883eeec8fe33a6a7a57c38131967809ac4a8	2026-10-24T11:38:08+00:00	feat: preserve partial paper evidence and start 1000 usdt trial
+fe8b1a18dd1ca50609c58fc9b7aa15aa02b48505	2026-10-24T11:30:27+00:00	chore: record paper session 40088524013 [skip ci]
+d00a936f717a1134c0714ef231f0846a27622016	2026-10-24T11:29:56+00:00	ci: request stop for 20 minute paper review
+3e004aef6730496ab740fc81334f953ef6f7c145	2026-10-24T11:11:51+00:00	test: verify executor shadow observer chain
+d70dfd494adcdafc513d7a184acb511718a9ef18	2026-10-24T11:10:34+00:00	feat: add paired shadow cohort review
+ab88d98a6ad9de7ada675e71845a67130e05a5c5	2026-10-24T11:08:34+00:00	chore: record futures connectivity matrix [skip ci]
+5c7d4c4640162dc5f5c9faa85e7bb1d1a467e81f	2026-10-24T11:07:38+00:00	fix: sanitize nonfinite shadow report values
+3919e14bda31b69f55ffba540b98579ebb2ba920	2026-10-24T11:06:35+00:00	chore: record futures connectivity matrix [skip ci]
+6d0b2816a3be3d0e70062c6f48da0aacd5e6738c	2026-10-24T11:05:54+00:00	ci: request 60 minute shadow paper session
+69c467a80e480e02ed14ae2369d311448d015ff8	2026-10-24T11:05:05+00:00	ci: require both exchanges for every paper session
+bec3b86f0b190dd7dee94350b5808a692ac9eb16	2026-10-24T11:04:47+00:00	feat: add paired trade quality shadow lab
+93edbd9fff6decfefd256c36650cce40f05b4c07	2026-10-24T10:41:34+00:00	docs: compare winning and losing entry profiles [skip ci]
+a92606c8f1f14fafb043dc244a381260a3a09637	2026-10-24T10:28:23+00:00	feat: finalize closed position cohort analysis [skip ci]
+8b95ad3e8487db646d316fd4151f453cfa8fd1c5	2026-10-24T10:23:40+00:00	chore: record paper session 40077757773 [skip ci]
+805a40dc3c49a02763c1ccf8ba0255fd8d6832d8	2026-10-24T10:15:54+00:00	feat: separate bot and manual close cohort reports [skip ci]
+574134a8bf14681d1b48806bf2023acff01f5dd7	2026-10-24T09:45:38+00:00	chore: remove unavailable live log snapshot reader [skip ci]
+8866b19c25e02babecae88d6a83245157b7a184e	2026-10-24T09:44:54+00:00	chore: snapshot live paper positions [skip ci]
+9c369e1e18fe2a3290a99a599d5471202b9e5daa	2026-10-24T09:44:52+00:00	chore: snapshot live paper positions [skip ci]
+4d2aa06d559e05f5f7f6849d2d0174d4ad7c407b	2026-10-24T09:44:42+00:00	fix: store live snapshots through contents api
+6f6c0f9c997f5d501e3db543e251ecaaa25aedb9	2026-10-24T09:43:25+00:00	fix: record masked live log download errors
+e646f0cc2a0984f9fb2628264321a3948dc7075d	2026-10-24T09:42:05+00:00	ci: add masked live paper position snapshot
+868ef29c0829a516e83044eb86819e44f2012c6a	2026-10-24T08:22:22+00:00	ci: restore manual paper workflow defaults [skip ci]
+1d7099b03ae9d1a52f92de97994caa287f95c07a	2026-10-24T08:22:04+00:00	fix: align paper preflight with ticker quote fallback
+497c5eed55c2585b3d258098a768ba6b3ce6125e	2026-10-24T08:21:17+00:00	chore: record paper session 40077659706 [skip ci]
+282ba6fcd76a335f62d7be4d303191abed079bd3	2026-10-24T08:20:50+00:00	ci: restore manual paper workflow defaults [skip ci]
+bb970366718cac0b7d6b2707c3fee9023cb6c1e2	2026-10-24T08:20:32+00:00	ci: launch isolated hosted www paper session
+f454679187d2c7bf163594ff57f2334f1191256b	2026-10-24T08:19:59+00:00	ci: remove temporary hosted paper trigger [skip ci]
+6bb1013036bc7a9fbc8453690a67d6847b6968d4	2026-10-24T08:19:42+00:00	feat: route Binance public futures data through official www host
+1af94aa9fa3c38d50a62dff3ba04912ef9a91236	2026-10-24T08:17:18+00:00	chore: record futures connectivity matrix [skip ci]
+9721c55c3809093e8a5a5ee84e520070e4fa2f1c	2026-10-24T08:16:39+00:00	ci: probe official Binance futures host routes
+7fc15bf6046afb5f8a249b5b71cda0deef194d65	2026-10-24T08:15:21+00:00	chore: record futures connectivity matrix [skip ci]
+3e7295839a13f56ecc9263d0232050f32e9ceff7	2026-10-24T08:14:46+00:00	ci: probe official Binance futures websockets
+ed4be99347f1ebe86d69885bf4645a6d987d46e2	2026-10-24T08:13:13+00:00	chore: record futures connectivity matrix [skip ci]
+1a26dbc73ce215a1c1f4042988eb90ad0d1f5065	2026-10-24T08:12:41+00:00	ci: probe additional GitHub runner pools
+ea22c83dee6416dc90c422402e99ae6a8e0d8bda	2026-10-24T08:07:03+00:00	ci: remove temporary codespace session trigger [skip ci]
+8c7a4ce0b8663cb248b79baf66e74e19d48a9108	2026-10-24T08:06:47+00:00	ci: launch 120 minute dual exchange codespace session
+fe70b517d6fcfbe54ded6f4e39cb3d1f88a206bf	2026-10-24T07:57:46+00:00	feat: automate browser-only codespaces runner setup
+5b2d1ad97a79cc5ca3e4966a0409a1667944e3c5	2026-10-24T07:39:49+00:00	ci: require manual dispatch for paper measurement [skip ci]
+d26a4447025269dfa6c5a2bc0bbc1e67ee869aa4	2026-10-24T07:39:18+00:00	chore: record paper session 40074944318 [skip ci]
+4acbb6dd359b87352e94a1dcb306728c45f75576	2026-10-24T07:38:30+00:00	ci: preserve dual exchange preflight evidence
+9c914905f2f4999109110a6badece3971970eec7	2026-10-24T07:37:31+00:00	chore: record paper session 40074826206 [skip ci]
+4090fcfaace3ea4847952079d28903e9df679cdb	2026-10-24T07:36:42+00:00	feat: add dual exchange session attribution and 120m paper gate
+3190c77f55e1f2c77f9b248175dd498db70ab793	2026-10-24T07:19:01+00:00	chore: record futures connectivity matrix [skip ci]
+6679a6415cead97036e0d095a57474780bb03c2c	2026-10-24T07:18:40+00:00	test: record runner futures connectivity artifacts
+eb17080eaca2406a339b5f1d0cf3f1bb12658c3d	2026-10-24T07:13:38+00:00	test: probe official futures access across GitHub runners
+f73b24077fe0aea2f48bf7df2c8e6d526b9a5f10	2026-10-24T07:09:11+00:00	chore: recover dual exchange preflight log [skip ci]
+a3fda9b3ca3ab7320c5684dadb40ff916e078b55	2026-10-24T07:09:03+00:00	ci: recover dual exchange preflight artifact
+44ead8dc1bf93a2540440de6003f1e66b039d0a3	2026-10-24T07:03:10+00:00	ci: remove temporary paper preflight trigger [skip ci]
+6c53a1640e0c9bf16b81792e85edc9524c4e7aea	2026-10-24T07:02:53+00:00	test: launch five minute dual exchange paper preflight
+fc295566f058c770dbe4fdfcc44c9d765f765f33	2026-10-24T07:02:24+00:00	fix: discover Binance USD-M futures without spot catalog
+af67e713df4d04dcd64afc91b188198ff76556ad	2026-10-24T06:42:49+00:00	docs: separate winning and losing strategy modules [skip ci]
+d669361b68d4bc3a5ff1e38775808f577224d441	2026-10-24T06:15:54+00:00	docs: record final paper validation [skip ci]
+f57684f45b3d4aa67d415367c0ddaa8270e27214	2026-10-24T06:14:37+00:00	docs: analyze one hour paper session and improve reporting
+a37fe1aa65798dd0666827ce0762c845dbe815e5	2026-10-24T06:08:40+00:00	chore: recover one hour paper session log [skip ci]
+a3837145b0a3bf6979b4536642d5e98e4893640d	2026-10-24T06:08:30+00:00	ci: recover completed one hour paper log
+8cd8b30f84921ed253ca4d1b1bee4a219a7b6727	2026-10-24T05:07:59+00:00	docs: track one hour paper session
+94824d287446c73c020174b783ca302d9a9eed52	2026-10-24T05:07:35+00:00	ci: remove temporary paper trigger [skip ci]
+44af9491f1ab218f03abcb4ac5d017fcf5664f6a	2026-10-24T05:07:26+00:00	chore: launch one hour controlled paper session
+76fdfb70db852bf83e09f70793af98fc2bf92b20	2026-10-24T05:07:05+00:00	fix: serialize closes and add paper position safeguards
+cd26f49f1f0aaa786437decf6437cfa3439e7313	2026-10-24T04:54:37+00:00	docs: analyze six hour paper session and module performance
+ce16adffab3b4cf50d749161ace302f3dbf735a4	2026-10-24T04:49:39+00:00	ci: remove temporary paper log recovery workflow [skip ci]
+79ac4b176c4d0e1c055a76d032b768f3659a8f08	2026-10-24T04:49:23+00:00	chore: recover paper session log for analysis [skip ci]
+917fbd5e352c6eb5595036f07348e941485ae723	2026-10-24T04:49:16+00:00	ci: recover completed paper log for analysis
+192ac53401970033664742b08cec94c133cb9da2	2026-10-23T14:26:30+00:00	ci: keep manual six hour paper workflow and record active run
+de4f1370856baae94ebfcc5feb5e48bbc09a2721	2026-10-23T14:25:28+00:00	ci: launch six hour paper session with timed report
+3d348860a1eb2bf9a3afac91a4fe6a5e35db881c	2026-10-23T14:21:03+00:00	docs: record manual cancellation and local session handoff
+f93f8ade7fecc7e69bde1d6e08c61b35edbfaa40	2026-10-23T14:13:53+00:00	docs: record XBI stop investigation and regression results
+5450e92107b962d4caad8f5a042ed754ec165758	2026-10-23T14:13:16+00:00	fix: keep initial stop until trailing reaches breakeven
+97f97bb55df31b7ccf13a73cfb8fcee85ab234ef	2026-10-23T14:07:44+00:00	docs: record 15 hour session transition constraints
+4a8a7100619dc00134ecaf71ec840d6f821931ce	2026-10-23T14:06:55+00:00	feat: add 15 hour paper session launcher
+7e25a12b9823d1b26ce7479ca5f219eb769709aa	2026-10-23T14:03:35+00:00	fix: clarify gross and net paper pnl reports
+5ea02af9668a4166915e7471a469b960e3b5a6ef	2026-10-23T13:57:47+00:00	chore: record preflight run and restore manual trigger
+09e2ee647fabf060c5d6abf24028f2d025602ac2	2026-10-23T13:57:14+00:00	test: start 100k paper preflight and record session
+0b6532929a6aad1f073ce429bac7c4f3b5a1e83e	2026-10-23T13:51:34+00:00	feat: add full futures paper sessions and daily reports
+6e1e80a97e30b653b6c29ae0628284168dd024da	2026-10-23T13:27:21+00:00	feat: Telegram bildirimlerini işlem ve durum odaklı sadeleştir
+08578e579d468bb6413fb25ca5add1d3481e016f	2026-10-23T13:22:58+00:00	chore: paper tetiklemesini yeniden manuel yap
+f68217387caf5a09f1c3490923a6bfd72d21ddfa	2026-10-23T13:22:44+00:00	chore: Telegram doğrulamalı paper oturumunu tetikle
+6964572a87e7aec74770d2cd1c4179fe009d9050	2026-10-23T13:16:55+00:00	chore: paper oturumunu yalnız manuel başlatılacak şekilde bırak
+6b5f2ecbc3e8d90b20e77954561e00471d938e3f	2026-10-23T13:16:40+00:00	chore: dal üzerinde ilk paper oturumunu tetikle
+e0080bdd3cc5b4714cd47ab181830c5253010d72	2026-10-23T13:16:14+00:00	feat: 1000 USDT süreli GitHub paper oturumu
+5e9b1f909183b50a5c2ed6383b88a8cd978ce426	2026-10-23T13:09:13+00:00	fix: CI testlerinde MODE ortam değişkenini ezme
+53179cb1eed709d08206ce2ed33d565ef5a39950	2026-10-23T13:06:55+00:00	ci: GitHub üzerinde tam test paketini çalıştır
+476e0a350da21236ff7d23dd21fde99264681fdf	2026-10-23T12:55:12+00:00	docs: kâr çıkışı ve backtest sınırını netleştir
+3734d07aabff447209653eb988e21dd186111738	2026-10-23T12:51:51+00:00	feat: sabit 50 USDT marj ve kâr koşusu modeli
+1ed902998a483416bf47b327fa5f9cee03746917	2026-10-23T12:22:59+00:00	Add ATR trade plans and tick order-flow analytics
+0cde3c04b4b7f2305745f80325d23d6523658eec	2026-10-23T12:00:11+00:00	Add regime-aware indicators and breakout confirmation
+44aed3d204b65279c9b882bba4de36071c6ddc46	2026-10-23T11:36:11+00:00	Add automatic Telegram status and market reports
+cf99ba695f4d88e1ad8c05eb4802505b29c074f7	2026-10-23T11:27:46+00:00	Add live-like paper trading with real market data
+156917fb506ec1552767908cbf071db697f1a26a	2026-10-23T11:13:44+00:00	Improve paper trading safety and Telegram monitoring
+86cea7d6125973fd05deec2f16a109f4151da408	2026-10-23T12:18:10+03:00	Add files via upload

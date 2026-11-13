@@ -1,0 +1,287 @@
+{
+  "Id": "9ae0ae22efa66c0748312ad57b4e3208a966c60b1eb36b1ff9ba987eabb35c90",
+  "Created": "2026-11-03T11:31:23.020645482Z",
+  "Path": "python",
+  "Args": [
+    "-u",
+    "-m",
+    "src.live_runner",
+    "--config",
+    "configs/v9-canonical-production.json",
+    "--duration-sec",
+    "600",
+    "--max-drain-sec",
+    "120",
+    "--port",
+    "8080",
+    "--report-prefix",
+    "/evidence/paper10m"
+  ],
+  "State": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-11-03T11:31:23.128453841Z",
+    "FinishedAt": "2026-11-03T11:43:32.877596369Z",
+    "Health": {
+      "Status": "unhealthy",
+      "FailingStreak": 0,
+      "Log": [
+        {
+          "Start": "2026-11-03T11:42:07.052280795Z",
+          "End": "2026-11-03T11:42:07.181949789Z",
+          "ExitCode": 0,
+          "Output": ""
+        },
+        {
+          "Start": "2026-11-03T11:42:27.182910837Z",
+          "End": "2026-11-03T11:42:27.306986337Z",
+          "ExitCode": 0,
+          "Output": ""
+        },
+        {
+          "Start": "2026-11-03T11:42:47.308378321Z",
+          "End": "2026-11-03T11:42:47.429360798Z",
+          "ExitCode": 0,
+          "Output": ""
+        },
+        {
+          "Start": "2026-11-03T11:43:07.430913736Z",
+          "End": "2026-11-03T11:43:07.57072788Z",
+          "ExitCode": 0,
+          "Output": ""
+        },
+        {
+          "Start": "2026-11-03T11:43:27.572452263Z",
+          "End": "2026-11-03T11:43:27.688859243Z",
+          "ExitCode": 0,
+          "Output": ""
+        }
+      ]
+    }
+  },
+  "Image": "sha256:e20310f7201f973f750d51fc05e5ade87476750e414ea1198a6eb1910e59813d",
+  "ResolvConfPath": "/var/lib/docker/containers/9ae0ae22efa66c0748312ad57b4e3208a966c60b1eb36b1ff9ba987eabb35c90/resolv.conf",
+  "HostnamePath": "/var/lib/docker/containers/9ae0ae22efa66c0748312ad57b4e3208a966c60b1eb36b1ff9ba987eabb35c90/hostname",
+  "HostsPath": "/var/lib/docker/containers/9ae0ae22efa66c0748312ad57b4e3208a966c60b1eb36b1ff9ba987eabb35c90/hosts",
+  "LogPath": "/var/lib/docker/containers/9ae0ae22efa66c0748312ad57b4e3208a966c60b1eb36b1ff9ba987eabb35c90/9ae0ae22efa66c0748312ad57b4e3208a966c60b1eb36b1ff9ba987eabb35c90-json.log",
+  "Name": "/kripto-v945-paper10m-20261103",
+  "RestartCount": 0,
+  "Driver": "overlay2",
+  "Platform": "linux",
+  "MountLabel": "",
+  "ProcessLabel": "",
+  "AppArmorProfile": "",
+  "ExecIDs": null,
+  "HostConfig": {
+    "Binds": [
+      "/home/user/v945-paper10m-20261103:/evidence"
+    ],
+    "ContainerIDFile": "",
+    "LogConfig": {
+      "Type": "json-file",
+      "Config": {}
+    },
+    "NetworkMode": "host",
+    "PortBindings": {},
+    "RestartPolicy": {
+      "Name": "no",
+      "MaximumRetryCount": 0
+    },
+    "AutoRemove": false,
+    "VolumeDriver": "",
+    "VolumesFrom": null,
+    "ConsoleSize": [
+      0,
+      0
+    ],
+    "CapAdd": null,
+    "CapDrop": null,
+    "CgroupnsMode": "private",
+    "Dns": [],
+    "DnsOptions": [],
+    "DnsSearch": [],
+    "ExtraHosts": null,
+    "GroupAdd": null,
+    "IpcMode": "private",
+    "Cgroup": "",
+    "Links": null,
+    "OomScoreAdj": 0,
+    "PidMode": "",
+    "Privileged": false,
+    "PublishAllPorts": false,
+    "ReadonlyRootfs": false,
+    "SecurityOpt": null,
+    "UTSMode": "",
+    "UsernsMode": "",
+    "ShmSize": 67108864,
+    "Runtime": "runc",
+    "Isolation": "",
+    "CpuShares": 0,
+    "Memory": 0,
+    "NanoCpus": 0,
+    "CgroupParent": "",
+    "BlkioWeight": 0,
+    "BlkioWeightDevice": [],
+    "BlkioDeviceReadBps": [],
+    "BlkioDeviceWriteBps": [],
+    "BlkioDeviceReadIOps": [],
+    "BlkioDeviceWriteIOps": [],
+    "CpuPeriod": 0,
+    "CpuQuota": 0,
+    "CpuRealtimePeriod": 0,
+    "CpuRealtimeRuntime": 0,
+    "CpusetCpus": "",
+    "CpusetMems": "",
+    "Devices": [],
+    "DeviceCgroupRules": null,
+    "DeviceRequests": null,
+    "MemoryReservation": 0,
+    "MemorySwap": 0,
+    "MemorySwappiness": null,
+    "OomKillDisable": null,
+    "PidsLimit": null,
+    "Ulimits": [],
+    "CpuCount": 0,
+    "CpuPercent": 0,
+    "IOMaximumIOps": 0,
+    "IOMaximumBandwidth": 0,
+    "MaskedPaths": [
+      "/proc/asound",
+      "/proc/acpi",
+      "/proc/kcore",
+      "/proc/keys",
+      "/proc/latency_stats",
+      "/proc/timer_list",
+      "/proc/timer_stats",
+      "/proc/sched_debug",
+      "/proc/scsi",
+      "/sys/firmware",
+      "/sys/devices/virtual/powercap"
+    ],
+    "ReadonlyPaths": [
+      "/proc/bus",
+      "/proc/fs",
+      "/proc/irq",
+      "/proc/sys",
+      "/proc/sysrq-trigger"
+    ]
+  },
+  "GraphDriver": {
+    "Data": {
+      "LowerDir": "/var/lib/docker/overlay2/f2e18c8da172dd449fb5fb06f5809de89e17c91fa1bfa48c9da3dec44a16d13d-init/diff:/var/lib/docker/overlay2/9b8b850fee5f72667a4d7a64d0daa6e18ffbadeacd8e6b135cc884113a58bac2/diff:/var/lib/docker/overlay2/3932b72b7a5a197e091326238f96c21d636e349b4d02f19d21a61158aab69e60/diff:/var/lib/docker/overlay2/5a52eaca32874fccf9586a0eb29db76f12bfcd511526023dbb9326d91934b3f8/diff:/var/lib/docker/overlay2/7f8a8fa56747c15a75e9033a9dcc71027744509c56e7de2a9edee5a01b817609/diff:/var/lib/docker/overlay2/bea7a0afdc5fed4f903a262907e379b53d0ee8ec757bfa6cdf481fe91d12bd91/diff:/var/lib/docker/overlay2/55e9f0789f58ce87e0c07ac778c84e6a26da9dbcce341bfb9aeba1dcceb7463e/diff:/var/lib/docker/overlay2/99aa71828a74e5ed4ca6ce74efeb6bf50af0596b5ef71fd8eabfbc416475a68c/diff:/var/lib/docker/overlay2/bbd069c290406c5e4be8aacbff8daf05fc2e90ed1138d2d1e03c81cf86dfc63b/diff",
+      "MergedDir": "/var/lib/docker/overlay2/f2e18c8da172dd449fb5fb06f5809de89e17c91fa1bfa48c9da3dec44a16d13d/merged",
+      "UpperDir": "/var/lib/docker/overlay2/f2e18c8da172dd449fb5fb06f5809de89e17c91fa1bfa48c9da3dec44a16d13d/diff",
+      "WorkDir": "/var/lib/docker/overlay2/f2e18c8da172dd449fb5fb06f5809de89e17c91fa1bfa48c9da3dec44a16d13d/work"
+    },
+    "Name": "overlay2"
+  },
+  "Mounts": [
+    {
+      "Type": "bind",
+      "Source": "/home/user/v945-paper10m-20261103",
+      "Destination": "/evidence",
+      "Mode": "",
+      "RW": true,
+      "Propagation": "rprivate"
+    }
+  ],
+  "Config": {
+    "Hostname": "e2b.local",
+    "Domainname": "",
+    "User": "",
+    "AttachStdin": false,
+    "AttachStdout": true,
+    "AttachStderr": true,
+    "ExposedPorts": {
+      "8080/tcp": {}
+    },
+    "Tty": false,
+    "OpenStdin": false,
+    "StdinOnce": false,
+    "Env": [
+      "PYTHONUNBUFFERED=1",
+      "PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+      "LANG=C.UTF-8",
+      "GPG_KEY=7169605F62C751356D054A26A821E680E5FA6305",
+      "PYTHON_VERSION=3.12.16",
+      "PYTHON_SHA256=b5796915dc45ff745cfb4e990a7e7c93d6f546328a102ce31448d69ebc37575c"
+    ],
+    "Cmd": [
+      "python",
+      "-u",
+      "-m",
+      "src.live_runner",
+      "--config",
+      "configs/v9-canonical-production.json",
+      "--duration-sec",
+      "600",
+      "--max-drain-sec",
+      "120",
+      "--port",
+      "8080",
+      "--report-prefix",
+      "/evidence/paper10m"
+    ],
+    "Healthcheck": {
+      "Test": [
+        "CMD-SHELL",
+        "python -c \"import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/health', timeout=4).read()\" || exit 1"
+      ],
+      "Interval": 20000000000,
+      "Timeout": 5000000000,
+      "StartPeriod": 25000000000,
+      "Retries": 3
+    },
+    "Image": "sha256:e20310f7201f973f750d51fc05e5ade87476750e414ea1198a6eb1910e59813d",
+    "Volumes": null,
+    "WorkingDir": "/app",
+    "Entrypoint": null,
+    "OnBuild": null,
+    "Labels": {},
+    "StopTimeout": 30
+  },
+  "NetworkSettings": {
+    "Bridge": "",
+    "SandboxID": "28053c9752463026655dc142163aa5e24063a63ad29229fccd1801cdc51d0699",
+    "SandboxKey": "/var/run/docker/netns/default",
+    "Ports": {},
+    "HairpinMode": false,
+    "LinkLocalIPv6Address": "",
+    "LinkLocalIPv6PrefixLen": 0,
+    "SecondaryIPAddresses": null,
+    "SecondaryIPv6Addresses": null,
+    "EndpointID": "",
+    "Gateway": "",
+    "GlobalIPv6Address": "",
+    "GlobalIPv6PrefixLen": 0,
+    "IPAddress": "",
+    "IPPrefixLen": 0,
+    "IPv6Gateway": "",
+    "MacAddress": "",
+    "Networks": {
+      "host": {
+        "IPAMConfig": null,
+        "Links": null,
+        "Aliases": null,
+        "MacAddress": "",
+        "NetworkID": "227a8b140e8065a47178ec8bad918346c0b7e0d5c602806635aa94a54c355a71",
+        "EndpointID": "",
+        "Gateway": "",
+        "IPAddress": "",
+        "IPPrefixLen": 0,
+        "IPv6Gateway": "",
+        "GlobalIPv6Address": "",
+        "GlobalIPv6PrefixLen": 0,
+        "DriverOpts": null,
+        "DNSNames": null
+      }
+    }
+  }
+}

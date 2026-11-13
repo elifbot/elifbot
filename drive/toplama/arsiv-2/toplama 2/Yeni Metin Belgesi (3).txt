@@ -1,0 +1,16 @@
+https://api.telegram.org/bot8808087873:AAEWVVMAywl0jTVaTmXoC9LYhpHuJzRP0B8/getUpdates
+
+6425796299
+
+1. Bu Arena Sayfasına Kalıcı Olarak Kaydedilen Dosyalar (GitHub Engellense Bile Burada Güvende)
+Sağdaki dosya görüntüleyicide doğrudan açtığım tam yedek paketi ve diğer dosyalar bu konuşma sayfasının çalışma alanında kalıcı olarak duruyor:
+
+Tam Proje + Veritabanı ZIP Paketi (1.0 MB, 228 dosya):
+Sayfa İçi Dosya Yolu: backups/KRIPTO-BOT-v7.6-TAM-YEDEK.zip (sağdaki panelden tek tıkla indirebilirsin)
+GitHub Dal ZIP Linki (Yedek): https://github.com/omeraca56/newkripto/archive/refs/heads/arena/f582cf73-newkripto.zip
+Git Yama (Patch) Dosyası (120 KB):
+Sayfa İçi Dosya Yolu: backups/KRIPTO-BOT-v7.6.patch (herhangi bir kopyaya git apply backups/KRIPTO-BOT-v7.6.patch ile uygulanabilir)
+Kalıcı İşlem & Oturum Veritabanı (5 Tam Oturum + 138 Gerçek İşlem + v7.6 Model Kaydı):
+SQLite Veritabanı: backups/kriptobot_kalici_hafiza.db (sessions, trades, model_snapshots tabloları)
+Taşınabilir JSON Veritabanı: paper-lab/tum_islemler_ve_oturumlar.json
+Kurtarma & Mimari Kılavuzu: paper-lab/KRIPTO_BOT_V7_6_KALICI_HAFIZA_VE_ARSIV.md

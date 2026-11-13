@@ -1,0 +1,2 @@
+# Su an yalnizca standart Python kutuphanesi kullaniliyor.
+# Ileride eklenecekler (ornek): ccxt, pandas, python-dotenv

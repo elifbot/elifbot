@@ -1,0 +1,22 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_______ test_new_utc_day_allows_entry_when_only_yesterdays_loss_blocked ________
+
+tmp_path = PosixPath('/tmp/pytest-of-user/pytest-293/test_new_utc_day_allows_entry_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f0e1adbe190>
+
+    def test_new_utc_day_allows_entry_when_only_yesterdays_loss_blocked(tmp_path,monkeypatch):
+        b=make_bot(tmp_path,monkeypatch);b._risk_gun_utc='2026-10-30'
+        b.portfoy.day_start_balance=1000.;b.portfoy.balance=940.
+        assert b.portfoy.daily_loss_limit_hit()
+        monkeypatch.setattr(ws_bot.time,'time',lambda:DAY2/1000)
+>       assert b._pozisyon_ac(sig(DAY2))=='acildi'
+E       AssertionError: assert 'engel:günlük zarar limiti' == 'acildi'
+E         
+E         - acildi
+E         + engel:günlük zarar limiti
+
+tests/test_utc_gunluk_risk.py:29: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_utc_gunluk_risk.py::test_new_utc_day_allows_entry_when_only_yesterdays_loss_blocked
+1 failed in 0.23s

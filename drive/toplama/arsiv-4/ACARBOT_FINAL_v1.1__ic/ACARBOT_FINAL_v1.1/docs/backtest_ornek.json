@@ -1,0 +1,81 @@
+{
+  "metrics": {
+    "net_pnl": 29.0904,
+    "trade_count": 16,
+    "win_rate": 0.6875,
+    "profit_factor": 2.8031,
+    "max_drawdown_usdt": 8.6024,
+    "max_drawdown_pct": 0.8391,
+    "sharpe_per_trade": 0.3585,
+    "avg_win": 4.1113,
+    "avg_loss": -3.2268,
+    "expectancy_usdt": 1.8182,
+    "expectancy_r": 0.49,
+    "max_consecutive_losses": 2,
+    "total_fees": 3.6821,
+    "total_funding": 0.0002,
+    "total_slippage": 2.6316,
+    "avg_r_multiple": 0.49,
+    "by_engine": {
+      "trend": {
+        "trades": 15,
+        "net_pnl": 27.201,
+        "win_rate": 0.6667,
+        "profit_factor": 2.6859,
+        "avg_r": 0.4906
+      },
+      "fade": {
+        "trades": 1,
+        "net_pnl": 1.8895,
+        "win_rate": 1.0,
+        "profit_factor": Infinity,
+        "avg_r": 0.4817
+      }
+    },
+    "by_symbol": {
+      "ETHUSDT": {
+        "trades": 10,
+        "net_pnl": 0.0815,
+        "win_rate": 0.6,
+        "profit_factor": 1.0062,
+        "avg_r": -0.0133
+      },
+      "SOLUSDT": {
+        "trades": 6,
+        "net_pnl": 29.0089,
+        "win_rate": 0.8333,
+        "profit_factor": 10.9121,
+        "avg_r": 1.3289
+      }
+    },
+    "by_side": {
+      "SHORT": {
+        "trades": 11,
+        "net_pnl": 10.3916,
+        "win_rate": 0.7273,
+        "profit_factor": 2.0551,
+        "avg_r": 0.2501
+      },
+      "LONG": {
+        "trades": 5,
+        "net_pnl": 18.6988,
+        "win_rate": 0.6,
+        "profit_factor": 3.975,
+        "avg_r": 1.0177
+      }
+    }
+  },
+  "rejection_counts": {
+    "dusuk_hacim": 23782,
+    "guclu_trend_fade_kapali": 1399,
+    "yukselen_bicak": 116,
+    "fake_breakout_or_suspect": 98,
+    "dusen_bicak": 96,
+    "fade_kosulu_yok": 106,
+    "limit_bekliyor": 17,
+    "rejim_uyumsuz": 19,
+    "emir_dolmadi": 1
+  },
+  "expired_orders": 1,
+  "partial_fills": 8
+}

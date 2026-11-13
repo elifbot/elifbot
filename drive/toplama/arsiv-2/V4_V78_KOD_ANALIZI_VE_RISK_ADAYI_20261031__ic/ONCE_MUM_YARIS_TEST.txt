@@ -1,0 +1,35 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_______ test_binance_repair_does_not_overwrite_candle_added_during_await _______
+
+    def test_binance_repair_does_not_overwrite_candle_added_during_await():
+        """Synthetic race: REST result arrives after a live closed candle."""
+        det=SpikeDetector();det.ind_aktif=True
+        s=det.durum('binance','X');doldur(s)
+        missing_mid=END-2;del s.ind_mum[missing_mid]
+        from scanner.ind_aktif import kapali_mum_ekle
+        expected=(102.,100.,101.,10.,1010.)
+        row=[str(missing_mid*60000),'100','100.2','99.8','100','10',
+             str((missing_mid+1)*60000-1),'1000']
+        class RaceResponse:
+            async def __aenter__(self):return self
+            async def __aexit__(self,*args):return False
+            async def json(self):
+                assert kapali_mum_ekle(s,missing_mid,*expected)
+                return [row]
+        class RaceSession:
+            def get(self,*args,**kwargs):return RaceResponse()
+        async def nop(*args):return None
+        with patch('scanner.ws_scanner.time.time',return_value=NOW/1000),patch('scanner.ws_scanner.asyncio.sleep',new=nop):
+            result=asyncio.run(binance_indikator_mum_eksiklerini_doldur(
+                RaceSession(),det,{'X'},simdi_ms=NOW,es_zamanli=1,bekleme=0))
+>       assert s.ind_mum[missing_mid]==expected
+E       assert (100.2, 99.8,... 10.0, 1000.0) == (102.0, 100.0... 10.0, 1010.0)
+E         
+E         At index 0 diff: 100.2 != 102.0
+E         Use -v to get more diff
+
+tests/test_v37_ind_aktif.py:243: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_v37_ind_aktif.py::test_binance_repair_does_not_overwrite_candle_added_during_await
+1 failed in 0.17s

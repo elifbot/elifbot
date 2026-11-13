@@ -1,0 +1,456 @@
+---
+research_exchange_apis_and_open_source_bot_references:
+  description: |2
+
+    Read the official documentation pages for Binance FAPI, OKX V5 SWAP, Freqtrade, and Hummingbot using your web tools. Report verified facts only — never fabricate endpoint responses, data availability, or library capabilities.
+
+    ## SOURCES TO READ (use ScrapeWebsiteTool and URLReadTool)
+
+    1. **Binance FAPI Klines**: https://developers.binance.com/docs/derivatives/usds-margined-futures/market-data/rest-api/Kline-Candlestick-Data
+    2. **Binance FAPI Exchange Info**: https://developers.binance.com/docs/derivatives/usds-margined-futures/market-data/rest-api/Exchange-Information
+    3. **Binance FAPI Funding Rate**: https://developers.binance.com/docs/derivatives/usds-margined-futures/market-data/rest-api/Get-Funding-Rate-History
+    4. **Binance FAPI Open Interest**: https://developers.binance.com/docs/derivatives/usds-margined-futures/market-data/rest-api/Open-Interest
+    5. **OKX V5 Market Candles**: https://www.okx.com/docs-v5/en/#order-book-trading-market-data-get-candlesticks
+    6. **OKX V5 Public Instruments**: https://www.okx.com/docs-v5/en/#public-data-rest-api-get-instruments
+    7. **Freqtrade Exchanges**: https://www.freqtrade.io/en/stable/exchanges/
+    8. **Freqtrade Lookahead Analysis**: https://www.freqtrade.io/en/stable/lookahead-analysis/
+    9. **Hummingbot Docs**: https://hummingbot.org/docs/
+
+    ## REPORT STRUCTURE (produce all sections)
+
+    ### 1. Binance FAPI — Verified Endpoint Inventory
+    For each endpoint attempted: URL, required params, response schema (key fields only), auth required (yes/no), rate limit (if documented), accessible via public GET (verified/unverified/blocked).
+
+    ### 2. OKX V5 SWAP — Verified Endpoint Inventory
+    Same structure. Critically document:
+    - `confirm` field: index in candle array, meaning of "1" vs "0", which candles to discard
+    - `vol` field: unit (contracts or base?), how to convert to base using ctVal
+    - `volCcy` field: unit and when to use
+    - `volCcyQuote` field: USDT notional
+    - `ctVal` and `ctMult` from instruments: meaning, units, how to compute base_qty = contracts * ctVal * ctMult
+
+    ### 3. Extended Data Availability
+    For each of these, state: endpoint URL (if public), auth required, data freshness/delay, regional restriction risk:
+    - Binance funding rate history (public? auth?)
+    - Binance open interest (public? auth?)
+    - Binance mark price / index price (public? auth?)
+    - OKX funding rate history (public? auth?)
+    - OKX open interest (public? auth?)
+    - OKX mark/index price (public? auth?)
+    - Order book data (both exchanges): public depth endpoint?
+    - Trade/CVD stream: public?
+
+    ### 4. Freqtrade Engineering Reference
+    From the docs you actually read:
+    - How does Freqtrade's dry-run mode work (conceptually, for engineering reference)?
+    - What does lookahead-analysis check for? Which specific biases?
+    - What does recursive-analysis detect?
+    - OKX futures support status in Freqtrade (exact quote or paraphrase from current docs)
+    - Binance futures support status (isolated vs cross noted?)
+    - License of Freqtrade (note: do NOT copy code; reference only)
+    - Key differences between Freqtrade's paper model and this project's cross-margin paper model
+
+    ### 5. Hummingbot Engineering Reference
+    From the docs you actually read:
+    - How does Hummingbot modularize exchange connectors?
+    - Paper trading mode: how does it simulate fills?
+    - Any relevant OKX or Binance futures connector notes
+    - License of Hummingbot (note: do NOT copy code)
+
+    ### 6. Data Quality Risk Assessment
+    For each data type used in this bot:
+    - Candle data: known gaps, restatements, timezone issues?
+    - Volume units: Binance base vs OKX contracts — conversion risk?
+    - Timestamp alignment: UTC consistency verified?
+    - Rate limits: what happens at 429? Regional 451 risk?
+    - Stale data risk: how to detect and handle?
+
+    ### 7. Recommendations for Developer Agent
+    Concrete, specific technical recommendations based on your research:
+    - Which Phase C data sources are confirmed public and accessible?
+    - Which are auth-required and must remain DATA_UNAVAILABLE in paper mode?
+    - Any endpoint URL corrections for the current codebase?
+    - OKX volume conversion formula (verified from docs)
+    - Freqtrade lookahead-analysis checks to implement as code guards
+
+    ## STRICT RULES
+    - If a page cannot be loaded: state "PAGE NOT ACCESSIBLE — [URL] — reason: [error]"
+    - If a fact cannot be verified from the page: state "UNVERIFIED — not found on page"
+    - Never invent API response schemas
+    - No code — only research findings and recommendations
+  expected_output: |2
+
+    Structured research report with 7 sections. Verified endpoint inventory for Binance FAPI and OKX V5 SWAP. OKX confirm/ctVal/volume unit semantics documented from actual docs. Extended data availability (funding, OI, mark price) with auth requirements. Freqtrade and Hummingbot engineering references with license notes. Data quality risk assessment. Developer recommendations. All unverified items explicitly marked. No fabricated API responses.
+  agent: market_data_exchange_research_specialist
+develop_multi_indicator_research_bot_source_code:
+  description: |2
+
+    Write the complete, phase-structured Python 3.10+ source code for a PAPER-ONLY, multi-indicator futures research bot. Use the data research report from context for endpoint verification, OKX volume conversion, and confirmed data availability. Output EVERY file with FULL code — no placeholders, no ellipsis. Label every assumption with # ASSUMPTION: and every unverified item with # UNVERIFIED:.
+
+    ## ABSOLUTE SECURITY CONSTRAINTS
+    - PAPER MODE ONLY. --mode live or --mode testnet: print error and exit with code 1. No authenticated calls anywhere.
+    - No API key, secret, passphrase referenced, prompted for, or stored.
+    - No GitHub write, no deploy, no scheduler, no email or SMS.
+    - Reference ZIP KRIPTO-BOT-v7.8: KAYNAK INCELENEMEDI — mark all v7.8 compatibility claims as UNVERIFIED.
+
+    ## PHASE DELIVERY ORDER
+
+    ### PHASE A — Core (deliver first, must be fully working before anything else)
+    Produce all files in this structure with complete runnable code:
+    - main.py: CLI, run loop, session timer, exchange+symbol keyed state dict
+    - config.py: all constants annotated with simulation assumptions; EXCHANGE_SYMBOL_PAIRS list
+    - data/__init__.py
+    - data/binance_futures_feed.py: FAPI public /fapi/v1/klines and /fapi/v1/exchangeInfo only
+    - data/okx_swap_feed.py: OKX public /api/v5/market/candles and /api/v5/public/instruments; confirm==1 filter; ctVal volume conversion from data research report
+    - data/feed_utils.py: validate_candle_row, filter_closed_candles, sort_and_dedup, check_candle_gaps
+    - data/extended/__init__.py: DataUnavailableError exception class
+    - data/extended/funding_feed.py: stub only; raises DataUnavailableError("funding: unverified or unavailable")
+    - data/extended/oi_feed.py: stub only; raises DataUnavailableError("open interest: unverified or unavailable")
+    - data/extended/markprice_feed.py: stub only; raises DataUnavailableError("mark price: unverified or unavailable")
+    - indicators/__init__.py
+    - indicators/core.py: EMA ribbon (corrected direction), SMA, Bollinger ddof=1, RSI Wilder, MACD, ATR Wilder, ADX, Stoch-RSI, Supertrend
+    - indicators/volume.py: OBV, VWAP session reset, MFI, CCI, Williams %R, Donchian, Keltner, BB-Keltner squeeze
+    - indicators/catalog.py: IndicatorCatalog dataclass; full inventory with status ACTIVE/SHADOW/MISSING/DATA_UNAVAILABLE for every indicator in families A through G
+    - strategies/__init__.py
+    - strategies/base.py: abstract StrategyBase with STATUS class attribute; SignalResult dataclass with signal, strategy_name, regime, contributor_log, active_families, missing_families, data_timestamp
+    - strategies/trend_follower.py: Candidate A using EMA ribbon + ADX + MACD + Supertrend; STATUS = "SHADOW"
+    - strategies/mean_reversion.py: Candidate B using RSI + Bollinger band touch + VWAP; STATUS = "SHADOW"
+    - strategies/squeeze_breakout.py: Candidate C using BB-Keltner squeeze + volume z-score + momentum; STATUS = "SHADOW"
+    - strategies/composite.py: family scoring; each family scored separately with cap; warns that same-price families are not independent evidence
+    - portfolio/__init__.py
+    - portfolio/paper_futures.py: LONG/SHORT, leverage, margin, fee, daily loss limit; keyed by (exchange, symbol) tuple
+    - logger/__init__.py
+    - logger/trade_logger.py: CSV allowlist; funding_fee column labeled with UNKNOWN in output when not fetched
+    - reports/__init__.py
+    - reports/pnl_report.py: PnL, win rate, drawdown; Sharpe suppressed with message "hesaplanamaz — yetersiz veri" when closed_trades < 30
+    - backtests/__init__.py
+    - backtests/engine_interface.py: abstract BacktestEngine base class for backtest agent to implement
+    - requirements.txt: requests, pandas, numpy, tabulate
+    - requirements-dev.txt: pytest, pytest-mock
+    - setup.py
+    - README.md: paper disclaimer, public endpoints, no-API-key statement, install steps, CLI flags, known limitations including run_with_trigger note
+
+    ### PHASE B — Full Indicator Catalog
+    Expand indicators/catalog.py with complete per-indicator entries for all families:
+    Family A Trend: EMA 5 8 10 13 21 34 50 100 200, SMA 20 50 200, WMA, HMA, DEMA, TEMA, KAMA, VWMA, Ichimoku, Supertrend, Parabolic SAR, ADX/+DI/-DI, Aroon
+    Family B Momentum: RSI 14, Stoch RSI, Stochastic K/D, MACD, ROC, Momentum, CCI, Williams %R, TSI, TRIX, PPO, CMO, Ultimate Oscillator, Awesome Oscillator, WaveTrend
+    Family C Volatility: ATR/NATR, Bollinger 20/2, Keltner, Donchian, BB-Keltner squeeze, StdDev, Historical Vol, Choppiness, Parkinson vol, Garman-Klass vol
+    Family D Volume: OBV, Session VWAP, Anchored VWAP, MFI 14, CMF, Accumulation/Distribution, Force Index, Relative Volume, Volume Z-Score
+    Family E Market Structure: Swing High/Low closed candles only no lookahead, HH/HL/LH/LL, Support/Resistance, Engulfing, Doji, Hammer, Inside Bar
+    Family F Futures Microstructure: Funding, Open Interest, Mark/Index/Basis, Bid-Ask spread, Order book imbalance, CVD, Liquidation flow — each with data_source and DATA_UNAVAILABLE where applicable
+    Family G Context: BTC/ETH correlation closed candles, Regime detector, Sentiment MISSING no verified public source
+
+    Each catalog entry must include: input_columns, period_warmup, data_source, status, last_verified_date.
+
+    ## CRITICAL IMPLEMENTATION RULES
+
+    ### EMA Ribbon Direction (corrected — this was wrong in previous version)
+    Bullish: ema_5 > ema_8 > ema_10 > ema_13 > ema_21 > ema_34 > ema_50 > ema_100 > ema_200 ALL strictly greater than next
+    Bearish: ema_5 < ema_8 < ema_10 < ema_13 < ema_21 < ema_34 < ema_50 < ema_100 < ema_200 ALL strictly less than next
+    Equality on ANY adjacent pair: HOLD; not bullish, not bearish
+    Any NaN in any EMA period: HOLD
+    EMA200 requires >= 200 valid closed rows; if fewer rows: ema_200 = NaN, data_sufficient_ema200 = False, ribbon signal = HOLD
+    NEVER substitute 0 for NaN ema_200. Add comment: "# BUG FIX: prior code substituted 0 for NaN ema_200, corrupting ribbon width and bullish flag"
+    Note in docstring that EMA Ribbon as mandatory entry gate is experimental/Shadow Lab territory
+
+    ### Bollinger Bands
+    Use rolling(20).std(ddof=1) for sample standard deviation.
+    Add comment: "# ddof=1: sample std, matches TradingView default; ddof=0 gives slightly narrower bands. Not claimed to be identical to TV in all versions."
+
+    ### Three Strategy Candidates
+    All must have STATUS = "SHADOW" class attribute. Never set to ACTIVE without explicit user action.
+    Each returns SignalResult with contributor_log showing per-indicator vote and value, active_families list, missing_families list, and data_timestamp.
+    No shared mutable state between strategy instances.
+    Use only iloc[-1] of confirmed closed candles.
+
+    ### Paper Futures Accounting
+    Position limits checked using post-open state: total_open+1 <= 6, same_direction+1 <= 4
+    Utilisation check: (used_margin + new_margin + entry_fee) divided by starting_balance must be <= 0.45
+    Balance floor: balance minus new_margin minus entry_fee must be >= 100.0
+    Entry fee deducted ONCE with margin at open: balance -= (margin + entry_fee). Do not deduct margin and fee in separate steps.
+    Leverage determines qty_base: notional = margin * leverage; qty_base = floor(notional / entry_price, step_size). Leverage is NOT multiplied into PnL again.
+    PnL verification as inline assertion in paper_futures.py:
+      LONG 5 units entry=100 exit=101 taker 0.05%: gross=5.0, entry_fee=0.25, exit_fee=0.2525, net=+4.4975
+      SHORT 5 units entry=100 exit=99 taker 0.05%: gross=5.0, entry_fee=0.25, exit_fee=0.2475, net=+4.5025
+    Same-candle SL+TP: assume stop triggered first at stop price; document as conservative assumption.
+    Funding field: present in record, default 0.0; add comment "# ASSUMPTION: funding not fetched; result is funding-EXCLUDED. Outputs labeled 'funding hari/bilinmiyor'."
+    Stale price guard: if last_price_timestamp > 2 * poll_interval seconds old, log warning and refuse new positions.
+    (exchange, symbol) keyed: Binance BTCUSDT and OKX BTC-USDT-SWAP are separate keys; never merged.
+    Sharpe: output "hesaplanamaz — yetersiz veri" when closed_trades < 30.
+
+    ### Multi-Exchange Isolation
+    EXCHANGE_SYMBOL_PAIRS in config.py: list of (exchange, symbol) tuples
+    Position state, feed instances, instrument metadata all keyed by (exchange, symbol) tuple
+    Never merge Binance volume with OKX volume
+
+    ### Session Timer
+    No new positions in final 7 minutes of session; close all at session end at last known price.
+    Warn if closing price is stale; mark trade record reason as STALE_PRICE if applicable.
+    Do NOT auto-restart session.
+
+    ### run_with_trigger
+    Add to README.md: "KNOWN ISSUE: run_with_trigger shortcut in pyproject.toml has no target function. Remove this entry manually or ignore it. No automatic trigger is active in this project."
+    Do NOT implement any automatic trigger.
+
+    Her dosyayı "Dosya Yazıcı" aracıyla GERÇEKTEN diske yaz:
+      path = 'futures_bot/<göreli/yol.py>', content = <dosyanın TAM içeriği>
+    Dosya içeriğini sohbete düz metin olarak dökmek YERİNE dosyayı yaz;
+    ardından yazdığın yolların listesini raporla.
+  expected_output: |2
+
+    Complete phase-labeled Python source code for all files. Phase A fully runnable. Phase B full indicator catalog with ACTIVE/SHADOW/MISSING/DATA_UNAVAILABLE status for all 7 families. Phase C stubs raising DataUnavailableError. Phase D abstract BacktestEngine interface. EMA ribbon direction corrected (bullish = ema_5 > ema_8 > ... > ema_200). Bollinger ddof=1 documented without TV compatibility claim. PnL arithmetic verified inline (+4.4975 LONG, +4.5025 SHORT). Three SHADOW strategy candidates with isolated state. (exchange,symbol) keyed positions. Sharpe suppressed for fewer than 30 trades. Funding labeled as unknown throughout. run_with_trigger noted as known issue in README.
+  agent: senior_python_futures_bot_developer
+  context:
+  - research_exchange_apis_and_open_source_bot_references
+design_backtest_framework_and_statistical_validation:
+  description: |2
+
+    Based on the developer source code and data research report from context, produce the complete backtesting framework, walk-forward validation, indicator ablation engine, and comparative reporting module. All code must be fully runnable Python. No fabricated backtest results, no invented historical data.
+
+    ## DELIVERABLES
+
+    ### backtests/engine.py — Core Backtest Engine
+    Implement BacktestEngine class. Anti-lookahead rules enforced in code:
+    - Candles fed one-by-one in time order; strategy never sees future candles
+    - Indicator warmup enforced: strategy.evaluate() not called until min_periods rows available
+    - Parameters frozen before backtest starts via a _freeze_parameters() method
+    - OKX confirm==1 filter applied to historical data before feeding
+    - Funding: applied only if timestamp matches known funding interval AND data is available; otherwise set trade attribute funding_excluded=True and label output "funding hari/bilinmiyor"
+
+    Document inline: fill model assumes immediate fill at close price of signal candle (market order simulation). Slippage: configurable fixed-point USDT amount added to entry/exit price. Survivorship bias: warn if symbol list was filtered to only currently-listed symbols.
+
+    Include method _check_no_lookahead(strategy, ohlcv_df) that runs strategy on shifted data and warns "LOOKAHEAD DETECTED" if signal changes — inspired by Freqtrade lookahead-analysis approach.
+
+    ### backtests/walk_forward.py — Walk-Forward Validation
+    Implement WalkForwardValidator class with:
+    - Parameters selected ONLY on training window, frozen before validation window
+    - Test window never seen during parameter selection
+    - Non-overlapping windows enforced
+    - Minimum window size: configurable, default 500 candles
+    - Results reported per window with no cross-window aggregation that hides variance
+
+    Mandatory warnings in code: if total data < 3 times min_window_size produce "INSUFFICIENT DATA FOR WALK-FORWARD"; if trade count in any window < 30 produce "SMALL SAMPLE — confidence intervals wide; results unreliable"; if parameter search space > 100 combinations produce "MULTIPLE COMPARISON RISK — results may be overfitted".
+
+    ### backtests/ablation.py — Indicator Family Ablation
+    Implement AblationStudy class that toggles one indicator family at a time from: trend, momentum, volatility, volume, market_structure, futures_context. For each ablation run: disable exactly one family by setting all its votes to NEUTRAL/ABSTAIN. Run identical backtest on identical data with identical cost model. Record per run: trades, win_rate, profit_factor, max_drawdown, expected_value, LONG_count, SHORT_count. Compare with all-families-enabled baseline.
+
+    Add comment in code: "# NOTE: families derived from same price series are not independent — removing one may have unexpected interaction effects with correlated families."
+
+    Ablation toggling must NOT change the candle feed or introduce lookahead.
+
+    ### backtests/report.py — Comparative Performance Report
+    Implement generate_comparison_report function producing a text table with:
+    - Per strategy: trade count, win percent with Wilson confidence interval, profit factor, max drawdown, Sharpe (suppressed with "N/A — fewer than 30 trades" when applicable), avg win USDT, avg loss USDT, LONG percent, SHORT percent, net PnL USDT
+    - Ablation summary: per family removed, delta win rate and delta net PnL vs baseline
+    - Walk-forward summary: per window showing train period, test period, trade count, win percent, net PnL
+    - All warnings generated during analysis listed at bottom
+    - Mandatory disclaimer: "Past backtest results do not predict future performance. Fee and funding assumptions are simulation-only. Survivorship bias may inflate results if only currently-listed symbols were used."
+
+    Report header must include in plain text: exchange, symbol, timeframe, date range, taker fee percent, maker fee percent, slippage USDT, funding status stated as either "applied from verified source" or "excluded — data not available", survivorship bias assessment status.
+
+    ### backtests/bias_checker.py — Bias Detection
+    Implement BiasChecker class with:
+    - check_lookahead(strategy, ohlcv_df): run strategy on shifted data; if signal changes warn "LOOKAHEAD DETECTED"
+    - check_survivorship(symbol_list, reference_date): warn if symbols were selected after reference_date
+    - check_parameter_leak(param_selection_date, test_start_date): warn if params selected after test start
+    - check_funding_anachronism(funding_data, trade_timestamps): warn if funding applied outside its valid range
+
+    ### backtests/data_models.py — Typed Dataclasses
+    Define: BacktestResult, WalkForwardResult, AblationResult, WindowSplit, AblationComparison dataclasses with typed fields.
+
+    ### tests/test_backtest.py — Backtest Tests
+    Tests covering:
+    - Lookahead detection: strategy that reads future candle triggers check_lookahead warning
+    - Walk-forward: windows are non-overlapping, parameter freeze verified before out-of-sample
+    - Ablation: disabling a family changes contributor_log but not candle DataFrame content
+    - Small sample warning: fewer than 30 trades produces Sharpe suppression message
+    - Funding exclusion: trade record contains funding_excluded=True when no funding data provided
+    - PnL arithmetic: LONG 5 units entry=100 exit=101 taker=0.0005 both sides yields net=+4.4975; SHORT 5 units entry=100 exit=99 yields net=+4.5025
+    - Bias checker: survivorship test, lookahead test, parameter leak test each produce correct warning
+
+    ## STATISTICAL RULES (enforce in code)
+    1. trade_count < 30: output "YETERSİZ VERİ — N islem; sonuclar istatistiksel olarak guvenilmez"
+    2. Sharpe: never annualise from fewer than 30 data points; suppress with warning
+    3. Win rate: output Wilson confidence interval alongside all win rate figures
+    4. Parameter combinations > 10: warn about family-wise error rate increase
+    5. Never label simulated results as "profitable strategy"; always label as research/simulation
+    6. Document: data source, date range, cost model, fill assumption, survivorship status
+
+    Dosyaları "Dosya Yazıcı" ile yaz: 'futures_bot/backtests/<dosya>.py' ve
+    'futures_bot/tests/test_backtest.py'. İçeriği sohbete dökmek yerine dosyaya yaz.
+  expected_output: |2
+
+    Complete backtest framework: engine.py with anti-lookahead enforcement and parameter freeze; walk_forward.py with non-overlapping windows and mandatory small-sample warnings; ablation.py with per-family toggling and correlation caveat documented; report.py with comparison table, Wilson intervals, and disclaimer; bias_checker.py with lookahead/survivorship/parameter-leak detection; data_models.py with typed dataclasses; test_backtest.py with all listed test cases. All files labeled with path headers. No fabricated results. Statistical warnings mandatory.
+  agent: backtest_statistical_validation_analyst
+  context:
+  - research_exchange_apis_and_open_source_bot_references
+  - develop_multi_indicator_research_bot_source_code
+write_multi_indicator_bot_pytest_test_suite:
+  description: |2
+
+    Based on all source code from context (developer code, data research report, backtest framework), write the complete pytest test suite. State clearly at the very top whether tests were executed in a real isolated environment or not. Never fabricate test output or pass counts.
+
+    ## MANDATORY FIRST LINE
+    If isolated Python execution environment is NOT available: write "TESTLER CALISTIRILMADI — yalitilmis Python calistirma ortami mevcut degil" and proceed to write tests without claiming they passed.
+    If available: show actual pytest command, Python version, and complete stdout.
+
+    ## TEST FILES TO PRODUCE
+
+    tests/__init__.py
+    tests/conftest.py — Fixtures: OHLCV DataFrames (100 rows, 199 rows, 200 rows, 250 rows), mock API payloads for both exchanges, (exchange,symbol) keyed portfolio fixture, mock strategy returning fixed SignalResult
+
+    tests/test_feed_utils.py — candle validation, gap detection, dedup, closed-candle filter
+    tests/test_binance_feed.py — FAPI klines and exchangeInfo mocked; symbol normalization; 429 backoff; 451 regional; timeout; URL allowlist enforcement
+    tests/test_okx_feed.py — SWAP candles and instruments mocked; confirm==1 filter; ctVal volume conversion; 429/451; timeout; URL allowlist
+    tests/test_indicators_core.py — EMA ribbon direction (bullish/bearish/equality/NaN each separate test); EMA200 NaN-guard; Bollinger ddof=1 arithmetic; RSI boundaries; MACD warmup; ATR Wilder; ADX warmup; Stoch-RSI; Supertrend flip
+    tests/test_indicators_volume.py — OBV, MFI, VWAP daily reset, CCI, Williams %R, Donchian, Keltner, squeeze boolean
+    tests/test_catalog.py — every indicator in catalog has required fields status, input_columns, period_warmup, data_source; DATA_UNAVAILABLE items do not produce computed values
+    tests/test_strategies.py — three candidates are isolated (no shared mutable state); all have STATUS=SHADOW; SignalResult contains contributor_log, active_families, missing_families, data_timestamp; EMA200 gate forces HOLD; NaN indicator forces HOLD; family scoring caps enforced
+    tests/test_paper_futures.py — PnL arithmetic LONG +4.4975 and SHORT +4.5025 exactly; single entry-fee deduction (balance == starting minus margin minus entry_fee after open); post-open position limit checks (7th position rejected, 5th same-direction rejected); utilisation cap; balance floor; daily loss limit blocks new position; stop-loss triggers; session close marks all trades SESSION_CLOSE; stale price guard refuses position; (exchange,symbol) isolation verified (Binance and OKX positions independent); leverage cap; lot/tick rounding; zero qty rejected
+    tests/test_trade_logger.py — CSV allowlist enforced; funding_fee column present but labeled UNKNOWN when not fetched; no credential fields written; append without duplicate headers
+    tests/test_pnl_report.py — Sharpe suppressed for fewer than 30 trades with correct message; zero-trade state; total return; win rate; drawdown
+    tests/test_backtest.py — from backtest context: lookahead detection, walk-forward non-overlap, ablation family toggle, small-sample Sharpe suppression, funding_excluded flag, bias checker warnings
+
+    ## CRITICAL TEST SPECIFICATIONS
+
+    ### EMA Ribbon Direction Tests (four tests required)
+    Test 1 bullish: 250-row strictly increasing close prices; after warmup ema_ribbon_bullish must be True, ema_ribbon_bearish must be False
+    Test 2 bearish: 250-row strictly decreasing close prices; after warmup ema_ribbon_bearish must be True, ema_ribbon_bullish must be False
+    Test 3 equality: 250-row series where ema_5 equals ema_8 at last row; both bullish and bearish must be False
+    Test 4 NaN: 199-row frame; ema_ribbon_bullish and ema_ribbon_bearish must both be False because ema_200 is NaN
+
+    ### EMA200 NaN Guard Tests (three tests required)
+    Test 1: 199-row frame — ema_200 must be all NaN; data_sufficient_ema200 must be False
+    Test 2: 200-row frame — ema_200 last row must not be NaN; data_sufficient_ema200 must be True
+    Test 3: 199-row frame — confirm no row has ema_200 equal to 0.0 (zero substitution bug must not exist)
+
+    ### Bollinger ddof Test
+    5-row frame with period 5: bb_middle equals mean of closes; bb_upper equals mean plus 2 times std with ddof=1; verify with explicit hand-calculated expected values.
+
+    ### PnL Arithmetic Tests (exact values)
+    LONG: qty=5, entry=100, exit=101, taker=0.0005 both sides; assert realized_pnl == pytest.approx(4.4975, abs=1e-10)
+    SHORT: qty=5, entry=100, exit=99, taker=0.0005 both sides; assert realized_pnl == pytest.approx(4.5025, abs=1e-10)
+
+    ### Single Entry Fee Test
+    After open_position: assert balance == pytest.approx(starting_balance - margin - entry_fee, abs=1e-10). Do NOT allow test where margin and fee were deducted in two separate steps.
+
+    ### Post-Open Position Limit Tests
+    Test 1: open 6 positions then attempt 7th; assert 7th returns False
+    Test 2: open 4 same-direction positions then attempt 5th same direction; assert 5th returns False; assert opposite direction still accepted
+    Test 3: fill utilisation to 45 percent; assert next position returns False
+    Test 4: fill balance so remaining would be below 100 USDT; assert next position returns False
+
+    ### Multi-Exchange Isolation Test
+    Create portfolio with (binance, BTCUSDT) having 4 LONG positions. Verify that opening (okx, BTC-USDT-SWAP) LONG does NOT count the Binance positions toward OKX same-direction limit.
+
+    ### Sharpe Suppression Test
+    PnL report with 29 closed trades: Sharpe output must contain "hesaplanamaz" or "yetersiz veri".
+    PnL report with 0 trades: Sharpe output must contain "hesaplanamaz" or "yetersiz veri".
+
+    ### Funding Label Test
+    Trade logger CSV: funding_fee column present; when portfolio records funding as 0.0 placeholder, verify that report labels the result as "funding hari" or "bilinmiyor" rather than confirmed zero.
+
+    ## RULES
+    - Mock ALL network calls with unittest.mock.patch; no real HTTP in any test
+    - All fixtures deterministic; constructed with fixed values
+    - Numerical assertions use pytest.approx with abs=1e-10 for fee arithmetic
+    - Every test has one-line docstring
+    - conftest.py sets futures_bot/ on sys.path
+    - No placeholder tests, no assert True, no tests without assertions
+    - pytest in requirements-dev.txt only
+
+    Her test dosyasını "Dosya Yazıcı" ile 'futures_bot/tests/<dosya>.py' yoluna yaz.
+  expected_output: |2
+
+    Mandatory execution transparency statement at top. Complete test suite covering all specified files. Four EMA ribbon direction tests. Three EMA200 NaN-guard tests. Bollinger ddof=1 arithmetic test. Exact PnL tests for LONG +4.4975 and SHORT +4.5025. Single entry-fee deduction test. Four post-open position limit tests. Multi-exchange isolation test. Sharpe suppression tests. Funding label test. All files labeled with path headers. No fabricated test output.
+  agent: qa_test_engineer___futures_bot
+  context:
+  - research_exchange_apis_and_open_source_bot_references
+  - develop_multi_indicator_research_bot_source_code
+  - design_backtest_framework_and_statistical_validation
+security_audit_and_final_deliverable_assembly:
+  description: |2
+
+    You have received outputs from all four preceding agents (data researcher, developer, backtest analyst, QA tester) via context. Perform a verifiable 10-category security audit, then assemble the complete final deliverable.
+
+    ## AUDIT RESULT SCALE — MANDATORY THREE VALUES ONLY
+    For EVERY category use exactly one of:
+    - PASS: verified clean by the stated method
+    - SORUN BULUNDU: issue found; provide corrected code inline
+    - DOGRULANMADI: could not be verified with available tools; explain what tool/data would be needed
+
+    Never mark PASS if verification method was insufficient. Dependency CVE category MUST be DOGRULANMADI (LLM knowledge only, no live scanner available).
+
+    For EACH category state: (1) verification method used, (2) result, (3) corrected code if SORUN, (4) required tool if DOGRULANMADI.
+
+    ## AUDIT CATEGORIES
+
+    1. Gercek Emir Onleme: LLM code review — search all .py files for session.post, requests.post, .put(, .delete(, /order, /trade, /withdraw, /account, authenticated. Confirm only session.get() or requests.get() exist in all feeds.
+
+    2. Kimlik Bilgisi Sizintisi: LLM code review — search for api_key, secret, passphrase, password, token, Authorization, bearer, private_key, withdraw, os.environ, dotenv, load_dotenv. Also check for placeholder data like "John Doe", "San Francisco", example user info in any knowledge or backstory visible in code — report if found.
+
+    3. Ag Yuzeyi: LLM code review — list EVERY hardcoded URL. Confirm all resolve to exactly the four allowlisted public endpoints: fapi.binance.com/fapi/v1/klines, fapi.binance.com/fapi/v1/exchangeInfo, www.okx.com/api/v5/market/candles, www.okx.com/api/v5/public/instruments. Flag any other URL, any f-string URL from user input, any non-allowlisted host.
+
+    4. Canli Mod Korumasi: LLM code review — confirm --mode live and --mode testnet both trigger sys.exit(1) or return 1 with error message before any API call. Confirm no silent fallback to authenticated mode.
+
+    5. Risk Yonetimi Butunlugu: LLM code review — verify all of: stop-loss checked BEFORE new signal processing each cycle; entry fee deducted ONCE with margin (not separately); balance floor 100 USDT enforced using post-open state; position limits 6 total and 4 same-direction checked post-open; utilisation cap 45% checked post-open; balance cannot go negative; daily loss limit blocks new positions; leverage cap 20x; Sharpe suppressed for fewer than 30 trades.
+
+    6. Hata Yonetimi: LLM code review — verify explicit handling for Timeout, 429, 451, non-2xx, malformed JSON, empty DataFrame, stale data. Confirm no bare except or except Exception: pass. Confirm main loop logs cycle failures. Confirm DataUnavailableError raised cleanly in Phase C stubs.
+
+    7. Girdi Dogrulamasi: LLM code review — verify OKX confirm=="1" enforced; OKX ctVal > 0 validated before volume conversion; candle OHLC validated as finite positive floats; exchangeInfo and instruments filter fields validated; DataFrame required columns checked before indicator calculation; timestamp validated as positive integer.
+
+    8. Log / CSV Guvenligi: LLM code review — check TradeLogger FIELDS allowlist. Confirm no HTTP headers, response bodies, credential variables, or absolute internal paths written to CSV or console. Confirm funding_fee is labeled as UNKNOWN or placeholder in output — NOT presented as confirmed zero.
+
+    9. Bagimlilik Guvenligi: This category MUST be marked DOGRULANMADI. Prefix with: "Bu denetim yalnizca LLM egitim bilgisine dayanmaktadir; gercek zamanli tarama yapilmamistir. Uretim oncesi pip-audit calistirin." Then provide LLM-knowledge assessment of requests>=2.32.4, pandas>=2.2.3, numpy>=2.0.0, tabulate>=0.9.0 version ranges.
+
+    10. GitHub / Deploy Izolasyonu: LLM code review — search for subprocess, git, github.com API calls, webhook URLs, cron, scheduler, smtplib, email, SMS, schedule.run, APScheduler, celery. Confirm none present. Confirm run_with_trigger is documented in README as known issue (broken stub) and NOT implemented as an actual trigger.
+
+    ## ADDITIONAL CHECKS FOR RESEARCH BOT ADDITIONS
+
+    11. Strateji Izolasyonu: LLM code review — verify three strategy candidates do not share mutable state; each instance creates its own data structures; STATUS="SHADOW" for all candidates; no strategy silently promoted to ACTIVE.
+
+    12. Lookahead Korumasi: LLM code review — verify backtest engine feeds candles one-by-one; strategy.evaluate() uses only iloc[-1] of past candles; bias_checker._check_no_lookahead method exists and tests for signal change on shifted data; no future candle data in indicator calculations.
+
+    13. Sahte Veri Yasagi: LLM code review — verify no fabricated historical price data, no invented backtest results, no fake funding values presented as real, no simulated win rates presented as live performance.
+
+    ## KNOWN ISSUES CHECKLIST — 9 ITEMS
+    Address each explicitly:
+    - EMA200 NaN-guard: bug fix present and documented?
+    - EMA ribbon direction: bullish = ema_5 > ema_8 > ... > ema_200 (not reversed)?
+    - Bollinger ddof=1: used AND no TradingView compatibility overclaim?
+    - run_with_trigger: documented in README as broken/removed — NOT implemented as trigger?
+    - Binance endpoint: fapi.binance.com for all futures calls (not api.binance.com)?
+    - pytest: in requirements-dev.txt only, not requirements.txt?
+    - Reference ZIP v7.8: marked KAYNAK INCELENEMEDI everywhere?
+    - Funding: labeled as unknown/excluded throughout, never as confirmed zero?
+    - Sharpe: suppressed for fewer than 30 trades with explicit message?
+
+    ## DOSYA ÜRETİM NOTU
+    Elinde "Dosya Yazıcı" (FileWriterTool) aracı VAR. Üretilen her dosyayı
+    output/ altına gerçek yol adıyla yaz (örn. 'futures_bot/main.py').
+    Kod bloklarını sohbete dökmek yerine dosyayı yaz; sonunda yazılan
+    dosyaların listesini ver.
+
+    ZIP oluşturma otomatik değildir; operatör output/ klasörünü zipleyecektir.
+    Crew projesinin kendi ZIP'ini bot kaynak kodu ZIP'i olarak SUNMA.
+
+    ## FINAL DELIVERABLE ASSEMBLY
+    Assemble ONE complete copy-paste-ready output in this order:
+    1. Security Audit Report (13 categories using 3-value scale)
+    2. Known Issues Checklist (9 items)
+    3. All Phase A source files with security fixes applied
+    4. All Phase B catalog additions
+    5. Phase C stubs and Phase D interface
+    6. Backtest framework files
+    7. All test files
+    8. Turkish 8-section final report with sections: UYGULANANANLAR, EKSIKLER, GERCEKTEN CALISTIRILAN TESTLER VE CIKTILARI, CALISTIRILMAYANLAR, GUVENLIK/RISK SINIRLARI, INDIKTOR ENVANTERI, KAYNAK VE ARAC ERISIMI, TESLIM EDILEN DOSYALAR
+    9. Quick-start (3 shell commands)
+  expected_output: |2
+
+    Security audit using 3-value scale for all 13 categories. Dependency category explicitly marked DOGRULANMADI. 9-item known issues checklist. All source files phases A-D with security fixes. All backtest files. All test files. Turkish 8-section final report. 3-command quick-start. No fabricated scanner output. No fake test results. Funding labeled as unknown throughout. Crew ZIP not presented as bot ZIP.
+  agent: security_auditor_and_deliverable_integrator
+  context:
+  - research_exchange_apis_and_open_source_bot_references
+  - develop_multi_indicator_research_bot_source_code
+  - design_backtest_framework_and_statistical_validation
+  - write_multi_indicator_bot_pytest_test_suite

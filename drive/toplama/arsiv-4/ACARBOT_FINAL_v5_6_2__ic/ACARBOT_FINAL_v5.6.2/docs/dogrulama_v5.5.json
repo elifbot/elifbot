@@ -1,0 +1,1014 @@
+{
+  "version": "5.5-final",
+  "generated_at": "2026-11-08T12:41:51+00:00",
+  "profile": "apex",
+  "target_net_risk": 25.0,
+  "initial_balance": 1000.0,
+  "dataset": {
+    "exchange": "okx",
+    "symbols": 6,
+    "symbol_list": [
+      "okx:ADA-USDT-SWAP",
+      "okx:BTC-USDT-SWAP",
+      "okx:DOGE-USDT-SWAP",
+      "okx:ETH-USDT-SWAP",
+      "okx:SOL-USDT-SWAP",
+      "okx:XRP-USDT-SWAP"
+    ],
+    "days": 90,
+    "total_bars": 155520,
+    "fine_mode": "targeted",
+    "fine_days": 0,
+    "fine_bars": 11385,
+    "fine_symbols": 6
+  },
+  "fine_pass": {
+    "mode": "targeted",
+    "passes": 1,
+    "targeted_windows": 0,
+    "requests": 0,
+    "fine_bars_gained": 0,
+    "empty_windows": 0,
+    "failures": 0,
+    "truncated": false,
+    "unsupported_exchange_skips": 0,
+    "history": [
+      {
+        "pass": 1,
+        "real_1m_bars": 257,
+        "synthetic_bars": 88,
+        "coverage": 0.7449,
+        "trades": 20,
+        "net_pnl": -95.4263
+      }
+    ]
+  },
+  "cost_model": {
+    "source": "measured",
+    "enabled": true,
+    "measured_at": "2026-11-07T21:58:04+00:00",
+    "measured_symbols": 10,
+    "optimistic_warning": false,
+    "by_exchange": {
+      "binance": {
+        "spread_bps": 1.5,
+        "slippage_bps": 2.0,
+        "latency_ms": 250,
+        "exit_slippage_bps": 3.0,
+        "maker_fee": 0.0002,
+        "taker_fee": 0.0005
+      },
+      "okx": {
+        "spread_bps": 1.1254,
+        "slippage_bps": 23.5635,
+        "latency_ms": 350,
+        "exit_slippage_bps": 25.6257,
+        "maker_fee": 0.0002,
+        "taker_fee": 0.0005
+      }
+    },
+    "measured_spread_bps": {
+      "okx:BTC-USDT-SWAP": 0.0132,
+      "okx:ETH-USDT-SWAP": 0.0449,
+      "okx:SOL-USDT-SWAP": 1.1244,
+      "okx:XRP-USDT-SWAP": 0.8652,
+      "okx:DOGE-USDT-SWAP": 1.4059,
+      "okx:ADA-USDT-SWAP": 5.554,
+      "okx:AVAX-USDT-SWAP": 1.2232,
+      "okx:LINK-USDT-SWAP": 0.9296,
+      "okx:DOT-USDT-SWAP": 1.1263,
+      "okx:LTC-USDT-SWAP": 1.9299
+    },
+    "measured_slippage_bps": {
+      "okx:BTC-USDT-SWAP": 0.0066,
+      "okx:ETH-USDT-SWAP": 0.0225,
+      "okx:SOL-USDT-SWAP": 0.5622,
+      "okx:XRP-USDT-SWAP": 3.182,
+      "okx:DOGE-USDT-SWAP": 22.8234,
+      "okx:ADA-USDT-SWAP": 14.9185,
+      "okx:AVAX-USDT-SWAP": 1.6022,
+      "okx:LINK-USDT-SWAP": 1.1398,
+      "okx:DOT-USDT-SWAP": 2.1693,
+      "okx:LTC-USDT-SWAP": 2.427
+    },
+    "measured_exit_slippage_bps": {
+      "okx:BTC-USDT-SWAP": 0.0066,
+      "okx:ETH-USDT-SWAP": 0.0225,
+      "okx:SOL-USDT-SWAP": 0.5622,
+      "okx:XRP-USDT-SWAP": 2.7343,
+      "okx:DOGE-USDT-SWAP": 25.1009,
+      "okx:ADA-USDT-SWAP": 16.193,
+      "okx:AVAX-USDT-SWAP": 1.4226,
+      "okx:LINK-USDT-SWAP": 0.8744,
+      "okx:DOT-USDT-SWAP": 3.5066,
+      "okx:LTC-USDT-SWAP": 2.5519
+    },
+    "measured_latency_ms": {
+      "okx:BTC-USDT-SWAP": 195,
+      "okx:ETH-USDT-SWAP": 151,
+      "okx:SOL-USDT-SWAP": 194,
+      "okx:XRP-USDT-SWAP": 197,
+      "okx:DOGE-USDT-SWAP": 152,
+      "okx:ADA-USDT-SWAP": 152,
+      "okx:AVAX-USDT-SWAP": 165,
+      "okx:LINK-USDT-SWAP": 151,
+      "okx:DOT-USDT-SWAP": 151,
+      "okx:LTC-USDT-SWAP": 151
+    },
+    "exchange_provenance": {
+      "binance": {
+        "source": "default_assumption",
+        "measured_symbol_count": 0,
+        "measured_symbols": [],
+        "fallback_spread_bps": 1.5,
+        "fallback_slippage_bps": 2.0,
+        "fallback_exit_slippage_bps": 3.0,
+        "fallback_latency_ms": 250
+      },
+      "okx": {
+        "source": "measured_symbols",
+        "measured_symbol_count": 10,
+        "measured_symbols": [
+          "okx:ADA-USDT-SWAP",
+          "okx:AVAX-USDT-SWAP",
+          "okx:BTC-USDT-SWAP",
+          "okx:DOGE-USDT-SWAP",
+          "okx:DOT-USDT-SWAP",
+          "okx:ETH-USDT-SWAP",
+          "okx:LINK-USDT-SWAP",
+          "okx:LTC-USDT-SWAP",
+          "okx:SOL-USDT-SWAP",
+          "okx:XRP-USDT-SWAP"
+        ],
+        "fallback_spread_bps": 1.1254,
+        "fallback_slippage_bps": 23.5635,
+        "fallback_exit_slippage_bps": 25.6257,
+        "fallback_latency_ms": 350
+      }
+    }
+  },
+  "cost_summary": "Maliyet modeli: 10 sembol ölçüldü · ölçüm anı 2026-11-07T21:58:04+00:00 · binance: VARSAYIM (ÖLÇÜLMEDİ) spread 1.50bps, kayma 2.00bps, çıkış 3.00bps, gecikme 250ms | okx: 10 sembol ÖLÇÜLDÜ (sembol bazlı değerler kullanılır); ölçülmeyenler için VARSAYIM spread 1.13bps, kayma 23.56bps, çıkış 25.63bps, gecikme 350ms · VERİ KÜMESİ KAPSAMASI 6/6 (%100)",
+  "cost_coverage": {
+    "dataset_symbols": 6,
+    "measured_symbols": 6,
+    "unmeasured_symbols": [],
+    "coverage_ratio": 1.0
+  },
+  "cost_quality": {
+    "grade": "adequate",
+    "reasons": [
+      "taban yeterli"
+    ],
+    "symbols": 10,
+    "rounds": 4,
+    "samples_per_symbol": 24,
+    "min_samples_observed": 24,
+    "window_seconds": 148.0,
+    "caveat": "Ölçüm yalnızca bu sembollerde ve bu zaman penceresinde alındı. Tam pazardaki küçük coinlerde kayma DAHA KÖTÜ olabilir."
+  },
+  "risk_scaling_config": {
+    "enabled": true,
+    "min_risk_usdt": 2.5,
+    "max_risk_usdt": 0.0,
+    "drawdown_start_pct": 2.0,
+    "drawdown_floor_pct": 8.0,
+    "hard_cost_fraction_of_risk": 0.6
+  },
+  "runs": [
+    {
+      "label": "birincil (karma yol (gerçek 1m %74.5))",
+      "label_requested": "birincil",
+      "path_source": "real_1m",
+      "metrics": {
+        "net_pnl": -95.4263,
+        "trade_count": 20,
+        "win_rate": 0.25,
+        "profit_factor": 0.0975,
+        "max_drawdown_usdt": 95.4263,
+        "max_drawdown_pct": 9.5426,
+        "sharpe_per_trade": -0.6333,
+        "avg_win": 2.0608,
+        "avg_loss": -7.0487,
+        "expectancy_usdt": -4.7713,
+        "expectancy_r": -0.5985,
+        "max_consecutive_losses": 6,
+        "total_fees": 18.2992,
+        "total_funding": -0.0803,
+        "total_slippage": 13.0721,
+        "avg_r_multiple": -0.5985,
+        "by_engine": {
+          "trend": {
+            "trades": 17,
+            "net_pnl": -89.8053,
+            "win_rate": 0.2353,
+            "profit_factor": 0.1004,
+            "avg_r": -0.6089
+          },
+          "fade": {
+            "trades": 3,
+            "net_pnl": -5.621,
+            "win_rate": 0.3333,
+            "profit_factor": 0.0482,
+            "avg_r": -0.5396
+          }
+        },
+        "by_symbol": {
+          "okx:ETH-USDT-SWAP": {
+            "trades": 3,
+            "net_pnl": -26.308,
+            "win_rate": 0.3333,
+            "profit_factor": 0.0842,
+            "avg_r": -0.4824
+          },
+          "okx:BTC-USDT-SWAP": {
+            "trades": 3,
+            "net_pnl": -21.6518,
+            "win_rate": 0.3333,
+            "profit_factor": 0.2416,
+            "avg_r": -0.3465
+          },
+          "okx:ADA-USDT-SWAP": {
+            "trades": 7,
+            "net_pnl": -6.7151,
+            "win_rate": 0.2857,
+            "profit_factor": 0.0474,
+            "avg_r": -0.5987
+          },
+          "okx:XRP-USDT-SWAP": {
+            "trades": 4,
+            "net_pnl": -16.7717,
+            "win_rate": 0.25,
+            "profit_factor": 0.0376,
+            "avg_r": -0.6382
+          },
+          "okx:SOL-USDT-SWAP": {
+            "trades": 3,
+            "net_pnl": -23.9796,
+            "win_rate": 0.0,
+            "profit_factor": 0.0,
+            "avg_r": -0.9133
+          }
+        },
+        "by_side": {
+          "SHORT": {
+            "trades": 10,
+            "net_pnl": -62.1603,
+            "win_rate": 0.4,
+            "profit_factor": 0.1126,
+            "avg_r": -0.4043
+          },
+          "LONG": {
+            "trades": 10,
+            "net_pnl": -33.266,
+            "win_rate": 0.1,
+            "profit_factor": 0.0678,
+            "avg_r": -0.7927
+          }
+        },
+        "by_regime": {
+          "TREND_DOWN": {
+            "trades": 6,
+            "net_pnl": -50.3392,
+            "win_rate": 0.3333,
+            "profit_factor": 0.1213,
+            "avg_r": -0.4356
+          },
+          "STRONG_TREND_UP": {
+            "trades": 2,
+            "net_pnl": -1.7379,
+            "win_rate": 0.0,
+            "profit_factor": 0.0,
+            "avg_r": -0.926
+          },
+          "STRONG_TREND_DOWN": {
+            "trades": 2,
+            "net_pnl": -11.9122,
+            "win_rate": 0.5,
+            "profit_factor": 0.0521,
+            "avg_r": -0.3622
+          },
+          "UNCERTAIN": {
+            "trades": 2,
+            "net_pnl": 0.0911,
+            "win_rate": 0.5,
+            "profit_factor": 1.4714,
+            "avg_r": -0.3526
+          },
+          "TREND_UP": {
+            "trades": 8,
+            "net_pnl": -31.5281,
+            "win_rate": 0.125,
+            "profit_factor": 0.0712,
+            "avg_r": -0.7594
+          }
+        }
+      },
+      "metrics_text": "== BIRINCIL ==\nNet PnL: -95.43 USDT\nİşlem: 20 | Kazanma: %25.0\nProfit Factor: 0.10 | Sharpe: -0.63\nMax DD: 95.43 USDT (%9.5)\nBeklenen değer: -4.771 USDT (-0.60R)\nOrt. kazanç/kayıp: +2.06 / -7.05\nArdışık kayıp: 6\nÜcret: 18.30 | Funding: -0.08 | Kayma: 13.07\n-- Motorlar --\ntrend: 17 işlem, net -89.81, PF 0.1004\nfade: 3 işlem, net -5.62, PF 0.0482\n-- Rejimler (v2.0) --\nTREND_UP: 8 işlem, net -31.53, kazanma %12\nTREND_DOWN: 6 işlem, net -50.34, kazanma %33\nSTRONG_TREND_UP: 2 işlem, net -1.74, kazanma %0\nSTRONG_TREND_DOWN: 2 işlem, net -11.91, kazanma %50\nUNCERTAIN: 2 işlem, net +0.09, kazanma %50\n-- Yön --\nLONG: 10 işlem, net -33.27, PF 0.0678\nSHORT: 10 işlem, net -62.16, PF 0.1126",
+      "monte_carlo": {
+        "simulations": 2000,
+        "final_pnl_p5": -153.5264,
+        "final_pnl_p25": -116.0592,
+        "final_pnl_p50": -93.563,
+        "final_pnl_p75": -72.3942,
+        "final_pnl_p95": -44.5108,
+        "max_dd_p50_pct": 9.551,
+        "max_dd_p95_pct": 15.377,
+        "prob_loss": 1.0,
+        "prob_ruin": 0.0625,
+        "trade_count": 20
+      },
+      "walk_forward": {
+        "windows": [
+          {
+            "index": 1,
+            "start_ts": 1786301400000,
+            "end_ts": 1788893400000,
+            "net_pnl": -95.4263,
+            "trades": 20,
+            "win_rate": 0.25,
+            "max_dd_pct": 9.5426,
+            "profitable": false
+          },
+          {
+            "index": 2,
+            "start_ts": 1788893400000,
+            "end_ts": 1791485400000,
+            "net_pnl": 17.7695,
+            "trades": 72,
+            "win_rate": 0.5417,
+            "max_dd_pct": 5.6941,
+            "profitable": true
+          },
+          {
+            "index": 3,
+            "start_ts": 1791485400000,
+            "end_ts": 1794077400001,
+            "net_pnl": -93.7291,
+            "trades": 21,
+            "win_rate": 0.381,
+            "max_dd_pct": 9.9644,
+            "profitable": false
+          }
+        ],
+        "profitable_windows": 1,
+        "total_windows": 3,
+        "total_net_pnl": -171.3859,
+        "worst_window_net_pnl": -95.4263
+      },
+      "intrabar": {
+        "real_1m_bars": 257,
+        "synthetic_bars": 88,
+        "partial_coverage_bars": 0,
+        "inconsistent_bars": 0,
+        "single_step_bars": 0,
+        "real_coverage_ratio": 0.7449
+      },
+      "risk_audit": {
+        "breach_ratio_threshold": 1.3,
+        "closed_trades": 20,
+        "losing_trades": 15,
+        "breaches": [],
+        "breach_count": 0,
+        "breach_rate": 0.0,
+        "max_realized_over_target": 0.952,
+        "mean_realized_over_target": 0.9215,
+        "max_stop_overshoot_ratio": 0.6569,
+        "trades": [
+          {
+            "symbol": "okx:ETH-USDT-SWAP",
+            "reason": "stop_loss",
+            "pnl": -23.0139,
+            "target_net_risk": 25.005,
+            "realized_over_target": 0.9204,
+            "stop_overshoot_ratio": 0.1485,
+            "breach": false
+          },
+          {
+            "symbol": "okx:BTC-USDT-SWAP",
+            "reason": "stop_loss",
+            "pnl": -22.8483,
+            "target_net_risk": 25.005,
+            "realized_over_target": 0.9138,
+            "stop_overshoot_ratio": 0.1672,
+            "breach": false
+          },
+          {
+            "symbol": "okx:ADA-USDT-SWAP",
+            "reason": "stop_loss",
+            "pnl": -1.1827,
+            "target_net_risk": 1.268,
+            "realized_over_target": 0.9328,
+            "stop_overshoot_ratio": 0.1126,
+            "breach": false
+          },
+          {
+            "symbol": "okx:XRP-USDT-SWAP",
+            "reason": "trailing_stop",
+            "pnl": 0.6544,
+            "target_net_risk": 3.4575,
+            "realized_over_target": 0.0,
+            "stop_overshoot_ratio": 0.0,
+            "breach": false
+          },
+          {
+            "symbol": "okx:SOL-USDT-SWAP",
+            "reason": "stop_loss",
+            "pnl": -12.5666,
+            "target_net_risk": 13.7527,
+            "realized_over_target": 0.9138,
+            "stop_overshoot_ratio": 0.1672,
+            "breach": false
+          },
+          {
+            "symbol": "okx:BTC-USDT-SWAP",
+            "reason": "trailing_stop",
+            "pnl": 6.8975,
+            "target_net_risk": 8.7696,
+            "realized_over_target": 0.0,
+            "stop_overshoot_ratio": 0.0868,
+            "breach": false
+          },
+          {
+            "symbol": "okx:ADA-USDT-SWAP",
+            "reason": "trailing_stop",
+            "pnl": 0.2844,
+            "target_net_risk": 1.2455,
+            "realized_over_target": 0.0,
+            "stop_overshoot_ratio": 0.0,
+            "breach": false
+          },
+          {
+            "symbol": "okx:XRP-USDT-SWAP",
+            "reason": "stop_loss",
+            "pnl": -9.1765,
+            "target_net_risk": 10.0007,
+            "realized_over_target": 0.9176,
+            "stop_overshoot_ratio": 0.1512,
+            "breach": false
+          },
+          {
+            "symbol": "okx:XRP-USDT-SWAP",
+            "reason": "stop_loss",
+            "pnl": -4.9442,
+            "target_net_risk": 5.4193,
+            "realized_over_target": 0.9123,
+            "stop_overshoot_ratio": 0.1662,
+            "breach": false
+          },
+          {
+            "symbol": "okx:ETH-USDT-SWAP",
+            "reason": "trailing_stop",
+            "pnl": 2.418,
+            "target_net_risk": 6.2488,
+            "realized_over_target": 0.0,
+            "stop_overshoot_ratio": 0.2317,
+            "breach": false
+          },
+          {
+            "symbol": "okx:SOL-USDT-SWAP",
+            "reason": "stop_loss",
+            "pnl": -5.701,
+            "target_net_risk": 6.2487,
+            "realized_over_target": 0.9123,
+            "stop_overshoot_ratio": 0.1662,
+            "breach": false
+          },
+          {
+            "symbol": "okx:BTC-USDT-SWAP",
+            "reason": "stop_loss",
+            "pnl": -5.701,
+            "target_net_risk": 6.2487,
+            "realized_over_target": 0.9123,
+            "stop_overshoot_ratio": 0.1662,
+            "breach": false
+          },
+          {
+            "symbol": "okx:ADA-USDT-SWAP",
+            "reason": "stop_loss",
+            "pnl": -0.1933,
+            "target_net_risk": 0.207,
+            "realized_over_target": 0.9335,
+            "stop_overshoot_ratio": 0.1155,
+            "breach": false
+          },
+          {
+            "symbol": "okx:ADA-USDT-SWAP",
+            "reason": "trailing_stop",
+            "pnl": 0.0497,
+            "target_net_risk": 0.1901,
+            "realized_over_target": 0.0,
+            "stop_overshoot_ratio": 0.6569,
+            "breach": false
+          },
+          {
+            "symbol": "okx:SOL-USDT-SWAP",
+            "reason": "stop_loss",
+            "pnl": -5.7121,
+            "target_net_risk": 6.2512,
+            "realized_over_target": 0.9138,
+            "stop_overshoot_ratio": 0.1672,
+            "breach": false
+          },
+          {
+            "symbol": "okx:ADA-USDT-SWAP",
+            "reason": "stop_loss",
+            "pnl": -0.8757,
+            "target_net_risk": 0.9198,
+            "realized_over_target": 0.952,
+            "stop_overshoot_ratio": 0.1045,
+            "breach": false
+          },
+          {
+            "symbol": "okx:ETH-USDT-SWAP",
+            "reason": "stop_loss",
+            "pnl": -5.7121,
+            "target_net_risk": 6.2512,
+            "realized_over_target": 0.9138,
+            "stop_overshoot_ratio": 0.1672,
+            "breach": false
+          },
+          {
+            "symbol": "okx:ADA-USDT-SWAP",
+            "reason": "stop_loss",
+            "pnl": -0.5551,
+            "target_net_risk": 0.604,
+            "realized_over_target": 0.9191,
+            "stop_overshoot_ratio": 0.1469,
+            "breach": false
+          },
+          {
+            "symbol": "okx:ADA-USDT-SWAP",
+            "reason": "stop_loss",
+            "pnl": -4.2424,
+            "target_net_risk": 4.4975,
+            "realized_over_target": 0.9433,
+            "stop_overshoot_ratio": 0.0895,
+            "breach": false
+          },
+          {
+            "symbol": "okx:XRP-USDT-SWAP",
+            "reason": "stop_loss",
+            "pnl": -3.3054,
+            "target_net_risk": 3.623,
+            "realized_over_target": 0.9123,
+            "stop_overshoot_ratio": 0.1662,
+            "breach": false
+          }
+        ]
+      },
+      "risk_scaling": {
+        "enabled": true,
+        "budgets_issued": 38,
+        "blocked_count": 1079,
+        "below_floor_blocks": 989,
+        "below_floor_action": "block",
+        "binding_counts": {
+          "cost": 5,
+          "drawdown": 3,
+          "none": 2,
+          "recovery": 28
+        },
+        "min_scale_seen": 0.104978,
+        "mean_scale": 0.347036,
+        "final_recovery_cap": 0.25,
+        "observed_trades": 20,
+        "mean_recent_r": -0.598518,
+        "min_risk_usdt": 2.5,
+        "max_risk_usdt": 0.0
+      },
+      "drawdown_peak": {
+        "mod": "rolling",
+        "pencere_gun": 7,
+        "son_tepe": 904.573746,
+        "sifirlama_sayisi": 60,
+        "sifirlamalar": [
+          {
+            "ts_ms": 1786927500000,
+            "tur": "rolling",
+            "eski_tepe": 1000.0,
+            "yeni_tepe": 991.33866
+          },
+          {
+            "ts_ms": 1786927800000,
+            "tur": "rolling",
+            "eski_tepe": 991.33866,
+            "yeni_tepe": 974.317273
+          },
+          {
+            "ts_ms": 1786928100000,
+            "tur": "rolling",
+            "eski_tepe": 974.317273,
+            "yeni_tepe": 966.186697
+          },
+          {
+            "ts_ms": 1786928400000,
+            "tur": "rolling",
+            "eski_tepe": 966.186697,
+            "yeni_tepe": 965.641709
+          },
+          {
+            "ts_ms": 1786929000000,
+            "tur": "rolling",
+            "eski_tepe": 965.641709,
+            "yeni_tepe": 963.77198
+          },
+          {
+            "ts_ms": 1786929300000,
+            "tur": "rolling",
+            "eski_tepe": 963.77198,
+            "yeni_tepe": 954.710073
+          },
+          {
+            "ts_ms": 1786986000000,
+            "tur": "rolling",
+            "eski_tepe": 954.710073,
+            "yeni_tepe": 954.644242
+          },
+          {
+            "ts_ms": 1786986600000,
+            "tur": "rolling",
+            "eski_tepe": 954.644242,
+            "yeni_tepe": 954.249254
+          },
+          {
+            "ts_ms": 1786986900000,
+            "tur": "rolling",
+            "eski_tepe": 954.249254,
+            "yeni_tepe": 953.609425
+          },
+          {
+            "ts_ms": 1787016300000,
+            "tur": "rolling",
+            "eski_tepe": 953.609425,
+            "yeni_tepe": 951.63728
+          },
+          {
+            "ts_ms": 1787017800000,
+            "tur": "rolling",
+            "eski_tepe": 951.63728,
+            "yeni_tepe": 950.804545
+          },
+          {
+            "ts_ms": 1787073000000,
+            "tur": "rolling",
+            "eski_tepe": 950.804545,
+            "yeni_tepe": 950.281316
+          },
+          {
+            "ts_ms": 1787073300000,
+            "tur": "rolling",
+            "eski_tepe": 950.281316,
+            "yeni_tepe": 950.059204
+          },
+          {
+            "ts_ms": 1787073600000,
+            "tur": "rolling",
+            "eski_tepe": 950.059204,
+            "yeni_tepe": 949.907155
+          },
+          {
+            "ts_ms": 1787074800000,
+            "tur": "rolling",
+            "eski_tepe": 949.907155,
+            "yeni_tepe": 949.85487
+          },
+          {
+            "ts_ms": 1787089500000,
+            "tur": "rolling",
+            "eski_tepe": 949.85487,
+            "yeni_tepe": 949.6599
+          },
+          {
+            "ts_ms": 1787090700000,
+            "tur": "rolling",
+            "eski_tepe": 949.6599,
+            "yeni_tepe": 947.86297
+          },
+          {
+            "ts_ms": 1787091000000,
+            "tur": "rolling",
+            "eski_tepe": 947.86297,
+            "yeni_tepe": 945.666723
+          },
+          {
+            "ts_ms": 1787091600000,
+            "tur": "rolling",
+            "eski_tepe": 945.666723,
+            "yeni_tepe": 943.470475
+          },
+          {
+            "ts_ms": 1787091900000,
+            "tur": "rolling",
+            "eski_tepe": 943.470475,
+            "yeni_tepe": 943.270816
+          },
+          {
+            "ts_ms": 1787092500000,
+            "tur": "rolling",
+            "eski_tepe": 943.270816,
+            "yeni_tepe": 943.071157
+          },
+          {
+            "ts_ms": 1787094300000,
+            "tur": "rolling",
+            "eski_tepe": 943.071157,
+            "yeni_tepe": 942.023179
+          },
+          {
+            "ts_ms": 1787105400000,
+            "tur": "rolling",
+            "eski_tepe": 942.023179,
+            "yeni_tepe": 941.665377
+          },
+          {
+            "ts_ms": 1787105700000,
+            "tur": "rolling",
+            "eski_tepe": 941.665377,
+            "yeni_tepe": 939.99039
+          },
+          {
+            "ts_ms": 1787113500000,
+            "tur": "rolling",
+            "eski_tepe": 939.99039,
+            "yeni_tepe": 938.305739
+          },
+          {
+            "ts_ms": 1787113800000,
+            "tur": "rolling",
+            "eski_tepe": 938.305739,
+            "yeni_tepe": 934.943627
+          },
+          {
+            "ts_ms": 1787115300000,
+            "tur": "rolling",
+            "eski_tepe": 934.943627,
+            "yeni_tepe": 933.19757
+          },
+          {
+            "ts_ms": 1787115600000,
+            "tur": "rolling",
+            "eski_tepe": 933.19757,
+            "yeni_tepe": 931.851911
+          },
+          {
+            "ts_ms": 1787115900000,
+            "tur": "rolling",
+            "eski_tepe": 931.851911,
+            "yeni_tepe": 931.583468
+          },
+          {
+            "ts_ms": 1787117700000,
+            "tur": "rolling",
+            "eski_tepe": 931.583468,
+            "yeni_tepe": 931.547262
+          },
+          {
+            "ts_ms": 1787118000000,
+            "tur": "rolling",
+            "eski_tepe": 931.547262,
+            "yeni_tepe": 931.342804
+          },
+          {
+            "ts_ms": 1787118300000,
+            "tur": "rolling",
+            "eski_tepe": 931.342804,
+            "yeni_tepe": 931.321506
+          },
+          {
+            "ts_ms": 1787118600000,
+            "tur": "rolling",
+            "eski_tepe": 931.321506,
+            "yeni_tepe": 931.234185
+          },
+          {
+            "ts_ms": 1787119200000,
+            "tur": "rolling",
+            "eski_tepe": 931.234185,
+            "yeni_tepe": 929.96697
+          },
+          {
+            "ts_ms": 1787119500000,
+            "tur": "rolling",
+            "eski_tepe": 929.96697,
+            "yeni_tepe": 929.055427
+          },
+          {
+            "ts_ms": 1787119800000,
+            "tur": "rolling",
+            "eski_tepe": 929.055427,
+            "yeni_tepe": 928.378159
+          },
+          {
+            "ts_ms": 1787120400000,
+            "tur": "rolling",
+            "eski_tepe": 928.378159,
+            "yeni_tepe": 927.015103
+          },
+          {
+            "ts_ms": 1787120700000,
+            "tur": "rolling",
+            "eski_tepe": 927.015103,
+            "yeni_tepe": 926.234243
+          },
+          {
+            "ts_ms": 1787580600000,
+            "tur": "rolling",
+            "eski_tepe": 926.234243,
+            "yeni_tepe": 925.515451
+          },
+          {
+            "ts_ms": 1787580900000,
+            "tur": "rolling",
+            "eski_tepe": 925.515451,
+            "yeni_tepe": 925.335753
+          },
+          {
+            "ts_ms": 1787582700000,
+            "tur": "rolling",
+            "eski_tepe": 925.335753,
+            "yeni_tepe": 924.437264
+          },
+          {
+            "ts_ms": 1787583000000,
+            "tur": "rolling",
+            "eski_tepe": 924.437264,
+            "yeni_tepe": 921.741796
+          },
+          {
+            "ts_ms": 1787583300000,
+            "tur": "rolling",
+            "eski_tepe": 921.741796,
+            "yeni_tepe": 919.264351
+          },
+          {
+            "ts_ms": 1787587200000,
+            "tur": "rolling",
+            "eski_tepe": 919.264351,
+            "yeni_tepe": 919.074676
+          },
+          {
+            "ts_ms": 1787588100000,
+            "tur": "rolling",
+            "eski_tepe": 919.074676,
+            "yeni_tepe": 918.909712
+          },
+          {
+            "ts_ms": 1787588400000,
+            "tur": "rolling",
+            "eski_tepe": 918.909712,
+            "yeni_tepe": 918.744748
+          },
+          {
+            "ts_ms": 1787588700000,
+            "tur": "rolling",
+            "eski_tepe": 918.744748,
+            "yeni_tepe": 918.662266
+          },
+          {
+            "ts_ms": 1787589000000,
+            "tur": "rolling",
+            "eski_tepe": 918.662266,
+            "yeni_tepe": 918.453207
+          },
+          {
+            "ts_ms": 1787638200000,
+            "tur": "rolling",
+            "eski_tepe": 918.453207,
+            "yeni_tepe": 917.742855
+          },
+          {
+            "ts_ms": 1787638500000,
+            "tur": "rolling",
+            "eski_tepe": 917.742855,
+            "yeni_tepe": 917.075554
+          },
+          {
+            "ts_ms": 1787638800000,
+            "tur": "rolling",
+            "eski_tepe": 917.075554,
+            "yeni_tepe": 916.300625
+          },
+          {
+            "ts_ms": 1787639100000,
+            "tur": "rolling",
+            "eski_tepe": 916.300625,
+            "yeni_tepe": 914.406352
+          },
+          {
+            "ts_ms": 1787639400000,
+            "tur": "rolling",
+            "eski_tepe": 914.406352,
+            "yeni_tepe": 912.784186
+          },
+          {
+            "ts_ms": 1787668800000,
+            "tur": "rolling",
+            "eski_tepe": 912.784186,
+            "yeni_tepe": 911.359278
+          },
+          {
+            "ts_ms": 1787669700000,
+            "tur": "rolling",
+            "eski_tepe": 911.359278,
+            "yeni_tepe": 908.131885
+          },
+          {
+            "ts_ms": 1787735400000,
+            "tur": "rolling",
+            "eski_tepe": 908.131885,
+            "yeni_tepe": 907.115194
+          },
+          {
+            "ts_ms": 1787736300000,
+            "tur": "rolling",
+            "eski_tepe": 907.115194,
+            "yeni_tepe": 906.95878
+          },
+          {
+            "ts_ms": 1787736600000,
+            "tur": "rolling",
+            "eski_tepe": 906.95878,
+            "yeni_tepe": 906.489538
+          },
+          {
+            "ts_ms": 1787736900000,
+            "tur": "rolling",
+            "eski_tepe": 906.489538,
+            "yeni_tepe": 906.098503
+          },
+          {
+            "ts_ms": 1787737200000,
+            "tur": "rolling",
+            "eski_tepe": 906.098503,
+            "yeni_tepe": 904.573746
+          }
+        ],
+        "taban_alti_red": 989,
+        "not": "Tepe penceresi etkin; kilit dönemsel olarak çözülür."
+      },
+      "rejection_counts": {
+        "dusuk_hacim": 126422,
+        "fade_kosulu_yok": 12693,
+        "guclu_trend_fade_kapali": 5690,
+        "yukselen_bicak": 1322,
+        "dusuk_puan": 459,
+        "fake_breakout_or_suspect": 3623,
+        "dusen_bicak": 1207,
+        "limit_bekliyor": 38,
+        "yeniden_giris_beklemesi": 50,
+        "OLCEK_TABAN_ALTINDA": 989,
+        "ttl_cozulemez": 18,
+        "rejim_uyumsuz": 2476,
+        "kismi_dolum": 10,
+        "MALIYET_BUTCESI_ASIMI": 90
+      },
+      "expired_orders": 0,
+      "partial_fills": 15,
+      "cost_model_source": "measured",
+      "net_pnl": -95.4263,
+      "trade_count": 20
+    }
+  ],
+  "optimism_gap": {},
+  "bounds_interval": {},
+  "verdict": "🔴 **KENAR KANITLANMADI — örneklem yetersiz**\n\n- Toplam kanıt 133 işlem (birincil 20 + walk-forward 113); istatistiksel hüküm için en az 200 gerekir.\n- Walk-forward: 1/3 pencere kârlı, toplam -171.39 USDT.\n- DİKKAT: örneklem yetersiz olsa da walk-forward toplamı NEGATİF (-171.39 USDT). Bu, kenar lehine bir işaret DEĞİLDİR.\n- Daha uzun veri veya daha çok sembol ile tekrar koşun. Bu sonuçla gerçek paraya ölçekleme YAPILMAMALIDIR.",
+  "verdict_detail": {
+    "code": "INSUFFICIENT_SAMPLE",
+    "severity": "red",
+    "headline": "KENAR KANITLANMADI — örneklem yetersiz",
+    "text": "Toplam kanıt 133 işlem (birincil 20 + walk-forward 113); istatistiksel hüküm için en az 200 gerekir. Walk-forward: 1/3 pencere kârlı, toplam -171.39 USDT. DİKKAT: örneklem yetersiz olsa da walk-forward toplamı NEGATİF (-171.39 USDT). Bu, kenar lehine bir işaret DEĞİLDİR. Daha uzun veri veya daha çok sembol ile tekrar koşun. Bu sonuçla gerçek paraya ölçekleme YAPILMAMALIDIR.",
+    "reasons": [
+      "Toplam kanıt 133 işlem (birincil 20 + walk-forward 113); istatistiksel hüküm için en az 200 gerekir.",
+      "Walk-forward: 1/3 pencere kârlı, toplam -171.39 USDT.",
+      "DİKKAT: örneklem yetersiz olsa da walk-forward toplamı NEGATİF (-171.39 USDT). Bu, kenar lehine bir işaret DEĞİLDİR.",
+      "Daha uzun veri veya daha çok sembol ile tekrar koşun. Bu sonuçla gerçek paraya ölçekleme YAPILMAMALIDIR."
+    ],
+    "evidence": {
+      "primary_trades": 20,
+      "primary_net_pnl": -95.4263,
+      "mc_prob_loss": 1.0,
+      "risk_breaches": 0,
+      "max_realized_over_target": 0.952,
+      "breach_ratio_threshold": 1.3,
+      "walk_forward": {
+        "label": "birincil (karma yol (gerçek 1m %74.5))",
+        "total_windows": 3,
+        "profitable_windows": 1,
+        "total_trades": 113,
+        "total_net_pnl": -171.3859,
+        "worst_window_net_pnl": -95.4263
+      },
+      "sample_truncation": {
+        "drawdown_rejections": 0,
+        "total_rejections": 155087,
+        "ratio_of_all_rejections": 0.0,
+        "rejections_per_opened_trade": 0.0,
+        "truncated": false
+      },
+      "real_1m_coverage_ratio": 0.7449,
+      "min_trades": 200,
+      "min_wf_trades": 30,
+      "min_trades_source": "all"
+    }
+  }
+}

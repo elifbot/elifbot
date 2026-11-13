@@ -1,0 +1,82 @@
+
+
+===== SAYFA 1 =====
+
+PRO KRYPTO BOT INDIKATÖR KATALOGU
+Futures Scalping, Algoritmik Ticaret ve Reddit/Open-Source Sistem Referans Dokümanı
+Profesyonel vadeli işlem (Futures) botları, tekil göstergeler yerine çok katmanlı onay mekanizmaları
+kullanır. Bu doküman, açık kaynaklı Reddit ekosistemleri (Freqtrade, Jesse.trade), ticari platformlar
+(3Commas, Pionex) ve kurumsal trading sistemlerinde kullanılan tüm teknik ve veri tabanlı indikatörlerin
+mimarisini sunar.
+TAVSİYE EDİLEN ZAMAN DİLİMİ
+1m / 3m / 5m
+Kısa vadeli scalping & volatilite
+stratejileri
+KARAR EŞİĞİ (CONFLUENCE)
+≥ 4 Onay Sinyali
+Farklı katmanlardan eş zamanlı
+doğrulama
+RİSK MODELİ
+Dinamik ATR x 1.5
+Volatiliteye adapte olan Stop-Loss
+yapısı
+1. REDDİT & AÇIK KAYNAK EKOSİSTEMİ İNDİKATÖRLERİ
+Freqtrade ve Jesse.trade gibi topluluk projelerinde yüksek başarı oranıyla bilinen temel algoritmik
+göstergeler:
+İNDİKATÖR KATEGORİ IŞLEV & ANALİZ MANTIĞI KULLANIM AMACI
+Ehlers Fisher
+Transform Momentum Fiyatı Gaussian dağılımına çevirerek gürültüyüazaltır. Gecikmesiz tepe/diptespiti
+KAMA (Kaufman
+Adaptive) Trend / Fİltre Yatayda düzleşir, trend başlangıcında hızlafiyatı takip eder. Sahte kırılım filtresi
+Supertrend / HMA Trend Takip Hull Moving Average ile güçlendirilmiş trendçizgisi çizer. Izleyen Stop(Trailing)
+Choppiness Index
+(CHOP)
+Piyasa
+Durumu
+Piyasanın trendde veya testere modunda
+olduğunu ölçer. Yatay piyasa engeli
+Squeeze Momentum Volatilite Bollinger ve Keltner bantlarının sıkışmasınıtespit eder. Kırılım (Breakout)takibi
+WaveTrend (WT
+Cross) Momentum RSI ve MACD senteziyle dip/tepe noktalarındaaşırı alım uyarısı verir. Hassas GirişTetikleyicisi
+
+===== SAYFA 2 =====
+
+Kripto Bot Indikator & Veri Mimarisi Sayfa 1 / 2
+2. BORSA İÇİ TÜREV & AKILLI PARA (SMC) GÖSTERGELERİ
+Grafik üzerindeki standart mumların ötesine geçerek borsadaki gerçek para akışını ve kurumsal hareketleri
+takip eden gelişmiş veri katmanları:
+GÖSTERGE / VERİ KAYNAK OPERASYONEL TANIM KRİTİK EŞİK / SİNYAL
+CVD (Cumulative Vol.
+Delta)
+Orderbook
+Tick
+Piyasa emriyle yapılan alım-satımların net
+hacim farkı.
+Fiyat/Delta
+uyumsuzlukları
+Funding Rate
+(Fonlama) Borsa API Long ve Short pozisyonlar arasındakimaliyet dengesi. > %0.05 Aşırı Long riski
+Open Interest (OI)
+Delta Türev Verisi Piyasadaki toplam açık kontrat miktarıdeğişimi. Fiyat ↑  / OI ↓  = SahteYükseliş
+Liquidation Heatmap Likidasyon Stop-Loss birikimlerinin olduğu kritik fiyatbölgeleri. Mıknatıs hedef seviyeler
+Order Blocks (OB) Price Action Kurumsal alıcı/satıcıların bıraktığı devemir bölgeleri. Destek/Dirençreaksiyonu
+Fair Value Gap (FVG) Price Action Aşırı hızlı hareket sonrası arada kalandengesiz boşluklar. Geri çekilme hedefi
+Reddit Mention
+Velocity Reddit API Coin isimlerinin sosyal medyadabahsedilme ivmesi. Ani hacim / Pumpuyarısı
+VADER Sentiment
+Score NLP Model Sosyal medya metinlerinin duyguskorlaması (-1 ile +1). > 0.40 Boğa eğilimi
+3. TÜMLEŞİK BOT KARAR KARŞILAMA SİSTEMİ
+Sinyal Skorlama (Conﬂuence Engine) Nasıl Çalışır?
+Bot, tek bir indikatörle alım-satım kararı vermez. Sistem her periyotta şu sorgulamayı yapar:
+Filtre Kontrolü: CHOP < 50 ve Fiyat > EMA 200 mü? (Trend Uygun)
+Türev Kontrolü: Funding Rate dengeli ve CVD pozitif mi? (Hacim Destekli)
+Teknik Tetikleme: WaveTrend dipte kesişim yaptı mı ve FVG doldu mu? (Giriş Uygun)
+Sosyal Onay: Reddit Duygu Skoru > 0.20 mi? (Piyasa Algısı Olumlu)
+Risk ve Pozisyon Yönetimi Kuralları
+Stop Loss: ATR (Average True Range) x 1.5 katsayısı ile dinamik belirlenir.
+Kademeli Kar Al (TP): %50 pozisyon kapatma (1.5R) - %50 Pozisyon kapatma (3.0R).
+Kaldıraç Limiti: Maksimum 10x (Sermayenin işlem başına %2 ila %5 riski ile).
+
+===== SAYFA 3 =====
+
+Kripto Bot Indikator & Veri Mimarisi Sayfa 2 / 2

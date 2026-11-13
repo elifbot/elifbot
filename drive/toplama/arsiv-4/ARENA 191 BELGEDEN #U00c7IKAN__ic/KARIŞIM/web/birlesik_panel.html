@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ACAR · Sanal İşlem Durumu</title>
+<style>
+:root{font-family:system-ui,-apple-system,sans-serif;color:#dbe8f0;background:#07131d;font-size:16px}*{box-sizing:border-box}body{margin:0}.wrap{max-width:1120px;margin:auto;padding:32px 22px 80px}header{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;border-bottom:1px solid #274153;padding-bottom:24px}.brand{font-weight:800;letter-spacing:.15em;color:#7ce4c4;font-size:12px}h1{font-size:clamp(26px,4vw,38px);line-height:1.1;margin:10px 0}p{color:#a1b4c1;line-height:1.6}h2{font-size:17px;margin:0 0 16px}.tag{border:1px solid #355c65;border-radius:100px;padding:8px 12px;font-size:12px;color:#84dfc7;white-space:nowrap}.warning{background:#3c3021;border:1px solid #8f6a37;color:#ffe0aa;border-radius:12px;padding:14px 16px;margin:24px 0;font-size:14px;line-height:1.55}.access,.card,.positions{background:#102330;border:1px solid #294454;border-radius:14px;padding:20px}.access{display:flex;gap:10px;align-items:end;flex-wrap:wrap}.access label{flex:1;min-width:230px;font-size:13px;color:#b6c9d4}.access input{display:block;margin-top:8px;width:100%;background:#071720;color:white;border:1px solid #456270;border-radius:8px;padding:11px;font:inherit}.access button{border:0;border-radius:8px;padding:12px 18px;font-weight:700;background:#75ddbc;color:#052620;cursor:pointer}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:20px 0}.label{font-size:12px;color:#9aafba;text-transform:uppercase;letter-spacing:.05em}.value{font-size:clamp(18px,2.5vw,26px);font-weight:700;margin-top:12px;word-break:break-word}.sub{font-size:12px;color:#94adba;margin-top:8px}.good{color:#84dfc7}.bad{color:#ffae86}.positions{overflow:auto}table{border-collapse:collapse;width:100%;min-width:650px;text-align:left;font-size:14px}th,td{border-bottom:1px solid #294454;padding:13px 8px}th{font-size:11px;color:#94adba;text-transform:uppercase;letter-spacing:.04em}td{color:#e4eef3}.statusline{min-height:24px;margin:15px 0;font-size:14px}.foot{font-size:13px;color:#8da5b4;margin-top:24px}@media(max-width:700px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}header{display:block}.tag{display:inline-block;margin-top:10px}}
+</style>
+</head>
+<body><main class="wrap">
+<header><div><div class="brand">ACAR / PAPER TERMINAL</div><h1>Birleşik bot durumu</h1><p>Yerel defterin salt okunur özeti. Gerçek emir veya ayar kontrolü içermez.</p></div><span class="tag">SANAL SİMÜLASYON</span></header>
+<div class="warning"><strong>Önemli:</strong> Bu ekran işçinin çalıştığını doğrulamaz. Stoplar borsada tutulmaz; fiyatlar ve sonuçlar simülasyon tahminidir. Bağlantı veya izleme kesintisi geçmiş işlemleri belirsiz yapabilir.</div>
+<section class="access" aria-label="Yetkilendirme"><label for="token">Yerel gateway anahtarı<input id="token" type="password" autocomplete="off" placeholder="ACAR_GATEWAY_TOKEN"></label><button id="connect" type="button">Durumu göster</button><button id="disconnect" type="button">Bağlantıyı kes</button></section>
+<div id="message" class="statusline" role="status" aria-live="polite">Bağlı değil. Anahtar sadece bu sayfanın belleğinde tutulur.</div>
+<section class="grid" aria-label="Hesap özeti">
+<div class="card"><div class="label">Serbest kasa</div><div id="cash" class="value">—</div><div class="sub">USDT · model</div></div>
+<div class="card"><div class="label">Son mark equity</div><div id="equity" class="value">—</div><div id="equity-note" class="sub">Tazelik ve belirsizlik kontrolü gerekir</div></div>
+<div class="card"><div class="label">Giriş durumu</div><div id="lock" class="value">—</div><div id="lock-reason" class="sub">—</div></div>
+<div class="card"><div class="label">Günlük durma</div><div id="daily" class="value">—</div><div class="sub">İşçi canlılığı: doğrulanmıyor</div></div>
+</section>
+<section class="positions"><h2>Açık sanal pozisyonlar</h2><table><thead><tr><th>Sembol</th><th>Yön</th><th>Miktar</th><th>Giriş</th><th>Son mark</th><th>Güvenlik</th></tr></thead><tbody id="positions"><tr><td colspan="6">Henüz durum alınmadı.</td></tr></tbody></table></section>
+<p class="foot">Ağ erişimi sadece bu yerel gateway'e yapılır. Parola kaydedilmez. Kimlik bilgilerini paylaşmayın; gateway TLS olmadan internete açılmamalıdır.</p>
+</main><script>
+'use strict';
+let secret='',timer=null;
+const $=id=>document.getElementById(id);
+function text(id,value){$(id).textContent=String(value)}
+function resetView(){for(const id of ['cash','equity','lock','daily'])text(id,'—');text('equity-note','Tazelik ve belirsizlik kontrolü gerekir');text('lock-reason','—');$('positions').replaceChildren();const tr=document.createElement('tr'),td=document.createElement('td');td.colSpan=6;td.textContent='Durum alınmadı.';tr.append(td);$('positions').append(tr)}
+function render(s){
+ const a=s.account||{};text('cash',a.cash??'—');text('equity',a.equityAtLastMarks??'—');text('equity-note',a.equityReliable?'Model tahmini; gerçek sonuç değildir':'Belirsiz veya bayat; güvenilir değil');
+ text('lock',a.entriesLocked?'KİLİTLİ':'Kilit yok');$('lock').className='value '+(a.entriesLocked?'bad':'good');text('lock-reason',a.lockReason||'—');text('daily',a.dailyHalt?'DURDURULDU':'Durma yok');
+ const tbody=$('positions');tbody.replaceChildren();const rows=Array.isArray(s.positions)?s.positions:[];
+ if(!rows.length){const tr=document.createElement('tr'),td=document.createElement('td');td.colSpan=6;td.textContent='Açık sanal pozisyon yok.';tr.append(td);tbody.append(tr)}
+ for(const p of rows){const tr=document.createElement('tr');const safety=[p.protectionStatus||'—',p.markStale?'BAYAT MARK':'',p.fundingDue?'FUNDING BEKLİYOR':'',p.executionUncertain?'BELİRSİZ':''].filter(Boolean).join(' · ');for(const v of [p.symbol,p.side,p.quantity,p.entryPrice,p.lastMark,safety]){const td=document.createElement('td');td.textContent=String(v??'—');tr.append(td)}tbody.append(tr)}
+ text('message','Durum alındı · '+new Date(s.asOfTime*1000).toLocaleString('tr-TR')+' · İşçi sağlığı doğrulanmadı');
+}
+async function refresh(){if(!secret)return;try{const r=await fetch('/v1/status',{headers:{Authorization:'Bearer '+secret},cache:'no-store'});if(!r.ok)throw new Error('http');render(await r.json())}catch(_){resetView();text('message','Durum alınamadı. Anahtarı, gateway’i ve yerel bağlantıyı kontrol edin.')}}
+$('connect').addEventListener('click',()=>{secret=$('token').value;$('token').value='';if(timer)clearInterval(timer);if(!secret){text('message','Anahtar gerekli.');return}refresh();timer=setInterval(refresh,10000)});
+$('disconnect').addEventListener('click',()=>{secret='';$('token').value='';if(timer)clearInterval(timer);timer=null;resetView();text('message','Bağlantı kesildi.');});
+</script></body></html>

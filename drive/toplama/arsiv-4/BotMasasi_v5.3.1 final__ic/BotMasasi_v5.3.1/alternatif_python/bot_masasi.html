@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bot Masası v5.3.1 — Sınırsız Masa (API)</title>
+<style>
+  :root{--bg:#f4f5f7;--panel:#ffffff;--panel2:#eef1f5;--yazi:#1b1e24;--soluk:#68707c;
+        --vurgu:#2563eb;--yesil:#15803d;--sari:#b45309;--hata:#d92d20;--kenar:#dde1e7;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--yazi);font-family:"Segoe UI",system-ui,sans-serif;
+       height:100vh;display:flex;flex-direction:column;}
+  header{background:var(--panel);padding:8px 14px;display:flex;align-items:center;gap:8px;
+         flex-wrap:wrap;border-bottom:1px solid var(--kenar);}
+  header h1{font-size:16px;}
+  .rozet{background:var(--yesil);color:#fff;font-size:11px;padding:2px 9px;border-radius:10px;}
+  .rozet2{background:var(--panel2);color:var(--soluk);font-size:11px;padding:2px 9px;
+          border-radius:10px;border:1px solid var(--kenar);}
+  input[type=text],textarea{background:#fff;color:var(--yazi);
+        border:1px solid var(--kenar);padding:7px 10px;border-radius:6px;font-size:13px;
+        outline:none;font-family:inherit;}
+  input:focus,textarea:focus{border-color:var(--vurgu);}
+  button{background:var(--vurgu);color:#fff;border:1px solid var(--vurgu);padding:8px 14px;
+         border-radius:6px;font-size:13px;cursor:pointer;}
+  button.ikincil{background:var(--panel2);color:var(--yazi);border-color:var(--kenar);}
+  button.ikincil:hover{background:#e3e7ee;}
+  button.tehlike{background:#fff;color:var(--hata);border-color:#f3c2bd;}
+  button:disabled{opacity:.5;cursor:wait;}
+  #bar5,#bar7{background:var(--panel);padding:6px 14px;border-bottom:1px solid var(--kenar);
+        display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .etiket{font-size:11px;font-weight:700;color:var(--soluk);letter-spacing:.4px;}
+  #ciplar5,#ajanlar7{display:flex;gap:6px;flex-wrap:wrap;flex:1;}
+  .cip{display:inline-flex;align-items:center;gap:5px;background:var(--panel2);
+       border:1px solid var(--kenar);border-radius:14px;padding:4px 10px;font-size:12px;
+       cursor:pointer;user-select:none;}
+  .cip.secili{background:#eaf1fe;border-color:var(--vurgu);color:var(--vurgu);font-weight:600;}
+  .cip.kilitli{opacity:.45;}
+  .cip input{accent-color:var(--vurgu);}
+  #kutu{flex:1;overflow-y:auto;padding:16px 6%;}
+  .balon{max-width:88%;padding:10px 14px;border-radius:12px;line-height:1.55;
+         white-space:pre-wrap;word-wrap:break-word;font-size:14px;margin-bottom:14px;}
+  .kullanici{margin-left:auto;background:var(--vurgu);color:#fff;border-bottom-right-radius:3px;}
+  .hata{background:#fdf0ef;color:var(--hata);border:1px solid #f3c2bd;font-size:13px;}
+  .kartlar5{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));
+            gap:12px;margin:4px 0 18px;}
+  .kart{background:var(--panel);border:1px solid var(--kenar);border-radius:10px;
+        display:flex;flex-direction:column;min-height:120px;overflow:hidden;}
+  .kart .baslik{padding:7px 10px;font-size:12px;font-weight:700;color:var(--yesil);
+        background:var(--panel2);border-bottom:1px solid var(--kenar);
+        display:flex;justify-content:space-between;gap:8px;align-items:center;}
+  .kart .govde{padding:10px;font-size:13px;line-height:1.5;white-space:pre-wrap;
+        word-wrap:break-word;max-height:420px;overflow-y:auto;}
+  .kart.hataKart{border-color:#f3c2bd;}
+  .kart.hataKart .govde{color:var(--hata);background:#fdf0ef;}
+  .kart button{margin:0 10px 10px;align-self:flex-start;background:#fff;color:var(--hata);
+        border-color:#f3c2bd;padding:4px 10px;font-size:12px;}
+  footer{background:var(--panel);padding:10px 6%;display:flex;gap:8px;align-items:flex-end;
+         border-top:1px solid var(--kenar);}
+  .girisSutun{flex:1;display:flex;flex-direction:column;gap:6px;}
+  .girisSatir{display:flex;gap:8px;align-items:flex-end;}
+  #rol{flex:1;min-width:180px;}
+  #giris{flex:1;resize:none;height:56px;}
+  #ekler{display:flex;flex-wrap:wrap;gap:6px;}
+  #ekler:empty{display:none;}
+  .ekCip{background:var(--panel2);border:1px solid var(--kenar);border-radius:12px;
+         font-size:12px;padding:3px 9px;display:flex;gap:6px;align-items:center;}
+  .ekCip a{color:var(--hata);cursor:pointer;font-weight:700;text-decoration:none;}
+  .not{font-size:12px;color:var(--soluk);padding:5px 16px;background:#fbfcfd;
+       border-bottom:1px solid var(--kenar);}
+  .not b{color:var(--sari);}
+  #birlesikPanel{background:var(--panel);border:2px solid var(--vurgu);border-radius:12px;
+                 margin:6px 0 26px;overflow:hidden;}
+  #birlesikPanel .bBaslik{background:var(--vurgu);color:#fff;padding:8px 12px;font-weight:700;
+        font-size:13px;display:flex;justify-content:space-between;align-items:center;gap:8px;}
+  #birlesikPanel .bGovde{padding:6px 12px;max-height:420px;overflow-y:auto;}
+  #birlesikPanel .bBolum{padding:8px 0;border-bottom:1px dashed var(--kenar);}
+  #birlesikPanel .bBolum:last-child{border-bottom:none;}
+  #birlesikPanel .bKim{font-weight:700;color:var(--vurgu);font-size:12px;
+        display:flex;justify-content:space-between;align-items:center;gap:8px;}
+  #birlesikPanel .bMetin{white-space:pre-wrap;word-wrap:break-word;font-size:13px;
+        line-height:1.5;margin-top:4px;}
+  .kopyalaBtn{background:#fff;color:var(--vurgu);border:1px solid var(--vurgu);border-radius:6px;
+        padding:4px 10px;font-size:12px;cursor:pointer;white-space:nowrap;}
+  .kopyalaBtn:hover{background:#eaf1fe;}
+  .kopyalaBtn.kucuk{padding:1px 6px;font-size:11px;}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🤖 Bot Masası</h1>
+  <span class="rozet">SINIRSIZ MASA — API</span>
+  <span class="rozet2" id="servisRozet">⏳ bağlanıyor…</span>
+  <button class="ikincil" onclick="ekipBesli()" title="En iyi 5 modeli tek tuşla seç: anahtarsız bot + NVIDIA'nın güçlüleri (GLM, Nemotron, MiniMax, Mistral, GPT-OSS)">⭐ 5'li Ekip</button>
+  <button class="ikincil" onclick=" tumunuKopyala(this)" title="İşaretli botların yazdıklarını TEK tuşla kopyala — tur sürerken de çalışır, yarım kalanı bile alır">📋 Tümünü Kopyala</button>
+  <button class="ikincil" onclick="window.open('/','_blank')" title="Ana Masa: anahtar yönetimi, dosya paketleme, döngü modu">🖥 Ana Masa</button>
+  <button class="tehlike" onclick="durdur()" title="Çalışan tüm istekleri durdurur">🔴 Durdur</button>
+</header>
+
+<div class="not" id="notSatur">
+  ✅ Bu masa <b>Puter'sız</b> çalışır: modeller NVIDIA + ücretsiz sağlayıcı API'leriyle konuşur.
+  <b>Hesap yok, popup yok, oturum yok, aylık kota yok.</b> Bir modelde limit/kota hatası çıkarsa
+  kart otomatik olarak yedek modele geçer; tur asla kilitlenmez.
+</div>
+
+<div id="bar5">
+  <span class="etiket">⚖ MODELLER</span>
+  <div id="ciplar5"></div>
+</div>
+
+<div id="bar7">
+  <span class="etiket">🛠 KOD AJANLARI</span>
+  <div id="ajanlar7"></div>
+</div>
+
+<div id="kutu"></div>
+
+<footer>
+  <div class="girisSutun">
+    <div id="ekler"></div>
+    <div class="girisSatir">
+      <input type="text" id="rol" placeholder="Rol / sistem talimatı (isteğe bağlı)…">
+      <button class="ikincil" onclick="dosyaSec()" title="Dosya, zip, Word, Excel, PDF ekleyin — içindekiler çıkarılıp modelleri okutulur">📎 Ekle</button>
+    </div>
+    <textarea id="giris" placeholder="Sorunuzu yazın… (Enter = gönder)"></textarea>
+  </div>
+  <button id="gonderBtn" onclick="gonder()">Gönder ▶</button>
+</footer>
+
+<input type="file" id="dosyaGiris" multiple style="display:none">
+
+<script>
+const $ = id => document.getElementById(id);
+const kutu = $('kutu'), giris = $('giris');
+
+// ---------- durum ----------
+let SAG = [];                        // sağlayıcı listesi (sunucudan)
+let ANAHTARLAR = {}, MODELLER = {}, EKSTRA = {};
+let SAGLIK = null;
+let SECILI = new Set();              // işaretli sağlayıcı id'leri
+let SECILI_AGANLAR = new Set();      // işaretli ajan id'leri
+let GECMIS = {};                     // anahtar -> [{role, content}] (model/ajan başına hafıza)
+let EKLER = [];                      // {ad, tur, sayi, dosyalar:[{yol, blok}]}
+let SONISLER = [];                   // son/aktif turun kartları (toplu kopya buradan okur)
+let AKTIF = new Set();               // çalışan istekler (durdurma için)
+let DURDURULDU = false;
+let sunucuOlu = false;
+
+const VARSAYILAN_SISTEM =
+  "Sen, kullanıcının bilgisayarında çalışan 'Bot Masası' adlı çoklu yapay zekâ masasındaki " +
+  "botlardan birisin; masada başka botlar da vardır, 'yalnız ikimiz' gibi ifadeler kullanma. " +
+  "HER ZAMAN kullanıcının yazdığı dilde yanıt ver: kullanıcı Türkçe yazdıysa kesinlikle Türkçe yanıt ver. " +
+  "Cevaplarını düzgün kurulu, akıcı cümlelerle yaz; bozuk kelime dizimi ve anlamsız kelime salatası ÜRETME; " +
+  "emin olmadığın yerde tahmin YAPMA, 'emin değilim' de. " +
+  "Sana dosya veya kod eklenirse; çalıştırma imkânın olmasa da dosyaları satır satır incele: " +
+  "hataları, güvenlik sorunlarını, mantık hatalarını ve iyileştirme önerilerini madde madde, " +
+  "dosya adını belirterek söyle. SADECE sana verilen içerikten bahset: verilmeyen dosya, fonksiyon, " +
+  "değişken veya satır numarası UYDURMA; içerikte olmayan bir şeyi varmış gibi anlatma.";
+
+// v5.3.1 — öncelik sırası: her zaman çalışan anahtarsız bot + NVIDIA'nın güçlüleri
+// + varsa diğer ücretsiz anahtarlı botlar. Kilitli olanlar atlanır.
+const ONCELIK = ['pollinations','nv-glm','nv-ultra','nv-bolt','nv-lightning',
+                 'nv-minimax','nv-gptoss','nv-mistral',
+                 'gemini','groq','openrouter','glm','mistral','qwen','kimi',
+                 'openai','anthropic','openai-codex','codex','ollama','custom'];
+
+// NVIDIA grubundaki her model GÖMÜLÜ anahtarla çalışır: kullanıcı anahtar
+// kaydetmemişse bile bu grubun çipleri KİLİTLİ GÖRÜNMEZ (sunucu anahtarı bilir).
+function anahtarAlan(p){ return p.anahtar_grubu || p.id; }
+function keyOf(p){ return (ANAHTARLAR[anahtarAlan(p)] || '').trim(); }
+function modelOf(p){ return (MODELLER[p.id] || p.model || '').trim(); }
+function customURL(){ return (EKSTRA.custom_url || '').trim(); }
+function gomuluNvidia(p){ return (p.anahtar_grubu === 'nvidia' || p.anahtar_grubu === 'nv'); }
+function kullanilabilir(p){
+  if(p.id === 'custom') return customURL() !== '';
+  if(p.id === 'ollama' && SAGLIK && !SAGLIK.ollama) return false;
+  if(p.id === 'codex' && SAGLIK && SAGLIK.codex === false) return false;
+  if(gomuluNvidia(p)) return true;   // gömülü anahtar sunucuda
+  return !p.anahtar_gerekli || keyOf(p) !== '';
+}
+function kisaAd(p){ return p.ad.split(' — ')[0].replace(' (+', ' ('); }
+function kimlik(p){ return kisaAd(p); }
+
+// ---------- 🛠 KOD AJANLARI (v5.3: kişiler aynı, motor API) ----------
+// her ajan TERCİH sırasındaki ilk kullanılabilir sağlayıcıyla çalışır
+const AJANLAR = [
+  {id:'ajan-claude', ad:'🤖 Claude Code', tercih:['nv-glm','nv-ultra','nv-gptoss','pollinations'],
+   rol:"Sen 'Claude Code'sun — terminalde çalışan kıdemli kodlama ajanı. Derin analitik düşünür, hatanın kök nedenine inersin. Önerilerini 'Dosya: satır' biçiminde, EN AZ değişiklikle (minimal diff) verirsin; riskleri ve kenar durumları açıkça yazarsın."},
+  {id:'ajan-codex', ad:'💻 Codex', tercih:['nv-gptoss','nv-ultra','nv-glm','pollinations'],
+   rol:"Sen 'Codex'sun — kodlama ajanı. Önce kısa bir PLAN, sonra adım adım uygulama verirsin. Algoritmik verimlilik ve test edilebilirliğe öncelik verirsin; kod örneklerini çalışır, eksiksiz bloklar hâlinde yazarsın."},
+  {id:'ajan-cursor', ad:'🖱 Cursor', tercih:['nv-bolt','nv-lightning','nv-glm','pollinations'],
+   rol:"Sen 'Cursor'sun — editör içi hızlı kodlama asistanı. KISA ve uygulanabilir yazarsın: anında uygulanabilir değişiklik/diff önerileri + tek cümlelik gerekçe. Uzun teoriye girmezsin."},
+  {id:'ajan-cline', ad:'🧩 Cline', tercih:['nv-glm','nv-bolt','pollinations'],
+   rol:"Sen 'Cline'sun — dosya dosya çalışan dikkatli ajan. Önce etkilenen dosyaları listeler, sonra dosya başına değişikliği tek tek söylersin; güvenlik/gizlilik kontrollerini ayrı başlıkta verirsin."},
+  {id:'ajan-jules', ad:'🌐 Jules', tercih:['nv-minimax','nv-lightning','nv-glm','pollinations'],
+   rol:"Sen 'Jules'sun — asenkron kodlama ajanı. İlk çıktında kısa net bir PLAN sunar, ardından 'plan onaylanırsa şunları yaparım' diye uygulama ve test adımlarını listelersin; değişiklikleri PR özeti gibi özetlersin."},
+  {id:'ajan-aider', ad:'🛠 Aider', tercih:['nv-mistral','nv-glm','nv-bolt','pollinations'],
+   rol:"Sen 'Aider'sun — git bilinçli çift programcı. Değişiklikleri birleşik diff (patch) biçiminde, --- / +++ satırlarıyla önerirsin; commit önerisi ve kırılma riski notu eklersin."},
+  {id:'ajan-devin', ad:'🚀 Devin', tercih:['nv-ultra','nv-glm','nv-gptoss','pollinations'],
+   rol:"Sen 'Devin'sun — otonom yazılım mühendisi. Görevi uçtan uca üstlenirsin: hedef → kilometre taşları → risk analizi → uygulama adımları → doğrulama. Kendi kararlarını ve gerekçelerini açıkça yazarsın."}
+];
+SECILI_AGANLAR.add('ajan-claude');   // varsayılan: yalnız Claude Code işaretli
+
+// ---------- açılış ----------
+async function ilkYukleme(){
+  giris.addEventListener('keydown', e => {
+    if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); gonder(); }
+  });
+  $('dosyaGiris').addEventListener('change', dosyaEklendi);
+  try{
+    let c1 = null;
+    for(let d = 0; d < 8; d++){
+      try{
+        c1 = await fetch('/api/saglayicilar').then(r => r.json());
+        const liste = c1.saglayicilar || c1.sag || (Array.isArray(c1) ? c1 : []);
+        if(liste.length){ c1 = liste; break; }
+      }catch(_){ c1 = null; }
+      await new Promise(r => setTimeout(r, 1200));   // sunucu daha başlıyor olabilir
+    }
+    const c2 = await fetch('/api/ayarlar').then(r => r.json()).catch(() => ({}));
+    const c3 = await fetch('/api/saglik').then(r => r.json()).catch(() => null);
+    SAG = Array.isArray(c1) ? c1 : (c1 && (c1.saglayicilar || c1.sag)) || [];
+    if(c2.ok !== false){
+      ANAHTARLAR = c2.anahtarlar || {};
+      MODELLER = c2.modeller || {};
+      EKSTRA = c2.ekstra || {};
+    }
+    SAGLIK = c3;
+    sunucuOlu = false;
+    $('servisRozet').textContent = '✔ sunucu hazır — ' +
+      SAG.filter(kullanilabilir).length + ' model hazır';
+    $('servisRozet').style.color = 'var(--yesil)';
+  }catch(h){
+    sunucuOlu = true;
+    $('servisRozet').textContent = '✖ sunucu yok';
+    $('servisRozet').style.color = 'var(--hata)';
+    $('notSatur').innerHTML = '⚠ <b>Sunucu yanıt vermiyor</b> — Bot Masası kapandı. ' +
+      'Masaüstündeki BotMasasi.exe\'ye çift tıklayıp yeniden açın (bu sekme eski oturuma aittir).';
+  }
+  cipleriCiz(); ajanlariCiz(); ekipBesli(); notGoster();
+}
+
+function cipleriCiz(){
+  const kap = $('ciplar5'); kap.innerHTML = '';
+  for(const p of SAG){
+    const uygun = kullanilabilir(p);
+    const lab = document.createElement('label');
+    lab.className = 'cip' + (SECILI.has(p.id) ? ' secili' : '') + (uygun ? '' : ' kilitli');
+    const cb = document.createElement('input');
+    cb.type = 'checkbox'; cb.checked = SECILI.has(p.id); cb.disabled = !uygun;
+    cb.onchange = () => {
+      if(cb.checked) SECILI.add(p.id); else SECILI.delete(p.id);
+      lab.classList.toggle('secili', cb.checked); notGoster();
+    };
+    lab.appendChild(cb);
+    lab.appendChild(document.createTextNode(kisaAd(p)));
+    lab.title = p.ad + (gomuluNvidia(p) && !keyOf(p) ?
+      ' — gömülü NVIDIA anahtarıyla çalışır (sınırsız)' :
+      (uygun ? '' : ' — anahtar gerekli (Ana Masa → ⚙ Anahtarlar)'));
+    kap.appendChild(lab);
+  }
+}
+function ekipBesli(){
+  SECILI.clear();
+  for(const id of ONCELIK){
+    const p = SAG.find(x => x.id === id);
+    if(p && kullanilabilir(p) && !hatKirik(anahtarAlan(p))){
+      SECILI.add(id);
+      if(SECILI.size >= 5) break;
+    }
+  }
+  if(SECILI.size === 0){
+    for(const p of SAG){ if(kullanilabilir(p)){ SECILI.add(p.id); break; } }
+  }
+  cipleriCiz(); notGoster();
+}
+function ajanlariCiz(){
+  const kap = $('ajanlar7'); kap.innerHTML = '';
+  for(const a of AJANLAR){
+    const lab = document.createElement('label');
+    lab.className = 'cip' + (SECILI_AGANLAR.has(a.id) ? ' secili' : '');
+    const cb = document.createElement('input');
+    cb.type = 'checkbox'; cb.checked = SECILI_AGANLAR.has(a.id);
+    cb.onchange = () => {
+      if(cb.checked) SECILI_AGANLAR.add(a.id); else SECILI_AGANLAR.delete(a.id);
+      lab.classList.toggle('secili', cb.checked); notGoster();
+    };
+    lab.appendChild(cb);
+    lab.appendChild(document.createTextNode(a.ad));
+    const motor = ajanMotoru(a);
+    lab.title = a.rol.slice(0, 90) + '… — motor: ' + (motor ? kimlik(motor) : 'yok');
+    kap.appendChild(lab);
+  }
+}
+function ajanMotoru(a){
+  for(const id of a.tercih){
+    const p = SAG.find(x => x.id === id);
+    if(p && kullanilabilir(p)) return p;
+  }
+  return SAG.find(kullanilabilir) || null;
+}
+function notGoster(){
+  if(sunucuOlu) return;
+  const kilitli = SAG.filter(p => !kullanilabilir(p)).length;
+  let m = '⚖ ' + SECILI.size + ' model ve 🛠 ' + SECILI_AGANLAR.size +
+          ' ajan seçili — aynı sorun hepsine gider, cevaplar yan yana akar.';
+  if(EKLER.length) m += ' 📎 ' + EKLER.length + ' dosya eklendi.';
+  if(kilitli) m += ' ' + kilitli + ' bot anahtar bekliyor (Ana Masa → ⚙ Anahtarlar).';
+  if(SAGLIK && !SAGLIK.ollama && SAG.find(p => p.id === 'ollama'))
+    m += ' Ollama kapalı görünüyor — çipi kilitli.';
+  $('notSatur').textContent = m;
+  if(hatKirik('nvidia'))
+    m += ' ⚡ NVIDIA hattı anahtar hatası verdi — botlar otomatik yedek hatlardan devam ediyor; ⚙ Anahtarlar\'dan kendi anahtarınızı girince NVIDIA botlar yeniden açılır.';
+  if(!(ANAHTARLAR['nvidia'] || '').trim() && SAG.some(x => x.anahtar_grubu === 'nvidia'))
+    m += ' ⚡ 8 NVIDIA botunu sınırsız açmak için ⚙ Anahtarlar\'dan ücretsiz NVIDIA anahtarınızı girin (build.nvidia.com); girmeden masa yedek hatlarla çalışır.';
+}
+
+// ---------- akış: /api/sohbet (SSE) — Ana Masa ile birebir aynı hat ----------
+// denetleyici dışarıdan verilebilir: bekçi (watchdog) yalnız BU isteği durdurabilsin
+async function akisAl(pid, model, key, sistem, mesajlar, parcaFn, hataFn, denetleyici){
+  denetleyici = denetleyici || new AbortController();
+  AKTIF.add(denetleyici);
+  try{
+    const resp = await fetch('/api/sohbet', {
+      method:'POST', signal: denetleyici.signal,
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({pid, model, key, sistem, mesajlar,
+        url: pid === 'custom' ? customURL() : ''})
+    });
+    if(!resp.ok || !resp.body){
+      hataFn('Sunucu yanıtı alınamadı (HTTP ' + resp.status + ')');
+      return;
+    }
+    const okuyucu = resp.body.getReader();
+    const coz = new TextDecoder();
+    let tampon = '';
+    while(true){
+      const {done, value} = await okuyucu.read();
+      if(done) break;
+      tampon += coz.decode(value, {stream:true});
+      const satirlar = tampon.split('\n');
+      tampon = satirlar.pop();
+      for(const ham of satirlar){
+        const s = ham.trim();
+        if(!s.startsWith('data:')) continue;
+        let nesne;
+        try{ nesne = JSON.parse(s.slice(5).trim()); }catch(_){ continue; }
+        if(nesne.t) parcaFn(nesne.t);
+        if(nesne.h) hataFn(nesne.h);
+      }
+    }
+  }catch(h){
+    if(h.name !== 'AbortError') hataFn('Bağlantı hatası: ' + h.message);
+  }finally{
+    AKTIF.delete(denetleyici);
+  }
+}
+
+// ---------- hafıza (her model/ajan kendi geçmişini tutar) ----------
+function gecmisAc(anahtar, gonderilen, hafiza){
+  const g = GECMIS[anahtar] || (GECMIS[anahtar] = []);
+  g.push({role:'user', content: hafiza === undefined ? gonderilen : hafiza});
+  while(g.length > 24) g.shift();
+  const donen = g.slice();
+  donen[donen.length - 1] = {role:'user', content: gonderilen};
+  return donen;
+}
+function gecmisEkle(anahtar, rol, icerik){
+  (GECMIS[anahtar] || (GECMIS[anahtar] = [])).push({role:rol, content:icerik});
+}
+function gecmisGeriAl(anahtar){
+  const g = GECMIS[anahtar];
+  if(g && g.length && g[g.length - 1].role === 'user') g.pop();
+}
+
+// ---------- yardımcılar ----------
+function gecikme(ms){ return new Promise(c => setTimeout(c, ms)); }
+const GECICI_HATA = /bağlantı hatası|failed to fetch|networkerror|sunucuya ulaşılamadı|limit doldu|ücretsiz sınırı doldu|http 5\d\d|\b429\b|rate limit|too many/i;
+const KOTA_HATA = /\b429\b|rate limit|quota|kota|credit|insufficient|usage.?limit|limit doldu|ücretsiz sınırı|subscription|capacity|overloaded|RESOURCE_EXHAUSTED/i;
+const AUTH_HATA = /\b40[13]\b|anahtar|yetkisiz|unauthorized|forbidden|authorization|invalid api key|authentication/i;
+const OLUMCU_HATA = /\b404\b|not found|bulunamadı|model.*yok|http 5\d\d/i;
+const YAVAS_HATA = /zaman aşımı|boş yanıt|timeout/i;
+// v5.3.1: kimlik (401/403) hatası veren aile 10 dk "kırık" sayılır →
+// zincir o ailenin diğer botlarında boşuna denemez, ekip seçiminden de düşer
+const HAT_KIRIK = {};
+const PIH = {son: 0};
+function hatKirik(grup){
+  if(!grup) return false;
+  const t = HAT_KIRIK[grup];
+  if(t && (Date.now() - t) < 600000) return true;
+  if(t) delete HAT_KIRIK[grup];
+  return false;
+}
+function hatKir(grup){ if(grup){ HAT_KIRIK[grup] = Date.now(); } }
+const BAGLAM_HATA = /context|bağlam|too large|çok uzun|token/i;
+
+// ---------- kart kurma ----------
+function kartKur(ad){
+  const tasiyici = document.createElement('div');
+  tasiyici.className = 'kartlar5';
+  const kart = document.createElement('div'); kart.className = 'kart';
+  const bas = document.createElement('div'); bas.className = 'baslik'; bas.textContent = ad;
+  const gov = document.createElement('div'); gov.className = 'govde';
+  const kopya = document.createElement('button'); kopya.textContent = '📋 Kopyala';
+  kopya.onclick = () => {
+    const t = gov.textContent || '';
+    if(!t.trim()){ kopya.textContent = '⏳ boş'; }
+    else{ metniKopyala(t); kopya.textContent = '✔ kopyalandı'; }
+    setTimeout(() => { kopya.textContent = '📋 Kopyala'; }, 1400);
+  };
+  kart.appendChild(bas); kart.appendChild(gov); kart.appendChild(kopya);
+  tasiyici.appendChild(kart); kutu.appendChild(tasiyici);
+  kutu.scrollTop = kutu.scrollHeight;
+  return {bas, gov};
+}
+function kartNot(gov, metin){
+  const n = document.createElement('div');
+  n.style.cssText = 'color:var(--sari);font-size:12px;margin:6px 0;';
+  n.textContent = metin; gov.appendChild(n);
+  gov.scrollTop = gov.scrollHeight;
+}
+function kartHata(gov, mesaj, tekrar){
+  const e = document.createElement('div'); e.className = 'err';
+  e.style.cssText = 'color:var(--hata);font-size:13px;white-space:pre-wrap;';
+  e.textContent = '✖ ' + mesaj; gov.appendChild(e);
+  if(tekrar){
+    const b = document.createElement('button');
+    b.textContent = '↻ Tekrar dene';
+    b.onclick = () => {
+      b.disabled = true;
+      gov.textContent = '';
+      kartNot(gov, '⏳ yeniden deneniyor…');
+      Promise.resolve(tekrar()).finally(() => { b.remove(); });
+    };
+    gov.appendChild(b);
+  }
+  gov.scrollTop = gov.scrollHeight;
+}
+function balon(sinif, kim, yazi){
+  const d = document.createElement('div');
+  d.className = 'balon ' + sinif;
+  if(kim){
+    const k = document.createElement('span'); k.className = 'kim';
+    k.style.cssText = 'display:block;color:var(--yesil);font-size:11px;font-weight:700;margin-bottom:4px;';
+    k.textContent = kim; d.appendChild(k);
+  }
+  const m = document.createElement('span'); m.textContent = yazi || '';
+  d.appendChild(m); kutu.appendChild(d);
+  kutu.scrollTop = kutu.scrollHeight;
+  return m;
+}
+
+// ---------- 📊 HEPSİNİN YORUMU paneli (canlı güncellenir) ----------
+let PANEL = null;
+function panelKur(){
+  const eski = $('birlesikPanel'); if(eski) eski.remove();
+  PANEL = document.createElement('div'); PANEL.id = 'birlesikPanel';
+  PANEL.innerHTML = '<div class="bBaslik"><span>📊 HEPSİNİN YORUMU — canlı</span>' +
+    '<button class="kopyalaBtn" onclick="tumunuKopyala(this)">📋 Tümünü Kopyala</button></div>' +
+    '<div class="bGovde"></div>';
+  kutu.appendChild(PANEL);
+  kutu.scrollTop = kutu.scrollHeight;
+}
+function panelBolumEkle(ad){
+  if(!PANEL) return null;
+  const b = document.createElement('div'); b.className = 'bBolum';
+  const kim = document.createElement('div'); kim.className = 'bKim';
+  const sol = document.createElement('span'); sol.textContent = ad;
+  const btn = document.createElement('button'); btn.className = 'kopyalaBtn kucuk';
+  btn.textContent = '📋'; btn.title = 'Yalnız bunu kopyala';
+  kim.appendChild(sol); kim.appendChild(btn);
+  const metin = document.createElement('div'); metin.className = 'bMetin';
+  metin.textContent = '⏳ düşünüyor…';
+  btn.onclick = () => {
+    const t = metin.textContent || '';
+    if(t.trim() && t !== '⏳ düşünüyor…'){ metniKopyala(t); btn.textContent = '✔'; }
+    else{ btn.textContent = '⏳'; }
+    setTimeout(() => { btn.textContent = '📋'; }, 1200);
+  };
+  b.appendChild(kim); b.appendChild(metin);
+  PANEL.querySelector('.bGovde').appendChild(b);
+  return metin;
+}
+function panelGuncelle(el, metin){
+  if(el) el.textContent = metin || '(yanıt yok)';
+}
+
+// ---------- tek modelin/ajanın tüm turu ----------
+// v5.3.1 kuralı: kota/limit/kimlik hatasında SESSİZ yedek sağlayıcıya geçilir;
+// tur asla kilitlenmez. İlk-token bekçisi: 60 sn sessizlik → yedek.
+const ILK_TOKEN_SN = 60, TOPLAM_SN = 300;
+
+async function kartiCalistir(p, sistem, soru, dosyalar, gov, bas, panelEl, tekrar){
+  const ref = {deger: ''};
+  const yaz = t => {
+    ref.deger += t;
+    gov.textContent = ref.deger; gov.scrollTop = gov.scrollHeight;
+    panelGuncelle(panelEl, ref.deger);
+  };
+  const gecmisAnahtari = p.id + (p.ajanSuf || '');
+  let motor = p;   // yedek geçişlerinde bu kartın o an konuştuğu sağlayıcı
+
+  // bir deneme: akış + bekçiler.
+  // 60 sn içinde TEK HARF gelmezse istek durdurulur; ilk token geldikten
+  // sonra 120 sn sessizlik yine durdurma sayılır; toplam tavani 300 sn.
+  async function istekYap(mesajlar){
+    let tam = '', hataMetni = null;
+    const denetleyici = new AbortController();
+    let bekciZ = null;
+    const bekciKur = ms => {
+      if(bekciZ) clearTimeout(bekciZ);
+      bekciZ = setTimeout(() => {
+        if(!hataMetni) hataMetni = 'Zaman aşımı — akış ' + Math.round(ms/1000) +
+          ' sn içinde ilerlemedi. Model yedekle deneniyor.';
+        denetleyici.abort();
+      }, ms);
+    };
+    const toplamZ = setTimeout(() => {
+      if(!hataMetni) hataMetni = 'Zaman aşımı — toplam ' + TOPLAM_SN + ' sn sınırı doldu.';
+      denetleyici.abort();
+    }, TOPLAM_SN * 1000);
+    bekciKur(ILK_TOKEN_SN * 1000);
+    try{
+      // motor: yedek geçişlerinde güncellenir — istek HEP o anki sağlayıcıya gider
+      await akisAl(motor.id, modelOf(motor), keyOf(motor), sistem, mesajlar,
+        t => { bekciKur(120 * 1000); tam += t; yaz(t); },
+        h => { hataMetni = h; }, denetleyici);
+    }catch(h){ hataMetni = hataMetni || h.message; }
+    finally{ if(bekciZ) clearTimeout(bekciZ); clearTimeout(toplamZ); }
+    if(!hataMetni && !tam.trim()) hataMetni = 'Model boş yanıt döndürdü.';
+    return {tam, hata: hataMetni};
+  }
+
+  // geçici hatada 3-6 sn bekleyip BİR kez daha dene
+  async function dayanikliIstek(mesajlar){
+    let s = await istekYap(mesajlar);
+    if(s.hata && GECICI_HATA.test(s.hata)){
+      kartNot(gov, '↪ Geçici hata — 3-6 sn sonra yeniden deneniyor…');
+      await gecikme(3000 + Math.floor(Math.random() * 3000));
+      s = await istekYap(mesajlar);
+    }
+    return s;
+  }
+
+  // kota/limit/zaman aşımı: sıradaki kullanılabilir yedeğe SESSİZ geç (en fazla 2 hop)
+  const DENENEN = new Set([p.id]);
+  let hop = 0;
+  async function yedegiBul(){
+    if(hop >= 2) return null;
+    for(const id of ONCELIK){
+      if(DENENEN.has(id)) continue;
+      const q = SAG.find(x => x.id === id);
+      if(q && kullanilabilir(q) && !hatKirik(anahtarAlan(q))){ DENENEN.add(id); hop++; return q; }
+    }
+    for(const q of SAG){
+      if(!DENENEN.has(q.id) && kullanilabilir(q) && !hatKirik(anahtarAlan(q))){
+        DENENEN.add(q.id); hop++; return q;
+      }
+    }
+    return null;
+  }
+  function yedekNotu(yedek){
+    ref.deger += '↪ ' + kimlik(motor) + ' yanıt vermedi/limit döndü → otomatik yedek hat: ' + kimlik(yedek) + '\n';
+    gov.textContent = ref.deger; gov.scrollTop = gov.scrollHeight;
+    const parc = bas.textContent.split(' — ');
+    bas.textContent = parc[0].split(' → ')[0] + ' → ' + kimlik(yedek) +
+      (parc.length > 1 ? ' — ' + parc.slice(1).join(' — ') : '');
+    panelBolumYenidenAdlandir(panelEl, yedek);
+    motor = yedek;
+  }
+  function yedegiDene(s, tamIcerik, hafiza){
+    return (async () => {
+      // v5.3.1: kimlik (401/403) ve 404/5xx hataları da zinciri tetikler
+      if(!s.hata || !(KOTA_HATA.test(s.hata) || YAVAS_HATA.test(s.hata) ||
+                      AUTH_HATA.test(s.hata) || OLUMCU_HATA.test(s.hata))) return s;
+      if(AUTH_HATA.test(s.hata)) hatKir(anahtarAlan(p));
+      if(!s.tam.trim()) gecmisGeriAl(gecmisAnahtari);   // başarısız denemenin kullanıcı mesajını geri al
+      const yedek = await yedegiBul();
+      if(!yedek) return s;
+      // anahtarsız hat paralel patlamada 402 veriyor → istekleri 2.2 sn arayla sırala
+      if(yedek.id === 'pollinations' && p.id !== 'pollinations'){
+        const bekleyen = Math.max(0, PIH.son + 2200 - Date.now());
+        if(bekleyen){ kartNot(gov, '↪ yedek hat sırası — ' + Math.ceil(bekleyen / 1000) + ' sn…'); await gecikme(bekleyen); }
+        PIH.son = Date.now();
+      }
+      yedekNotu(yedek);
+      return await dayanikliIstek(gecmisAc(gecmisAnahtari, tamIcerik, hafiza));
+    })();
+  }
+
+  try{
+    if(dosyalar.length === 0){
+      let s = await dayanikliIstek(gecmisAc(gecmisAnahtari, soru));
+      s = await yedegiDene(s, soru, undefined);
+      if(s.hata) kartHata(gov, s.hata + (s.hata.match(KOTA_HATA) ?
+        '\n(Yedek sağlayıcılar da doldu — birkaç dakika sonra ↻ Tekrar dene.)' : ''), tekrar);
+      bas.textContent = bas.textContent.split(' — ')[0] + (s.hata ? ' — ✖ hata' : ' — ✔ tamam');
+      KAYIT_EKLE(bas.textContent.split(' — ')[0], ref.deger || '(yanıt yok / hata)');
+      return ref;
+    }
+
+    // dosyalı yol: tek atış, sığmazsa küçült, o da olmazsa bölüm bölüm
+    const butce = Math.max(6000, (p.maks_govde || 24000));
+    const paket = paketYap(dosyalar, butce, soru);
+    if(paket.tam.length <= Math.floor(butce * 0.92)){
+      let s = await dayanikliIstek(gecmisAc(gecmisAnahtari, paket.tam, paket.hafiza));
+      if(s.hata && BAGLAM_HATA.test(s.hata)){
+        gecmisGeriAl(gecmisAnahtari);
+        kartNot(gov, '↪ İçerik modele sığmadı — küçültülüp yeniden deneniyor…');
+        const kucuk = paketYap(dosyalar, Math.floor(butce * 0.5), soru);
+        s = await dayanikliIstek(gecmisAc(gecmisAnahtari, kucuk.tam, kucuk.hafiza));
+      }
+      s = await yedegiDene(s, paket.tam, paket.hafiza);
+      if(s.tam.trim() && !s.hata) gecmisEkle(gecmisAnahtari, 'assistant', s.tam);
+      else if(!s.tam.trim()) gecmisGeriAl(gecmisAnahtari);
+      if(s.hata) kartHata(gov, s.hata, tekrar);
+      bas.textContent = bas.textContent.split(' — ')[0] + (s.hata ? ' — ✖ hata' : ' — ✔ tamam');
+      KAYIT_EKLE(bas.textContent.split(' — ')[0], ref.deger || '(yanıt yok / hata)');
+      return ref;
+    }
+
+    // bölüm bölüm (büyük paket)
+    const parcalar = bolumlereBol(dosyalar, Math.floor(butce * 0.6));
+    const notlar = [];
+    for(let i = 0; i < parcalar.length; i++){
+      if(DURDURULDU) break;
+      kartNot(gov, '📖 Bölüm ' + (i + 1) + '/' + parcalar.length + ' inceleniyor…');
+      const s = await dayanikliIstek([{role:'user', content:
+        parcalar[i] + '\n\n(Yukarıdaki bölüm i/' + parcalar.length +
+        '. ÖNEMLİ BULGU VE NOTLARINI madde madde yaz; geniş özet verme, ' +
+        'hata/risk/iyileştirme odaklı kısa notlar bırak.)'}]);
+      if(s.hata){
+        kartNot(gov, '⚠ bölüm notu alınamadı: ' + s.hata);
+        continue;
+      }
+      notlar.push('BÖLÜM ' + (i + 1) + ' NOTLARI:\n' + s.tam.trim());
+    }
+    if(!DURDURULDU){
+      kartNot(gov, '🧩 Notlar birleştirilip nihai yanıt yazılıyor…');
+      const gonderilen = soru + '\n\nDOSYA HARİTASI — ' + dosyalar.length + ' dosya:\n' +
+        dosyalar.map(d => d.yol).join('\n') +
+        '\n\nİnceleme notları (bölüm bölüm):\n' + notlar.join('\n\n') +
+        '\n\nBu notlara ve dosyalara dayanarak kullanıcının sorusunu NİHAİ olarak yanıtla.';
+      let s = await dayanikliIstek([{role:'user', content: gonderilen}]);
+      if(s.hata) kartHata(gov, s.hata, tekrar);
+      else yaz(s.tam);
+    }
+    bas.textContent = bas.textContent.split(' — ')[0] + (DURDURULDU ? ' — ⏹ durduruldu' : ' — ✔ tamam');
+    KAYIT_EKLE(bas.textContent.split(' — ')[0], ref.deger || '(yanıt yok / hata)');
+    return ref;
+  }catch(h){
+    kartHata(gov, 'Beklenmeyen hata: ' + h.message, tekrar);
+    return ref;
+  }
+}
+function panelBolumYenidenAdlandir(el, p){
+  if(!PANEL || !el) return;
+  const bolum = el.closest('.bBolum');
+  if(bolum){
+    const sol = bolum.querySelector('.bKim span');
+    if(sol) sol.textContent = kimlik(p);
+  }
+}
+let KAYIT = [];
+function KAYIT_EKLE(kim, icerik){ KAYIT.push({kim, icerik}); }
+
+// ---------- dosya paketleme (Ana Masa mantığının kompakt sürümü) ----------
+function haritaYap(dosyalar){
+  const satirlar = dosyalar.map(d => d.yol + ' (' + d.blok.split('\n').length + ' satır)');
+  let m = 'DOSYA HARİTASI — toplam ' + dosyalar.length + ' dosya:\n' + satirlar.join('\n');
+  if(m.length > 3500) m = m.slice(0, 3500) + '\n…(harita kısaltıldı)';
+  return m;
+}
+function paketYap(dosyalar, butce, soru){
+  const harita = haritaYap(dosyalar);
+  const sinir = butce - soru.length - harita.length - 800;
+  let metin = '', alinan = 0;
+  for(const d of dosyalar){
+    if(metin.length + d.blok.length + 2 > sinir) break;
+    metin += (metin ? '\n\n' : '') + d.blok;
+    alinan++;
+  }
+  const tam = soru + '\n\n' + harita + (alinan ? '\n\n' + metin : '');
+  const hafiza = soru + '\n(' + alinan + '/' + dosyalar.length + ' dosya eklendi ve incelendi)';
+  return {tam, hafiza, alinan};
+}
+function bolumlereBol(bloklar, maks){
+  const parcalar = [];
+  let suanki = '';
+  for(const b of bloklar){
+    if(b.blok.length > maks){
+      if(suanki.trim()){ parcalar.push(suanki); suanki = ''; }
+      for(let i = 0; i < b.blok.length; i += maks) parcalar.push(b.blok.slice(i, i + maks));
+      continue;
+    }
+    if(suanki.length + b.blok.length + 2 > maks && suanki.trim()){
+      parcalar.push(suanki); suanki = '';
+    }
+    suanki += (suanki ? '\n\n' : '') + b.blok;
+  }
+  if(suanki.trim()) parcalar.push(suanki);
+  return parcalar;
+}
+
+// ---------- gönder ----------
+async function gonder(){
+  const soru = giris.value.trim();
+  if(!soru) return;
+  if(sunucuOlu){ alert('Sunucu yanıt vermiyor — BotMasasi.exe kapalı olabilir.'); return; }
+  if(SECILI.size === 0 && SECILI_AGANLAR.size === 0){
+    alert('En az bir model veya ajan işaretleyin (⚖ MODELLER / 🛠 KOD AJANLARI çubukları).');
+    return;
+  }
+  giris.value = '';
+  DURDURULDU = false;
+  balon('kullanici', null, soru);
+
+  const rol = $('rol').value.trim();
+  const sistem = (rol ? rol + '\n\n' : '') + VARSAYILAN_SISTEM;
+
+  const hedefler = [];
+  for(const id of SECILI){
+    const p = SAG.find(x => x.id === id);
+    if(p && kullanilabilir(p)) hedefler.push({p, ad: kimlik(p)});
+  }
+  for(const aid of SECILI_AGANLAR){
+    const a = AJANLAR.find(x => x.id === aid);
+    if(!a) continue;
+    const motor = ajanMotoru(a);
+    if(!motor) continue;
+    const q = Object.assign({}, motor, {ajanSuf: ':' + a.id});
+    hedefler.push({p: q, ad: a.ad + ' → ' + kimlik(motor)});
+  }
+  if(hedefler.length === 0){ alert('Kullanılabilir model bulunamadı.'); return; }
+
+  // dosyaları düz listeye aç
+  const dosyaSeti = [];
+  for(const ek of EKLER) for(const d of ek.dosyalar) dosyaSeti.push(d);
+
+  $('gonderBtn').disabled = true;
+  panelKur();
+  const isler = hedefler.map(h => {
+    const {bas, gov} = kartKur(h.ad + ' — ⏳ yazıyor…');
+    const panelEl = panelBolumEkle(h.ad);
+    return {p: h.p, ad: h.ad, bas, gov, panelEl};
+  });
+  SONISLER = isler;
+
+  // aynı saniyede başla: 300 ms kademeli (sağlayıcıyı boğmamak için)
+  await new Promise(bitti => {
+    let sira = 0;
+    const sonraki = () => {
+      if(sira >= isler.length){ bitti(); return; }
+      const is = isler[sira++];
+      is.gov.textContent = '⏳ düşünüyor…';
+      const yenidenDene = () => {
+        is.gov.textContent = '';
+        return kartiCalistir(is.p, sistem, soru, dosyaSeti, is.gov, is.bas, is.panelEl, yenidenDene);
+      };
+      kartiCalistir(is.p, sistem, soru, dosyaSeti, is.gov, is.bas, is.panelEl, yenidenDene)
+        .finally(() => { setTimeout(sonraki, 300); });
+    };
+    sonraki();
+  });
+  if(PANEL){
+    const bB = PANEL.querySelector('.bBaslik span');
+    if(bB) bB.textContent = '📊 HEPSİNİN YORUMU — tur bitti';
+  }
+  $('gonderBtn').disabled = false;
+  kutu.scrollTop = kutu.scrollHeight;
+}
+function durdur(){
+  DURDURULDU = true;
+  for(const c of AKTIF) c.abort();
+  $('gonderBtn').disabled = false;
+}
+
+// ---------- kopyalama ----------
+function metniKopyala(metin){
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(metin)
+      .catch(() => bildir(yedekKopyala(metin)));
+  }else bildir(yedekKopyala(metin));
+}
+function bildir(p){
+  Promise.resolve(p).catch(() => {});
+}
+function yedekKopyala(metin){
+  const ta = document.createElement('textarea');
+  ta.value = metin; ta.style.cssText = 'position:fixed;left:-9999px;top:0;';
+  document.body.appendChild(ta); ta.select();
+  try{ document.execCommand('copy'); }catch(_){}
+  ta.remove();
+}
+function tumunuKopyala(btn){
+  const bolumler = [];
+  for(const is of SONISLER){
+    const t = (is.gov.textContent || '').trim();
+    if(!t || t === '⏳ düşünüyor…' || t === '⏳ yeniden deneniyor…') continue;
+    bolumler.push('══ ' + is.ad + ' ══\n' + t);
+  }
+  if(!bolumler.length){
+    if(btn){ btn.textContent = '⏳ henüz yazı yok'; setTimeout(() => { btn.textContent = '📋 Tümünü Kopyala'; }, 1400); }
+    return;
+  }
+  metniKopyala(bolumler.join('\n\n'));
+  if(btn){
+    const eski = btn.dataset.eski || btn.textContent;
+    btn.dataset.eski = eski; btn.textContent = '✔ kopyalandı';
+    setTimeout(() => { btn.textContent = eski; }, 1400);
+  }
+}
+
+// ---------- 📎 dosya / zip ekleme ----------
+function dosyaSec(){ const g = $('dosyaGiris'); g.value = ''; g.click(); }
+async function dosyaEklendi(e){
+  for(const f of e.target.files){
+    if(f.size > 16 * 1024 * 1024){
+      alert('"' + f.name + '" çok büyük (üst sınır 16 MB).'); continue;
+    }
+    const bekCip = ekCipGoster(f.name + ' ⏳ yükleniyor…');
+    try{
+      const fd = new FormData(); fd.append('dosya', f, f.name);
+      const resp = await fetch('/api/dosya', {method:'POST', body: fd});
+      const cev = await resp.json();
+      if(cev.hata){ bekCip.remove(); alert('"' + f.name + '" → ' + cev.hata); continue; }
+      const ek = {ad: f.name, tur: cev.tur, sayi: cev.dosyalar.length, dosyalar: cev.dosyalar};
+      EKLER.push(ek);
+      bekCip.remove();
+      ekCipGoster(ek, true);
+    }catch(h){
+      bekCip.remove();
+      alert('"' + f.name + '" yüklenemedi: ' + h.message);
+    }
+  }
+  e.target.value = '';
+  notGoster();
+}
+function ekCipGoster(metin, silinebilir){
+  const d = document.createElement('div'); d.className = 'ekCip';
+  const s = document.createElement('span');
+  if(typeof metin === 'object'){
+    const ek = metin;
+    s.textContent = '📎 ' + ek.ad + (ek.tur === 'zip' ? ' (' + ek.sayi + ' dosya)' : '');
+    const x = document.createElement('a'); x.textContent = ' ✖'; x.title = 'Kaldır';
+    x.onclick = () => {
+      EKLER = EKLER.filter(e => e !== ek); d.remove(); notGoster();
+    };
+    d.appendChild(s); d.appendChild(x);
+  }else{
+    s.textContent = '📎 ' + metin; d.appendChild(s);
+  }
+  $('ekler').appendChild(d);
+  return d;
+}
+
+ilkYukleme();
+</script>
+</body>
+</html>

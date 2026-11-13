@@ -1,0 +1,53 @@
+name: test
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: test-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # MODE global olarak ezilmez; yapılandırma testleri live/paper geçişlerini doğrular.
+  PYTHONUNBUFFERED: "1"
+
+jobs:
+  offline-tests:
+    name: Offline test ve lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Kodu indir
+        uses: actions/checkout@v7
+
+      - name: Python 3.11 kur
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Bağımlılıkları kur
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements-dev.txt
+
+      - name: Ruff
+        run: python -m ruff check .
+
+      - name: Byte-compile
+        run: python -m compileall -q src tests
+
+      - name: Regresyon testleri
+        run: python -m pytest -q -W error
+
+      - name: 101 hızlı paper senaryosu
+        run: python test_hizli.py
+
+      - name: 27 bağımsız paper senaryosu
+        run: python test_bot_v7.py

@@ -1,0 +1,17 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+___________________ test_future_price_timestamp_is_rejected ____________________
+
+    def test_future_price_timestamp_is_rejected() -> None:
+        """İlerideki fiyat damgası, negatif yaş nedeniyle yanlışlıkla taze sayılmaz."""
+        pf=_pf()
+        result=pf.open_position('b','X',LONG,100.,100.,leverage=5.,step_size=.001,
+                                now_ms=100_000,price_ts=101_000,poll_interval_ms=60_000)
+>       assert not result.ok and 'gelecek' in result.reason
+E       AssertionError: assert (not True)
+E        +  where True = OpenResult(ok=True, reason='', position=Position(exchange='b', symbol='X', side='LONG', entry_price=100.0, qty_base=5....500.0, 'entry_fee': 0.25, 'post_total': 1, 'post_same_direction': 1, 'utilisation': 0.050125, 'post_balance': 1899.75}).ok
+
+tests/test_pnl_accounting.py:189: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_pnl_accounting.py::test_future_price_timestamp_is_rejected
+1 failed in 0.07s

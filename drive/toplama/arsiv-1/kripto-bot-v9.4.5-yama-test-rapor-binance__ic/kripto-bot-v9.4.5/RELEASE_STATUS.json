@@ -1,0 +1,24 @@
+{
+  "version": "9.4.5",
+  "phase": "1.5",
+  "host_pytest": {
+    "passed": 158,
+    "seconds": 15.84
+  },
+  "docker_pytest": {
+    "passed": 158,
+    "seconds": 17.31
+  },
+  "controlled_pending_http_verified": true,
+  "pending_in_flight_observed_live": true,
+  "real_money_approved": false,
+  "operational_readiness_approved": false,
+  "strategy_parameters_changed": false,
+  "canonical_report": "reports/v945/FINAL_REPORT.md",
+  "natural_cycle_current_run": false,
+  "live_run_status": "COMPLETED",
+  "live_result": "reports/v945/live10m/SONUC.json",
+  "live_sampled_connectivity_checks_passed": true,
+  "background_task_failures": {},
+  "continuity_gap_count": 0
+}

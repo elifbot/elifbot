@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kripto Bot Ekibi — Bot Odası + Konsensus Sinyalleri</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header>
+  <div class="logo">🤖 Kripto Bot Ekibi</div>
+  <div class="sub">İsimli AI Bot Kadrosu • Bot Odası • Konsensus Long/Short Sinyalleri</div>
+  <div id="model-chips" class="chips"></div>
+  <div id="bildirim-badge" class="badge"></div>
+</header>
+
+<main class="grid">
+  <aside>
+    <section class="card">
+      <h3>👥 Bot Kadrosu</h3>
+      <div id="bot-liste"></div>
+      <details class="bot-ekle">
+        <summary>➕ Bot Ekle</summary>
+        <input id="bot-ad" placeholder="Bot adı (ör: Kovan)" spellcheck="false">
+        <div class="row">
+          <input id="bot-emoji" placeholder="🐝" maxlength="4" style="flex:0 0 64px">
+          <select id="bot-rol"></select>
+        </div>
+        <select id="bot-model"></select>
+        <button id="btn-bot-ekle" class="btn primary">Kadroya Ekle</button>
+        <p id="bot-ekle-mesaj" class="hint"></p>
+      </details>
+      <p class="hint">Her bot ayrı bir AI modelidir. Rolünü/modelini değiştirebilir,
+      pasife alabilir veya kadrodan çıkarabilirsin. Botlar odaya yazdığında
+      gerçekten kendi modeli konuşur.</p>
+    </section>
+
+    <section class="card">
+      <h3>🔎 Sembol Analizi</h3>
+      <input id="sembol" placeholder="BTCUSDT" spellcheck="false">
+      <button id="btn-analiz" class="btn primary">🧠 Bot Ekibiyle Analiz Et</button>
+      <div id="hizli" class="quick"></div>
+      <div id="analiz-durum" class="status hidden"></div>
+    </section>
+
+    <section class="card">
+      <h3>👁 İzleme Listesi</h3>
+      <div class="row">
+        <input id="izle-sembol" placeholder="SOLUSDT" spellcheck="false">
+        <button id="btn-izle" class="btn">Ekle</button>
+      </div>
+      <ul id="izleme-liste" class="izleme"></ul>
+      <p class="hint">Listedeki semboller her <b id="aralik-info">15</b> dakikada taranır.
+      Eşik aşılırsa bot ekibi konsensusu doğrular, geçerse <b>masaüstü bildirimi</b> gelir.</p>
+    </section>
+
+    <section class="card">
+      <h3>⚙️ Ayarlar</h3>
+      <label>Tarama aralığı (dk)
+        <input id="ayar-dk" type="number" min="5" max="240"></label>
+      <label>Alarm eşiği (|teknik skor|)
+        <input id="ayar-esik" type="number" min="10" max="80"></label>
+      <button id="btn-ayar" class="btn">Kaydet</button>
+      <p id="ayar-mesaj" class="hint"></p>
+    </section>
+  </aside>
+
+  <section class="main">
+    <section class="card oda-card">
+      <h3>💬 Bot Odası
+        <button id="btn-oda-temizle" class="btn small">Temizle</button></h3>
+      <div id="oda-mesajlar" class="oda-mesajlar"></div>
+      <div id="oda-mesgul" class="status hidden"><span class="spin"></span>Botlar çalışıyor…</div>
+      <div class="row oda-giris">
+        <input id="oda-metin" spellcheck="false"
+          placeholder="Bota görev ver: 'BTC analiz et', 'piyasayı tara', 'Hakem ne düşünür?'">
+        <button id="btn-oda-gonder" class="btn primary" style="width:auto">Gönder</button>
+      </div>
+      <div id="oda-hizli" class="quick"></div>
+    </section>
+
+    <div id="sonuc" class="hidden"></div>
+
+    <section class="card">
+      <h3>🔍 Piyasa Taraması
+        <button id="btn-tarama" class="btn small">Tara</button></h3>
+      <div id="tarama-alan"><p class="hint">"Tara" düğmesine bas — popüler coinler teknik skorla sıralanır. Dilersen bot odaya da "piyasayı tara" görevi verebilirsin; Tarayıcı bot yorumuyla özetler.</p></div>
+    </section>
+
+    <section class="card">
+      <h3>🚨 Son Alarmlar</h3>
+      <table id="alarm-tablo" class="tablo"></table>
+    </section>
+
+    <section class="card">
+      <h3>🕓 Son Analizler</h3>
+      <table id="gecmis-tablo" class="tablo"></table>
+    </section>
+  </section>
+</main>
+
+<footer>
+  ⚠️ Tüm sinyaller otomatik bot analizi ve teknik motorla üretilir,
+  <b>yatırım tavsiyesi değildir</b>.
+  Vadeli işlemler kaldıraç nedeniyle yüksek risk taşır.
+  <span id="panel-sag"></span>
+</footer>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

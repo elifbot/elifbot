@@ -1,0 +1,3 @@
+# Süper sürüm — yalnızca paper trading, ağır bağımlılık yok
+aiohttp>=3.9
+pytest>=8.0

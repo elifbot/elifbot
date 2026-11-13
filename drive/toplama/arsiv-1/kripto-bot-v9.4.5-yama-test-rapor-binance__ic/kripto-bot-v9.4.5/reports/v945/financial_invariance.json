@@ -1,0 +1,12 @@
+{
+  "compared_module_count": 62,
+  "byte_mismatches": [],
+  "config_equal_except_version": true,
+  "runtime_operational_behavior_changed": [
+    "background failure stops new entries and FAILED shutdown",
+    "lease renewal failure no longer ignored",
+    "monotonic deadlines and discontinuity status",
+    "liveness alarms and timing telemetry"
+  ],
+  "no_strategy_parameter_changes": true
+}

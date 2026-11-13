@@ -1,0 +1,7 @@
+{
+  "verify_paper_ledger_integrity": {
+    "old_sha256": "ad624dfe5103ec6a1ddc3e4c7a29af1d7b6f7df0c9c1011dc4a9247b577d3513",
+    "new_sha256": "ad624dfe5103ec6a1ddc3e4c7a29af1d7b6f7df0c9c1011dc4a9247b577d3513",
+    "identical": true
+  }
+}

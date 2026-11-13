@@ -1,0 +1,23 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_________ test_long_unobserved_flat_overnight_gap_does_not_reset_risk __________
+
+tmp_path = PosixPath('/tmp/pytest-of-user/pytest-304/test_long_unobserved_flat_over0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fa2a9db7100>
+
+    def test_long_unobserved_flat_overnight_gap_does_not_reset_risk(tmp_path,monkeypatch):
+        noon1=int(datetime(2026,10,30,12,0,tzinfo=timezone.utc).timestamp()*1000)
+        noon2=int(datetime(2026,10,31,12,0,tzinfo=timezone.utc).timestamp()*1000)
+        monkeypatch.setattr(ws_bot.time,'time',lambda:noon1/1000)
+        b=make_bot(tmp_path,monkeypatch)
+        assert b._gunluk_risk_guncelle(noon1)==(True,'')
+        b.portfoy.balance=940.;b.portfoy.day_start_balance=1000.
+        monkeypatch.setattr(ws_bot.time,'time',lambda:noon2/1000)
+        ok,reason=b._gunluk_risk_guncelle(noon2)
+>       assert not ok and reason=='gunluk_risk_bilinmiyor'
+E       assert (not True)
+
+tests/test_utc_gunluk_risk.py:157: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_utc_gunluk_risk.py::test_long_unobserved_flat_overnight_gap_does_not_reset_risk
+1 failed in 0.25s

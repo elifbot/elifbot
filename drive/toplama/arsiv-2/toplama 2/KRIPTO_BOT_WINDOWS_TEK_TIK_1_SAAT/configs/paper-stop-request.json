@@ -1,0 +1,6 @@
+{
+  "run_id": 40173738048,
+  "reason": "URL formatli Telegram token ayiklayici ve getMe+sendMessage kesin dogrulamasi ile yeni 60 dakikalik oturuma geciliyor.",
+  "real_orders": false,
+  "requested_at": "2026-10-25T10:49:00+03:00"
+}

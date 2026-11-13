@@ -1,0 +1,14 @@
+{
+  "request": "v7.6-pure-crypto-cross-harmony-profit-shield-1000-usdt-60m",
+  "requested_at": "2026-10-25T15:25:00+03:00",
+  "config_profile": "controlled-60-v2-1000-no-cross-rescue",
+  "duration_minutes": 60,
+  "runner": "ubuntu-latest",
+  "mode": "paper",
+  "real_orders": false,
+  "baseline_strategy_changes": true,
+  "starting_balance_usdt": 1000.0,
+  "margin_per_trade_usdt": 50.0,
+  "leverage": 10,
+  "note": "KRIPTO-BOT v7.6: %100 saf kripto USDT-M Futures (AAOI/COHR/VRT dahil tam hisse filtresi), Capraz Ortak Kasa, Canli Technical-Harmony & Range Kalkani, 2 Kademeli Net Kar Kilidi (+0.50%->+0.12%), Erken Panik Cikisi KAPALI ve 28/28 Kar Kosusu ile 60 dakikalik 1000 USDT canli veri testi."
+}

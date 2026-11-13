@@ -1,0 +1,3 @@
+# v35n H-01 adayı — KABUL EDİLMEDİ
+
+Kullanıcının sentetik betiği SYN_RC=0 bildirdi; C ve E senaryolarında sonuç doğrulayan assert yoktur. Bağımsız gerçek detektör ve sentetik saat testlerinde 4 geçti, 1 başarısız (`/home/user/v35n_guvenlik_kapsam.log`): 19 saniyelik doğrulanmamış boşluk daha sıkı fail-closed kabulünü karşılamadı. Bu 20 saniye eşiği tasarımı açısından beklenen sonuçtur ve gerçek veri kaybı kanıtı değildir. H-01/P0 açıktır; tam regresyon ve v35n smoke yapılmadı. Kopyada kalan `tests/test_v35m_guvenlik_kapsam.py` eski sayaç adını bekler; sonraki regresyondan önce anlamı korunarak güncellenmelidir. Ayrıntı: `/home/user/V34_Gevset_Smoke_ve_V35n_Kabul_Raporu.md`.

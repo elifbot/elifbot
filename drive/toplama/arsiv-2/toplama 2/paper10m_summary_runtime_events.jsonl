@@ -1,0 +1,8 @@
+{"event": "EVENT_LOOP_DELAY", "epoch": 1793708148.3617837, "monotonic": 39418.064223488, "requested_sec": 1.0, "observed_monotonic_sec": 2.0604393550020177, "excess_sec": 1.0604393550020177}
+{"event": "EVENT_LOOP_DELAY", "epoch": 1793708167.123568, "monotonic": 39436.826007924, "requested_sec": 1.0, "observed_monotonic_sec": 2.1661113100053626, "excess_sec": 1.1661113100053626}
+{"event": "EVENT_LOOP_DELAY", "epoch": 1793708550.1714156, "monotonic": 39819.873855234, "requested_sec": 1.0, "observed_monotonic_sec": 3.416445108996413, "excess_sec": 2.416445108996413}
+{"event": "EVENT_LOOP_DELAY", "epoch": 1793708554.2038853, "monotonic": 39823.906325003, "requested_sec": 1.0, "observed_monotonic_sec": 4.0323390339981415, "excess_sec": 3.0323390339981415}
+{"event": "EVENT_LOOP_DELAY", "epoch": 1793708556.3023882, "monotonic": 39826.004827789, "requested_sec": 1.0, "observed_monotonic_sec": 2.098295969000901, "excess_sec": 1.098295969000901}
+{"event": "RUN_DISCONTINUITY", "epoch": 1793708573.2059233, "monotonic": 39842.908362932, "requested_sec": 1.0, "observed_monotonic_sec": 5.220222342999477, "observed_wall_sec": 5.220222473144531, "wall_monotonic_skew_sec": 1.3014505384489894e-07}
+{"event": "EVENT_LOOP_DELAY", "epoch": 1793708575.86749, "monotonic": 39845.569929736, "requested_sec": 1.0, "observed_monotonic_sec": 2.6614013110011, "excess_sec": 1.6614013110011001}
+{"event": "EVENT_LOOP_DELAY", "epoch": 1793708578.0587184, "monotonic": 39847.761158198, "requested_sec": 1.0, "observed_monotonic_sec": 2.191111157000705, "excess_sec": 1.1911111570007051}

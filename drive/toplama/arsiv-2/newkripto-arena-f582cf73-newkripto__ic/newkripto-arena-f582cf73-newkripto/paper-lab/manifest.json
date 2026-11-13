@@ -1,0 +1,122 @@
+{
+  "schema": "paper-lab-manifest-v1",
+  "project": "kripto-bot-paper-lab",
+  "source_repository": "omeracar56/kripto-bot",
+  "branch": "arena/787d4de8-kripto-bot",
+  "created_at": "2026-10-24",
+  "archive_repository": {
+    "requested_name": "omeracar56/kripto-bot-paper-lab",
+    "status": "createRepository permission denied by integration; archived as paper-lab/ in source repository"
+  },
+  "main_experiments": [
+    {
+      "run_id": 39969507314,
+      "role": "main-1",
+      "starting_balance_usdt": 100000.0,
+      "duration_hours": 5.91667,
+      "code_sha": "de4f137",
+      "cross_rescue": true,
+      "exchanges_evidence": [
+        "okx"
+      ],
+      "report": "analysis/run_39969507314/GENEL_ANALIZ.md",
+      "status": "completed-success",
+      "caution": "872 duplicate close records; OKX-only; reported net is not a clean strategy result"
+    },
+    {
+      "run_id": 40077757773,
+      "role": "main-2",
+      "starting_balance_usdt": 100000.0,
+      "duration_hours": 2.0,
+      "code_sha": "1d7099b",
+      "cross_rescue": false,
+      "exchanges_evidence": [
+        "binance",
+        "okx"
+      ],
+      "report": "analysis/run_40077757773/sonuc-ozeti.md",
+      "status": "completed-success",
+      "caution": "55 session-end closes are separate from the 30 natural bot-close cohort"
+    },
+    {
+      "run_id": 40090692312,
+      "role": "main-3",
+      "starting_balance_usdt": 1000.0,
+      "duration_minutes": 60,
+      "code_sha": "1804883",
+      "cross_rescue": false,
+      "shadow_enabled": true,
+      "exchanges_required": [
+        "binance",
+        "okx"
+      ],
+      "report": "analysis/run_40090692312/",
+      "status": "completed-success",
+      "caution": "All nine closes were FLASH CRASH insurance; no natural trailing/order-flow cohort; small single-period sample",
+      "closeout_completed": true,
+      "entries": 9,
+      "closes": 9,
+      "open_positions": 0,
+      "net_pnl_usdt": -3.047808707782033,
+      "profit_factor": 0.2583842330300485,
+      "insurance_close_count": 9,
+      "natural_close_count": 0
+    }
+  ],
+  "planned_experiments": [
+    {
+      "request": "pdf-v2-1000-usdt-120m-shadow",
+      "role": "pdf-v2-controlled-shadow",
+      "starting_balance_usdt": 1000.0,
+      "duration_minutes": 120,
+      "margin_per_trade_usdt": 50.0,
+      "leverage": 10,
+      "cross_rescue": false,
+      "exchanges_required": [
+        "binance",
+        "okx"
+      ],
+      "config_profile": "controlled-v2-1000-no-cross-rescue",
+      "request_file": "configs/paper-120-v2-request.json",
+      "status": "in_progress",
+      "caution": "Run ID and final trade/Shadow metrics will be added only after hosted execution",
+      "v2_code_sha": "33cd433",
+      "run_id": 40095304624,
+      "run_url": "https://github.com/omeracar56/kripto-bot/actions/runs/40095304624",
+      "code_sha": "a5b8d0e",
+      "started_at": "2026-10-24T12:46:13Z",
+      "preflight_status": "passed",
+      "v2_safety_assertions": "passed"
+    }
+  ],
+  "research_artifacts": [
+    "paper-lab/PDF_INDIKATOR_ANALIZI.md",
+    "paper-lab/references/",
+    "src/pdf_indicators.py",
+    "tests/test_pdf_indicators.py"
+  ],
+  "supporting_experiments": [
+    {
+      "run_id": 40065026239,
+      "role": "one-hour-control",
+      "report": "analysis/run_40065026239/GENEL_ANALIZ.md",
+      "status": "completed-success",
+      "caution": "74 open positions at session end; OKX-only"
+    },
+    {
+      "run_id": 40088524013,
+      "role": "early-20-minute-review",
+      "report": "analysis/run_40088524013/20-dakika-inceleme.md",
+      "status": "completed-cancelled",
+      "caution": "All six closes were flash-crash insurance; no final Shadow report"
+    }
+  ],
+  "indexes": [
+    "analysis/project-actions-index.json",
+    "analysis/project-git-history.txt",
+    "paper-lab/three-run-metrics.json",
+    "PROJECT_MEMORY.md"
+  ],
+  "real_orders": false,
+  "auto_live_promotion": false
+}

@@ -1,0 +1,37 @@
+{
+  "name": "60m-1000-usdt-v7.3-pdf-v3-shadow",
+  "description": "v7.3 iyilestirmeleri (BTC/ETH kapsamli global Flash Crash sigortasi, kripto-disi hisse/ETF kontrat filtresi, 1000* ikiz varlik korumasi, canli volatility-gate + komisyon-ustu net-exit, duzeltilmis flow-confidence emir defteri olcumu) ve PDF v2 + PDF v3 + ucretsiz turev istihbarati paketiyle 60 dakikalik 1000 USDT paper oturumu.",
+  "overrides": {
+    "paper": {
+      "bakiye": 1000.0
+    },
+    "risk": {
+      "capraz_kurtarma": false
+    },
+    "shadow_lab": {
+      "aktif": true,
+      "sanal_kasa_usdt": 1000.0,
+      "pdf_confluence": {
+        "aktif": true,
+        "min_aligned_families": 4,
+        "max_opposed_families": 2
+      },
+      "pdf_v3_confluence": {
+        "aktif": true,
+        "min_aligned_signals": 2,
+        "max_opposed_signals": 2
+      }
+    },
+    "pdf_v2": {
+      "aktif": true
+    },
+    "pdf_v3": {
+      "aktif": true,
+      "turev_istihbarat_aktif": true,
+      "turev_cache_sn": 180.0,
+      "asiri_kalabalik_engeli": true
+    }
+  },
+  "paper_session_minutes": 60,
+  "do_not_auto_promote": false
+}

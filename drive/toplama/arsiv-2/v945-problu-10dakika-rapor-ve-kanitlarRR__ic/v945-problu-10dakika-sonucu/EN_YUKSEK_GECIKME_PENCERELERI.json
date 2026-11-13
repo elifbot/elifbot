@@ -1,0 +1,617 @@
+[
+  {
+    "epoch": 1793713634.2772768,
+    "monotonic": 1032.276393665,
+    "window_elapsed_ms": 1210.8600319998004,
+    "phase": "ACTIVE",
+    "final": false,
+    "open_positions": 0,
+    "loop_lag_max_ms": 1160.6017930000235,
+    "loop_lag_event": {
+      "sleep_start_epoch": 1793713633.0665154,
+      "wake_epoch": 1793713634.2771173,
+      "requested_ms": 50.0,
+      "observed_ms": 1210.6017930000235
+    },
+    "recorder_ns_this_window": 8369942,
+    "recorder_ns_total": 3721224343,
+    "write_ns_total_before_this_row": 63982975,
+    "write_ns_max_before_this_row": 543807,
+    "stats": {
+      "on_price_tick": {
+        "n": 4973,
+        "total_ms": 29.474359990217636,
+        "max_ms": 0.17832300000009127,
+        "max_start_epoch": 1793713634.1568084,
+        "max_end_epoch": 1793713634.1569867,
+        "context": {
+          "symbol": "BTC/USDT",
+          "exchange": "binance"
+        }
+      },
+      "on_trade": {
+        "n": 681,
+        "total_ms": 1042.1721830000479,
+        "max_ms": 89.38412399993467,
+        "max_start_epoch": 1793713634.1593733,
+        "max_end_epoch": 1793713634.2487574,
+        "context": {
+          "exchange": "binance",
+          "symbol": "ZEC/USDT"
+        }
+      },
+      "build_state_payload": {
+        "n": 1,
+        "total_ms": 3.132423000124618,
+        "max_ms": 3.132423000124618,
+        "max_start_epoch": 1793713633.966063,
+        "max_end_epoch": 1793713633.9691956,
+        "context": {}
+      }
+    },
+    "scope": "inclusive wall durations; nested/overlapping calls MUST NOT be summed as CPU use; probe changes timing"
+  },
+  {
+    "epoch": 1793713223.3393974,
+    "monotonic": 621.338505407,
+    "window_elapsed_ms": 1664.927372999955,
+    "phase": "ACTIVE",
+    "final": false,
+    "open_positions": 0,
+    "loop_lag_max_ms": 1150.8600919999708,
+    "loop_lag_event": {
+      "sleep_start_epoch": 1793713222.1385157,
+      "wake_epoch": 1793713223.339376,
+      "requested_ms": 50.0,
+      "observed_ms": 1200.8600919999708
+    },
+    "recorder_ns_this_window": 16581081,
+    "recorder_ns_total": 711207183,
+    "write_ns_total_before_this_row": 10749700,
+    "write_ns_max_before_this_row": 543807,
+    "stats": {
+      "on_price_tick": {
+        "n": 10232,
+        "total_ms": 52.62412600131938,
+        "max_ms": 0.2397389999941879,
+        "max_start_epoch": 1793713221.7023318,
+        "max_end_epoch": 1793713221.7025716,
+        "context": {
+          "symbol": "ZEC/USDT",
+          "exchange": "okx"
+        }
+      },
+      "on_trade": {
+        "n": 753,
+        "total_ms": 440.84049099888034,
+        "max_ms": 20.540353999990657,
+        "max_start_epoch": 1793713221.6820521,
+        "max_end_epoch": 1793713221.7025926,
+        "context": {
+          "exchange": "okx",
+          "symbol": "ZEC/USDT"
+        }
+      },
+      "_rows_to_df": {
+        "n": 2,
+        "total_ms": 2.200971000092977,
+        "max_ms": 1.111451000042507,
+        "max_start_epoch": 1793713223.2682288,
+        "max_end_epoch": 1793713223.2693403,
+        "context": {}
+      },
+      "acquire_writer_lease": {
+        "n": 1,
+        "total_ms": 3.4880270000030578,
+        "max_ms": 3.4880270000030578,
+        "max_start_epoch": 1793713222.1385531,
+        "max_end_epoch": 1793713222.1420412,
+        "context": {
+          "symbol": "kripto-bot-v94-main"
+        }
+      },
+      "evaluate_and_route": {
+        "n": 55,
+        "total_ms": 778.7703420004846,
+        "max_ms": 46.54672699996354,
+        "max_start_epoch": 1793713222.5191927,
+        "max_end_epoch": 1793713222.5657394,
+        "context": {
+          "exchange": "binance",
+          "symbol": "WIF/USDT"
+        }
+      },
+      "features": {
+        "n": 23,
+        "total_ms": 213.05600100015454,
+        "max_ms": 13.59411100008856,
+        "max_start_epoch": 1793713222.3653152,
+        "max_end_epoch": 1793713222.3789093,
+        "context": {
+          "bar_open_ms": 1793712900000
+        }
+      },
+      "market_context": {
+        "n": 23,
+        "total_ms": 559.4193940002015,
+        "max_ms": 34.71934100002727,
+        "max_start_epoch": 1793713222.530972,
+        "max_end_epoch": 1793713222.5656915,
+        "context": {
+          "bar_open_ms": 1793712900000
+        }
+      }
+    },
+    "scope": "inclusive wall durations; nested/overlapping calls MUST NOT be summed as CPU use; probe changes timing"
+  },
+  {
+    "epoch": 1793713727.035905,
+    "monotonic": 1125.035020151,
+    "window_elapsed_ms": 1165.2280759999485,
+    "phase": "ACTIVE",
+    "final": false,
+    "open_positions": 0,
+    "loop_lag_max_ms": 1115.0692029998027,
+    "loop_lag_event": {
+      "sleep_start_epoch": 1793713725.870823,
+      "wake_epoch": 1793713727.035892,
+      "requested_ms": 50.0,
+      "observed_ms": 1165.0692029998027
+    },
+    "recorder_ns_this_window": 8185344,
+    "recorder_ns_total": 4403125159,
+    "write_ns_total_before_this_row": 76693386,
+    "write_ns_max_before_this_row": 543807,
+    "stats": {
+      "_rows_to_df": {
+        "n": 1,
+        "total_ms": 1.301762999901257,
+        "max_ms": 1.301762999901257,
+        "max_start_epoch": 1793713725.87505,
+        "max_end_epoch": 1793713725.8763518,
+        "context": {}
+      },
+      "on_price_tick": {
+        "n": 5406,
+        "total_ms": 27.874628002791724,
+        "max_ms": 0.09482499990554061,
+        "max_start_epoch": 1793713726.871514,
+        "max_end_epoch": 1793713726.871609,
+        "context": {
+          "symbol": "XRP/USDT",
+          "exchange": "okx"
+        }
+      },
+      "on_trade": {
+        "n": 1027,
+        "total_ms": 1008.4711299959963,
+        "max_ms": 68.88657499985129,
+        "max_start_epoch": 1793713726.5857098,
+        "max_end_epoch": 1793713726.6545963,
+        "context": {
+          "exchange": "binance",
+          "symbol": "SOL/USDT"
+        }
+      }
+    },
+    "scope": "inclusive wall durations; nested/overlapping calls MUST NOT be summed as CPU use; probe changes timing"
+  },
+  {
+    "epoch": 1793713601.1663604,
+    "monotonic": 999.165477171,
+    "window_elapsed_ms": 1088.5958110000047,
+    "phase": "ACTIVE",
+    "final": false,
+    "open_positions": 0,
+    "loop_lag_max_ms": 1038.4515789999796,
+    "loop_lag_event": {
+      "sleep_start_epoch": 1793713600.0778985,
+      "wake_epoch": 1793713601.1663501,
+      "requested_ms": 50.0,
+      "observed_ms": 1088.4515789999796
+    },
+    "recorder_ns_this_window": 12019103,
+    "recorder_ns_total": 3439174105,
+    "write_ns_total_before_this_row": 59394239,
+    "write_ns_max_before_this_row": 543807,
+    "stats": {
+      "on_price_tick": {
+        "n": 7045,
+        "total_ms": 40.29869000032704,
+        "max_ms": 0.20822099997985788,
+        "max_start_epoch": 1793713600.8018355,
+        "max_end_epoch": 1793713600.8020437,
+        "context": {
+          "symbol": "BTC/USDT",
+          "exchange": "binance"
+        }
+      },
+      "on_trade": {
+        "n": 662,
+        "total_ms": 802.1531899987622,
+        "max_ms": 61.307490999979564,
+        "max_start_epoch": 1793713600.9083016,
+        "max_end_epoch": 1793713600.969609,
+        "context": {
+          "exchange": "okx",
+          "symbol": "ZEC/USDT"
+        }
+      },
+      "acquire_writer_lease": {
+        "n": 1,
+        "total_ms": 2.9817349999348153,
+        "max_ms": 2.9817349999348153,
+        "max_start_epoch": 1793713600.7134624,
+        "max_end_epoch": 1793713600.716444,
+        "context": {
+          "symbol": "kripto-bot-v94-main"
+        }
+      },
+      "evaluate_and_route": {
+        "n": 75,
+        "total_ms": 2.4838840002985307,
+        "max_ms": 0.08778800008713006,
+        "max_start_epoch": 1793713600.7528646,
+        "max_end_epoch": 1793713600.7529523,
+        "context": {
+          "exchange": "binance",
+          "symbol": "XRP/USDT"
+        }
+      }
+    },
+    "scope": "inclusive wall durations; nested/overlapping calls MUST NOT be summed as CPU use; probe changes timing"
+  },
+  {
+    "epoch": 1793713724.4996276,
+    "monotonic": 1122.498747099,
+    "window_elapsed_ms": 1446.9933240000046,
+    "phase": "ACTIVE",
+    "final": false,
+    "open_positions": 0,
+    "loop_lag_max_ms": 1017.5319510000918,
+    "loop_lag_event": {
+      "sleep_start_epoch": 1793713723.4320872,
+      "wake_epoch": 1793713724.4996192,
+      "requested_ms": 50.0,
+      "observed_ms": 1067.5319510000918
+    },
+    "recorder_ns_this_window": 10115050,
+    "recorder_ns_total": 4379828071,
+    "write_ns_total_before_this_row": 76463345,
+    "write_ns_max_before_this_row": 543807,
+    "stats": {
+      "on_price_tick": {
+        "n": 4908,
+        "total_ms": 31.24072298714964,
+        "max_ms": 0.4857840001477598,
+        "max_start_epoch": 1793713723.4682846,
+        "max_end_epoch": 1793713723.4687703,
+        "context": {
+          "symbol": "ENA/USDT",
+          "exchange": "okx"
+        }
+      },
+      "on_trade": {
+        "n": 884,
+        "total_ms": 1032.6501590079715,
+        "max_ms": 83.35664600008386,
+        "max_start_epoch": 1793713724.400035,
+        "max_end_epoch": 1793713724.4833915,
+        "context": {
+          "exchange": "okx",
+          "symbol": "ZEC/USDT"
+        }
+      },
+      "_rows_to_df": {
+        "n": 2,
+        "total_ms": 2.6528599998982827,
+        "max_ms": 1.545580999845697,
+        "max_start_epoch": 1793713723.117551,
+        "max_end_epoch": 1793713723.1190965,
+        "context": {}
+      }
+    },
+    "scope": "inclusive wall durations; nested/overlapping calls MUST NOT be summed as CPU use; probe changes timing"
+  },
+  {
+    "epoch": 1793713633.0664132,
+    "monotonic": 1031.065533633,
+    "window_elapsed_ms": 1677.6835370001209,
+    "phase": "ACTIVE",
+    "final": false,
+    "open_positions": 0,
+    "loop_lag_max_ms": 1010.1588870001706,
+    "loop_lag_event": {
+      "sleep_start_epoch": 1793713632.0062475,
+      "wake_epoch": 1793713633.0664062,
+      "requested_ms": 50.0,
+      "observed_ms": 1060.1588870001706
+    },
+    "recorder_ns_this_window": 18435773,
+    "recorder_ns_total": 3712854401,
+    "write_ns_total_before_this_row": 63888861,
+    "write_ns_max_before_this_row": 543807,
+    "stats": {
+      "on_price_tick": {
+        "n": 8468,
+        "total_ms": 61.35885598382629,
+        "max_ms": 0.5091230000289215,
+        "max_start_epoch": 1793713631.9312081,
+        "max_end_epoch": 1793713631.9317172,
+        "context": {
+          "symbol": "BTC/USDT",
+          "exchange": "binance"
+        }
+      },
+      "on_trade": {
+        "n": 681,
+        "total_ms": 1137.5638889992388,
+        "max_ms": 106.74247400015702,
+        "max_start_epoch": 1793713632.305424,
+        "max_end_epoch": 1793713632.4121664,
+        "context": {
+          "exchange": "okx",
+          "symbol": "BTC/USDT"
+        }
+      }
+    },
+    "scope": "inclusive wall durations; nested/overlapping calls MUST NOT be summed as CPU use; probe changes timing"
+  },
+  {
+    "epoch": 1793713524.9574778,
+    "monotonic": 922.956594279,
+    "window_elapsed_ms": 1764.2073319999554,
+    "phase": "ACTIVE",
+    "final": false,
+    "open_positions": 0,
+    "loop_lag_max_ms": 976.2588490001008,
+    "loop_lag_event": {
+      "sleep_start_epoch": 1793713523.931208,
+      "wake_epoch": 1793713524.9574666,
+      "requested_ms": 50.0,
+      "observed_ms": 1026.2588490001008
+    },
+    "recorder_ns_this_window": 12356420,
+    "recorder_ns_total": 2892150194,
+    "write_ns_total_before_this_row": 50374847,
+    "write_ns_max_before_this_row": 543807,
+    "stats": {
+      "on_price_tick": {
+        "n": 7712,
+        "total_ms": 44.6351269989691,
+        "max_ms": 0.6539409999959389,
+        "max_start_epoch": 1793713524.908879,
+        "max_end_epoch": 1793713524.909533,
+        "context": {
+          "symbol": "ZEC/USDT",
+          "exchange": "binance"
+        }
+      },
+      "_rows_to_df": {
+        "n": 3,
+        "total_ms": 3.979626999921493,
+        "max_ms": 1.47357099990586,
+        "max_start_epoch": 1793713523.4761708,
+        "max_end_epoch": 1793713523.4776444,
+        "context": {}
+      },
+      "on_trade": {
+        "n": 1059,
+        "total_ms": 1203.0744819990105,
+        "max_ms": 52.898733999995784,
+        "max_start_epoch": 1793713524.4669611,
+        "max_end_epoch": 1793713524.5198598,
+        "context": {
+          "exchange": "okx",
+          "symbol": "LINK/USDT"
+        }
+      },
+      "build_state_payload": {
+        "n": 1,
+        "total_ms": 4.075524999961999,
+        "max_ms": 4.075524999961999,
+        "max_start_epoch": 1793713523.3745651,
+        "max_end_epoch": 1793713523.3786407,
+        "context": {}
+      }
+    },
+    "scope": "inclusive wall durations; nested/overlapping calls MUST NOT be summed as CPU use; probe changes timing"
+  },
+  {
+    "epoch": 1793713600.0777643,
+    "monotonic": 998.07688136,
+    "window_elapsed_ms": 1331.6750449999972,
+    "phase": "ACTIVE",
+    "final": false,
+    "open_positions": 0,
+    "loop_lag_max_ms": 933.6845929999072,
+    "loop_lag_event": {
+      "sleep_start_epoch": 1793713599.0940685,
+      "wake_epoch": 1793713600.077753,
+      "requested_ms": 50.0,
+      "observed_ms": 983.6845929999072
+    },
+    "recorder_ns_this_window": 14074110,
+    "recorder_ns_total": 3427155002,
+    "write_ns_total_before_this_row": 59272209,
+    "write_ns_max_before_this_row": 543807,
+    "stats": {
+      "on_price_tick": {
+        "n": 9144,
+        "total_ms": 47.53307500163828,
+        "max_ms": 0.24886599999263126,
+        "max_start_epoch": 1793713598.880878,
+        "max_end_epoch": 1793713598.8811269,
+        "context": {
+          "symbol": "ETH/USDT",
+          "exchange": "binance"
+        }
+      },
+      "on_trade": {
+        "n": 765,
+        "total_ms": 1054.0637819985932,
+        "max_ms": 63.68703900000128,
+        "max_start_epoch": 1793713599.6419263,
+        "max_end_epoch": 1793713599.7056134,
+        "context": {
+          "exchange": "okx",
+          "symbol": "PEPE/USDT"
+        }
+      },
+      "build_state_payload": {
+        "n": 1,
+        "total_ms": 4.072689000054197,
+        "max_ms": 4.072689000054197,
+        "max_start_epoch": 1793713599.8175797,
+        "max_end_epoch": 1793713599.8216527,
+        "context": {}
+      }
+    },
+    "scope": "inclusive wall durations; nested/overlapping calls MUST NOT be summed as CPU use; probe changes timing"
+  },
+  {
+    "epoch": 1793713540.7967541,
+    "monotonic": 938.795869487,
+    "window_elapsed_ms": 1440.6185599999617,
+    "phase": "ACTIVE",
+    "final": false,
+    "open_positions": 0,
+    "loop_lag_max_ms": 924.9636330000158,
+    "loop_lag_event": {
+      "sleep_start_epoch": 1793713539.8217769,
+      "wake_epoch": 1793713540.7967405,
+      "requested_ms": 50.0,
+      "observed_ms": 974.9636330000158
+    },
+    "recorder_ns_this_window": 8885502,
+    "recorder_ns_total": 3022477042,
+    "write_ns_total_before_this_row": 52313738,
+    "write_ns_max_before_this_row": 543807,
+    "stats": {
+      "on_price_tick": {
+        "n": 5404,
+        "total_ms": 30.432809001695205,
+        "max_ms": 0.13127099998655467,
+        "max_start_epoch": 1793713539.546701,
+        "max_end_epoch": 1793713539.5468323,
+        "context": {
+          "symbol": "BTC/USDT",
+          "exchange": "binance"
+        }
+      },
+      "on_trade": {
+        "n": 980,
+        "total_ms": 1031.0471769987544,
+        "max_ms": 52.71295700003975,
+        "max_start_epoch": 1793713539.7366452,
+        "max_end_epoch": 1793713539.7893581,
+        "context": {
+          "exchange": "okx",
+          "symbol": "PEPE/USDT"
+        }
+      },
+      "build_state_payload": {
+        "n": 1,
+        "total_ms": 6.01881099998991,
+        "max_ms": 6.01881099998991,
+        "max_start_epoch": 1793713539.6745746,
+        "max_end_epoch": 1793713539.6805935,
+        "context": {}
+      }
+    },
+    "scope": "inclusive wall durations; nested/overlapping calls MUST NOT be summed as CPU use; probe changes timing"
+  },
+  {
+    "epoch": 1793713519.1141438,
+    "monotonic": 917.113258623,
+    "window_elapsed_ms": 1070.543708999935,
+    "phase": "ACTIVE",
+    "final": false,
+    "open_positions": 0,
+    "loop_lag_max_ms": 918.9507499999763,
+    "loop_lag_event": {
+      "sleep_start_epoch": 1793713518.145178,
+      "wake_epoch": 1793713519.1141288,
+      "requested_ms": 50.0,
+      "observed_ms": 968.9507499999763
+    },
+    "recorder_ns_this_window": 3778065,
+    "recorder_ns_total": 2852460105,
+    "write_ns_total_before_this_row": 49721635,
+    "write_ns_max_before_this_row": 543807,
+    "stats": {
+      "on_price_tick": {
+        "n": 2216,
+        "total_ms": 11.508967999475317,
+        "max_ms": 0.12352999999620806,
+        "max_start_epoch": 1793713518.7799468,
+        "max_end_epoch": 1793713518.7800703,
+        "context": {
+          "symbol": "CRV/USDT",
+          "exchange": "binance"
+        }
+      },
+      "on_trade": {
+        "n": 302,
+        "total_ms": 303.8397229997827,
+        "max_ms": 52.33625400001074,
+        "max_start_epoch": 1793713518.8138528,
+        "max_end_epoch": 1793713518.866189,
+        "context": {
+          "exchange": "okx",
+          "symbol": "CRV/USDT"
+        }
+      },
+      "_rows_to_df": {
+        "n": 1,
+        "total_ms": 1.1848359999930835,
+        "max_ms": 1.1848359999930835,
+        "max_start_epoch": 1793713518.0827441,
+        "max_end_epoch": 1793713518.083929,
+        "context": {}
+      },
+      "acquire_writer_lease": {
+        "n": 1,
+        "total_ms": 3.030453999940619,
+        "max_ms": 3.030453999940619,
+        "max_start_epoch": 1793713518.147222,
+        "max_end_epoch": 1793713518.1502526,
+        "context": {
+          "symbol": "kripto-bot-v94-main"
+        }
+      },
+      "evaluate_and_route": {
+        "n": 75,
+        "total_ms": 576.4501009996366,
+        "max_ms": 39.817189000018516,
+        "max_start_epoch": 1793713518.6954308,
+        "max_end_epoch": 1793713518.735248,
+        "context": {
+          "exchange": "binance",
+          "symbol": "B/USDT"
+        }
+      },
+      "features": {
+        "n": 19,
+        "total_ms": 131.3394349998589,
+        "max_ms": 9.902251999960754,
+        "max_start_epoch": 1793713518.4203918,
+        "max_end_epoch": 1793713518.430294,
+        "context": {
+          "bar_open_ms": 1793713200000
+        }
+      },
+      "market_context": {
+        "n": 19,
+        "total_ms": 440.7528919999777,
+        "max_ms": 30.44308699998055,
+        "max_start_epoch": 1793713518.7047513,
+        "max_end_epoch": 1793713518.7351942,
+        "context": {
+          "bar_open_ms": 1793713200000
+        }
+      }
+    },
+    "scope": "inclusive wall durations; nested/overlapping calls MUST NOT be summed as CPU use; probe changes timing"
+  }
+]

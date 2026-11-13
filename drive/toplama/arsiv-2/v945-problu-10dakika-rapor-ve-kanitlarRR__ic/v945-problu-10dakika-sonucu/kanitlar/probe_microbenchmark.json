@@ -1,0 +1,20 @@
+{
+  "iterations_per_batch": 200000,
+  "batches": 5,
+  "raw_sec": [
+    0.014375588000007156,
+    0.014286855000023024,
+    0.016504017999977805,
+    0.015260992999969858,
+    0.014381740999965587
+  ],
+  "wrapped_sec": [
+    0.24448822500005463,
+    0.24629643900004794,
+    0.2662911749999921,
+    0.3276982429999862,
+    0.24848838100001558
+  ],
+  "median_extra_ns_per_trivial_sync_call": 1170.53320000025,
+  "scope": "Toy no-op wrapper microbenchmark, NOT measured live total overhead; function argument shapes/async/IO differ. Includes aggregation; no JSONL writes."
+}

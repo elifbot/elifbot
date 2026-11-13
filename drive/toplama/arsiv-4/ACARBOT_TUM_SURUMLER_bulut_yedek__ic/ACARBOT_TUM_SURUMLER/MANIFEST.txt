@@ -1,0 +1,55 @@
+ACARBOT — TÜM SÜRÜMLER BULUT YEDEĞİ
+Oluşturulma: 7 Kasım 2026
+====================================================
+
+Bu paket, üzerinde çalışılan tüm bot sürümlerinin eksiksiz yedeğidir.
+
+--- 1) resmi_surumler/ — Sürüm paketleri (kopyalanabilir, tek dosya) ---
+
+ACARBOT_FINAL_v1.2.zip   (88 dosya)  Temel hat: bot_super tabanı + süreli oturum
+                                     + oturum raporu (v1.0), APEX profili + haber
+                                     koruması + sweep guard (v1.1), Binance otomatik
+                                     ayna fallback + çift borsa sembol eşleme (v1.2)
+ACARBOT_FINAL_v1.7.zip   (100 dosya) Dış geliştirme hattı: scan-all öncülü, motor
+                                     seçimi, baz hacim düzeltmesi, bayat sinyal
+                                     koruması, CLI eşikleri (v3.1'e ilham veren hat)
+ACARBOT_FINAL_v2.0.zip   (230 KB)    Akıllı katman: 5 uzman motor, rejim+MTF+order
+                                     flow, 100 puanlık skor, Piyasa Hakemi, Monte
+                                     Carlo, panel, testnet güvenlik çatısı
+ACARBOT_FINAL_v2.0.1.zip (230 KB)    v2.0 yama sürümü
+ACARBOT_FINAL_v3.0.zip   (290 KB)    Sertleştirme: dış inceleme 20+ bulgu düzeltmesi,
+                                     tam OKX eşleme, dead-man's switch, log rotasyonu,
+                                     gerçekçi backtest modeli, veri indirme aracı
+ACARBOT_FINAL_v3.1.zip   (314 KB)    Tek kapıda birleşme: --scan-all (528 feed),
+                                     --motors, baz hacim düzeltmesi, bayat sinyal
+                                     koruması, CLI eşikleri. 389/389 test
+ACARBOT_FINAL_v4.0.zip   (372 KB, 134 dosya)
+                                     Genişleme: seçilebilir stratejiler (Confluence
+                                     10 filtre + rsirev/macd/bollkir/bolldon), DCA,
+                                     seans filtresi, 429 yönetimi, zaman senkronu
+                                     (-1021/50102 resync), hedge mode otomatik
+                                     algılama, para akışı (funding + likidasyon WS),
+                                     ajanlar (ABD piyasası/RSS/analist/kongre),
+                                     testnet kılavuzu. 483/483 test — GÜNCEL SÜRÜM
+
+--- 2) kaynak_kod/ — Kaynak kod yedekleri ---
+
+ACARBOT_ext_v1.7_gelistirme_hatti.zip
+                         Dış v1.3–v1.7 geliştirme hattının tam kaynağı
+                         (referans/arşiv amaçlı; özellikleri v3.1'de
+                          v3.0 mimarisine uyarlanarak birleştirildi)
+
+--- 3) dokumanlar/ ---
+
+ACARBOT_v4_Sistem_Rehberi.pdf
+                         Botun tamamını anlatan 8 sayfalık sistem ve işleyiş
+                         rehberi (mimari, sinyal zinciri, 9 risk katmanı,
+                         sürüm tarihi, hızlı başlangıç)
+
+--- ÖNEMLİ NOTLAR ---
+- Güncel çalışma sürümü: v4.0 (ACARBOT_FINAL_v4.0.zip = son kaynak ağacıyla aynı).
+- Bot yalnızca paper trading + testnet/demo eşlemesi yapar; gerçek para emri göndermez.
+- Strateji kârlılığı kanıtlanmamıştır; canlı kullanım öncesi uzun dönem backtest
+  ve testnet oturumu zorunludur (bkz. rehber PDF, Bölüm 01 ve 05).
+- Sistem rehberinin düzenlenebilir HTML kaynağı da yedek setiyle birlikte chat
+  dosyalarında ayrıca mevcuttur.

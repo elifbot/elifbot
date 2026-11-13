@@ -1,0 +1,84 @@
+{
+  "surum": "5.1-final",
+  "mod": "paper / tam pazar / apex / trend",
+  "baslangic": "2026-11-07T18:57:46.740000+00:00",
+  "bitis": "2026-11-07T19:12:46.750000+00:00",
+  "sure_sn": 900.0,
+  "bakiye": {
+    "baslangic": 1000.0,
+    "bitis": 976.3223,
+    "equity": 981.4091
+  },
+  "giris": 2,
+  "kapanis": 1,
+  "acik_pozisyon": 1,
+  "hedef_risk_denetimi": {
+    "target_net_risk": 25.0,
+    "max_notional_cap": 0.0,
+    "grid_symbols": 1046,
+    "grid_realign_count": 7,
+    "margin_lock_cancels": 0,
+    "opened_positions": 2,
+    "net_risks": [
+      25.0,
+      25.0
+    ]
+  },
+  "gerceklesen_vs_hedef": {
+    "breach_ratio_threshold": 1.3,
+    "closed_trades": 1,
+    "losing_trades": 1,
+    "breaches": [],
+    "breach_count": 0,
+    "breach_rate": 0.0,
+    "max_realized_over_target": 0.9133,
+    "mean_realized_over_target": 0.9133,
+    "max_stop_overshoot_ratio": 0.1632
+  },
+  "kapanan_islemler": [
+    {
+      "symbol": "okx:JTO-USDT-SWAP",
+      "reason": "stop_loss",
+      "pnl": -22.8336,
+      "target_net_risk": 25.0,
+      "realized_over_target": 0.9133,
+      "stop_overshoot_ratio": 0.1632,
+      "breach": false
+    }
+  ],
+  "tick_dogrulama": {
+    "policy": "warn",
+    "futures_source": "",
+    "futures_error": "binance_fapi3: boş yanıt (HTTP 202)",
+    "futures_symbols": 0,
+    "checked": 518,
+    "match": 0,
+    "mismatch": 0,
+    "unverified": 518,
+    "excluded_symbols": [],
+    "allowed_symbols": 518,
+    "verified": false
+  },
+  "canli_izgara_gozlemi": {
+    "symbols_checked": 1041,
+    "ticks_checked": 1290426,
+    "violations": {},
+    "rejected_symbols": [],
+    "examples": {},
+    "max_violations": 3
+  },
+  "hacim_filtresi": {
+    "low_liquidity_count": 1602,
+    "rvol_suspect_count": 35,
+    "log_suppressed": 196,
+    "min_baseline_notional_per_second": 5.0
+  },
+  "log_kanit": {
+    "satir": 10924,
+    "traceback": 0,
+    "stop_izgara_kaba_reddi": 1,
+    "izgara_reddi": 0,
+    "teminat_kilidi": 0
+  },
+  "test_paketi": "601 passed, 1 skipped"
+}

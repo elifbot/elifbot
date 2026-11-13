@@ -1,0 +1,86 @@
+{
+  "name": "60m-1000-usdt-v7.6-pure-crypto-cross-harmony-profit-shield",
+  "description": "v7.6 saf kripto USDT-M Futures + Capraz Ortak Kasa + Canli Technical-Harmony & Range-Confirmation kapisi + 2 Kademeli Net Kar Kalkani (+0.50% -> +0.12%, +0.90% -> +0.30%) + Erken Zarar Kesme KAPALI + 28/28 Kar Kosusu.",
+  "overrides": {
+    "paper": {
+      "bakiye": 1000.0
+    },
+    "risk": {
+      "marj_modu": "cross",
+      "capraz_max_kullanim_yuzde": 95.0,
+      "capraz_min_serbest_usdt": 50.0,
+      "firsat_takasi_aktif": true,
+      "firsat_takasi_min_dakika": 8.0,
+      "capraz_kurtarma": false,
+      "paper_max_pozisyon": 1000,
+      "paper_ayni_yon_max_pozisyon": 25,
+      "erken_kar_kilit_tetik": 0.50,
+      "erken_kar_kilit_seviye": 0.12,
+      "kar_kilit_tetikleyici": 0.90,
+      "kar_kilit_seviyesi": 0.30,
+      "trailing_yuzde": 1.50
+    },
+    "cikis": {
+      "kosan_kar": true,
+      "net_basabas_aktif": true,
+      "net_kar_tamponu_usdt": 0.05,
+      "orderflow_min_kar_yuzde": 0.45,
+      "erken_bozulma_cikisi_aktif": false
+    },
+    "sinyal": {
+      "tukenme_korumasi_aktif": true,
+      "short_min_rsi": 27.0,
+      "short_min_mfi": 18.0,
+      "long_max_rsi": 73.0,
+      "long_max_mfi": 82.0,
+      "yatay_akis_engeli_aktif": true,
+      "teknik_uyum_aktif": true,
+      "max_karsit_teknik_bilesen": 1,
+      "min_teknik_skor": 24.0
+    },
+    "para_akisi": {
+      "baslangic_isinma_saniye": 90.0,
+      "canli_akis_guveni_aktif": true,
+      "anlik_akis_tetik_aktif": true,
+      "min_kapsama_saniye": 60.0,
+      "min_islem_sayisi": 10,
+      "min_notional_usdt": 2500.0,
+      "max_defter_yasi_saniye": 15.0,
+      "referans_notional_usdt": 2500.0,
+      "referans_cvd_usdt": 250.0
+    },
+    "futures": {
+      "kripto_disi_filtre": true,
+      "tarama_araligi_saniye": 90,
+      "tarama_paralellik": 8
+    },
+    "shadow_lab": {
+      "aktif": true,
+      "sanal_kasa_usdt": 1000.0,
+      "portfolio": {
+        "ayni_yon_max_pozisyon": 25
+      },
+      "pdf_confluence": {
+        "aktif": true,
+        "min_aligned_families": 4,
+        "max_opposed_families": 2
+      },
+      "pdf_v3_confluence": {
+        "aktif": true,
+        "min_aligned_signals": 2,
+        "max_opposed_signals": 2
+      }
+    },
+    "pdf_v2": {
+      "aktif": true
+    },
+    "pdf_v3": {
+      "aktif": true,
+      "turev_istihbarat_aktif": true,
+      "turev_cache_sn": 180.0,
+      "asiri_kalabalik_engeli": true
+    }
+  },
+  "paper_session_minutes": 60,
+  "do_not_auto_promote": false
+}

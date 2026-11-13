@@ -1,0 +1,122 @@
+
+
+===== SAYFA 1 =====
+
+Kripto Futures Botları: Birleşik İndikatör
+Listesi
+Bu doküman, Freqtrade, Jesse, OctoBot ve CyberPunkMetalHead Reddit sentiment
+botunun örnek stratejilerinde ve kütüphanelerinde geçen indikatörleri, ilk cevaptaki
+profesyonel bot listesiyle birleştirir. Reddit'e doğrudan ulaşılamadı; bilgiler projelerin kendi
+kodundan ve dokümanlarından gelir. OctoBot'un tüm evaluator'ları tek tek görülemedi,
+yalnızca belgelenmiş olanlar alındı.
+Kaynaklardan Çıkan İndikatörler
+Freqtrade örnek stratejileri: ADX (ayrıca yavaş ADX), hızlı Stochastic, EMA (5, 10, 13,
+50), MACD, +DI/-DI, RSI, Bollinger Bands (%B ve band genişliği), MFI, Stochastic RSI.
+Grafik ayarlarında TEMA ve Parabolic SAR geçiyor. Topluluk stratejilerinde CCI, RSI ve
+MFI'nin EMA ile yumuşatılmış halleri de kullanılıyor.
+Jesse: Hareketli ortalama ailesi (DEMA, TEMA, HMA, KAMA, FRAMA, JMA, T3, VIDYA,
+TRIX, VWAP), ADX/ADXR, DI, DX, Alligator, Ichimoku, SAR, SuperTrend, Vortex,
+Donchian ve Keltner. Ayrıca RSI, MACD, Bollinger Bands ve SMA. Topluluk eklentileri
+ATR, True Range, RMA ve SuperTrend sağlıyor.
+OctoBot: RSI, MACD histogramı, Bollinger Bands ve ADX evaluator'ları. Bunlara ek
+olarak orderbook ve anlık dalgalanma (real-time) evaluator'ları ile Reddit forum, Twitter
+haber ve Google Trends sosyal evaluator'ları var.
+CyberPunkMetalHead Reddit botu: Klasik indikatör yok. Sinyal, VADER ile Reddit
+gönderilerine verilen duygu skoru ve bu skorun tersine çevrilmesi.
+Etiketler: [İ] ilk listem, [F] Freqtrade, [J] Jesse, [O] OctoBot, [R] Reddit sentiment botu.
+Birden fazla etiket, birden fazla kaynakta geçtiği anlamına gelir.
+Birleşik İndikatör Listesi
+1. Rejim ve Volatilite Tespiti
+ADX, +DI/-DI [İ F J O]
+Bollinger Band Width [İ F]
+Choppiness Index, Hurst Exponent, Keltner Squeeze [İ]
+Realized, Parkinson ve Garman-Klass volatilite, HMM/k-means rejim sınıflandırma [İ]
+BTC dominansı ve BTC korelasyonu [İ]
+ADXR, DX, Vortex (VI) [J]
+Kripto Futures Botları: Birleşik İndikatör Listesi
+Page 1 of 4
+
+===== SAYFA 2 =====
+
+2. Trend
+EMA (5/9/10/13/21/50/100/200) [İ F J]
+SMA [F J]
+TEMA, DEMA, HMA, KAMA, T3, FRAMA, JMA, VIDYA, TRIX [J, kısmen İ]
+Supertrend [İ J]
+Ichimoku [İ J]
+Parabolic SAR [İ F J]
+VWAP, anchored VWAP [İ J]
+Donchian Channel [İ J]
+Alligator, SafeZone Stop [J]
+Linear Regression Channel [İ]
+3. Momentum ve Osilatörler
+RSI, RSI divergence [İ F J O]
+Stochastic ve Stochastic RSI [İ F J]
+MACD ve histogram [İ F J O]
+CCI [İ F]
+MFI [İ F]
+ROC [İ F]
+Williams %R, TSI, Awesome Oscillator [İ]
+4. Volatilite ve Stop/Hedef
+ATR [İ J]
+Bollinger Bands, %B [İ F J O]
+Keltner Channel [İ J]
+Chandelier Exit [İ]
+DVOL / implied volatility [İ]
+5. Hacim ve Order Flow
+OBV, CMF, Accumulation/Distribution [İ]
+Volume Profile (POC/VAH/VAL), CVD, footprint [İ]
+Order book imbalance ve heatmap [İ O]
+Tape reading, spoofing/iceberg tespiti [İ]
+Anlık dalgalanma (real-time evaluator) [O]
+Kripto Futures Botları: Birleşik İndikatör Listesi
+Page 2 of 4
+
+===== SAYFA 3 =====
+
+6. Futures'a Özgü Veriler
+Funding rate, open interest, long/short oranı [İ]
+Likidasyon verileri ve heatmap [İ]
+Basis/premium, taker buy/sell oranı, perp-quarterly spread [İ]
+Opsiyon verileri (max pain, put/call, gamma, skew) [İ]
+Cross-exchange funding farkı [İ]
+Funding ve mark price verisi (altyapı düzeyinde) [F]
+7. Market Yapısı ve Fiyat Aksiyonu
+Destek/direnç, swing noktaları, BOS/CHoCH [İ]
+Fibonacci, pivot noktaları [İ]
+Order block, FVG, likidite sweep [İ]
+Mum formasyonları [İ]
+Multi-timeframe analiz [İ F J]
+8. On-chain
+Exchange inflow/outflow, whale transferleri [İ]
+Stablecoin rezervleri, MVRV/NUPL/SOPR [İ]
+Miner flow, hash rate [İ]
+9. Duygu ve Makro
+Reddit duygu skoru (VADER), ters sentiment [R O]
+Twitter/haber duygusu [İ O]
+Google Trends [İ O]
+Fear & Greed [İ]
+DXY, tahvil faizi, Nasdaq korelasyonu, ETF akışları [İ]
+Ekonomik takvim, token unlock takvimi [İ]
+10. Risk Yönetimi (İndikatör Değil, Parametre)
+ROI tablosu (süreye göre minimum kâr), trailing stop, custom stoploss [F]
+Risk bazlı pozisyon büyüklüğü [J İ]
+Liquidation buffer, isolated/cross margin seçimi [F İ]
+Kelly, günlük zarar limiti, korelasyon kontrolü [İ]
+Kripto Futures Botları: Birleşik İndikatör Listesi
+Page 3 of 4
+
+===== SAYFA 4 =====
+
+Tablodan Çıkan Sonuç
+Freqtrade, Jesse ve OctoBot örneklerinde yaygın olan hep aynı klasik set: EMA/SMA, RSI,
+MACD, ADX, Bollinger, Stochastic, ATR, SAR/Supertrend. Funding rate, OI, CVD,
+likidasyon, on-chain ve rejim modelleri bu çerçevelerin hazır örneklerinde geçmiyor.
+Yalnızca Freqtrade'in futures veri altyapısı funding ve mark price verisini destekliyor.
+Birleşik listenin edge potansiyeli taşıyan kısmı bu yüzden 5, 6 ve 8. bölümler. Bunlar ayrıca
+veri kaynağı ve entegrasyon emeği gerektirir.
+Uyarı
+Bu liste eğitim amaçlıdır, yatırım tavsiyesi değildir. Ben finansal danışman değilim; kaldıraçlı
+futures işlemleri hesabın tamamını kaybettirebilir.
+Kripto Futures Botları: Birleşik İndikatör Listesi
+Page 4 of 4

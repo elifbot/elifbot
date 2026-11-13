@@ -1,0 +1,38 @@
+Merhaba Claude, 
+
+Kripto bot projemin en kritik karar mekanizması olan Strateji, Risk ve Konfigürasyon dosyalarının kodları aşağıdadır. Lütfen bu çekirdek yapıyı inceleyerek mantık hatalarını, risk açıkları ve olası optimizasyonları değerlendir.
+
+=========================================
+1. DOSYA: config.yaml
+=========================================
+```yaml
+# Kripto Bot v7.1 Konfigürasyon Dosyası
+bot:
+  name: "KriptoBotV7"
+  mode: "live" # live / dry_run / backtest
+  leverage: 20
+  max_open_positions: 3
+
+risk:
+  max_daily_loss_pct: 5.0
+  max_slippage_pct: 0.30
+  stop_loss_pct: 1.5
+  take_profit_pct: 3.0
+  trailing_stop_pct: 0.8
+
+strategy:
+  w_ind: 0.50
+  w_flow: 0.30
+  w_news: 0.20
+  long_th: 55
+  short_th: -55
+  exit_th: 15
+  allow_short: true
+  flow_trigger: true
+  flow_th: 50.0
+
+exchanges:
+  primary: "binance"
+  backup: "okx"
+  timeout_seconds: 5
+  max_retries: 3

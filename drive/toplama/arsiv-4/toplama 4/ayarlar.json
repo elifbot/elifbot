@@ -1,0 +1,90 @@
+{
+ "saglayicilar": {
+  "nvidia": {
+   "ad": "NVIDIA NIM",
+   "taban": "https://integrate.api.nvidia.com/v1",
+   "anahtar": ""
+  },
+  "gemini": {
+   "ad": "Google Gemini",
+   "taban": "https://generativelanguage.googleapis.com/v1beta/openai",
+   "anahtar": "***REDACTED***"
+  }
+ },
+ "proje_yolu": "C:\\Users\\manager\\Downloads\\proje",
+ "moderator": "mimar",
+ "surum": 3,
+ "ajanlar": [
+  {
+   "id": "mimar",
+   "emoji": "🧠",
+   "ad": "Mimar",
+   "saglayici": "nvidia",
+   "model": "nvidia/nemotron-3-super-120b-a12b",
+   "rol": "Sistem mimarı. Büyük resmi görür, mimari kararlar alır, önerilerin yönünü belirler. Yapılı ve net konuşur.",
+   "skill_izni": [
+    "dosya_oku",
+    "dosya_listele",
+    "not_al",
+    "notlari_oku"
+   ]
+  },
+  {
+   "id": "gelistirici",
+   "emoji": "💻",
+   "ad": "Geliştirici",
+   "saglayici": "nvidia",
+   "model": "deepseek-ai/deepseek-v4.1-flash",
+   "rol": "Pratik yazılım geliştirici. Kod yazar, hataları düzeltir, uygulanabilir çözümler önerir. Somut kod örnekleri verir.",
+   "skill_izni": [
+    "dosya_oku",
+    "dosya_listele",
+    "dosya_yaz",
+    "kod_calistir",
+    "not_al"
+   ]
+  },
+  {
+   "id": "elestirmen",
+   "emoji": "🔍",
+   "ad": "Eleştirmen",
+   "saglayici": "nvidia",
+   "model": "mistralai/mistral-large-2-instruct",
+   "rol": "Kalite ve risk denetçisi. Önerilerdeki zayıf noktaları, hataları ve unutulan durumları bulur. Dürüst ve sert eleştiri yapar.",
+   "skill_izni": [
+    "dosya_oku",
+    "dosya_listele",
+    "kod_calistir",
+    "not_al",
+    "notlari_oku"
+   ]
+  },
+  {
+   "id": "urun",
+   "emoji": "🎯",
+   "ad": "Ürün Gözü",
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "Ürün ve kullanıcı deneyimi gözü. Sadelik, kullanılabilirlik ve gerçek kullanıcı ihtiyacı açısından konuşur.",
+   "skill_izni": [
+    "dosya_oku",
+    "web_oku",
+    "not_al"
+   ]
+  },
+  {
+   "id": "kasif",
+   "emoji": "🌐",
+   "ad": "Kaşif",
+   "saglayici": "nvidia",
+   "model": "moonshotai/kimi-k2.6",
+   "rol": "Araştırmacı kaşif. Web'den örnek ve güncel bilgi getirir, alternatif yaklaşımlar önerir, kutunun dışından bakar.",
+   "skill_izni": [
+    "web_oku",
+    "dosya_oku",
+    "not_al",
+    "notlari_oku"
+   ]
+  }
+ ]
+}

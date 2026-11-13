@@ -1,0 +1,24 @@
+{
+  "surum": "5.0-final",
+  "tarih_utc": "2026-11-07T13:27:34+00:00",
+  "mod": "paper / tam pazar / apex / trend",
+  "log_satir": 5819,
+  "traceback": 0,
+  "critical": 0,
+  "order_new": 0,
+  "likidite_dusuk_satir": 281,
+  "rvol_supheli_satir": 12,
+  "teminat_kilidi": 0,
+  "risk_engeli": 1,
+  "banner": [
+    "2026-11-07 13:19:47,330 INFO paper_bot: FİYAT IZGARASI [binance]: 518 sembol için tickSize alındı",
+    "2026-11-07 13:19:48,038 INFO paper_bot: FİYAT IZGARASI [okx]: 528 sembol için tickSize alındı",
+    "2026-11-07 13:19:48,038 INFO paper_bot: TAM PAZAR TARAMASI: binance=518 + okx=528 | toplam 1046 feed | döngü hedefi 60 sn",
+    "2026-11-07 13:19:48,038 INFO paper_bot: ACARBOT v5.0-final | PAPER mod | borsa=binance,okx | bakiye=1000.00 | maks pozisyon=SINIRSIZ",
+    "2026-11-07 13:19:48,038 INFO paper_bot: HACİM FİLTRESİ v5.0: taban hacim < 5.00 USDT/sn → LİKİDİTE DÜŞÜK (bilgi, sinyal yok) | taban üstünde RVOL > 100x → RVOL ŞÜPHELİ (uyarı) | log aralığı 60 sn/sembol",
+    "2026-11-07 13:19:48,038 INFO paper_bot: BOYUTLAMA v5.0: nominal tavan KAPALI — notional = 25 / (stop% + maliyet%), teminat DİNAMİK (notional/10)",
+    "2026-11-07 13:19:48,038 INFO paper_bot: STOP KORUMASI v5.0: fiyat ızgarası hizalı stop + dolum anı teminat kilidi AKTİF (genişleme tavanı 1.50x)"
+  ],
+  "test_sonucu": "549 passed",
+  "not": "Oturum devam ediyor; bu dosya paketleme anındaki kanıt anlık görüntüsüdür."
+}

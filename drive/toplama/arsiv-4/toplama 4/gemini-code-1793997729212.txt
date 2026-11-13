@@ -1,0 +1,38 @@
+trading_system_v2_ultra_plus.zip
+├── requirements.txt                   # Gerekli bağımlılıklar (ccxt, pandas, numpy, ta, scikit-learn, aiohttp vb.)
+├── .env.example                       # Borsa API anahtarları, risk ve haber koruması ayarları
+├── .gitignore                         # Versiyon kontrol dosyası
+├── app/
+│   ├── main.py                        # ULTRA+ Sistem çalıştırma noktası
+│   └── executor.py                    # Slippage & Latency korumalı emir yürütücü
+├── core/
+│   ├── indicators.py                  # EMA, RSI, ATR teknik gösterge motoru
+│   ├── strategy.py                    # HTF trend onaylı, Stop-Hunt ve fonlama korumalı sinyal motoru
+│   ├── risk.py                        # ATR tabanlı dinamik boyutlandırma & 25 USDT sabit risk
+│   ├── portfolio.py                   # Korelasyon matrisi (R>0.85) & Delta Netting
+│   ├── liquidation.py                 # Likidasyon ısı haritası & Stop-Hunt tespiti
+│   └── volume_spike.py                # Hacim patlaması teyit motoru
+├── infra/
+│   ├── paper.py                       # Maker Broker (Orderbook simülasyonu & TTL)
+│   ├── slippage.py                    # Gerçekçi kayma (slippage) ve ağ gecikmesi simülatörü
+│   ├── market_data/fetcher.py         # REST/WebSocket piyasa verisi çekici
+│   └── exchanges/ccxt_client.py       # CCXT Binance/OKX borsa konnektörü
+├── backtest/
+│   ├── engine.py                      # Backtest motoru
+│   └── walkforward.py                 # Walk-Forward (Out-of-sample) ezberleme önleyici lab
+├── safety/
+│   ├── news_guard.py                  # Makroekonomik haber & volatilite takvimi filtresi
+│   ├── smart_exit.py                  # Kademeli kâr al (%50 kilit) & Trailing Stop motoru
+│   ├── alerts.py                      # Telegram/Webhook anlık bildirim sistemi
+│   └── security.py                    # API güvenlik ve para çekme kısıtlama koruması
+├── state/
+│   └── store.py                       # Sistem yeniden başlatmalarında durum deposu
+├── tests/
+│   ├── test_indicators.py             # İndikatör testleri
+│   ├── test_trading_system.py         # Temel risk testleri
+│   ├── test_regressions.py            # Güvenlik & regresyon testleri
+│   ├── test_walkforward.py            # Walk-Forward testleri
+│   └── test_advanced_features.py      # ATR Sizing, Slippage ve Smart Exit birim testleri
+└── docs/
+    ├── CALISTIRMA.md                  # Adım adım kullanım kılavuzu
+    └── MIMARI.md                      # ULTRA+ mimari teknik dokümanı

@@ -1,0 +1,11 @@
+# toplama-1.zip icerik listesi (10 dosya, acilmis 77.8 MB)
+   4892700 toplama 1/01a1685a-0f4d-7806-9870-3cc3787d4de8 (1).patch
+  10525952 toplama 1/01a171b1-ae75-7a59-a064-a7659f6488eb.patch
+  20656665 toplama 1/01a171b1-ae75-7a59-a064-a7659f6488eb1.patch
+   7170460 toplama 1/Futures_Bot_Temiz_Kayitli_v34_v35n_v2 (1).zip
+   7170460 toplama 1/Futures_Bot_Temiz_Kayitli_v34_v35n_v2.zip
+   5030730 toplama 1/kripto-bot-v9.4.5-yama-test-rapor-binance.zip
+   9216336 toplama 1/Kripto_Bot_TUM_SURUMLER_RAPORLAR_VE_TEST_KANITLARI_2026-11-03.zip
+   5611808 toplama 1/v9.5.2-ILIMLI-PAPER-KOD-TEST-VE-DENEME (1).zip
+   5611808 toplama 1/v9.5.2-ILIMLI-PAPER-KOD-TEST-VE-DENEME.zip
+   5662533 toplama 1/v9.5.3-SUREKLILIK-DUZELTME-KOD-TEST-VE-GOZETIM.zip

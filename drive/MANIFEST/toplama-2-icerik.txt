@@ -1,0 +1,388 @@
+# toplama-2.zip icerik listesi (387 dosya, acilmis 67.6 MB)
+    644946 toplama 2/01a1685a-0f4d-7806-9870-3cc3787d4de8.patch
+      9449 toplama 2/acarbot-iskelet.zip
+    376027 toplama 2/ACARBOT-OmniStudio-20261105.zip
+    283828 toplama 2/acarbot-system (1).html
+    291026 toplama 2/acarbot-system (2).html
+    291068 toplama 2/acarbot-system (3)..html
+    291068 toplama 2/acarbot-system (3).html
+    291018 toplama 2/acarbot-system (3).html.bak
+    317235 toplama 2/acarbot-system (4).html
+    317235 toplama 2/acarbot-system (5).html
+    326347 toplama 2/acarbot-system final.html
+    241667 toplama 2/acarbot-system.html
+    541727 toplama 2/ACARBOT-V10-anlik-akis-ve-kontrat-denetimi-KISMI.zip
+    233882 toplama 2/ACARBOT-V10-binance-okx-guncelleme-KISMI.zip
+    251896 toplama 2/ACARBOT-V10-eski-bot-baglanti-duzeltmesi-PAPER-KISMI.zip
+    179454 toplama 2/ACARBOT-V10-paper-testli.zip
+    179454 toplama 2/ACARBOT-V10-paper-testlii.zip
+    489888 toplama 2/ai-omnistudio-v1.0.0-10dk-testli.zip
+    566392 toplama 2/ai-omnistudio-v1.0.1-dogrulanmis.zip
+    277244 toplama 2/bcc94bc1-adc0-422d-a9f9-249369019ec2 (1).JPG
+    277244 toplama 2/bcc94bc1-adc0-422d-a9f9-249369019ec2.JPG
+    316779 toplama 2/binance_okx_paper_futures_bot_v1_crewai-project (1).zip
+    311971 toplama 2/binance_okx_paper_futures_bot_v1_crewai-project.zip
+     42907 toplama 2/birle_tirilmi_bot_sistemi.py
+     56311 toplama 2/botdenemesi-main.zip
+     64230 toplama 2/claude versiyon.html
+     42252 toplama 2/deepseek_html_20261104_15ae7b.html
+     33703 toplama 2/deepseek_html_20261104_a4e1d6 (1).html
+     33703 toplama 2/deepseek_html_20261104_a4e1d6.html
+    104240 toplama 2/executor.py
+     20268 toplama 2/files.zip
+     62096 toplama 2/finL.py
+     45335 toplama 2/futures-flow-bot.zip
+    574191 toplama 2/futures_bot_v10.zip
+    583061 toplama 2/futures_bot_v12.zip
+    583061 toplama 2/futures_bot_v122.zip
+    586493 toplama 2/futures_bot_v13.zip
+    591514 toplama 2/futures_bot_v14.zip
+    618736 toplama 2/futures_bot_v17_binance_akis_drain.zip
+    348424 toplama 2/Futures_Bot_v37_Deneysel_Paper_SON.zip
+    971111 toplama 2/Futures_Bot_v4.0_TUNING_GUNCELLEME_20261029.zip
+    556597 toplama 2/futures_bot_v7.zip
+    562096 toplama 2/futures_bot_v8.zip
+      1010 toplama 2/gemini-code-1792660182100.py
+      1903 toplama 2/gemini-code-1792660184631.py
+       903 toplama 2/gemini-code-1792660187451.txt
+     14851 toplama 2/gemini-code-1792662185060.py
+    289898 toplama 2/gunluk_vadeli_islem_sinyal_plani_v1_crewai-project.zip
+    154976 toplama 2/Kripto Futures Bot Indikator Mimarisi.pdf
+    143516 toplama 2/Kripto Futures Botlarì Birleƒik ÿndikatör Listesi.pdf
+        45 toplama 2/kripto-bot/.dockerignore
+       889 toplama 2/kripto-bot/.env.example
+      2766 toplama 2/kripto-bot/BULUT_KURULUM.md
+     10618 toplama 2/kripto-bot/config.yaml
+      1813 toplama 2/kripto-bot/DEGISIKLIKLER_v7.md
+       321 toplama 2/kripto-bot/docker-compose.yml
+       668 toplama 2/kripto-bot/Dockerfile
+      1465 toplama 2/kripto-bot/kelly_stats.json
+      5731 toplama 2/kripto-bot/README.md
+       124 toplama 2/kripto-bot/requirements.txt
+     11367 toplama 2/kripto-bot/src/alerts.py
+      7838 toplama 2/kripto-bot/src/arbitrage.py
+     22639 toplama 2/kripto-bot/src/backtest.py
+      9697 toplama 2/kripto-bot/src/circuit_breaker.py
+      2689 toplama 2/kripto-bot/src/config.py
+     64196 toplama 2/kripto-bot/src/dashboard.py
+     36827 toplama 2/kripto-bot/src/exchanges.py
+     28303 toplama 2/kripto-bot/src/executor.py
+      9170 toplama 2/kripto-bot/src/health.py
+     15458 toplama 2/kripto-bot/src/indicators.py
+     23854 toplama 2/kripto-bot/src/main.py
+     18057 toplama 2/kripto-bot/src/market_data.py
+     13180 toplama 2/kripto-bot/src/ml_predictor.py
+     17258 toplama 2/kripto-bot/src/moneyflow.py
+     12209 toplama 2/kripto-bot/src/news.py
+      2149 toplama 2/kripto-bot/src/reconcile.py
+     23009 toplama 2/kripto-bot/src/risk.py
+      7916 toplama 2/kripto-bot/src/security.py
+      8438 toplama 2/kripto-bot/src/sentiment_ai.py
+      6964 toplama 2/kripto-bot/src/sizing.py
+     19898 toplama 2/kripto-bot/src/state_store.py
+      9471 toplama 2/kripto-bot/src/strategy.py
+      9227 toplama 2/kripto-bot/src/telegram.py
+      9306 toplama 2/kripto-bot/src/walkforward.py
+        85 toplama 2/kripto-bot/src/__init__.py
+    114044 toplama 2/kripto-bot/src.zip
+     35097 toplama 2/kripto-bot/test_hizli.py
+    142155 toplama 2/kripto-bot-v7.1 (1).zip
+    142155 toplama 2/kripto-bot-v7.1.zip
+    364931 toplama 2/KRIPTO-BOT-v7.8-DUZELTILMIS-2026-10-26.zip
+   1166945 toplama 2/KRIPTO-BOT-v7.8-ENV-DAHIL-20261101.zip
+   1165778 toplama 2/KRIPTO-BOT-v7.8-HEARTBEAT-DUZELTILMIS-20261101.zip
+    140641 toplama 2/kripto-bot-v7.zip
+    930396 toplama 2/kripto-bot-v8.4-ve-raporlar-tam-paket.zip
+   4040509 toplama 2/kripto-bot-v9.4.1-arastirma-paketi.zip
+   4347000 toplama 2/kripto-bot-v9.4.3-GUNCEL-r3.zip
+   4245124 toplama 2/kripto-bot-v9.4.3-saglik-yamasi.zip
+   4438080 toplama 2/kripto-bot-v9.4.4-Phase1-dogruluk-yamasi.zip
+   4243420 toplama 2/kripto-bot-v9_4_2-akis-onarimi.zip
+    479298 toplama 2/KRIPTO_BOT_COLAB_1_SAAT.ipynb
+    344239 toplama 2/KRIPTO_BOT_COLAB_BASLATMA_PAKETI.zip
+     56161 toplama 2/Kripto_Bot_v9.3_ve_v9.4.1_Detayli_Raporlar.docx
+      1977 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/.env.ornek
+      7989 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/.github/workflows/exchange-connectivity.yml
+      1537 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/.github/workflows/paper-control.yml
+     30551 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/.github/workflows/paper-live.yml
+      1122 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/.github/workflows/test.yml
+      8790 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/.github/workflows/whatsapp-verify.yml
+       315 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/.gitignore
+      1721 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/.gitlab-ci.yml
+       809 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/BASLAT_1_SAAT.bat
+      6506 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/config.windows.yaml
+     21917 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/config.yaml
+       521 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/configs/paper-120-control.json
+       853 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/configs/paper-120-v2-control.json
+       536 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/configs/paper-120-v2-request.json
+       610 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/configs/paper-60-1000-control.json
+       560 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/configs/paper-60-1000-request.json
+       434 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/configs/paper-60-shadow-request.json
+      2943 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/configs/paper-60-v2-control.json
+       502 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/configs/paper-60-v2-request.json
+       233 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/configs/paper-stop-request.json
+        97 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/configs/whatsapp-check.json
+      3328 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/DEGISIKLIKLER_2026-10-26.md
+      3558 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/deploy/bildirim_testi.py
+     11113 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/deploy/bir_saat_gozetmen.py
+      4045 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/deploy/gitlab_kabul_kontrol.py
+       873 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/deploy/kripto-bot.service
+       662 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/deploy/kripto-panel.service
+      3068 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/deploy/kur.sh
+      2216 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/deploy/nobetci.sh
+     15278 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/KURULUM_VE_DEVIR.md
+     13797 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/PDF_BOT_KARSILASTIRMA_RAPORU_2026-10-26.md
+      1506 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/preview_proxy.py
+      4992 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/README.md
+       144 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/requirements.txt
+      6578 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/src/alerts.py
+      6631 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/src/arbitrage.py
+     13762 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/src/attribution.py
+     34176 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/src/backtest.py
+     13631 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/src/circuit_breaker.py
+     12288 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/src/cohort_report.py
+     31801 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/src/config.py
+     54009 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/src/dashboard.py
+     14725 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/src/derivatives_intel.py
+     54683 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/src/exchanges.py
+     73331 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/src/executor.py
+      7663 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/src/exit_rules.py
+     11522 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/src/futures_catalog.py
+      7659 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/src/health.py
+     30900 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/src/indicators.py
+     85464 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/src/main.py
+     24050 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/src/market_data.py
+     11646 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/src/master_archive.py
+      9232 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/src/ml_predictor.py
+     23316 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/src/moneyflow.py
+     10853 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/src/news.py
+     24867 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/src/pdf_indicators.py
+     33816 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/src/pdf_v3_prep.py
+      3161 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/src/reconcile.py
+      5257 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/src/release_bundle.py
+     31267 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/src/risk.py
+      5211 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/src/security.py
+      5162 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/src/sentiment_ai.py
+     30480 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/src/shadow_lab.py
+     16980 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/src/shadow_review.py
+      9406 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/src/sizing.py
+     21824 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/src/state_store.py
+     13320 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/src/strategy.py
+     40786 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/src/telegram.py
+     29610 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/src/trade_quality.py
+     10180 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/src/walkforward.py
+      7936 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/src/whatsapp.py
+         0 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/src/__init__.py
+      3448 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/tests/test_attribution.py
+      4242 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/tests/test_cohort_report.py
+      1173 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/tests/test_executor_shadow.py
+     13954 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/tests/test_fixed_runner.py
+      9029 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/tests/test_futures_session.py
+      2529 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/tests/test_net_exit.py
+      4917 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/tests/test_pdf_indicators.py
+      9319 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/tests/test_pdf_v3_prep.py
+     49901 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/tests/test_regressions.py
+      6292 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/tests/test_shadow_lab.py
+      1623 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/tests/test_shadow_review.py
+      9622 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/tests/test_trade_plan_orderflow.py
+      3188 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/tests/test_trade_quality.py
+      7949 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/tests/test_v73_upgrades.py
+     21667 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/tests/test_v74_winning_upgrades.py
+      4040 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/tests/test_v78_collision_and_core_guards.py
+     23885 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/test_hizli.py
+      9049 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/windows_baslat_1_saat.ps1
+      1398 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT/WINDOWS_OKU_BENI.txt
+    348348 toplama 2/KRIPTO_BOT_WINDOWS_TEK_TIK_1_SAAT.zip
+     92360 toplama 2/kripto_futures_bot_rehberi.pdf
+      3161 toplama 2/latency_probe.py
+      7750 toplama 2/latency_probe_fixed.py
+     94958 toplama 2/live_runner.py
+     26628 toplama 2/make_bot_v2.py
+    303429 toplama 2/modular_paper_trading_crypto_bot_v1_crewai-project.zip
+   2743199 toplama 2/newkripto-arena-f582cf73-newkripto.zip
+   1514715 toplama 2/newkripto-main.zip
+     15390 toplama 2/NOVA-BOT-test-sonuclari-15dk-20261106.zip
+     38654 toplama 2/NOVA-BOT-v1.0.0-kaynak-20261106.zip
+    175665 toplama 2/otomat-cloud-v2 (1).html
+    200574 toplama 2/otomat-cloud-v2.html
+    136302 toplama 2/otomat-cloud-v22.html
+    241667 toplama 2/otomat-cloud-v3 (3).html
+    145595 toplama 2/OTOMAT-CLOUD-v3-ELITE-yeniden.html
+    142895 toplama 2/OTOMAT-CLOUD-v3-ELITE.html
+      1574 toplama 2/paper10m_summary_runtime_events.jsonl
+    195751 toplama 2/Profesyonel Kripto Futures Botu Veriler ve ÿndikatörler.pdf
+      6962 toplama 2/RAPOR (1).md
+      8759 toplama 2/RAPOR (2).md
+      7234 toplama 2/RAPOR (3).md
+     10059 toplama 2/RAPOR (4).md
+     10059 toplama 2/RAPOR (5).md
+      6181 toplama 2/RAPOR.md
+      5108 toplama 2/README (1).md
+      6369 toplama 2/README (2).md
+      5731 toplama 2/README (3).md
+      5974 toplama 2/README.md
+   1289757 toplama 2/retim.zip
+     33769 toplama 2/risk.py
+     66668 toplama 2/state_store.py
+     59193 toplama 2/unified_engine.py
+     77812 toplama 2/Uretim Takip Formlari (Guncel Oranlar).pdf
+    475273 toplama 2/v37_vwap02_paper_paketi_20261030.zip
+    467094 toplama 2/V4_V78_KOD_ANALIZI_VE_RISK_ADAYI_20261031.zip
+     10116 toplama 2/v9.4.2_test_raporu.md
+     20775 toplama 2/v941_nihai_detayli_rapor.md
+      7171 toplama 2/v943_final_report.md
+    518344 toplama 2/v945-problu-10dakika-rapor-ve-kanitlarRR.zip
+      7725 toplama 2/v94_core.py
+      4198 toplama 2/v94_live_router.py
+    566878 toplama 2/workspace-01a16293-f3c1-782b-834d-3fab49507faf.zip
+   4731880 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models.html
+     26377 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/0-a4qtnvjo3ju.js.indir
+      1069 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/005_o0dcn58q8.js.indir
+     33744 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/015tg1-1hs-wk.js.indir
+      5240 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/01a1wuf3r9te2.js.indir
+     51993 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/05a3cwu29pesp.js.indir
+     58696 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/06oaczfag4wg_.js.indir
+      2522 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/06trtgh0py8xy.js.indir
+     42942 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/07f3c_puwbvq2.js.indir
+     31738 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/08dwn_axy1elx.js.indir
+     61047 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/093-t93wqbnc3.js.indir
+    197787 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/0bugl4z74d60_.js.indir
+    112594 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/0c0hxoamwjsbw.js.indir
+     22760 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/0c99ncz16pkrk.js.indir
+     24371 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/0ci6rwqm2k9ah.css
+     60936 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/0fts_hz7uo0ov.js.indir
+    252249 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/0hupo2i_v3az8.js.indir
+     42592 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/0li8nyu1ib001.js.indir
+    261300 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/0t7dh71fwg4sh.js.indir
+     43898 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/0waz5oc3hlz4y.js.indir
+    466654 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/0y5c7uf8gbwou.js.indir
+     54848 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/0y8su30870583.js.indir
+     54867 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/0yaq-xx0_-cx3.js.indir
+     92761 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/1-spmgl-qn_i0.js.indir
+    146736 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/10efcubsvxoxy.js.indir
+      1023 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/11s65_zoyzcmr.js.indir
+     40578 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/12l6wswvvkjzg.js.indir
+     11679 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/13u34wh7ycu24.js.indir
+     61249 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/16nm1_89hybrh.js.indir
+      1861 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/17hotnlyr2pkk.js.indir
+     20349 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/1bm52iaoilmp6.js.indir
+     38062 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/1c9u8djatdvd6.js.indir
+     15313 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/1dryja5xoujkf.js.indir
+       734 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/1e8-bj1ctuuo9.css
+      1128 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/1eowioij32nvd.js.indir
+    125913 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/1fayur7le0vfl.js.indir
+      3052 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/1l2bria26dtb_.css
+     29767 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/1l3tbfh4kv6ph.js.indir
+     38828 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/1lp7jbx3jhqr8.js.indir
+     31862 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/1mxrqi5p3rsnk.js.indir
+     57085 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/1p8quo232mcg1.js.indir
+     26352 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/1pkpj8ydie01m.js.indir
+     38987 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/1qi9cqyg-sf5w.js.indir
+    185034 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/1qlinneha_l_y.js.indir
+    181080 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/1rdvsvkvrstgr.js.indir
+     28085 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/1re1b1_j0wpon.js.indir
+    134394 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/1tw-scehncbu1.js.indir
+     67071 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/1uwgk5ex5g7xv.js.indir
+     41157 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/1vmbjr66jmq-8.js.indir
+      5362 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/1zzyfeqd0tp3v.css
+     77270 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/1__pa8v4p8stk.js.indir
+    242252 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/2-hzkc2m_0a2g.css
+    254673 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/2050_hmii16w6.js.indir
+    134914 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/2154f52e-voe6.js.indir
+     21042 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/245_hqcprnos2.js.indir
+     33165 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/25oejs_pu6fm3.js.indir
+     30623 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/27ijq4m1vxnyo.js.indir
+     33607 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/28h0vguv8uswb.js.indir
+    154791 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/2aho75-i52vqu.js.indir
+       724 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/2chrjs_m_rhp9.js.indir
+    147103 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/2drqg7yt_69y_.js.indir
+     24593 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/2dz_6pgyb1elc.js.indir
+    598020 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/2ejrwtei48zjs.js.indir
+     59486 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/2kq0kooh0kbcp.js.indir
+     43031 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/2lxj07wpnrkne.js.indir
+      3723 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/2lyosnmaihrin.js.indir
+    229353 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/2mij-_ta8wlcb.js.indir
+     47839 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/2ojkq0wk7bx9-.js.indir
+    175319 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/2pcaydgw7a1c0.js.indir
+     58001 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/2pqjjzuvju-6l.js.indir
+     33619 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/2ruzi-kom_vki.js.indir
+     22376 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/2s9ctp06jk-i6.js.indir
+    106874 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/2uu1th8mvz0i9.js.indir
+     32210 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/2v-j593rwvi0k.js.indir
+     32399 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/2v1g1zrs35etu.js.indir
+     94274 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/2v21yhc5nptgw.js.indir
+     52817 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/2vh13j9k4q5xb.js.indir
+     83351 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/2vuxtgz0cmity.js.indir
+     96368 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/2w0f3u761e99e.js.indir
+     14431 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/2waf65b_a7z43.js.indir
+     35918 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/2wcl5dsvvddgi.js.indir
+     56781 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/2wmllcwfk9w_e.js.indir
+     35074 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/2xhs9_xq064ab.js.indir
+      5963 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/2_we3o07pu78b.css
+     87312 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/30xtncfrl42gx.js.indir
+    271760 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/32x31uy0go540.js.indir
+     11900 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/33uhwy8ieumwf.js.indir
+     29187 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/34qrun1rlxgnr.js.indir
+     44905 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/34tz-g-xwfp10.js.indir
+     38328 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/35lfn34e17h65.js.indir
+     25180 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/36fpnm-z3o--w.js.indir
+      4024 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/37_k3zwpw-lg2.js.indir
+     44126 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/38gtj2-d6wnt7.js.indir
+     63159 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/3b3qe3k896tjp.js.indir
+     26272 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/3lhebfb23oosn.js.indir
+     39316 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/3m6hib8igrgva.js.indir
+       828 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/3mc1m8pqg5ek_.js.indir
+     29064 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/3pjssme17rgam.js.indir
+     78261 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/3t0rsfj6h1bol.js.indir
+   1556095 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/3t6nelqsiqhai.js.indir
+    112634 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/3wlgndpzaoajz.js.indir
+        74 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/3xle4tjoq0fzc.css
+       926 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/3z6_w6yu1pw4u.js.indir
+     58641 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/3zpq525e40im9.js.indir
+     28810 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/3_ny4rcwqo48t.js.indir
+     67485 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/41j-yc1ss_4z_.js.indir
+     55966 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/anchor.html
+      3661 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/config.js.indir
+     24085 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/dead-clicks-autocapture.js.indir
+      1731 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/enterprise.js.indir
+     17854 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/exception-autocapture.js.indir
+    545097 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/js
+    853202 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/recaptcha__tr.js.indir
+       149 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/saved_resource(1).html
+       149 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/saved_resource.html
+     75464 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/styles__ltr.css
+    143975 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/surveys.js.indir
+     11614 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/turbopack-2ihhr7iq83pua.js.indir
+      1420 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/unnamed.png
+     31853 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/vce701823e78c4301a35b7e07294d87301792088814092
+     11042 toplama 2/Yeni klasör/Arena _ Benchmark & Compare the Best AI Models_files/web-vitals.js.indir
+    212009 toplama 2/Yeni klasör/deepseek_html_20261105_46d6d8.html
+     70021 toplama 2/Yeni klasör/deepseek_html_20261105_735f45.html
+     69665 toplama 2/Yeni klasör/deepseek_html_20261105_93852e.html
+     71505 toplama 2/Yeni klasör/deepseek_html_20261105_b65149.html
+     68932 toplama 2/Yeni klasör/deepseek_html_20261105_c1ab0b.html
+    211821 toplama 2/Yeni klasör/deepseek_html_20261105_caaf21.html
+     69134 toplama 2/Yeni klasör/deepseek_html_20261105_cc8e0c (1).html
+     69134 toplama 2/Yeni klasör/deepseek_html_20261105_cc8e0c.html
+     38280 toplama 2/Yeni klasör/fraq final.txt
+     28026 toplama 2/Yeni klasör/fraqtret.txt
+     45335 toplama 2/Yeni klasör/futures-flow-bot.zip
+     26628 toplama 2/Yeni klasör/make_bot_v2.py
+    200574 toplama 2/Yeni klasör/otomat-cloud-v2 (1).html
+    174551 toplama 2/Yeni klasör/otomat-cloud-v2.html
+    217615 toplama 2/Yeni klasör/otomat-cloud-v3 (1).html
+    224114 toplama 2/Yeni klasör/otomat-cloud-v3 (2).html
+    206574 toplama 2/Yeni klasör/otomat-cloud-v3.html
+     29607 toplama 2/Yeni klasör/Yeni Metin Belgesi (2).txt
+     30087 toplama 2/Yeni klasör/Yeni Metin Belgesi (3).txt
+         0 toplama 2/Yeni klasör/Yeni Metin Belgesi.txt
+      1181 toplama 2/Yeni Metin Belgesi (3).txt
+    118250 toplama 2/Üretim Takip Formlarì ve PPF Kodlarì Raporu (1).pdf
+    103634 toplama 2/Üretim Takip Formlarì ve PPF Kodlarì Raporu (2).pdf
+     67976 toplama 2/Üretim Takip Formlarì ve PPF Kodlarì Raporu (3).pdf
+     67804 toplama 2/Üretim Takip Formlarì ve PPF Kodlarì Raporu (4).pdf
+     80061 toplama 2/Üretim Takip Formlarì ve PPF Kodlarì Raporu (5).pdf
+     80061 toplama 2/Üretim Takip Formlarì ve PPF Kodlarì Raporu (6).pdf
+     79501 toplama 2/Üretim Takip Formlarì ve PPF Kodlarì Raporu (7).pdf
+     66923 toplama 2/Üretim Takip Formlarì ve PPF Kodlarì Raporu (8).pdf
+    144519 toplama 2/Üretim Takip Formlarì ve PPF Kodlarì Raporu.pdf

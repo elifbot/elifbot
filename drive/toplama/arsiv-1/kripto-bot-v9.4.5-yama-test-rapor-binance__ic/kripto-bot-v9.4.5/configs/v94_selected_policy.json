@@ -1,0 +1,13 @@
+{
+  "stop_atr": 1.8,
+  "min_stop_pct": 0.35,
+  "max_stop_pct": 1.2,
+  "trail_atr": 2.0,
+  "activation_r": 1.5,
+  "profit_floor_r": 0.25,
+  "total_risk_fraction": 0.02,
+  "directional_risk_fraction": 0.015,
+  "cooldown_bars": 3,
+  "max_spread_pct": 0.05,
+  "max_entry_drift_atr": 0.5
+}

@@ -1,0 +1,5 @@
+# ACARBOT v5.6.2 — geliştirme/test bağımlılıkları
+-r requirements.txt
+pytest==9.0.2
+# CI ile aynı lint sürümü
+ruff==0.8.4

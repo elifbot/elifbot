@@ -1,0 +1,122 @@
+📅 1 SAATLİK PAPER SONUÇ RAPORU
+🕒 24.10.2026 12:38:44 UTC | Oturum: 1.00 saat
+• Başlangıç kasası: $1,000.00
+• Başlangıç özsermayesi: $1,000.00
+• Bitiş/anlık kasa: $996.95
+• Bitiş/anlık özsermaye: $996.95
+• NET OTURUM K/Z: $-3.05
+• Gerçekleşen fiyat K/Z (brüt): $+0.10 | Açık K/Z: $+0.00
+• Kapalı işlemlerin NET K/Z'si (ücret/funding dahil): $-3.05
+• Komisyon: $3.15 | Funding (ödeme - / alacak +): $+0.00
+• Gerçekleşen fiyat K/Z satırı brüt fiyat K/Z'sidir; kapalı işlem NET K/Z'si ve NET OTURUM K/Z ücret/funding içerir.
+• Açılan işlem: 9 | Kapanan işlem: 9 | 2 kâr / 7 zarar / 0 başa baş
+• Kazanma oranı: %22.2 (net) | Açık pozisyon: 0
+• Kullanılan marj: $0.00 | Serbest kasa: $996.95
+
+🏦 BORSA BAZINDA KAPANAN SONUÇLAR (brüt | net)
+  binance: 6 işlem | $+0.57 | net $-1.53
+  okx: 3 işlem | $-0.46 | net $-1.52
+
+🏷️ SEMBOL BAZINDA KAPANAN SONUÇLAR
+  AEON/USDT: 1 işlem | $-1.85 | net $-2.20
+  IONQ/USDT: 1 işlem | $+1.13 | net $+0.78
+  CYBER/USDT: 1 işlem | $+0.63 | net $+0.28
+  FLUX/USDT: 1 işlem | $-0.61 | net $-0.96
+  DYM/USDT: 1 işlem | $+0.28 | net $-0.07
+  KSM/USDT: 1 işlem | $+0.26 | net $-0.09
+  KOMA/USDT: 1 işlem | $+0.22 | net $-0.13
+  ARPA/USDT: 1 işlem | $+0.05 | net $-0.30
+
+🚪 ÇIKIŞ NEDENLERİ
+  FLASH CRASH SİGORTASI: 9 işlem | $+0.10 | net $-3.05
+
+📌 Açık pozisyon bulunmuyor.
+
+🧪 OTURUM BİLEŞEN / MALİYET ANALİZİ
+Kapanan=9 | Net kazanma=%22.2 | Brüt=$+0.10 | Ücret=$+3.15 | Funding=$+0.00 | Net=$-3.05 | PF=0.26
+Leave-one-out kapsama: 9/9
+
+🛰️ BORSA VERİ / PAPER FILL KANITI
+• BINANCE | katalog=741 | OHLCV +13338/-0 | WS trade/book=2549674/1391956 | paper fill=12
+• OKX | katalog=507 | OHLCV +1206/-0 | WS trade/book=483013/2821659 | paper fill=6
+
+🏦 BORSA BAZINDA GERÇEKLEŞEN SONUÇ
+• binance | n=6 | kazanma=%16.7 | brüt=$+0.57 | ücret=$+2.10 | funding=$+0.00 | net=$-1.53 | PF=0.16 | OLUMSUZ İLİŞKİ
+• okx | n=3 | kazanma=%33.3 | brüt=$-0.46 | ücret=$+1.05 | funding=$+0.00 | net=$-1.52 | PF=0.34 | YETERSİZ VERİ
+
+🚪 ÇIKIŞ MODÜLLERİ (giriş bileşenlerinden ayrı)
+• FLASH CRASH SİGORTASI | n=9 | kazanma=%22.2 | brüt=$+0.10 | ücret=$+3.15 | funding=$+0.00 | net=$-3.05 | PF=0.26 | OLUMSUZ İLİŞKİ
+
+📈 YÖNLE UYUMLU AKTİF GİRİŞ BİLEŞENLERİ
+• ema_trend | n=9 | kazanma=%22.2 | brüt=$+0.10 | ücret=$+3.15 | funding=$+0.00 | net=$-3.05 | PF=0.26 | OLUMSUZ İLİŞKİ
+• ma_trend | n=7 | kazanma=%14.3 | brüt=$-0.58 | ücret=$+2.45 | funding=$+0.00 | net=$-3.03 | PF=0.20 | OLUMSUZ İLİŞKİ
+• rsi: veri yok
+• macd | n=9 | kazanma=%22.2 | brüt=$+0.10 | ücret=$+3.15 | funding=$+0.00 | net=$-3.05 | PF=0.26 | OLUMSUZ İLİŞKİ
+• bollinger: veri yok
+• stoch_rsi: veri yok
+• williams_r: veri yok
+• adx | n=8 | kazanma=%12.5 | brüt=$-0.53 | ücret=$+2.80 | funding=$+0.00 | net=$-3.33 | PF=0.19 | OLUMSUZ İLİŞKİ
+• cci: veri yok
+• mfi: veri yok
+• obv | n=9 | kazanma=%22.2 | brüt=$+0.10 | ücret=$+3.15 | funding=$+0.00 | net=$-3.05 | PF=0.26 | OLUMSUZ İLİŞKİ
+• vwap: veri yok
+• donchian: veri yok
+• funding: veri yok
+• supertrend | n=9 | kazanma=%22.2 | brüt=$+0.10 | ücret=$+3.15 | funding=$+0.00 | net=$-3.05 | PF=0.26 | OLUMSUZ İLİŞKİ
+• session_vwap | n=8 | kazanma=%12.5 | brüt=$-0.53 | ücret=$+2.80 | funding=$+0.00 | net=$-3.33 | PF=0.19 | OLUMSUZ İLİŞKİ
+• anchored_vwap | n=9 | kazanma=%22.2 | brüt=$+0.10 | ücret=$+3.15 | funding=$+0.00 | net=$-3.05 | PF=0.26 | OLUMSUZ İLİŞKİ
+• volume_profile | n=8 | kazanma=%12.5 | brüt=$-0.53 | ücret=$+2.80 | funding=$+0.00 | net=$-3.33 | PF=0.19 | OLUMSUZ İLİŞKİ
+• confirmed_breakout: veri yok
+• taker_delta | n=9 | kazanma=%22.2 | brüt=$+0.10 | ücret=$+3.15 | funding=$+0.00 | net=$-3.05 | PF=0.26 | OLUMSUZ İLİŞKİ
+• cvd_direction | n=9 | kazanma=%22.2 | brüt=$+0.10 | ücret=$+3.15 | funding=$+0.00 | net=$-3.05 | PF=0.26 | OLUMSUZ İLİŞKİ
+• whale_balance: veri yok
+• orderbook_depth | n=4 | kazanma=%25.0 | brüt=$+1.65 | ücret=$+1.40 | funding=$+0.00 | net=$+0.25 | PF=1.48 | YETERSİZ VERİ
+• oi_liquidation: veri yok
+• volume_spike: veri yok
+• technical_all | n=9 | kazanma=%22.2 | brüt=$+0.10 | ücret=$+3.15 | funding=$+0.00 | net=$-3.05 | PF=0.26 | OLUMSUZ İLİŞKİ
+• orderflow_all | n=9 | kazanma=%22.2 | brüt=$+0.10 | ücret=$+3.15 | funding=$+0.00 | net=$-3.05 | PF=0.26 | OLUMSUZ İLİŞKİ
+• news_score: veri yok
+• ml_score | n=5 | kazanma=%20.0 | brüt=$+0.57 | ücret=$+1.75 | funding=$+0.00 | net=$-1.18 | PF=0.19 | OLUMSUZ İLİŞKİ
+• mtf_filter | n=7 | kazanma=%14.3 | brüt=$+1.32 | ücret=$+2.45 | funding=$+0.00 | net=$-1.13 | PF=0.41 | OLUMSUZ İLİŞKİ
+
+🎯 BELİRLEYİCİ BİLEŞENLER — LEAVE-ONE-OUT
+• ema_trend | n=1 | kazanma=%100.0 | brüt=$+0.63 | ücret=$+0.35 | funding=$+0.00 | net=$+0.28 | PF=— | YETERSİZ VERİ
+• ma_trend: veri yok
+• rsi: veri yok
+• macd: veri yok
+• bollinger: veri yok
+• stoch_rsi: veri yok
+• williams_r: veri yok
+• adx: veri yok
+• cci: veri yok
+• mfi: veri yok
+• obv: veri yok
+• vwap: veri yok
+• donchian: veri yok
+• funding: veri yok
+• supertrend | n=1 | kazanma=%100.0 | brüt=$+0.63 | ücret=$+0.35 | funding=$+0.00 | net=$+0.28 | PF=— | YETERSİZ VERİ
+• session_vwap: veri yok
+• anchored_vwap: veri yok
+• volume_profile: veri yok
+• confirmed_breakout: veri yok
+• taker_delta | n=9 | kazanma=%22.2 | brüt=$+0.10 | ücret=$+3.15 | funding=$+0.00 | net=$-3.05 | PF=0.26 | OLUMSUZ İLİŞKİ
+• cvd_direction | n=9 | kazanma=%22.2 | brüt=$+0.10 | ücret=$+3.15 | funding=$+0.00 | net=$-3.05 | PF=0.26 | OLUMSUZ İLİŞKİ
+• whale_balance: veri yok
+• orderbook_depth | n=2 | kazanma=%50.0 | brüt=$+1.35 | ücret=$+0.70 | funding=$+0.00 | net=$+0.65 | PF=5.91 | YETERSİZ VERİ
+• oi_liquidation: veri yok
+• volume_spike: veri yok
+• technical_all | n=9 | kazanma=%22.2 | brüt=$+0.10 | ücret=$+3.15 | funding=$+0.00 | net=$-3.05 | PF=0.26 | OLUMSUZ İLİŞKİ
+• orderflow_all | n=9 | kazanma=%22.2 | brüt=$+0.10 | ücret=$+3.15 | funding=$+0.00 | net=$-3.05 | PF=0.26 | OLUMSUZ İLİŞKİ
+• news_score: veri yok
+• ml_score: veri yok
+• mtf_filter: veri yok
+
+⚠️ Bileşen kohortları örtüşür; satırlar birbirine eklenmez. Bunlar tek oturumluk gözlemsel ilişkilerdir; nedensellik kanıtı veya otomatik parametre değişikliği gerekçesi değildir.
+
+🧪 SHADOW LAB (ana strateji sabit)
+net-exit: 9 işlem | net -3.05 USDT | ret 0
+flow-confidence: 0 işlem | net +0.00 USDT | ret 9
+volatility-gate: 9 işlem | net -3.05 USDT | ret 0
+range-confirmation: 9 işlem | net -3.05 USDT | ret 0
+technical-harmony: 8 işlem | net -3.33 USDT | ret 1
+portfolio-guard: 9 işlem | net -3.05 USDT | ret 0

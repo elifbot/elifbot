@@ -1,0 +1,374 @@
+{
+  "version": "9.4.3",
+  "name": "kripto-bot-v9.4-shared-core-adaptive-risk",
+  "canonical_engine": "src.unified_engine.UnifiedTradingEngine",
+  "sert_risk_tavanlari": {
+    "maksimum_kaldirac_tavani": 10,
+    "maks_marj_zarar_orani": 0.8,
+    "maks_likidasyon_stop_tamponu": 0.85,
+    "maks_gunluk_zarar_tavani_yuzde": 25.0
+  },
+  "genel": {
+    "borsalar": [
+      "binance",
+      "okx"
+    ],
+    "semboller": [
+      "BTC/USDT",
+      "ETH/USDT",
+      "SOL/USDT",
+      "BNB/USDT",
+      "XRP/USDT",
+      "DOGE/USDT",
+      "NEAR/USDT",
+      "UNI/USDT",
+      "SUI/USDT",
+      "ADA/USDT",
+      "LINK/USDT",
+      "AVAX/USDT"
+    ],
+    "zaman_dilimi": "5m",
+    "mod": "paper",
+    "short_izni": true,
+    "kaldıraç": 10
+  },
+  "cift_borsa": {
+    "mod": "full_crypto_futures_best_execution",
+    "aktif_borsalar": [
+      "binance",
+      "okx"
+    ],
+    "tum_saf_coin_evreni": true,
+    "ortak_likit_evren_zorunlu": false,
+    "hacim_alt_siniri_usdt": 0.0,
+    "hedef_parite_sayisi": 0,
+    "aktif_derin_havuz_boyutu": 40,
+    "max_capraz_fiyat_farki_yuzde": 1.2,
+    "max_spot_perp_basis_bps": 25.0,
+    "binance_ws_birincil": "wss://fstream.binance.com/{public|market}/stream",
+    "binance_ws_ikincil": "wss://data-stream.binance.vision/stream",
+    "binance_rest_birincil": "https://www.binance.com/fapi/v1",
+    "binance_rest_yedek": "https://data-api.binance.vision/api/v3",
+    "okx_ws": "wss://ws.okx.com/ws/v5/public",
+    "okx_rest": "https://www.okx.com/api/v5"
+  },
+  "paper": {
+    "bakiye": 1000.0,
+    "gercekci_yurutme": true,
+    "akilli_maker_yurutme": true,
+    "gercekci_maker_kuyruk": true,
+    "dinamik_atr_kayma": true,
+    "funding_aktif": true,
+    "funding_gercek_8s_uzlasma": true
+  },
+  "mtf_filtre": {
+    "aktif": true,
+    "zaman_dilimleri": [
+      "15m",
+      "1h"
+    ],
+    "dusus_engelleme_esigi": -15.0,
+    "yukselis_engelleme_esigi": 15.0
+  },
+  "failover": {
+    "aktif": true,
+    "timeout_esigi": 3,
+    "soguma_saniye": 300
+  },
+  "veritabani": {
+    "dosya": "reports/v92_state.db",
+    "wal_modu": true,
+    "cop_toplayici_saniye": 86400,
+    "max_islem_gecmisi": 2000,
+    "max_equity_gecmisi": 2000,
+    "max_arbitraj_gecmisi": 1000
+  },
+  "health_check": {
+    "aktif": true,
+    "host": "0.0.0.0",
+    "port": 8502
+  },
+  "panel": {
+    "aktif": true,
+    "host": "0.0.0.0",
+    "port": 8080
+  },
+  "risk": {
+    "marj_modu": "cross",
+    "capraz_max_kullanim_yuzde": 98.0,
+    "capraz_min_serbest_usdt": 0.0,
+    "firsat_takasi_aktif": false,
+    "firsat_takasi_min_dakika": 10.0,
+    "stop_modeli": "marj",
+    "marj_zarar_orani": 0.8,
+    "marj_stop_likidasyon_tamponu": 0.85,
+    "stop_loss_yuzde": 8.0,
+    "erken_kar_kilit_tetik": 0.0,
+    "erken_kar_kilit_seviye": 0.0,
+    "zirve_kar_koruma_min_usdt": 2.4,
+    "zirve_kar_koruma_orani": 0.66,
+    "atr_trailing_carpani": 2.4,
+    "kar_kilit_tetikleyici": 2.5,
+    "kar_kilit_seviyesi": 1.2,
+    "trailing_yuzde": 1.5,
+    "kasa_giris_yuzde": 5.0,
+    "dinamik_kaldirac": false,
+    "atr_yuksek_oynaklik_yuzde": 1.5,
+    "atr_asiri_oynaklik_yuzde": 3.0,
+    "max_kayma_yuzde": 0.2,
+    "islem_basina_risk_yuzde": 4.0,
+    "max_pozisyon": 1000,
+    "paper_genis_pozisyon_limiti": true,
+    "paper_max_pozisyon": 1000,
+    "paper_ayni_yon_max_pozisyon": 1000,
+    "sinirsiz_ekleme": false,
+    "ekleme_min_kar_yuzde": 0.4,
+    "capraz_kurtarma": false,
+    "kurtarma_min_zarar_yuzde": 0.8,
+    "gunluk_max_zarar_yuzde": 20.0,
+    "haftalik_max_zarar_yuzde": 40.0,
+    "mola_saniye": 900,
+    "max_kademe": 1,
+    "mutlak_max_pozisyon": 1000,
+    "ayni_yon_max_pozisyon": 1000,
+    "toplam_marj_tavani_yuzde": 98.0,
+    "likidasyon_stop_tamponu": 0.85
+  },
+  "islem_plani": {
+    "aktif": false,
+    "atr_stop_katsayi": 1.5,
+    "swing_mum": 6,
+    "swing_atr_buffer": 0.15,
+    "max_stop_yuzde": 8.0,
+    "tp1_r": 1.2,
+    "tp2_r": 2.4,
+    "tp1_kapatma_orani": 0.5
+  },
+  "cikis": {
+    "kosan_kar": true,
+    "akim_takip_cikisi_aktif": true,
+    "min_donus_kar_usdt": 1.1,
+    "net_basabas_aktif": true,
+    "net_kar_tamponu_usdt": 0.35,
+    "orderflow_kontrol_saniye": 1.0,
+    "orderflow_min_kar_yuzde": 0.3,
+    "orderflow_orani": 1.5,
+    "orderflow_min_usdt": 1000.0,
+    "orderflow_min_geri_cekilme_yuzde": 0.08,
+    "erken_bozulma_cikisi_aktif": false,
+    "erken_bozulma_min_dakika": 18.0,
+    "erken_bozulma_uzatilan_dakika": 25.0,
+    "erken_bozulma_min_zarar_yuzde": 0.25,
+    "erken_bozulma_ters_skor": 12.0
+  },
+  "sigorta": {
+    "max_ardisik_yetki_hatasi": 3,
+    "max_ardisik_emir_hatasi": 3,
+    "gunluk_max_zarar_yuzde": 20.0,
+    "ws_kopma_saniye": 20.0,
+    "flash_crash_yuzde": 8.0,
+    "global_sok_sembolleri": [
+      "BTC/USDT",
+      "ETH/USDT"
+    ],
+    "altcoin_sok_mola_saniye": 900.0
+  },
+  "boyutlandirma": {
+    "mod": "sabit_usdt",
+    "sabit_marj_usdt": 50.0,
+    "kasa_yuzde": 5.0,
+    "kaldirac": 10,
+    "atr_periyot": 14,
+    "atr_katsayi": 1.25,
+    "kelly_kesir": 0.5,
+    "kelly_min_risk": 0.25,
+    "kelly_max_risk": 1.5,
+    "kelly_min_islem": 20
+  },
+  "emirler": {
+    "giris_tipi": "maker",
+    "maker_zaman_asimi_sn": 5.5,
+    "max_kayma_yuzde": 0.2,
+    "max_maker_makas_yuzde": 0.1,
+    "komisyon_maker_yuzde": 0.02,
+    "komisyon_taker_yuzde": 0.05,
+    "borsa_korumasi": true
+  },
+  "makine_ogrenmesi": {
+    "aktif": false,
+    "ufuk_mum": 3,
+    "min_egitim_mumu": 80,
+    "yeniden_egitim_araligi": 15
+  },
+  "sinyal": {
+    "agirlik_indikator": 0.52,
+    "agirlik_para_akisi": 0.48,
+    "agirlik_haber": 0.0,
+    "agirlik_ml": 0.0,
+    "long_esik": 20.0,
+    "short_esik": -20.0,
+    "cikis_esik": 14.0,
+    "rejim_bazli": true,
+    "supertrend_iz_takibi": false,
+    "breakout_hacim_z_esik": 1.5,
+    "breakout_akim_onayi": true,
+    "orderflow_onayi": true,
+    "para_akisi_tetik": true,
+    "para_akisi_esik": 36.0,
+    "tetik_indikator_min": 8.0,
+    "tetik_min_toplam": 18.0,
+    "min_bb_genisligi_yuzde": 0.14,
+    "min_atr_yuzde": 0.08,
+    "ikiz_varlik_korumasi": true,
+    "tukenme_korumasi_aktif": true,
+    "short_min_rsi": 27.0,
+    "short_min_mfi": 18.0,
+    "long_max_rsi": 75.0,
+    "long_max_mfi": 82.0,
+    "yatay_akis_engeli_aktif": true,
+    "teknik_uyum_aktif": true,
+    "max_karsit_teknik_bilesen": 2,
+    "min_teknik_skor": 14.0,
+    "likidasyon_miknatis_aktif": true,
+    "likidasyon_miknatis_mesafe_yuzde": 0.18,
+    "likidasyon_miknatis_akis_istisna": 68.0
+  },
+  "para_akisi": {
+    "balina_esik_usdt": 100000,
+    "likidasyon_squeeze_usdt": 50000,
+    "emir_defteri_kademe": 20,
+    "pencere_saniye": 300,
+    "hacim_patlama_katsayi": 2.5,
+    "divergence_min_fiyat_yuzde": 0.05,
+    "absorption_min_usdt": 25000,
+    "absorption_oran": 1.5,
+    "vpvr_pencere_saniye": 21600,
+    "vpvr_bin": 48,
+    "squeeze_min_tekil_usdt": 25000.0,
+    "squeeze_bildirim_mola_sn": 300.0,
+    "baslangic_isinma_saniye": 0.0,
+    "hafif_akis_teyidi_aktif": true,
+    "min_hafif_kapsama_saniye": 5.0,
+    "min_hafif_islem_sayisi": 2,
+    "min_hafif_notional_usdt": 100.0,
+    "canli_akis_guveni_aktif": false,
+    "anlik_akis_tetik_aktif": false,
+    "anlik_tetik_min_kapsama_saniye": 12.0,
+    "anlik_tetik_min_notional_usdt": 200.0,
+    "min_kapsama_saniye": 60.0,
+    "min_islem_sayisi": 10,
+    "min_notional_usdt": 2500.0,
+    "max_defter_yasi_saniye": 15.0,
+    "referans_notional_usdt": 2500.0,
+    "referans_cvd_usdt": 250.0
+  },
+  "rejim_makinesi": {
+    "min_onay_mumu": 2,
+    "adx_giris": 22.0,
+    "adx_cikis": 18.0,
+    "genislik_fade_esigi": 0.35,
+    "fade_min_vwap_z": 1.65,
+    "choppy_choppiness_esigi": 61.8,
+    "crash_5m_sok_yuzde": -1.8,
+    "crash_1h_dusus_yuzde": -3.5,
+    "hacim_daralma_orani_ust": 0.94,
+    "ayi_ve_dagitimda_long_engeli": true
+  },
+  "hacim_uyumsuzlugu": {
+    "aktif": true,
+    "pencere_mum": 14,
+    "tepe_yakinlik_tolerans_yuzde": 0.38,
+    "hacim_tukenme_orani_ust": 0.72,
+    "maks_rvol_tukenme": 0.88,
+    "maks_akis_skoru_short": -2.5,
+    "agresif_short_skor_tabani": -26.5,
+    "swing_stop_atr_tamponu": 0.2
+  },
+  "on_ajan_konseyi": {
+    "aktif": true,
+    "min_onay_oyu": 7,
+    "min_brut_maliyet_kati": 3.5
+  },
+  "llm_hakem": {
+    "aktif": true,
+    "timeout_saniye": 2.5,
+    "siki_gurultu_filtresi": true,
+    "min_konsensus_skoru": 40.0,
+    "maks_izin_choppiness": 61.5,
+    "ters_akis_veto_esigi": 8.0
+  },
+  "futures": {
+    "tum_pariteler": true,
+    "kripto_disi_filtre": true,
+    "min_kaldirac": 10,
+    "ws_grup_boyutu": 40,
+    "ws_derinlik_guncelleme_ms": 500,
+    "tarama_araligi_saniye": 60,
+    "tarama_paralellik": 6,
+    "max_parite": 0
+  },
+  "arbitraj": {
+    "aktif": false,
+    "min_net_kar_yuzde": 0.08,
+    "islem_tutari_usdt": 1000.0,
+    "mola_saniye": 10.0
+  },
+  "haberler": {
+    "kaynaklar": [],
+    "kontrol_saniye": 60,
+    "veto_guc": false,
+    "korku_acgozluluk": false,
+    "korku_veto_alt": 15,
+    "acgozluluk_long_veto_ust": 85
+  },
+  "bildirimler": {
+    "telegram_aktif": false,
+    "whatsapp_aktif": false,
+    "telegram_periyodik_rapor": false,
+    "telegram_detayli_rapor": false,
+    "balina_uyarilari": false,
+    "telegram_rapor_araligi_sn": 300,
+    "telegram_ilk_rapor_gecikmesi_sn": 10,
+    "discord_aktif": false,
+    "pagerduty_aktif": false,
+    "sadece_kritik_pagerduty": true
+  },
+  "optimizasyon": {
+    "otomatik_params": false,
+    "oos_egitim_orani": 0.7,
+    "params_dosyasi": "configs/v9-canonical-production.json"
+  },
+  "hiz": {
+    "mum_yenileme_saniye": 15,
+    "reconnect_saniye": 5,
+    "ws_ping_saniye": 15
+  },
+  "global_market_regime": {
+    "aktif": true,
+    "leaders": [
+      "BTC/USDT",
+      "ETH/USDT"
+    ],
+    "breadth_window": "15m",
+    "bearish_leader_th": -20.0,
+    "bullish_leader_th": 20.0
+  },
+  "v94": {
+    "enabled": true,
+    "policy": {
+      "stop_atr": 1.8,
+      "min_stop_pct": 0.35,
+      "max_stop_pct": 1.2,
+      "trail_atr": 2.0,
+      "activation_r": 1.5,
+      "profit_floor_r": 0.25,
+      "total_risk_fraction": 0.02,
+      "directional_risk_fraction": 0.015,
+      "cooldown_bars": 3,
+      "max_spread_pct": 0.05,
+      "max_entry_drift_atr": 0.5
+    },
+    "research_only": true,
+    "real_money_approved": false
+  }
+}

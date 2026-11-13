@@ -1,0 +1,181 @@
+.......................F................................................ [ 61%]
+..............................................                           [100%]
+=================================== FAILURES ===================================
+__________ test_restart_open_position_recovery_and_operational_alarms __________
+
+tmp_path = PosixPath('/tmp/pytest-of-user/pytest-72/test_restart_open_position_rec0')
+
+    def test_restart_open_position_recovery_and_operational_alarms(tmp_path: Path):
+        """Süreç yeniden başlatıldığında SQLite'daki açık pozisyon ve stop emri eksiksiz devralınır."""
+    
+        async def _run():
+            cfg = load_config(CANONICAL_CONFIG_PATH)
+            cfg["paper"]["gercekci_maker_kuyruk"] = False
+            db_file = tmp_path / "restart_test.db"
+    
+            store1 = StateStore(db_file)
+            broker1 = ExchangeManager(cfg)
+            broker1.update_live_bbo("binance", "ETH/USDT", 2500.0, 2500.2)
+            risk1 = RiskManager(
+                stop_loss_pct=8.0,
+                stop_model="marj",
+                margin_stop_fraction=0.80,
+                margin_stop_liq_buffer=0.85,
+                lock_trigger_pct=2.5,
+                lock_level_pct=1.2,
+                trail_pct=1.5,
+                risk_per_trade_pct=4.0,
+                max_positions=1000,
+                daily_max_loss_pct=20.0,
+                capital_pct_per_entry=5.0,
+                leverage=10,
+                margin_mode="cross",
+                cross_max_margin_pct=98.0,
+                cross_min_free_usdt=0.0,
+                max_total_margin_pct=98.0,
+                state_store=store1,
+            )
+            sizer1 = PositionSizer(
+                4.0, 1.25, False, 0.5, 0.25, 1.5, 20, tmp_path / "k.json",
+                mode="sabit_usdt", capital_pct=5.0, leverage=10, fixed_margin_usdt=50.0,
+            )
+            strat = Strategy(0.52, 0.48, 0.0, 20.0, -20.0, 14.0, True)
+            ex1 = Executor(
+                broker1, risk1, strat, sizer1, _SilentAlerter(), 10, "maker", 1.0, False,
+                state_store=store1, circuit_breaker=CircuitBreaker(state_store=store1),
+                trade_plan_cfg={"aktif": False},
+            )
+            ex1.reconcile_and_unlock_paper_state(owner_id="kripto-bot-v92-main")
+            await ex1.on_price_tick("ETH/USDT", 2500.1, exchange="binance")
+            await ex1.on_signal(
+                "ETH/USDT", 2500.1, {"signal": "LONG", "total": 35.0, "ind": 30.0}, 40.0, False,
+                entry_context={"exchange": "binance", "preferred_exchange": "binance"},
+            )
+            assert "ETH/USDT" in ex1.positions
+            saved_stop = ex1.positions["ETH/USDT"].stop
+            await broker1.close()
+    
+            store2 = StateStore(db_file)
+            broker2 = ExchangeManager(cfg)
+            ex2 = Executor(
+                broker2, risk1, strat, sizer1, _SilentAlerter(), 10, "maker", 1.0, False,
+                state_store=store2, circuit_breaker=CircuitBreaker(state_store=store2),
+                trade_plan_cfg={"aktif": False},
+            )
+            rec = ex2.reconcile_and_unlock_paper_state(owner_id="kripto-bot-v92-main")
+            assert rec["ok"] is True
+            assert ex2.paper_recovery_locked is False
+            assert "ETH/USDT" in ex2.positions
+            assert pytest.approx(ex2.positions["ETH/USDT"].stop) == saved_stop
+    
+            eng2 = UnifiedTradingEngine(ex2, cfg=cfg)
+            health_ok = eng2.operational_health_snapshot(max_feed_lag_sec=30.0)
+            assert health_ok["healthy"] is True
+            assert health_ok["ledger_reconciled"] is True
+    
+            eng2._last_feed_ts = time.time() - 60.0
+            ex2.positions.pop("ETH/USDT")
+            health_bad = eng2.operational_health_snapshot(max_feed_lag_sec=15.0)
+            assert health_bad["healthy"] is False
+            assert any("FEED_LATENCY_ALARM" in a for a in health_bad["alarms"])
+            assert any("LEDGER_RECONCILIATION_MISMATCH" in a for a in health_bad["alarms"])
+            await broker2.close()
+    
+>       asyncio.run(_run())
+
+tests/test_v92_upgrades.py:420: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.13/asyncio/runners.py:196: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/asyncio/runners.py:119: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/asyncio/base_events.py:726: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    async def _run():
+        cfg = load_config(CANONICAL_CONFIG_PATH)
+        cfg["paper"]["gercekci_maker_kuyruk"] = False
+        db_file = tmp_path / "restart_test.db"
+    
+        store1 = StateStore(db_file)
+        broker1 = ExchangeManager(cfg)
+        broker1.update_live_bbo("binance", "ETH/USDT", 2500.0, 2500.2)
+        risk1 = RiskManager(
+            stop_loss_pct=8.0,
+            stop_model="marj",
+            margin_stop_fraction=0.80,
+            margin_stop_liq_buffer=0.85,
+            lock_trigger_pct=2.5,
+            lock_level_pct=1.2,
+            trail_pct=1.5,
+            risk_per_trade_pct=4.0,
+            max_positions=1000,
+            daily_max_loss_pct=20.0,
+            capital_pct_per_entry=5.0,
+            leverage=10,
+            margin_mode="cross",
+            cross_max_margin_pct=98.0,
+            cross_min_free_usdt=0.0,
+            max_total_margin_pct=98.0,
+            state_store=store1,
+        )
+        sizer1 = PositionSizer(
+            4.0, 1.25, False, 0.5, 0.25, 1.5, 20, tmp_path / "k.json",
+            mode="sabit_usdt", capital_pct=5.0, leverage=10, fixed_margin_usdt=50.0,
+        )
+        strat = Strategy(0.52, 0.48, 0.0, 20.0, -20.0, 14.0, True)
+        ex1 = Executor(
+            broker1, risk1, strat, sizer1, _SilentAlerter(), 10, "maker", 1.0, False,
+            state_store=store1, circuit_breaker=CircuitBreaker(state_store=store1),
+            trade_plan_cfg={"aktif": False},
+        )
+        ex1.reconcile_and_unlock_paper_state(owner_id="kripto-bot-v92-main")
+        await ex1.on_price_tick("ETH/USDT", 2500.1, exchange="binance")
+        await ex1.on_signal(
+            "ETH/USDT", 2500.1, {"signal": "LONG", "total": 35.0, "ind": 30.0}, 40.0, False,
+            entry_context={"exchange": "binance", "preferred_exchange": "binance"},
+        )
+        assert "ETH/USDT" in ex1.positions
+        saved_stop = ex1.positions["ETH/USDT"].stop
+        await broker1.close()
+    
+        store2 = StateStore(db_file)
+        broker2 = ExchangeManager(cfg)
+        ex2 = Executor(
+            broker2, risk1, strat, sizer1, _SilentAlerter(), 10, "maker", 1.0, False,
+            state_store=store2, circuit_breaker=CircuitBreaker(state_store=store2),
+            trade_plan_cfg={"aktif": False},
+        )
+        rec = ex2.reconcile_and_unlock_paper_state(owner_id="kripto-bot-v92-main")
+        assert rec["ok"] is True
+        assert ex2.paper_recovery_locked is False
+        assert "ETH/USDT" in ex2.positions
+        assert pytest.approx(ex2.positions["ETH/USDT"].stop) == saved_stop
+    
+        eng2 = UnifiedTradingEngine(ex2, cfg=cfg)
+        health_ok = eng2.operational_health_snapshot(max_feed_lag_sec=30.0)
+        assert health_ok["healthy"] is True
+        assert health_ok["ledger_reconciled"] is True
+    
+        eng2._last_feed_ts = time.time() - 60.0
+        ex2.positions.pop("ETH/USDT")
+        health_bad = eng2.operational_health_snapshot(max_feed_lag_sec=15.0)
+        assert health_bad["healthy"] is False
+        assert any("FEED_LATENCY_ALARM" in a for a in health_bad["alarms"])
+>       assert any("LEDGER_RECONCILIATION_MISMATCH" in a for a in health_bad["alarms"])
+E       assert False
+E        +  where False = any(<generator object test_restart_open_position_recovery_and_operational_alarms.<locals>._run.<locals>.<genexpr> at 0x7f0edb777030>)
+
+tests/test_v92_upgrades.py:417: AssertionError
+----------------------------- Captured stdout call -----------------------------
+🧾 GİRİŞ VERİSİ | c2298481e46e4fba95f902f28a04cc25 | ETH/USDT | {"exchange":"binance","preferred_exchange":"binance","entry_reason":"birleşik skor=+35.0 >= +20","side":"LONG","entry_price":2500.0,"leverage":10,"margin_usdt":50.0,"attribution":{"technical":{},"orderflow":{},"modules":{"technical_all":{"contribution":0.0,"decisive":true,"without_action":"yok","without_signal":"BEKLE","without_total":0.0},"orderflow_all":{"contribution":0.0,"decisive":true,"without_action":"yok","without_signal":"BEKLE","without_total":0.0},"news_score":{"contribution":0.0,"decisive":true,"without_action":"yok","without_signal":"BEKLE","without_total":0.0},"ml_score":{"contribution":0.0,"decisive":true,"without_action":"yok","without_signal":"BEKLE","without_total":0.0},"mtf_filter":{"contribution":0.0,"decisive":true,"without_action":"yok","without_signal":"BEKLE","without_total":0.0}}}}
+🟢 LONG AÇILDI | ETH/USDT @ 2,500.0000 | 10x Kaldıraç (normal piyasa (10x)) | Marj: $50.00 (%5.0) | Emir: maker_post_only | Stop: 2,300.0000 (%8.00 / ~$40.00 fiyat K/Z) | Koruma: bot-taraflı | Neden: birleşik skor=+35.0 >= +20
+♻️ SQLite'tan 1 açık pozisyon kurtarıldı:
+  • ETH/USDT (binance) LONG qty=0.199992 @ 2,500.0000 | stop=2,300.0000
+=========================== short test summary info ============================
+FAILED tests/test_v92_upgrades.py::test_restart_open_position_recovery_and_operational_alarms
+1 failed, 117 passed in 10.91s

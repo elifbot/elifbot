@@ -1,0 +1,50 @@
+{
+  "metrics": {
+    "net_pnl": 0.0,
+    "trade_count": 0,
+    "win_rate": 0.0,
+    "profit_factor": 0.0,
+    "max_drawdown_usdt": 0.0,
+    "max_drawdown_pct": 0.0,
+    "sharpe_per_trade": 0.0,
+    "avg_win": 0.0,
+    "avg_loss": 0.0,
+    "expectancy_usdt": 0.0,
+    "expectancy_r": 0.0,
+    "max_consecutive_losses": 0,
+    "total_fees": 0.0,
+    "total_funding": 0.0,
+    "total_slippage": 0.0,
+    "avg_r_multiple": 0.0,
+    "by_engine": {},
+    "by_symbol": {},
+    "by_side": {},
+    "by_regime": {}
+  },
+  "rejection_counts": {
+    "dusuk_hacim": 571
+  },
+  "expired_orders": 0,
+  "partial_fills": 0,
+  "monte_carlo": {
+    "simulations": 0,
+    "final_pnl_p5": 0.0,
+    "final_pnl_p25": 0.0,
+    "final_pnl_p50": 0.0,
+    "final_pnl_p75": 0.0,
+    "final_pnl_p95": 0.0,
+    "max_dd_p50_pct": 0.0,
+    "max_dd_p95_pct": 0.0,
+    "prob_loss": 0.0,
+    "prob_ruin": 0.0,
+    "trade_count": 0
+  },
+  "shock_tests": {
+    "checked": 0,
+    "blocked": 0,
+    "unavailable": 0
+  },
+  "betas": {},
+  "spread": "uygulanmadi",
+  "data_source": "perp"
+}

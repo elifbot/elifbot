@@ -1,0 +1,67 @@
+{
+  "project": "ai-omnistudio",
+  "version": "1.0.0",
+  "python_files": 32,
+  "lines_of_code": 5956,
+  "tests_passed": 150,
+  "ai_providers": 20,
+  "archive_zips_verified": 17,
+  "archive_original_tests_reproduced": 158,
+  "runs": [
+    {
+      "run_id": "dogrulamali-test",
+      "status": "COMPLETED",
+      "profile": "natural",
+      "evidence_class": "NATURAL_PAPER",
+      "ticks": 11072,
+      "signals": 0,
+      "accepted": 0,
+      "closed": 0,
+      "net": 0,
+      "gaps": 0,
+      "real_orders": 0
+    },
+    {
+      "run_id": "genis-evren-8dk",
+      "status": "COMPLETED",
+      "profile": "natural",
+      "evidence_class": "NATURAL_PAPER",
+      "ticks": 60806,
+      "signals": 4,
+      "accepted": 0,
+      "closed": 0,
+      "net": 0,
+      "gaps": 0,
+      "real_orders": 0
+    },
+    {
+      "run_id": "ilk-gercek-test",
+      "status": "FAILED",
+      "profile": "natural",
+      "evidence_class": "NATURAL_PAPER",
+      "ticks": 8480,
+      "signals": 0,
+      "accepted": 0,
+      "closed": 0,
+      "net": 0,
+      "gaps": 0,
+      "real_orders": 0
+    },
+    {
+      "run_id": "yasam-dongusu-tani",
+      "status": "COMPLETED",
+      "profile": "lifecycle-diagnostic",
+      "evidence_class": "LIFECYCLE_DIAGNOSTIC_NOT_NATURAL",
+      "ticks": 32613,
+      "signals": 844,
+      "accepted": 1,
+      "closed": 1,
+      "net": -0.335406,
+      "gaps": 0,
+      "real_orders": 0
+    }
+  ],
+  "mode": "PAPER",
+  "live_orders_sent": 0,
+  "real_money_approved": false
+}

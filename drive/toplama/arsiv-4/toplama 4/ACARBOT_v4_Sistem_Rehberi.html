@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>ACARBOT v4.0 — Sistem ve İşleyiş Rehberi</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+@page { size: 720px 1020px; margin: 0; }
+:root {
+  --c-bg: #0c1220;
+  --c-panel: #131b2e;
+  --c-panel2: #18233a;
+  --c-text: #e6ebf4;
+  --c-dim: #93a1b8;
+  --c-accent: #2dd4a7;
+  --c-amber: #f0b45c;
+}
+html, body {
+  margin: 0; padding: 0;
+  width: 720px;
+  background: var(--c-bg);
+  color: var(--c-text);
+  font-family: 'Inter', 'DejaVu Sans', 'Liberation Sans', sans-serif;
+  font-size: 13.5px;
+  line-height: 1.62;
+}
+@media screen {
+  html { height: auto; display: flex; justify-content: center; background: #060a13; }
+  body { margin: 20px auto; box-shadow: 0 0 60px rgba(0,0,0,.6); }
+}
+* { box-sizing: border-box; }
+
+/* ---------- COVER ---------- */
+.cover {
+  width: 720px; height: 1020px;
+  break-after: page;
+  overflow: hidden;
+  position: relative;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 60px 64px;
+  background: linear-gradient(160deg, #0c1220 0%, #101a30 55%, #0d2233 100%);
+}
+.cover .glow {
+  position: absolute; width: 300px; height: 300px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(45,212,167,.13) 0%, transparent 70%);
+  top: 30px; right: 30px;
+}
+.cover .glow2 {
+  position: absolute; width: 260px; height: 260px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(240,180,92,.10) 0%, transparent 70%);
+  bottom: 40px; left: 20px;
+}
+.cover-badge {
+  display: inline-block; width: fit-content;
+  border: 1px solid rgba(45,212,167,.5); color: var(--c-accent);
+  font-size: 11px; letter-spacing: 3px; font-weight: 600;
+  padding: 6px 14px; border-radius: 3px; margin-bottom: 28px;
+}
+.cover-title {
+  font-size: 58px; font-weight: 900; line-height: 1.02; letter-spacing: -1px;
+  color: #fff; margin-bottom: 14px;
+}
+.cover-title span { color: var(--c-accent); }
+.cover-sub {
+  font-size: 16px; color: var(--c-dim); font-weight: 400;
+  max-width: 480px; margin-bottom: 40px;
+}
+.cover-stats { display: flex; gap: 14px; margin-bottom: 46px; }
+.cstat {
+  background: rgba(19,27,46,.75); border: 1px solid rgba(147,161,184,.18);
+  border-radius: 8px; padding: 14px 16px; min-width: 118px;
+}
+.cstat .n { font-size: 24px; font-weight: 800; color: var(--c-accent); line-height: 1.1; }
+.cstat .l { font-size: 10px; color: var(--c-dim); letter-spacing: 1px; text-transform: uppercase; margin-top: 4px; }
+.cover-line { height: 2px; background: linear-gradient(90deg, var(--c-accent), transparent); width: 200px; margin-bottom: 44px; border-radius: 2px; }
+.cover-meta { font-size: 11.5px; color: var(--c-dim); line-height: 1.9; }
+.cover-meta b { color: var(--c-text); font-weight: 600; }
+.cover-foot {
+  position: absolute; bottom: 44px; left: 64px; right: 64px;
+  display: flex; justify-content: space-between;
+  font-size: 10.5px; color: rgba(147,161,184,.75); letter-spacing: 2px; text-transform: uppercase;
+}
+
+/* ---------- CONTENT ---------- */
+.main-content { padding: 54px 58px 40px 58px; }
+.chapter-header { break-after: avoid; break-inside: avoid; margin-top: 26px; }
+.chapter-header:first-child { margin-top: 0; }
+.sec-tag {
+  font-size: 10.5px; font-weight: 700; letter-spacing: 2.5px;
+  color: var(--c-accent); text-transform: uppercase; margin-bottom: 6px;
+}
+.sec-title { font-size: 23px; font-weight: 800; color: #fff; line-height: 1.2; margin-bottom: 8px; }
+.divider { height: 2px; width: 54px; background: var(--c-accent); margin-bottom: 16px; border-radius: 2px; }
+p { margin: 0 0 12px 0; color: var(--c-text); }
+.small { font-size: 11.5px; color: var(--c-dim); }
+b { color: #fff; font-weight: 600; }
+.accent { color: var(--c-accent); font-weight: 600; }
+
+.callout {
+  background: rgba(45,212,167,.07); border-left: 3px solid var(--c-accent);
+  padding: 12px 16px; border-radius: 0 6px 6px 0; margin: 14px 0;
+  break-inside: avoid;
+}
+.callout.warn { background: rgba(240,180,92,.07); border-left-color: var(--c-amber); }
+.callout .t { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 4px; color: var(--c-accent); }
+.callout.warn .t { color: var(--c-amber); }
+
+.card {
+  background: var(--c-panel); border: 1px solid rgba(147,161,184,.14);
+  border-radius: 8px; padding: 14px 16px; margin-bottom: 12px; break-inside: avoid;
+}
+.card .ct { font-weight: 700; color: #fff; font-size: 13.5px; margin-bottom: 4px; }
+.card .ct code { color: var(--c-accent); font-size: 12.5px; }
+.card p { margin: 0; font-size: 12.5px; color: var(--c-dim); }
+.card p b { color: var(--c-text); }
+
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+.grid2 .card { margin-bottom: 0; }
+
+table { width: 100%; border-collapse: collapse; margin: 12px 0 16px 0; font-size: 12px; break-inside: avoid; }
+th {
+  text-align: left; padding: 8px 10px; background: var(--c-panel2);
+  color: var(--c-accent); font-weight: 700; font-size: 11px; letter-spacing: 1px; text-transform: uppercase;
+  border-bottom: 2px solid rgba(45,212,167,.35);
+}
+td { padding: 7px 10px; border-bottom: 1px solid rgba(147,161,184,.12); color: var(--c-text); vertical-align: top; }
+td.k { color: var(--c-dim); white-space: nowrap; font-weight: 600; }
+
+/* flow steps */
+.step {
+  display: flex; gap: 14px; margin-bottom: 10px; break-inside: avoid;
+  background: var(--c-panel); border: 1px solid rgba(147,161,184,.14); border-radius: 8px; padding: 12px 14px;
+}
+.step .num {
+  flex-shrink: 0; width: 30px; height: 30px; border-radius: 6px;
+  background: rgba(45,212,167,.12); color: var(--c-accent);
+  font-weight: 800; font-size: 14px; display: flex; align-items: center; justify-content: center;
+  border: 1px solid rgba(45,212,167,.3);
+}
+.step .st { font-weight: 700; color: #fff; font-size: 13px; }
+.step .sd { font-size: 12px; color: var(--c-dim); }
+
+code.inline {
+  background: rgba(45,212,167,.1); color: var(--c-accent);
+  padding: 1px 6px; border-radius: 4px; font-family: 'DejaVu Sans Mono', 'Liberation Mono', monospace; font-size: 11.5px;
+}
+pre {
+  background: #0a0f1b; border: 1px solid rgba(147,161,184,.15); border-radius: 8px;
+  padding: 14px 16px; font-family: 'DejaVu Sans Mono', 'Liberation Mono', monospace;
+  font-size: 11px; line-height: 1.7; color: #c8d4e8; margin: 12px 0 16px 0;
+  overflow: hidden; break-inside: avoid; white-space: pre-wrap;
+}
+pre .c { color: #5d6f8f; }
+pre .g { color: var(--c-accent); }
+
+/* version timeline */
+.ver {
+  display: flex; gap: 14px; margin-bottom: 10px; break-inside: avoid;
+}
+.ver .vtag {
+  flex-shrink: 0; width: 52px; text-align: center;
+  background: var(--c-panel2); border: 1px solid rgba(45,212,167,.3); border-radius: 6px;
+  color: var(--c-accent); font-weight: 800; font-size: 12px; padding: 5px 0; height: fit-content;
+}
+.ver .vb { font-size: 12.5px; color: var(--c-dim); }
+.ver .vb b { color: var(--c-text); }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 14px 0; break-inside: avoid; }
+.chip {
+  background: var(--c-panel2); border: 1px solid rgba(147,161,184,.2);
+  border-radius: 20px; padding: 4px 12px; font-size: 11px; color: var(--c-text);
+}
+.chip b { color: var(--c-accent); font-weight: 700; }
+
+/* ---------- ENDING ---------- */
+.ending {
+  width: 720px; height: 1020px; break-before: page; overflow: hidden;
+  position: relative;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 70px 64px;
+  background: linear-gradient(200deg, #0c1220 0%, #101a30 60%, #0d2233 100%);
+}
+.ending .glow { position: absolute; width: 280px; height: 280px; border-radius: 50%; background: radial-gradient(circle, rgba(45,212,167,.12) 0%, transparent 70%); bottom: 60px; right: 30px; }
+.end-title { font-size: 34px; font-weight: 900; color: #fff; line-height: 1.15; margin-bottom: 18px; }
+.end-title span { color: var(--c-accent); }
+.end-box { background: rgba(19,27,46,.8); border: 1px solid rgba(147,161,184,.16); border-radius: 10px; padding: 20px 22px; margin-bottom: 14px; }
+.end-box .t { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--c-accent); font-weight: 700; margin-bottom: 6px; }
+.end-box p { font-size: 12.5px; color: var(--c-dim); margin: 0; }
+.end-foot { position: absolute; bottom: 44px; left: 64px; right: 64px; font-size: 10.5px; color: rgba(147,161,184,.7); letter-spacing: 2px; text-transform: uppercase; display: flex; justify-content: space-between; }
+</style>
+</head>
+<body>
+
+<!-- ================= COVER ================= -->
+<div class="cover">
+  <div class="glow"></div>
+  <div class="glow2"></div>
+  <div class="cover-badge">ACARBOT · FINAL v4.0</div>
+  <div class="cover-title">Sistem ve<br>İşleyiş <span>Rehberi</span></div>
+  <div class="cover-sub">Kripto vadeli işlem botunun içindeki her şey: mimari, sinyal zinciri, 5 uzman motor, risk katmanları, sürüm tarihi ve canlı/testnet altyapısı — tek belgede.</div>
+  <div class="cover-stats">
+    <div class="cstat"><div class="n">483</div><div class="l">Geçen Test</div></div>
+    <div class="cstat"><div class="n">2</div><div class="l">Borsa (OKX+Binance)</div></div>
+    <div class="cstat"><div class="n">6</div><div class="l">Strateji Modu</div></div>
+    <div class="cstat"><div class="n">46+</div><div class="l">CLI Parametresi</div></div>
+  </div>
+  <div class="cover-line"></div>
+  <div class="cover-meta">
+    <b>Mod:</b> Yalnızca paper trading (gerçek emir gönderilmez) · Testnet/demo ayrıca ve açıkça istenir<br>
+    <b>Veri:</b> Canlı OKX + Binance public feed · Örnek gerçek veri pakette: BTCUSDT_5m.csv<br>
+    <b>Tarih:</b> 7 Kasım 2026
+  </div>
+  <div class="cover-foot"><span>ACARBOT</span><span>v1.0 → v4.0</span></div>
+</div>
+
+<!-- ================= BODY ================= -->
+<div class="main-content">
+
+  <!-- 1. BOT NEDİR -->
+  <div class="chapter-header">
+    <div class="sec-tag">Bölüm 01</div>
+    <div class="sec-title">Bot ne yapıyor? (30 saniyelik özet)</div>
+    <div class="divider"></div>
+  </div>
+  <p>ACARBOT, <b>kripto vadeli işlem (futures) piyasası için yazılmış bir sinyal ve işlem botudur</b>. OKX ve Binance'ten canlı piyasa verisini çeker; bu veriyi 5 farklı "uzman motor"dan geçirir, her sinyali 100 puanlık şeffaf bir sistemle puanlar, bir "Piyasa Hakemi" vetosundan geçirir ve sonunda paper (simülasyon) emirleri açar. Her pozisyon doğumundan itibaren sunucu tarafı stop, break-even, trailing ve TP1 mantığıyla yönetilir.</p>
+  <p>Bot <b>kesinlikle gerçek para emri göndermez</b>: varsayılan mod paper trading'dir; borsa testnet/demo eşlemesi (<code class="inline">--live-testnet</code>) ayrıca ve açıkça istenir. Amaç, stratejiyi ve altyapıyı sıfırdan risk almadan kanıtlanabilir biçimde test etmektir.</p>
+  <div class="callout warn">
+    <div class="t">Dürüstlük notu</div>
+    Strateji kârlılığı <b>kanıtlanmamıştır</b>. Gerçek OKX verisiyle (BTC-USDT-SWAP, ~7 gün, 2000 adet 5 dakikalık mum) yapılan backtest 8 işlem üretti — sinyal→emir→pozisyon zinciri çalışıyor demektir — ama net sonuç bu örnekte negatiftir. Parametre kalibrasyonu ve uzun dönem testi şart. Backtest/paper sonucu gelecek getirinin garantisi değildir.
+  </div>
+
+  <!-- 2. MİMARİ -->
+  <div class="chapter-header">
+    <div class="sec-tag">Bölüm 02</div>
+    <div class="sec-title">Mimari: hangi klasörde ne var?</div>
+    <div class="divider"></div>
+  </div>
+  <p>Kod, tek yönlü bir boru hattı etrafında örgütlenmiştir: <b>veri → sinyal → risk → emir → izleme</b>. Her katman kendi klasöründe yaşar; canlı ve backtest aynı çekirdek kuralları paylaşır (tek kapı ilkesi).</p>
+  <div class="grid2">
+    <div class="card"><div class="ct">core/ — Beyin</div><p>Strateji (FADE/TREND + 4 ek strateji), rejim tespiti, MTF, order flow, 100 puanlık skorlama, uzman motorlar, Piyasa Hakemi, giriş kapıları, risk ve portföy sınırları.</p></div>
+    <div class="card"><div class="ct">infra/ — Veri Katmanı</div><p>Binance + OKX public bağlantıları (reconnect, açık faiz/OI), mum modeli ve <b>veri bütünlüğü</b>: bozuk/eksik veride güvenli moda geçer.</p></div>
+    <div class="card"><div class="ct">exec/ — Emir Motoru</div><p>Maker kuyruk modeli, kısmi dolum, emir TTL, spread/kayma/gecikme modeli + paper broker simülasyonu.</p></div>
+    <div class="card"><div class="ct">live/ — Borsa Eşleme</div><p>Testnet/demo katmanı: imzalı HTTP istemcileri (hata gövdesi korunur), Binance testnet + OKX demo (algo stop), LiveMirror, acil durum ve restart kurtarma.</p></div>
+    <div class="card"><div class="ct">backtest/ — Laboratuvar</div><p>Spread/kayma/gecikme/kısmi dolumlu engine, metrikler, Monte Carlo, walk-forward ve optimizasyon.</p></div>
+    <div class="card"><div class="ct">monitor/ — Panel</div><p>9 bölümlük canlı dashboard, oturum raporu ve Prometheus formatında metrik çıktısı.</p></div>
+    <div class="card"><div class="ct">safety/ — Güvenlik</div><p>Telegram uyarıları, haber koruması (bigün önemli haberlerde girişi kapatır), anahtar maskeleme.</p></div>
+    <div class="card"><div class="ct">agents/ — Ajanlar</div><p>ABD piyasası ajanı (SPX/Nasdaq/DXY/VIX risk-on/off), RSS haber ajanı, analist ajanı (oturum raporunu yorumlar), kongre ajanı (dürüstçe: "uygulanmadı").</p></div>
+  </div>
+  <p class="small">Ayrıca: <b>state/</b> SQLite (WAL) durum deposu — restart sonrası çift emir yok, stoplar geri yüklenir · <b>app/</b> asyncio CLI ve executor · <b>tools/</b> geçmiş veri indirici (API anahtarı gerektirmez) · <b>tests/</b> 483 test · <b>docs/</b> testnet oturum kılavuzu ve örnek backtest çıktıları.</p>
+
+  <!-- 3. İŞLEYİŞ -->
+  <div class="chapter-header">
+    <div class="sec-tag">Bölüm 03</div>
+    <div class="sec-title">İşleyiş: bir sinyalin yolculuğu</div>
+    <div class="divider"></div>
+  </div>
+  <p>Her tarama döngüsünde (tam pazar taramasında ölçülmüş döngü: <b>66 saniye, 528 sembol, 0 hata/429</b>) bir sinyal şu kapılardan geçer:</p>
+  <div class="step"><div class="num">1</div><div><div class="st">Veri toplama ve bütünlük</div><div class="sd">OKX/Binance feed'lerinden mumlar; forming mum elenir, gap varsa güvenli mod. RVOL sahte-hacim hatasına karşı baz hacim düzeltmesi (v3.1): işlem olmayan ama fiyatı oynayan dakikalar artık sahte hacim spike'ı üretmez.</div></div></div>
+  <div class="step"><div class="num">2</div><div><div class="st">Rejim tespiti</div><div class="sd">Piyasa TREND mi RANGE mi? BTC yönü filtresi ve sahte kırılım (fake breakout) filtresi çalışır. RegimeDetector sonucuna göre FADE motoru mu TREND motoru mu konuşacak karar verir.</div></div></div>
+  <div class="step"><div class="num">3</div><div><div class="st">Uzman motorlar oy verir</div><div class="sd">4 avcı motor (trend, likidite, momentum, dönüş) + istenirse Confluence 10 filtre oylaması. Her motor kendi uzmanlığında sinyal üretir veya çekilir.</div></div></div>
+  <div class="step"><div class="num">4</div><div><div class="st">100 puanlık skorlama</div><div class="sd">Her bileşenin katkısı şeffaf: RVOL, yapı kırılımı, momentum, MTF uyumu… Skor ≥ 70 değilse sinyal ölür. Eşik CLI'dan değiştirilebilir (v3.1).</div></div></div>
+  <div class="step"><div class="num">5</div><div><div class="st">Piyasa Hakemi + kapılar</div><div class="sd">MarketJudge vetosu, MTF çelişki kapısı, giriş hız limiti (dakikada 3), stop sonrası 15 dk yeniden giriş beklemesi (soft 5 dk), haber/sweep koruması, <b>bayat sinyal koruması</b> (v3.1): canlı fiyat stopu çoktan aşmışsa giriş iptal.</div></div></div>
+  <div class="step"><div class="num">6</div><div><div class="st">Risk kesintisi</div><div class="sd">Pozisyon başı 25 USDT net zarar tavanı, portföy tavanları (toplam açık risk 150 USDT, korelasyon grubu başına 2 pozisyon), beta yön tavanı. Geçemiyorsa emir doğmaz.</div></div></div>
+  <div class="step"><div class="num">7</div><div><div class="st">Emir ve yönetim</div><div class="sd">Maker (post-only) giriş, MARKET yedeği; doğumda stop + TP kurulur. Break-even, trailing stop ve TP1 kademeleri paper'da işletilir ve borsadaki stop'a yansıtılır. Equity -%15'e değerse HARD_HALT: her şey kapatılır.</div></div></div>
+
+  <!-- 4. MOTORLAR -->
+  <div class="chapter-header">
+    <div class="sec-tag">Bölüm 04</div>
+    <div class="sec-title">Motorlar ve stratejiler</div>
+    <div class="divider"></div>
+  </div>
+  <p>Botun kalbinde <b>5 uzman motor</b> ve bunların üzerinde bir jüri vardır. v4.0 ile klasik motorların yanına <b>seçilebilir stratejiler</b> eklendi (<code class="inline">--strategy</code>):</p>
+  <div class="grid2">
+    <div class="card"><div class="ct">TrendHunter</div><p>Trend piyasasında yönle birlikte hareket avlar; RegimeDetector "TREND" dediğinde ağırlık kazanır.</p></div>
+    <div class="card"><div class="ct">LiquidityHunter</div><p>Likidite boşluklarını ve sıvılaşma bölgelerini hedefler; sweep_guard ile sahte sıvılaşma avlarını eler.</p></div>
+    <div class="card"><div class="ct">MomentumHunter</div><p>Hacim destekli ivme patlamalarını yakalar; spike tespiti ve RVOL sanity kontrolüyle beslenir.</p></div>
+    <div class="card"><div class="ct">ReversalHunter</div><p>Aşırı uzamış hareketlerde dönüş sinyali arar; FADE mantığının uzman halidir.</p></div>
+  </div>
+  <p><b>MarketJudge (Piyasa Hakemi):</b> Motorların oylarını toplayan jüridir; çelişkili rejimde veto koyar, motorların geçmiş performansını oturum içinde izleyip zayıf motorun sesini kısar (ExpertPerformanceTracker).</p>
+  <div class="callout">
+    <div class="t">Confluence stratejisi (v4.0)</div>
+    10 filtreli ağırlıklı oylama — eşit ağırlıklı, şeffaf: EMA20/EMA50, fiyat-EMA200, MACD histogram, RSI bölgesi, RVOL yönü, yapı kırılımı, BTC uyumu, ATR genişlemesi, momentum serisi, EMA20 eğimi. Oy toplamı eşiği <code class="inline">--confluence-threshold</code> ile ayarlanır. Diğer seçenekler: <code class="inline">rsirev</code>, <code class="inline">macd</code>, <code class="inline">bollkir</code>, <code class="inline">bolldon</code>.
+  </div>
+  <p>Ayrıca v3.1'den gelen <b>motor seçimi</b> (<code class="inline">--motors both|trend|fade</code>) pipeline'ın tek kapısından geçer: canlı ve backtest aynı kural setini kullanır. Kod varsayılanları korunur, gevşetme yalnız CLI'dan: <code class="inline">--min-rvol</code>, <code class="inline">--fade-impulse</code>, <code class="inline">--spike-multiplier</code>, <code class="inline">--scoring-threshold</code>.</p>
+
+  <!-- 5. RİSK -->
+  <div class="chapter-header">
+    <div class="sec-tag">Bölüm 05</div>
+    <div class="sec-title">Risk ve koruma katmanları</div>
+    <div class="divider"></div>
+  </div>
+  <p>Botun tasarım felsefesi: <b>önce hayatta kal</b>. Dokuz katmanlı koruma mimarisi, tek bir kötü günün hesabı bitirmesini engellemeyi hedefler:</p>
+  <table>
+    <tr><th>Katman</th><th>Mekanizma</th></tr>
+    <tr><td class="k">Sinyal</td><td>100 puanlık skor ≥ 70, Piyasa Hakemi vetosu, MTF çelişki kapısı</td></tr>
+    <tr><td class="k">Emir</td><td>Maker kuyruk modeli, kısmi dolum, TTL, spread/kayma/gecikme modeli</td></tr>
+    <tr><td class="k">Risk</td><td>Pozisyon başı <b>25 USDT</b> net risk (ücret+kayma dâhil), toplam açık risk tavanı 150 USDT, maks. 6 pozisyon, grup başına 2</td></tr>
+    <tr><td class="k">Hesap</td><td>Equity eşiği <b>-%15 → HARD_HALT</b> (+ borsa pozisyonlarının otomatik flatten), cross likidasyon modeli</td></tr>
+    <tr><td class="k">Akış</td><td>Giriş <b>3/dk</b>, stop sonrası 15 dk yeniden giriş beklemesi (soft 5 dk)</td></tr>
+    <tr><td class="k">Veri</td><td>Forming mum eleme, gap → güvenli mod, RVOL sanity, baz hacim düzeltmesi, haber/sweep koruması</td></tr>
+    <tr><td class="k">Borsa</td><td>Sunucu tarafı stop (bot ölse bile çalışır), reduce-only çıkış, idempotent clientOrderId, stop kurulamazsa pozisyon kapatılır (korumasız pozisyon yok)</td></tr>
+    <tr><td class="k">Bot</td><td>Dead-man's switch (opt-in, çift onaylı), restart kurtarma (SQLite'tan), acil durum komutu, log rotasyonu, gizli anahtar dosya desteği</td></tr>
+    <tr><td class="k">Giriş</td><td>v3.1 bayat sinyal koruması: canlı fiyat stopu aşmışsa giriş iptal (FTT anında stop-out vakasından ders)</td></tr>
+  </table>
+  <p class="small">v4.0 ekleri: DCA güvenlik emirleri (<code class="inline">--dca</code>; varsayılan kapalı, yalnız LONG, net risk 25 USDT tavanı aşılacaksa DCA yapılmaz — fail-closed) ve seans filtresi (<code class="inline">--session asia|eu|us|"HH-HH"</code>).</p>
+
+  <!-- 6. CANLI KATMAN -->
+  <div class="chapter-header">
+    <div class="sec-tag">Bölüm 06</div>
+    <div class="sec-title">Canlı/testnet katmanı: 429, zaman senkronu, hedge mode</div>
+    <div class="divider"></div>
+  </div>
+  <p>Borsa eşlemesi (v3.0'da kuruldu, v4.0'da sertleştirildi) bot ile borsa arasındaki güvenilir köprüdür. Üç başlıkta toplanır:</p>
+  <div class="card"><div class="ct">429 rate-limit yönetimi</div><p>Borsa "yavaşla" derse bot dinler: <b>429/Retry-After</b> uyumlu yeniden deneme, paralel taramada rate pacer, OKX WebSocket aboneliklerinin 250'lik parçalara bölünmesi. Tam pazar taraması bu ayarlarla 528 sembolde sıfır 429 ile döner.</p></div>
+  <div class="card"><div class="ct">Zaman senkronu</div><p>Zaman kaymalı istekler borsada <b>-1021 (Binance) / 50102 (OKX)</b> hatasıyla reddedilir. Bot borsa sunucu saatini alır, ofseti hesaplar; bu hatalardan birini görünce <b>otomatik resync</b> yapar. İmzalı istemci hata gövdesini korur — sessiz hata yok.</p></div>
+  <div class="card"><div class="ct">Hedge mode / one-way otomatik algılama</div><p>Hesabın pozisyon modu (hedge veya one-way) <b>otomatik algılanır</b> ve emirlere doğru <code class="inline">positionSide</code>/<code class="inline">posSide</code> alanı eklenir; mod uyuşmazlığından doğan red yok. Giriş stili seçilebilir: <code class="inline">post_only</code>, <code class="inline">post_only_market_fallback</code> veya <code class="inline">market</code>.</p></div>
+  <p class="small">Eşleme güvenlik çatısı: miktar/fiyat borsa filtrelerine yuvarlanır, OKX kontrat dönüşü ctVal ile yapılır, paper stop değişiklikleri (break-even/trailing/TP1) borsadaki stop'a yansır, HARD_HALT'ta borsa pozisyonları da flatten edilir, mirror durumu SQLite'ta kalıcıdır, acil durum tek komutla dışarıdan tetiklenebilir (<code class="inline">--emergency-flatten</code>).</p>
+
+  <!-- 7. BACKTEST + AJANLAR -->
+  <div class="chapter-header">
+    <div class="sec-tag">Bölüm 07</div>
+    <div class="sec-title">Backtest, ajanlar ve izleme</div>
+    <div class="divider"></div>
+  </div>
+  <p><b>Backtest laboratuvarı:</b> Engine gerçekçi kötümserdir — spread, kayma (5 bps), gecikme ve kısmi dolum modellenir. Monte Carlo ile işlem sıralaması şansını, walk-forward ile dönem dışı dayanıklılığı, optimizasyon modülüyle parametre taramasını destekler. v4.0 tarihsel funding indirir ve sonuçları çok rejimli dökümlerle raporlar. Paket örnek gerçek veriyle gelir; kendi verinizi anahtarsız indirin: <code class="inline">tools/download_history.py</code>.</p>
+  <p><b>Ajanlar (v4.0):</b> ABD piyasası ajanı SPX/Nasdaq/DXY/VIX ile risk-on/off bayrağı üretir (<code class="inline">--us-market off|flag|block</code>; canlı testte gerçek veriyle çalıştı). RSS haber ajanı haber akışını duyarlılıkla etiketler (<code class="inline">--news-rss off|flag|block</code>). Analist ajanı oturum raporunu yorumlar; kongre ajanı ise dürüstçe "uygulanmadı" der.</p>
+  <p><b>İzleme:</b> 9 bölümlük canlı dashboard (<code class="inline">--dashboard-seconds</code>), oturum bitişinde rapor (<code class="inline">--report-file</code>) ve Prometheus formatında metrikler. Süreli oturum: <code class="inline">--duration-minutes 60</code>.</p>
+
+  <!-- 8. SÜRÜM TARİHÇESİ -->
+  <div class="chapter-header">
+    <div class="sec-tag">Bölüm 08</div>
+    <div class="sec-title">Sürüm tarihi: v1.0 → v4.0</div>
+    <div class="divider"></div>
+  </div>
+  <div class="ver"><div class="vtag">v1.x</div><div class="vb"><b>Temel:</b> v1.0 bot_super tabanı, süreli oturum ve oturum raporu · v1.1 APEX profili + haber koruması + sweep guard · v1.2 Binance otomatik ayna fallback + çift borsa sembol eşleme.</div></div>
+  <div class="ver"><div class="vtag">v2.0</div><div class="vb"><b>Akıllı katman:</b> 9 maddelik geliştirme paketi + 5 uzman motor mimarisi; rejim tespiti, MTF, order flow, 100 puanlık skorlama, Piyasa Hakemi, equity eşiği, BTC şok testi, giriş hız limiti, Monte Carlo, kontrol paneli, testnet güvenlik çatısı.</div></div>
+  <div class="ver"><div class="vtag">v3.0</div><div class="vb"><b>Sertleştirme:</b> Bağımsız dış incelemenin 20+ bulgusu tek tek doğrulanıp düzeltildi (OKX acil durum yönü, sessiz hatalar, korumasız pozisyon, stopların borsaya yansıması, event loop kilidi, restart kurtarma…). Tam emir eşleme, dead-man's switch, log rotasyonu, gerçekçi backtest modeli, veri indirme aracı. 326/326 test.</div></div>
+  <div class="ver"><div class="vtag">v3.1</div><div class="vb"><b>Tek kapıda birleşme:</b> Dış geliştirme hattı v3.0 mimarisine uyarlandı: <b>--scan-all</b> tam pazar taraması (528 OKX feed, paralel + 429 pacer), <b>--motors</b>, baz hacim düzeltmesi, bayat sinyal koruması, CLI eşikleri. 389/389 test; canlı duman testi: 66 sn döngü, 0 hata/429.</div></div>
+  <div class="ver"><div class="vtag">v4.0</div><div class="vb"><b>Genişleme:</b> Seçilebilir stratejiler (Confluence 10 filtre + 4 ek), DCA güvenlik emirleri, seans filtresi, canlı emir sertleştirme (429, zaman senkronu, hedge mode, post-only+MARKET yedek), para akışı (gerçek funding, long/short oranı, Binance likidasyon akışı WS), ajanlar, tarihsel funding + çok rejimli backtest, 24-48h testnet kılavuzu. <b>483/483 test.</b></div></div>
+
+  <!-- 9. HIZLI BAŞLANGIÇ -->
+  <div class="chapter-header">
+    <div class="sec-tag">Bölüm 09</div>
+    <div class="sec-title">Hızlı başlangıç komutları</div>
+    <div class="divider"></div>
+  </div>
+  <pre><span class="c"># Kurulum ve testler</span>
+pip install -r requirements.txt
+python -m pytest tests/ -q                <span class="c"># 483 test</span>
+
+<span class="c"># Paper: canlı veri, simülasyon emirler</span>
+python -m app.main --mode paper --paper --exchange okx --symbols BTCUSDT
+
+<span class="c"># v3.1: TAM PAZAR taraması (evren borsadan keşfedilir)</span>
+python -m app.main --mode paper --paper --exchange all --scan-all \
+    --motors trend --duration-minutes 60
+
+<span class="c"># v4.0: strateji + seans + DCA + ajanlar</span>
+python -m app.main --mode paper --paper --exchange okx --symbols BTCUSDT \
+    --strategy confluence --confluence-threshold 0.6 \
+    --session us --dca --us-market flag --news-rss flag
+
+<span class="c"># 24-48 saat testnet oturumu (kılavuz: docs/testnet_oturum_kilavuzu.md)</span>
+./run_testnet_session.sh 1440 binance
+
+<span class="c"># Gerçek veriyle backtest + kendi verini indir (anahtarsız)</span>
+python -m app.main --mode backtest --data-dir data --symbols BTCUSDT
+python tools/download_history.py --exchange okx --symbol BTC-USDT-SWAP \
+    --out-symbol BTCUSDT --bars 2000</pre>
+  <p class="small">Önemli CLI anahtarları (46+): <code class="inline">--profile guarded|apex</code> · <code class="inline">--exchange binance|okx|all</code> · <code class="inline">--position-mode</code> · <code class="inline">--margin-mode</code> · <code class="inline">--live-testnet --live-exchange</code> · <code class="inline">--max-positions</code> · <code class="inline">--equity-floor-pct</code> · <code class="inline">--entry-rate-limit</code> · <code class="inline">--reentry-cooldown-minutes</code> · <code class="inline">--deadman-seconds --deadman-confirm</code> · <code class="inline">--emergency-flatten</code> · <code class="inline">--state</code> · <code class="inline">--log-level</code></p>
+  <div class="callout">
+    <div class="t">Testnet oturumu için ipucu</div>
+    Anahtarlar ortam değişkeninden veya <code class="inline">*_FILE</code> dosyasından okunur (güvenli maskeleme ile). Dead-man's switch varsayılan KAPALIDIR: borsa tarafı countdown koruyucu stopları da iptal ettiği için çift onay ister. Sunucu tarafı stoplar zaten bot ölse bile çalışır.
+  </div>
+
+</div>
+
+<!-- ================= ENDING ================= -->
+<div class="ending">
+  <div class="glow"></div>
+  <div class="end-title">Özet: tek cümlede<br><span>ACARBOT</span></div>
+  <div class="end-box">
+    <div class="t">Ne?</div>
+    <p>Çift borsalı (OKX + Binance), 5 uzman motorlu, 100 puanlık şeffaf skorlamalı ve dokuz katmanlı risk mimarisine sahip bir kripto futures sinyal/işlem botu — paper trading ve testnet odaklı.</p>
+  </div>
+  <div class="end-box">
+    <div class="t">Nasıl?</div>
+    <p>Veri → rejim → motor oyları → skor ≥ 70 → Piyasa Hakemi → risk kapıları → maker emir → doğumda stop/TP → break-even/trailing yönetimi. Her adım loglanır, ölçülür ve panelde görünür.</p>
+  </div>
+  <div class="end-box">
+    <div class="t">Sınır</div>
+    <p>Yalnızca paper + testnet. Strateji kârlılığı kanıtlanmamıştır; gerçek para kullanılmadan önce uzun dönem backtest, testnet oturumu ve parametre kalibrasyonu zorunludur.</p>
+  </div>
+  <div class="end-foot"><span>ACARBOT v4.0 · Sistem Rehberi</span><span>7 Kasım 2026</span></div>
+</div>
+
+</body>
+</html>

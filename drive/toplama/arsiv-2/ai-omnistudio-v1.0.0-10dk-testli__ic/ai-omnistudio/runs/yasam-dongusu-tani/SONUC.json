@@ -1,0 +1,822 @@
+{
+  "run_id": "yasam-dongusu-tani",
+  "version": "1.0.0",
+  "mode": "PAPER",
+  "run_status": "COMPLETED",
+  "profile": "lifecycle-diagnostic",
+  "filters_relaxed": true,
+  "evidence_class": "LIFECYCLE_DIAGNOSTIC_NOT_NATURAL",
+  "forced_reason": "",
+  "real_money_approved": false,
+  "real_orders_sent": 0,
+  "timing": {
+    "total_monotonic_sec": 320.69,
+    "active_sec_estimated": 240.225,
+    "drain_sec": 40.0,
+    "active_window_completed": true,
+    "note": "Monotonic ölçüm. Süreksizlik varsa COMPLETED yazılmaz. Bütün VM durduğunda gözlemci de durur; uptime garantisi yok."
+  },
+  "acceptance_criteria": {
+    "declared_before_run": true,
+    "duration_sec": 240.0,
+    "drain_sec": 40.0,
+    "success": {
+      "time_protocol": "active_window_completed",
+      "no_task_failures": true,
+      "no_continuity_gap": true,
+      "http_error_rate_max_pct": 5.0
+    },
+    "not_claimed": [
+      "Kârlılık kanıtı",
+      "Yürütme güvenilirliği onayı",
+      "Gerçek para uygunluğu",
+      "Kesintisiz uptime garantisi"
+    ],
+    "forced_trades": false,
+    "profile": "lifecycle-diagnostic",
+    "filters_loosened": true,
+    "old_db_inherited": false,
+    "evidence_class": "LIFECYCLE_DIAGNOSTIC_NOT_NATURAL"
+  },
+  "counters": {
+    "ticks": 32613,
+    "signals": 844,
+    "decisions": 604,
+    "accepted": 1,
+    "rejected": 603,
+    "council_vetoes": 0,
+    "risk_blocks": 6,
+    "quote_ok": 8377,
+    "quote_fail": 71
+  },
+  "detector": {
+    "symbols": 120,
+    "ticks_seen": 32613,
+    "evaluation_calls": 32613,
+    "signals_emitted": 844,
+    "breadth_moving": 1,
+    "breadth_total": 116,
+    "breadth_ratio": 0.0086,
+    "gates": {
+      "ret_threshold": 19926,
+      "rvol_threshold": 6109,
+      "cooldown": 4389,
+      "volume_threshold": 1333,
+      "signal_emitted": 844,
+      "stale_volume": 11,
+      "volume_rate_not_ready": 1
+    },
+    "index_stats": {
+      "invalid_indexes": 0,
+      "total_rebuilds": 0
+    }
+  },
+  "policy": {
+    "attempted_bars": 0,
+    "unique_signal_count": 604,
+    "evaluation_repeats": 0,
+    "gate_counts": {
+      "EDGE_BELOW_COST": 546,
+      "ATR_OUT_OF_BAND": 51,
+      "ACCEPTED": 7
+    }
+  },
+  "execution": {
+    "mode": "PAPER",
+    "real_orders_sent_to_exchange": 0,
+    "stats": {
+      "intents": 1,
+      "submitted": 1,
+      "filled": 1,
+      "partial": 9,
+      "expired": 1,
+      "cancelled": 0,
+      "rejected": 0,
+      "maker_fills": 9,
+      "taker_fills": 1,
+      "positions_opened": 1,
+      "positions_closed": 1
+    },
+    "closed_trades": 1,
+    "closed_net_total": -0.335406,
+    "exit_reasons": {
+      "STOP_LOSS": 1
+    },
+    "mean_hold_sec": 68.849,
+    "open_positions": [],
+    "risk": {
+      "equity": 9999.664594,
+      "realized_net": -0.335406,
+      "fees_paid": 0.10897,
+      "funding_paid": 0.0,
+      "closed_trades": 1,
+      "wins": 0,
+      "losses": 1,
+      "win_rate_pct": 0.0,
+      "consecutive_losses": 1,
+      "max_drawdown": 0.335406,
+      "breaker_tripped": false,
+      "breaker_reason": ""
+    },
+    "equity": {
+      "realized_equity": 9999.664594,
+      "unrealized": 0,
+      "total_equity": 9999.664594,
+      "open_positions": 0,
+      "note": "total_equity açık unrealized içerir; GERÇEKLEŞMİŞ kâr değildir. Çıkış ücretleri düşülmemiştir."
+    }
+  },
+  "ai_council": {
+    "mode": "RULE_BASED_QUANT",
+    "members": 20,
+    "live_members": 0,
+    "veto_enabled": true,
+    "stats": {
+      "live_calls": 0,
+      "rule_calls": 1,
+      "approved": 1,
+      "vetoed": 0,
+      "quorum_failures": 0,
+      "provider_errors": 0
+    },
+    "adapters": {
+      "openai": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "anthropic": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "google": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "xai": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "deepseek": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "mistral": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "groq": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "together": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "fireworks": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "perplexity": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "cohere": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "openrouter": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "cerebras": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "sambanova": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "hyperbolic": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "deepinfra": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "novita": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "qwen": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "moonshot": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "zhipu": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      }
+    },
+    "honesty_note": "RULE_BASED_QUANT modunda hiçbir YZ çağrısı yapılmaz; çıktı deterministik kural denetimidir."
+  },
+  "ai_registry": {
+    "total": 20,
+    "configured": 0,
+    "unconfigured": 20,
+    "mode": "RULE_BASED_QUANT",
+    "honesty_note": "Anahtarsız sağlayıcılar çağrılmaz. Konsey çıktısı kural tabanlı kantitatif denetimdir; YZ cevabı olarak sunulmaz.",
+    "providers": [
+      {
+        "provider_id": "openai",
+        "label": "OpenAI",
+        "protocol": "openai",
+        "model": "gpt-4o",
+        "role": "arbiter",
+        "tier": 1,
+        "configured": false,
+        "env_key": "OPENAI_API_KEY",
+        "base_url": "https://api.openai.com/v1",
+        "notes": "Genel amaçlı hakem; JSON mode destekli."
+      },
+      {
+        "provider_id": "anthropic",
+        "label": "Anthropic Claude",
+        "protocol": "anthropic",
+        "model": "claude-sonnet-4-5",
+        "role": "arbiter",
+        "tier": 1,
+        "configured": false,
+        "env_key": "ANTHROPIC_API_KEY",
+        "base_url": "https://api.anthropic.com/v1",
+        "notes": "Uzun bağlam, muhakeme ağırlıklı hakem."
+      },
+      {
+        "provider_id": "google",
+        "label": "Google Gemini",
+        "protocol": "gemini",
+        "model": "gemini-2.5-pro",
+        "role": "arbiter",
+        "tier": 1,
+        "configured": false,
+        "env_key": "GEMINI_API_KEY",
+        "base_url": "https://generativelanguage.googleapis.com/v1beta",
+        "notes": "Çok modlu; responseSchema ile katı JSON."
+      },
+      {
+        "provider_id": "xai",
+        "label": "xAI Grok",
+        "protocol": "openai",
+        "model": "grok-4",
+        "role": "auditor",
+        "tier": 2,
+        "configured": false,
+        "env_key": "XAI_API_KEY",
+        "base_url": "https://api.x.ai/v1",
+        "notes": "OpenAI uyumlu uç."
+      },
+      {
+        "provider_id": "deepseek",
+        "label": "DeepSeek",
+        "protocol": "openai",
+        "model": "deepseek-chat",
+        "role": "auditor",
+        "tier": 2,
+        "configured": false,
+        "env_key": "DEEPSEEK_API_KEY",
+        "base_url": "https://api.deepseek.com/v1",
+        "notes": "Düşük maliyetli muhakeme; v9 hattının varsayılan hakem modeliydi."
+      },
+      {
+        "provider_id": "mistral",
+        "label": "Mistral AI",
+        "protocol": "openai",
+        "model": "mistral-large-latest",
+        "role": "auditor",
+        "tier": 2,
+        "configured": false,
+        "env_key": "MISTRAL_API_KEY",
+        "base_url": "https://api.mistral.ai/v1",
+        "notes": ""
+      },
+      {
+        "provider_id": "groq",
+        "label": "Groq",
+        "protocol": "openai",
+        "model": "llama-3.3-70b-versatile",
+        "role": "screener",
+        "tier": 3,
+        "configured": false,
+        "env_key": "GROQ_API_KEY",
+        "base_url": "https://api.groq.com/openai/v1",
+        "notes": "Çok düşük gecikme; hızlı ön eleme için ideal."
+      },
+      {
+        "provider_id": "together",
+        "label": "Together AI",
+        "protocol": "openai",
+        "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+        "role": "auditor",
+        "tier": 2,
+        "configured": false,
+        "env_key": "TOGETHER_API_KEY",
+        "base_url": "https://api.together.xyz/v1",
+        "notes": ""
+      },
+      {
+        "provider_id": "fireworks",
+        "label": "Fireworks AI",
+        "protocol": "openai",
+        "model": "accounts/fireworks/models/llama-v3p3-70b-instruct",
+        "role": "screener",
+        "tier": 3,
+        "configured": false,
+        "env_key": "FIREWORKS_API_KEY",
+        "base_url": "https://api.fireworks.ai/inference/v1",
+        "notes": ""
+      },
+      {
+        "provider_id": "perplexity",
+        "label": "Perplexity",
+        "protocol": "openai",
+        "model": "sonar-pro",
+        "role": "auditor",
+        "tier": 2,
+        "configured": false,
+        "env_key": "PERPLEXITY_API_KEY",
+        "base_url": "https://api.perplexity.ai",
+        "notes": "Web bağlantılı; haber/olgu doğrulamada güçlü."
+      },
+      {
+        "provider_id": "cohere",
+        "label": "Cohere",
+        "protocol": "cohere",
+        "model": "command-r-plus",
+        "role": "auditor",
+        "tier": 2,
+        "configured": false,
+        "env_key": "COHERE_API_KEY",
+        "base_url": "https://api.cohere.com/v2",
+        "notes": ""
+      },
+      {
+        "provider_id": "openrouter",
+        "label": "OpenRouter (çoklu model)",
+        "protocol": "openai",
+        "model": "deepseek/deepseek-chat",
+        "role": "auditor",
+        "tier": 2,
+        "configured": false,
+        "env_key": "OPENROUTER_API_KEY",
+        "base_url": "https://openrouter.ai/api/v1",
+        "notes": "Tek anahtarla çok sağlayıcı. Anahtar varsa diğerlerinin çoğu buna yönlendirilebilir."
+      },
+      {
+        "provider_id": "cerebras",
+        "label": "Cerebras",
+        "protocol": "openai",
+        "model": "llama-3.3-70b",
+        "role": "screener",
+        "tier": 3,
+        "configured": false,
+        "env_key": "CEREBRAS_API_KEY",
+        "base_url": "https://api.cerebras.ai/v1",
+        "notes": "Yüksek token/sn; hızlı eleme."
+      },
+      {
+        "provider_id": "sambanova",
+        "label": "SambaNova",
+        "protocol": "openai",
+        "model": "Meta-Llama-3.3-70B-Instruct",
+        "role": "screener",
+        "tier": 3,
+        "configured": false,
+        "env_key": "SAMBANOVA_API_KEY",
+        "base_url": "https://api.sambanova.ai/v1",
+        "notes": ""
+      },
+      {
+        "provider_id": "hyperbolic",
+        "label": "Hyperbolic",
+        "protocol": "openai",
+        "model": "meta-llama/Llama-3.3-70B-Instruct",
+        "role": "auditor",
+        "tier": 2,
+        "configured": false,
+        "env_key": "HYPERBOLIC_API_KEY",
+        "base_url": "https://api.hyperbolic.xyz/v1",
+        "notes": ""
+      },
+      {
+        "provider_id": "deepinfra",
+        "label": "DeepInfra",
+        "protocol": "openai",
+        "model": "meta-llama/Llama-3.3-70B-Instruct",
+        "role": "auditor",
+        "tier": 2,
+        "configured": false,
+        "env_key": "DEEPINFRA_API_KEY",
+        "base_url": "https://api.deepinfra.com/v1/openai",
+        "notes": ""
+      },
+      {
+        "provider_id": "novita",
+        "label": "Novita AI",
+        "protocol": "openai",
+        "model": "meta-llama/llama-3.3-70b-instruct",
+        "role": "auditor",
+        "tier": 2,
+        "configured": false,
+        "env_key": "NOVITA_API_KEY",
+        "base_url": "https://api.novita.ai/v3/openai",
+        "notes": ""
+      },
+      {
+        "provider_id": "qwen",
+        "label": "Alibaba Qwen (DashScope)",
+        "protocol": "openai",
+        "model": "qwen-plus",
+        "role": "auditor",
+        "tier": 2,
+        "configured": false,
+        "env_key": "DASHSCOPE_API_KEY",
+        "base_url": "https://dashscope-intl.aliyuncs.com/compatible-mode/v1",
+        "notes": ""
+      },
+      {
+        "provider_id": "moonshot",
+        "label": "Moonshot Kimi",
+        "protocol": "openai",
+        "model": "kimi-latest",
+        "role": "auditor",
+        "tier": 2,
+        "configured": false,
+        "env_key": "MOONSHOT_API_KEY",
+        "base_url": "https://api.moonshot.ai/v1",
+        "notes": ""
+      },
+      {
+        "provider_id": "zhipu",
+        "label": "Zhipu GLM",
+        "protocol": "openai",
+        "model": "glm-4-plus",
+        "role": "auditor",
+        "tier": 2,
+        "configured": false,
+        "env_key": "ZHIPU_API_KEY",
+        "base_url": "https://open.bigmodel.cn/api/paas/v4",
+        "notes": ""
+      }
+    ]
+  },
+  "market_data": {
+    "reachable": [
+      "binance_vision",
+      "gateio"
+    ],
+    "unreachable": [],
+    "venues": {
+      "binance_vision": {
+        "venue": "binance_vision",
+        "reachable": true,
+        "http_status": 200,
+        "error": "",
+        "probe_latency_ms": 379.75,
+        "rest_ok": 4850,
+        "rest_fail": 0,
+        "ws_messages": 12056,
+        "ws_reconnects": 0,
+        "last_message_ms": 1793732076305
+      },
+      "gateio": {
+        "venue": "gateio",
+        "reachable": true,
+        "http_status": 200,
+        "error": "",
+        "probe_latency_ms": 388.44,
+        "rest_ok": 4852,
+        "rest_fail": 0,
+        "ws_messages": 20561,
+        "ws_reconnects": 0,
+        "last_message_ms": 1793732076335
+      }
+    },
+    "data_authenticity": "REAL_MARKET_DATA",
+    "note": "Erişilemeyen uçlar açıkça işaretlenir; sentetik veriye sessizce düşülmez."
+  },
+  "continuity": {
+    "gap_count": 0,
+    "continuous": true,
+    "max_poll_delay_sec": 0.004828,
+    "max_clock_skew_sec": 1.2e-05,
+    "events": []
+  },
+  "supervision": {
+    "entries_halted": true,
+    "fatal_reason": "",
+    "task_failures": {},
+    "tasks": {
+      "universe_warmup": {
+        "name": "universe_warmup",
+        "started_ms": 1793731756075,
+        "finished_ms": 1793732076376,
+        "outcome": "cancelled_planned",
+        "failure": "",
+        "done": true
+      },
+      "market_poll": {
+        "name": "market_poll",
+        "started_ms": 1793731756075,
+        "finished_ms": 1793732076377,
+        "outcome": "cancelled_planned",
+        "failure": "",
+        "done": true
+      },
+      "strategy_cycle": {
+        "name": "strategy_cycle",
+        "started_ms": 1793731756075,
+        "finished_ms": 1793732076377,
+        "outcome": "cancelled_planned",
+        "failure": "",
+        "done": true
+      },
+      "supervision": {
+        "name": "supervision",
+        "started_ms": 1793731756075,
+        "finished_ms": 1793732076377,
+        "outcome": "cancelled_planned",
+        "failure": "",
+        "done": true
+      },
+      "ws_binance_vision": {
+        "name": "ws_binance_vision",
+        "started_ms": 1793731756075,
+        "finished_ms": 1793732082861,
+        "outcome": "cancelled_planned",
+        "failure": "",
+        "done": true
+      },
+      "ws_gateio": {
+        "name": "ws_gateio",
+        "started_ms": 1793731756075,
+        "finished_ms": 1793732076471,
+        "outcome": "cancelled_planned",
+        "failure": "",
+        "done": true
+      }
+    },
+    "heartbeats": {
+      "strategy_cycle": {
+        "beats": 320,
+        "age_sec": 7.311,
+        "stale": false
+      },
+      "data_progress": {
+        "beats": 10,
+        "age_sec": 35.394,
+        "stale": false
+      }
+    },
+    "alarm_count": 0,
+    "alarms": []
+  },
+  "state_store": {
+    "path": "runs/yasam-dongusu-tani/state.db",
+    "writer_lease_ok": true,
+    "counts": {
+      "decisions": 604,
+      "orders": 1,
+      "positions": 2,
+      "events": 0,
+      "equity": 280,
+      "lease_renewals": 320
+    },
+    "reject_histogram": {
+      "EDGE_BELOW_COST": 546,
+      "ATR_OUT_OF_BAND": 51,
+      "LOSS_COOLDOWN": 5,
+      "SYMBOL_ALREADY_OPEN": 1
+    },
+    "note": "Bu DB yalnız bu koşuya aittir; sonraki koşuya devredilmez."
+  },
+  "timers": {
+    "tick_total": {
+      "name": "tick_total",
+      "calls": 32613,
+      "total_sec": 1.748178,
+      "max_ms": 0.634,
+      "mean_ms": 0.054,
+      "note": "inclusive_wall_time_not_cpu"
+    },
+    "detector_eval": {
+      "name": "detector_eval",
+      "calls": 32613,
+      "total_sec": 1.51005,
+      "max_ms": 0.494,
+      "mean_ms": 0.046,
+      "note": "inclusive_wall_time_not_cpu"
+    },
+    "policy_eval": {
+      "name": "policy_eval",
+      "calls": 604,
+      "total_sec": 0.150588,
+      "max_ms": 2.358,
+      "mean_ms": 0.249,
+      "note": "inclusive_wall_time_not_cpu"
+    },
+    "council_eval": {
+      "name": "council_eval",
+      "calls": 1,
+      "total_sec": 0.000243,
+      "max_ms": 0.243,
+      "mean_ms": 0.243,
+      "note": "inclusive_wall_time_not_cpu"
+    },
+    "execution": {
+      "name": "execution",
+      "calls": 281,
+      "total_sec": 0.005856,
+      "max_ms": 0.333,
+      "mean_ms": 0.021,
+      "note": "inclusive_wall_time_not_cpu"
+    },
+    "state_write": {
+      "name": "state_write",
+      "calls": 605,
+      "total_sec": 0.15895,
+      "max_ms": 6.916,
+      "mean_ms": 0.263,
+      "note": "inclusive_wall_time_not_cpu"
+    },
+    "candle_refresh": {
+      "name": "candle_refresh",
+      "calls": 10,
+      "total_sec": 20.185227,
+      "max_ms": 2504.146,
+      "mean_ms": 2018.523,
+      "note": "inclusive_wall_time_not_cpu"
+    },
+    "quote_refresh": {
+      "name": "quote_refresh",
+      "calls": 72,
+      "total_sec": 107.248725,
+      "max_ms": 2412.938,
+      "mean_ms": 1489.566,
+      "note": "inclusive_wall_time_not_cpu"
+    },
+    "breadth_update": {
+      "name": "breadth_update",
+      "calls": 280,
+      "total_sec": 0.150271,
+      "max_ms": 1.085,
+      "mean_ms": 0.537,
+      "note": "inclusive_wall_time_not_cpu"
+    }
+  },
+  "ws": [
+    {
+      "venue": "binance_vision",
+      "messages": 12056,
+      "reconnects": 0,
+      "json_parse_calls": 12056,
+      "json_parse_sec": 0.1874
+    },
+    {
+      "venue": "gateio",
+      "messages": 20561,
+      "reconnects": 0,
+      "json_parse_calls": 20561,
+      "json_parse_sec": 0.366
+    }
+  ],
+  "honesty": {
+    "data": "REAL_MARKET_DATA",
+    "orders": "PAPER_ONLY_NO_EXCHANGE_ORDERS",
+    "ai_mode": "RULE_BASED_QUANT",
+    "profitability_claim": false,
+    "note": "Küçük PAPER örneklemi kârlılık veya yürütme güvenilirliği kanıtı değildir. Açık unrealized gerçekleşmiş kâr değildir. Stop mesafesi maksimum zarar garantisi değildir."
+  }
+}

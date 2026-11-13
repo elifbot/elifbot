@@ -1,0 +1,6 @@
+{
+  "poll_seconds": 10,
+  "instruments": [
+    {"symbol": "BTC-USDT-SWAP", "quantity": "0.01", "leverage": "2", "min_notional": "5"}
+  ]
+}

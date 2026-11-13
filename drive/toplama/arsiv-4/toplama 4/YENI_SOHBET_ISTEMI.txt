@@ -1,0 +1,7 @@
+Merhaba. Kripto futures (Binance + OKX) trading botu projem var. Eski denemelerimden ben bir arsiv taradim; ekteki EN_IYI_ADAYLAR.zip icindeki ozet.md dosyasi arsivin ozeti, adaylar/ klasoru en yuksek puanli 12 surum (API anahtarlari silinmis), acarbot-final/BIRLESTIRME_PLANI.md ise hangi ozelligin hangi adaydan alinacagini gosteriyor.
+
+HEDEF: Bu adaylari tek bir temiz, moduler, testli final bota birlestir.
+
+Kararlarim: bakiye 1000$, islem basina 50$ marj, 10x kaldirac, bir islem 25$ zarar ettirecek sekilde stop; komisyon dusuk kalsin diye maker (limit) emir; ~800 coin tarama, anlik para girisi/cikisi tespiti; takeprofit'i bot kendisi karar versin; teknik ariza olursa bot beklesin; once paper/testnet, canli en son. GitHub deposu: private acar5656/acarbot (bot/core/risk.py ve tests/test_risk.py iskeleti hazir).
+
+Lutfen sirayla: (1) taban surumu sec ve nedenini soyle, (2) taban surumdeki risk hatalarini duzelt (ATR stop'ta zarar 25$'i asmasin, ayni coinin iki borsada tekrar acilmasi, dusuk likidite filtresi), (3) eksik ozellikleri teker teker ekle, her biri icin test yaz, (4) bana GitHub'a surukleyecegim dosyalari zip olarak ver. Yaparken test-driven-development ve audit-as-prod-readiness skill'lerini kullan.

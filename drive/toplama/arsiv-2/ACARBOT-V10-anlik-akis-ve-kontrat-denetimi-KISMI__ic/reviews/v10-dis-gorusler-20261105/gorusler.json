@@ -1,0 +1,84 @@
+{
+  "timestamp_utc": "2026-11-05T12:03:40.516909+00:00",
+  "models_attempted": 5,
+  "models_ok": 1,
+  "note": "Yanıtlar dış modellerin görüşüdür; otomatik emir onayı değildir. Sağlayıcı model etiketi kimlik doğrulaması sayılmaz.",
+  "results": [
+    {
+      "provider": "Kilo",
+      "requested_model": "cohere/north-mini-code:free",
+      "endpoint": "https://api.kilo.ai/api/gateway/chat/completions",
+      "sent_files": [
+        "acarbot/strategy.py",
+        "acarbot/ledger.py",
+        "acarbot/runner.py"
+      ],
+      "prompt_sha256": "cde3e3b3957e025b9a7ffea20413ca5fb27871b0f3a48bd20e47089bd6a3a686",
+      "http_status": 200,
+      "status": "ERROR",
+      "error": "empty model response"
+    },
+    {
+      "provider": "Kilo",
+      "requested_model": "nvidia/nemotron-3.5-lightning:free",
+      "endpoint": "https://api.kilo.ai/api/gateway/chat/completions",
+      "sent_files": [
+        "acarbot/strategy.py",
+        "acarbot/ledger.py",
+        "acarbot/runner.py"
+      ],
+      "prompt_sha256": "cde3e3b3957e025b9a7ffea20413ca5fb27871b0f3a48bd20e47089bd6a3a686",
+      "http_status": 200,
+      "status": "ERROR",
+      "error": "empty model response"
+    },
+    {
+      "provider": "Kilo",
+      "requested_model": "dots-studio/dots-3-note-preview:free",
+      "endpoint": "https://api.kilo.ai/api/gateway/chat/completions",
+      "sent_files": [
+        "acarbot/strategy.py",
+        "acarbot/ledger.py",
+        "acarbot/runner.py"
+      ],
+      "prompt_sha256": "cde3e3b3957e025b9a7ffea20413ca5fb27871b0f3a48bd20e47089bd6a3a686",
+      "http_status": 200,
+      "status": "ERROR",
+      "error": "empty model response"
+    },
+    {
+      "provider": "OVHcloud",
+      "requested_model": "Mistral-Small-3.2-24B-Instruct-2506",
+      "endpoint": "https://oai.endpoints.kepler.ai.cloud.ovh.net/v1/chat/completions",
+      "sent_files": [
+        "acarbot/strategy.py",
+        "acarbot/ledger.py",
+        "acarbot/runner.py"
+      ],
+      "prompt_sha256": "cde3e3b3957e025b9a7ffea20413ca5fb27871b0f3a48bd20e47089bd6a3a686",
+      "http_status": 200,
+      "status": "OK",
+      "response_model": "Mistral-Small-3.2-24B-Instruct-2506",
+      "answer": "Aşağıda, mevcut PAPER kripto botu kodunun en önemli 6 somut hatası veya riskli tasarım kararını, öncelik sırasına göre listelemekteyim. Her bir hatanın nedeni ve düzeltme önerisi de veriliyor:\n\n1. **Risk Yönetimi Sınırlamaları (ledger.py)**\n   - **Neden**: RiskManager sınıfı, pozisyon sayısı (5) ve notional limitleri (250) gibi sabit değerler kullanıyor. Bu değerler strateji ve piyasa koşullarına göre dinamik olarak ayarlanmalı.\n   - **Düzeltme**: Risk limitlerini dinamik olarak hesaplayan bir mekanizma ekleyin. Örneğin, mevcut portföyün risk profiline göre limitleri güncelleyin.\n\n2. **ATR Hesaplaması ve Risk Hesaplaması (strategy.py)**\n   - **Neden**: ATR (Average True Range) hesaplaması ve risk mesafesi (stop/target) belirlenmesi, sadece son 200 mum üzerinden yapılıyor. Bu, kısa dönemli volatilite değişikliklerini yakalamamakta.\n   - **Düzeltme**: ATR hesaplamasını daha uzun dönemli (örneğin 500 mum) veya dinamik olarak ayarlanabilir hale getirin. Ayrıca, risk mesafesini ATR'ın bir katı olarak sabit tutmak yerine, mevcut volatiliteye göre dinamik olarak ayarlayın.\n\n3. **Funding Rate Yönetimi (runner.py)**\n   - **Neden**: Funding rate'in sadece 180.000 ms (3 dakika) öncesinde pozisyonların kapatılması, funding rate değişikliklerine karşı yeterli koruma sağlamamaktadır.\n   - **Düzeltme**: Funding rate'in daha uzun bir süre öncesinde (örneğin 1 saat) pozisyonları kapatma mekanizması ekleyin. Ayrıca, funding rate'in negatif olma ihtimalini de dikkate alın.\n\n4. **Veri Doğrulaması ve Hata Yönetimi (strategy.py)**\n   - **Neden**: `decide` fonksiyonunda, mum verilerinin doğruluğu kontrolü yapılıyor ancak, bu kontrolün yeterli olmadığı durumlar var. Örneğin, mumların zaman aralıklarının düzgünlüğü kontrol ediliyor ancak, mumların içindeki verilerin (open, high, low, close) mantıklı olup olmadığı kontrolü yeterli değil.\n   - **Düzeltme**: Mum verilerinin daha kapsamlı bir doğrulama mekanizması ekleyin. Örneğin, high ve low değerlerinin open ve close değerleri arasında olması, close değerinin open değerinden büyük veya küçük olması gibi kontrolü ekleyin.\n\n5. **Slippage ve Fee Hesaplaması (ledger.py)**\n   - **Neden**: Slippage ve fee hesaplamaları sabit olarak yapılıyor (5.5 bps fee, 2 bps slippage). Bu, gerçek piyasa koşullarında değişen slippage ve fee değerlerini yakalamamaktadır.\n   - **Düzeltme**: Slippage ve fee hesaplamalarını dinamik olarak yapın. Örneğin, mevcut piyasa derinliği ve hacme göre slippage hesaplayın. Ayrıca, farklı takasların farklı fee yapılarını da dikkate alın.\n\n6. **Strateji Karar Verme Mekanizması (strategy.py)**\n   - **Neden**: Strateji karar verme mekanizması, sadece son mum verilerini kullanıyor. Bu, kısa dönemli gürültüye karşı dayanıksızlık yaratmaktadır.\n   - **Düzeltme**: Strateji karar verme mekanizmasına, daha uzun dönemli trendleri ve volatiliteyi dikkate alan ek göstergeler ekleyin. Örneğin, 200 mum ortalaması gibi uzun dönemli göstergeleri kullanın.\n\nBu düzeltmeler, botun risk yönetimi, veri doğrulaması ve karar verme mekanizmasını daha sağlam hale getirecektir. Ayrıca, gerçek piyasa koşullarına daha yakın bir performans sağlayacaktır.",
+      "usage": {
+        "prompt_tokens": 5625,
+        "completion_tokens": 954,
+        "total_tokens": 6579
+      }
+    },
+    {
+      "provider": "OVHcloud",
+      "requested_model": "Qwen3.8-27B",
+      "endpoint": "https://oai.endpoints.kepler.ai.cloud.ovh.net/v1/chat/completions",
+      "sent_files": [
+        "acarbot/strategy.py",
+        "acarbot/ledger.py",
+        "acarbot/runner.py"
+      ],
+      "prompt_sha256": "cde3e3b3957e025b9a7ffea20413ca5fb27871b0f3a48bd20e47089bd6a3a686",
+      "http_status": 200,
+      "status": "ERROR",
+      "error": "empty model response"
+    }
+  ]
+}

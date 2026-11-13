@@ -1,0 +1,8 @@
+Kullanıcı: Ömer Acar
+Rol: Kripto vadeli işlemler üzerine çalışan geliştirici / araştırmacı.
+İlgi alanı: Paper-only (simülasyon) ticaret botları, çok göstergeli strateji
+araştırması, veri doğrulama ve risk yönetimi.
+Dil tercihi: Türkçe raporlama, İngilizce kod ve değişken adları.
+
+NOT: Bu dosyada kimlik bilgisi, API anahtarı, adres veya iletişim bilgisi
+TUTULMAZ. Üretim ortamına kopyalanmadan önce gözden geçirilmelidir.

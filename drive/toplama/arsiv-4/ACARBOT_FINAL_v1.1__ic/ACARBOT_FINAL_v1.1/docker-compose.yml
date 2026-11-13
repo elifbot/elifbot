@@ -1,0 +1,21 @@
+services:
+  acarbot-super:
+    build: .
+    container_name: acarbot-super
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - ./data:/app/data
+      - ./state_data:/app/state_data
+    command: >
+      python -m app.main --mode paper --paper
+      --exchange binance
+      --symbols BTCUSDT,ETHUSDT,SOLUSDT
+      --balance 1000
+      --state state_data/paper_state.sqlite3
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"

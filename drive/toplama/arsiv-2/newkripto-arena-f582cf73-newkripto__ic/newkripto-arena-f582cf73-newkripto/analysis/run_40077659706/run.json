@@ -1,0 +1,8 @@
+{
+  "run_id": 40077659706,
+  "paper_job_result": "failure",
+  "files": [
+    "preflight.json"
+  ],
+  "note": "Yalnız ön-kontrol/başlatma kanıtı; iki-borsa oturumu veya nihai mutabakat kanıtı değildir."
+}
