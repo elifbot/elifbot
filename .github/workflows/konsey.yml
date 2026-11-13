@@ -1,0 +1,95 @@
+name: Konsey
+
+# Çoklu model konseyi: havuzu tarar, 3 tur tartışır, karar + yama üretir.
+# Sağlayıcılar: github (GITHUB_TOKEN, models: read) ve nvidia (NVIDIA_API_KEY secret).
+on:
+  workflow_dispatch:
+    inputs:
+      gorev:
+        description: "Konseye verilecek görev"
+        required: false
+        default: "Botun ölçülebilir kenarını artır: en yüksek etkili 5 değişiklik."
+      saglayici:
+        description: "Sağlayıcılar (virgülle): github,nvidia"
+        required: false
+        default: "github,nvidia"
+      butce:
+        description: "Azami model çağrısı"
+        required: false
+        default: "20"
+
+permissions:
+  contents: write
+  pull-requests: write
+  models: read          # GitHub Models için — ayrı anahtar gerekmez
+
+concurrency:
+  group: konsey
+  cancel-in-progress: false
+
+jobs:
+  konsey:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Bağımlılıklar
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Sır taraması (kapı)
+        run: python3 bot/tools/sir_tara.py .
+
+      - name: Havuzu indeksle ve demetleri üret
+        run: |
+          python3 -m havuz.indeks
+          python3 -m havuz.digest
+
+      - name: Konsey oturumu
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
+          GOREV: ${{ github.event.inputs.gorev }}
+          SAGLAYICILAR: ${{ github.event.inputs.saglayici }}
+          BUTCE: ${{ github.event.inputs.butce }}
+        run: |
+          ETIKET="$(date -u +%Y%m%d-%H%M%S)"
+          ARGS=()
+          IFS=',' read -ra LISTE <<< "$SAGLAYICILAR"
+          for s in "${LISTE[@]}"; do ARGS+=(--saglayici "$(echo "$s" | tr -d ' ')"); done
+          python3 -m kadro.konsey.calistir \
+            --gorev "$GOREV" "${ARGS[@]}" --butce "$BUTCE" --tur 3 --etiket "$ETIKET"
+          echo "ETIKET=$ETIKET" >> "$GITHUB_ENV"
+
+      - name: Çıktıyı yükle
+        uses: actions/upload-artifact@v4
+        with:
+          name: konsey-${{ env.ETIKET }}
+          path: |
+            konsey/
+            havuz/digest/
+          retention-days: 30
+
+      - name: Sonucu PR olarak aç
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "konsey-bot"
+          git config user.email "konsey@users.noreply.github.com"
+          git checkout -b "konsey/${ETIKET}"
+          git add konsey havuz/digest
+          git commit -m "konsey: ${ETIKET} — çoklu model tartışması sonucu" || echo "değişiklik yok"
+          git push -u origin "konsey/${ETIKET}"
+          gh pr create --base main --head "konsey/${ETIKET}" \
+            --title "Konsey kararı ${ETIKET}" \
+            --body-file "konsey/${ETIKET}/karar.md" || echo "PR açılamadı"
+
+      - name: Özet
+        run: |
+          cat "konsey/${ETIKET}/karar.md" >> "$GITHUB_STEP_SUMMARY"

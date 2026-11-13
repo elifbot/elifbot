@@ -163,7 +163,9 @@ class SimuleBorsa:
         eid = f"{self.ad}-{self.emir_sayaci}"
         komisyon = istek.adet * dolum_px * self.enstrumanlar[istek.sembol].kontrat_carpani * oran
         self.komisyonlar_usd += komisyon
-        self.kasa_usd -= komisyon
+        if not (istek.reduce_only and poz is not None):
+            self.kasa_usd -= komisyon      # açılış: komisyon peşin düşer
+        # kapanışta komisyon _pozisyon_kapat içinde net'e yansır — burada tekrar düşülmez
 
         if istek.reduce_only and poz is not None:
             self._pozisyon_kapat(poz, dolum_px, komisyon, ts)
@@ -255,7 +257,6 @@ class SimuleBorsa:
             dolum = px * (1 - kayma) if p.yon is Yon.LONG else px * (1 + kayma)
             komisyon = p.adet * dolum * self.enstrumanlar[sembol].kontrat_carpani \
                 * self.kurallar.taker_fee_orani
-            self.kasa_usd -= komisyon
             net = self._pozisyon_kapat(p, dolum, komisyon, p.acilis_ts)
             self.dolumlar.append(Dolum(sembol, p.yon, p.adet, dolum, komisyon,
                                        p.acilis_ts, "TASFIYE", kismi=True))

@@ -27,7 +27,7 @@ AYAR_DOSYASI = os.path.join(KLASOR, "anahtarlar.json")
 PORT = 8080
 
 # ── NVIDIA anahtarı: BotMasasi.exe'nin içindeki gömülü anahtar (aynı anahtar) ──
-NVIDIA_GOMULU = ("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")
+NVIDIA_GOMULU = ("nvapi-***REDACTED***")
 
 # ── Sağlayıcılar (exe sunucusundaki gerçek model kimlikleri) ──
 SAG = [
