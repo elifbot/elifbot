@@ -1,0 +1,191 @@
+{
+ "gorev": "Altı botlu Binance+OKX vadeli işlem sistemi. DEĞİŞMEZ: 1000$ kasa, 50$ x10, CROSS, sınırsız pozisyon, -10$ stop. ÖLÇÜLEN: 44 kapanan işlem, WR %15.9, PF 0.676, komisyon 24.66$, çıkış dağılımı REJIM_DONUS 36 / STOP 8. TANI: churn kaynağı bot/v9/motor.py satır 140-144. Pozisyon açıldıktan rejim_karsi_cikis_sn=120 sn sonra rejim ters dönerse ve pnl negatifse hemen kapatılıyor. ÖNCEKİ İKİ DENEME ETKİSİZ ÇIKTI: (a) sinyaller.py RVOL filtresi — A/B'de fark sıfır; (b) Poz dataclass'ına regime_flip_count alanı eklemek — alanı kullanan mantık yazılmadı. GÖREV: motor.py'de REJIM_DONUS çıkışını teyide bağlayan, 2-3 parçalı TUTARLI bir yama üret: (1) Poz'a sayaç alanı ekle, (2) _izle içinde ters rejim sayacını güncelle, (3) kapatma koşulunu sayaca bağla. Parçalar sırayla uygulanacak; her eski_kod dosyada birebir geçmeli. En fazla 2 karar.",
+ "saglayici_modelleri": {
+  "nvidia": [
+   "01-ai/yi-large",
+   "adept/fuyu-8b",
+   "ai21labs/jamba-1.5-large-instruct",
+   "aisingapore/sea-lion-7b-instruct",
+   "bigcode/starcoder2-15b",
+   "databricks/dbrx-instruct",
+   "deepseek-ai/deepseek-coder-6.7b-instruct",
+   "deepseek-ai/deepseek-v4.1-flash",
+   "google/codegemma-1.1-7b",
+   "google/codegemma-7b",
+   "google/deplot",
+   "google/gemma-2b",
+   "google/gemma-3-12b-it",
+   "google/gemma-3-4b-it",
+   "google/gemma-4-31b-it",
+   "google/recurrentgemma-2b",
+   "ibm/granite-3.0-3b-a800m-instruct",
+   "ibm/granite-3.0-8b-instruct",
+   "ibm/granite-34b-code-instruct",
+   "ibm/granite-8b-code-instruct",
+   "meta/codellama-70b",
+   "meta/llama-3.2-90b-vision-instruct",
+   "meta/llama-guard-4-12b",
+   "meta/llama2-70b",
+   "meta/muse-glimmer-30b",
+   "microsoft/kosmos-2",
+   "microsoft/phi-3-vision-128k-instruct",
+   "microsoft/phi-3.5-moe-instruct",
+   "minimaxai/minimax-m3.1-flash",
+   "mistralai/codestral-22b-instruct-v0.1",
+   "mistralai/mistral-7b-instruct-v0.3",
+   "mistralai/mistral-large",
+   "mistralai/mistral-large-2-instruct",
+   "mistralai/mistral-large-4-1t-a52b",
+   "mistralai/mixtral-8x22b-v0.1",
+   "moonshotai/kimi-k2.6",
+   "nv-mistralai/mistral-nemo-12b-instruct",
+   "nvidia/ai-synthetic-video-detector",
+   "nvidia/cosmos-reason2-8b",
+   "nvidia/embed-qa-4",
+   "nvidia/ising-calibration-1.5-31b",
+   "nvidia/llama-3.1-nemoguard-8b-content-safety",
+   "nvidia/llama-3.1-nemoguard-8b-topic-control",
+   "nvidia/llama-3.1-nemotron-51b-instruct",
+   "nvidia/llama-3.1-nemotron-70b-instruct",
+   "nvidia/llama-3.1-nemotron-safety-guard-8b-v3",
+   "nvidia/llama-3.1-nemotron-ultra-253b-v1",
+   "nvidia/llama-3.2-nemoretriever-1b-vlm-embed-v1",
+   "nvidia/llama-3.2-nv-embedqa-1b-v1",
+   "nvidia/llama-nemotron-embed-vl-1b-v2",
+   "nvidia/llama3-chatqa-1.5-70b",
+   "nvidia/mistral-nemo-minitron-8b-8k-instruct",
+   "nvidia/nemotron-3-embed-1b",
+   "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+   "nvidia/nemotron-3-super-120b-a12b",
+   "nvidia/nemotron-3-ultra-550b-a55b",
+   "nvidia/nemotron-3.5-bolt-e4b",
+   "nvidia/nemotron-3.5-content-safety",
+   "nvidia/nemotron-3.5-embed-1b",
+   "nvidia/nemotron-3.5-embed-8b"
+  ]
+ },
+ "saglayicilar": [
+  "nvidia"
+ ],
+ "modeller": {
+  "nvidia": [
+   null
+  ]
+ },
+ "cagri": [
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "risk_subayi",
+   "tur": 1,
+   "istem_karakter": 16012,
+   "yanit": "Risk subayı olarak raporu ve yama talebini inceledim.\n\n**RİSK ANALİZİ:**\nSistemde 1.000$ kasa ile 50$ teminat ve 10x kaldıraç (500$ pozisyon büyüklüğü) kullanılıyor. CROSS modunda olduğumuz için tasfiye mesafesi tüm kasa üzerinden hesaplanır.\n*   **Tek Pozisyon Tasfiye Mesafesi:** 1.000$ / 500$ = %200 (Fiyatın ters yönde %200 gitmesi gerekir, ancak 10x kaldıraçta izole stop %10'dur).\n*   **Korelasyon Riski:** 6 botun aynı anda aynı yöne pozisyon açtığı \"worst-case\" senaryoda toplam risk 3.000$ notional büyüklüğe ulaşır.\n*   **En Kötü Durumda Kasa Ne Olur?**\n    Her pozisyonun net -10$ stop ile kapandığı ve 6 botun aynı anda stop olduğu senaryoda kasa **-60$** (komisyonlar hariç) daralır. Bu, kasanın %6'sına tekabül eder. Kabul edilebilir risk sınırları içerisindedir.\n\n**VETO DURUMU:** Yama, kural sayılarını (1000, 50, 10x, -10$) değiştirmediği ve sadece çıkış mantığını (exit logic) optimize ettiği için **ONAYLANDI**.\n\n---\n\n### YAMA PLANI (motor.py)\n\n**Karar 1:** `REJIM_DONUS` çıkışlarını hemen tetiklemek yerine, ters rejimde kalma süresini/sayısını ölçen bir mekanizmaya bağla.\n**Karar 2:** Sadece `pnl < 0` ve `sayaç >= 3` (teyit) durumunda kapatma işlemini gerçekleştir.\n\n#### Parça 1: Pozisyon Veri Yapısına Sayaç Ekleme\n`Poz` dataclass'ına (veya ilgili sınıf tanımına) sayaç alanı eklenir.\n\n**eski_kod:**\n```python\n@dataclass\nclass Poz:\n    symbol: str\n    side: str\n    entry: float\n    stop: float\n    qty: float\n```\n**yeni_kod:**\n```python\n@dataclass\nclass Poz:\n    symbol: str\n    side: str\n    entry: float\n    stop: float\n    qty: float\n    regime_flip_count: int = 0  # Ters rejim teyit sayacı\n```\n\n#### Parça 2: İzleme Döngüsünde Sayacı Güncelleme\n`_izle` metodu içerisinde, rejim ters döndüğünde sayacı artır, rejim düzeldiğinde sıfırla.\n\n**eski_kod:**\n```python\n# _izle içinde rejim kontrolü kısmı\nif current_regime != pos.regime:\n    # rejim değişimi tespit edildi\n```\n**yeni_kod:**\n```python\n# _izle içinde rejim kontrolü kısmı\nif current_regime != pos.regime:\n    pos.regime_flip_count += 1\nelse:\n    pos.regime_flip_count = 0\n```\n\n#### Parça 3: Kapatma Koşulunu Sayaca Bağlama\n`motor.py` satır 140-144 arasındaki agresif kapatma mantığı, teyit sayacına bağlanır.\n\n**eski_kod:**\n```python\nif time.time() - pos.open_time > rejim_karsi_cikis_sn:\n    if current_regime != pos.regime and pos.pnl < 0:\n        return \"REJIM_DONUS\"\n```\n**yeni_kod:**\n```python\nif time.time() - pos.open_time > rejim_karsi_cikis",
+   "saniye": 282.4,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "test",
+   "tur": 1,
+   "istem_karakter": 16012,
+   "yanit": "### TEST MÜHENDİSİ RAPORU\n\n**Sistem Durumu:**\n*   **Kasa:** 1.000 $ | **Teminat:** 50 $ | **Kaldıraç:** 10x | **Mod:** CROSS\n*   **Stop:** -10 $ (Net)\n*   **Mevcut Performans:** WR %15.9 | PF 0.676 (Kritik Churn)\n*   **Hata Kaynağı:** `bot/v9/motor.py` (Satır 140-144) - Erken `REJIM_DONUS` çıkışı.\n\n**Veri Hattı Analizi (Kanıt Demeti):**\n*   **Tick Kalitesi:** `executor.py:206` ve `v5.1` kanıtlarında `data_integrity.record_tick` ile tick bazlı kayıt yapıldığı görülmektedir.\n*   **Sentetik-Gerçek Ayrımı:** `executor.py:251` (v5.0 düzeltmesi) kanıtı, dolum simülasyonunun \"GERÇEK tick baz hacmiyle\" beslendiğini, hacim filtresinin yalnızca sinyali iptal ettiğini, ölçülen hacmin gerçek olduğunu kanıtlar.\n*   **Replay Tutarlılığı:** `test_v52_hardening.py:1850` kanıtı, izleme (probe) açık/kapalıyken aynı sonucun verildiğini (`test_probe_does_not_change_result`) kanıtlar.\n\n---\n\n### YAMA PLANI (MOTOR.PY)\n\n`REJIM_DONUS` çıkışını, rejim ters döndükten sonraki tik sayısına bağlayarak \"gürültü\" kaynaklı kapanışları engellemek için aşağıdaki 3 parçalı yama uygulanacaktır.\n\n#### Parça 1: Pozisyon Veri Yapısının Güncellenmesi\n`Poz` dataclass'ına ters rejim sayacı eklenir.\n\n**eski_kod:**\n```python\n@dataclass\nclass Poz:\n    symbol: str\n    side: str\n    entry_price: float\n    # ... diğer alanlar\n```\n\n**yeni_kod:**\n```python\n@dataclass\nclass Poz:\n    symbol: str\n    side: str\n    entry_price: float\n    # ... diğer alanlar\n    regime_flip_count: int = 0\n```\n\n#### Parça 2: İzleme Mantığının Güncellenmesi\n`_izle` metodu içinde, rejim ters döndüğünde sayaç artırılır; rejim düzeldiğinde sayaç sıfırlanır.\n\n**eski_kod:**\n```python\n    def _izle(self, poz, current_regime):\n        # ... mevcut izleme mantığı\n        pass\n```\n\n**yeni_kod:**\n```python\n    def _izle(self, poz, current_regime):\n        # ... mevcut izleme mantığı\n        if current_regime == poz.opposite_regime:\n            poz.regime_flip_count += 1\n        else:\n            poz.regime_flip_count = 0\n```\n\n#### Parça 3: Kapatma Koşulunun Teyide Bağlanması\n`motor.py` satır 140-144 arasındaki anlık kapatma mantığı, sayacın belirli bir eşiği (örn: 3 tik) geçme şartına bağlanır.\n\n**eski_kod:**\n```python\n        if time_since_entry > self.config.rejim_karsi_cikis_sn:\n            if current_regime == poz.opposite_regime and pnl < 0:\n                self._kapat(poz, \"REJIM_DONUS\")\n```\n\n**yeni_kod:**\n```python\n        if time_since_entry > self.config.rejim_karsi_cikis_sn:\n            if",
+   "saniye": 259.4,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "icra",
+   "tur": 1,
+   "istem_karakter": 16012,
+   "yanit": "**'Kağıtta çalışır' ile 'borsada çalışır' arasındaki fark:**\nKağıtta (paper), emir gönderildiği an limit fiyattan dolmuş kabul edilir veya basit bir simülatörle (`MakerFillSimulator`) eşleştirilir. Borsada ise; emrin deftere yazılması, öncelik sırası, kısmi dolumlar, kayma (slippage), borsa reddi ve ağ gecikmesi vardır. Kağıtta \"anlık\" olan işlem, borsada \"belirsiz süreli bir bekleyiş\" ve \"fiyat sapması\"dır.\n\n**Soru Cevabı:**\nGerçek parada en pahalıya patlayan hata sınıfı **kayma (slippage)** ve **kısmi dolumların** yönetilememesidir. Özellikle stop-loss emirlerinde gerçekleşen yüksek kayma, matematiksel olarak hesaplanan net -10$ stop limitini hızla aşarak kasayı eritir.\n\n---\n\n**YAMA: motor.py (REJIM_DONUS Teyit Mekanizması)**\n\n**1. Parça: Poz Dataclass Güncellemesi**\n```python\n# eski_kod:\n# @dataclass\n# class Poz:\n#     ... (mevcut alanlar)\n\n# yeni_kod:\n@dataclass\nclass Poz:\n    # ... (mevcut alanlar)\n    regime_flip_count: int = 0\n```\n\n**2. Parça: _izle İçinde Sayaç Güncelleme**\n```python\n# eski_kod:\n# if rejim_ters_dondu:\n#     # rejim kontrol mantığı\n\n# yeni_kod:\nif rejim_ters_dondu:\n    poz.regime_flip_count += 1\n```\n\n**3. Parça: Kapatma Koşulunun Sayaca Bağlanması**\n```python\n# eski_kod:\n# if (time.time() - poz.acilis_zamani) > rejim_karsi_cikis_sn and rejim_ters_dondu and pnl < 0:\n#     return \"REJIM_DONUS\"\n\n# yeni_kod:\nif (time.time() - poz.acilis_zamani) > rejim_karsi_cikis_sn and poz.regime_flip_count >= 3 and pnl < 0:\n    return \"REJIM_DONUS\"\n```\n\n**Kararlar:**\n1. Teyit eşiği `regime_flip_count >= 3` olarak belirlendi (gürültüyü önlemek için).\n2. `regime_flip_count` alanı `Poz` sınıfına varsayılan `0` ile eklendi.",
+   "saniye": 288.6,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "mimar",
+   "tur": 1,
+   "istem_karakter": 16012,
+   "yanit": "",
+   "saniye": 0.0,
+   "hata": "google/gemma-4-31b-it → TimeoutError: The read operation timed out | meta/llama-3.3-70b-instruct → HTTP 410 {\"type\":\"about:blank\",\"title\":\"Gone\",\"status\":410,\"detail\":\"The model 'meta/llama-3.3-70b-instruct' has reached "
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "ops",
+   "tur": 1,
+   "istem_karakter": 16012,
+   "yanit": "Operasyonel gereksinimler ve `motor.py` üzerindeki churn (yüksek işlem kaybı) tanısı doğrultusunda, `REJIM_DONUS` çıkışlarını teyide bağlayan yama aşağıdadır.\n\n### 1. Parça: Pozisyon Veri Yapısının Güncellenmesi\n`Poz` dataclass'ına, rejim ters dönme olaylarını sayacak olan `regime_flip_count` alanı eklenir.\n\n**eski_kod:**\n```python\n@dataclass\nclass Poz:\n    # ... mevcut alanlar ...\n    entry_time: float\n    # ...\n```\n\n**yeni_kod:**\n```python\n@dataclass\nclass Poz:\n    # ... mevcut alanlar ...\n    entry_time: float\n    regime_flip_count: int = 0  # Rejim ters dönme sayacı\n    # ...\n```\n\n---\n\n### 2. Parça: İzleme Döngüsünde Sayacın Güncellenmesi\n`_izle` metodu içerisinde, mevcut rejim ile pozisyonun yönü karşılaştırılır; rejim ters döndüğünde sayaç artırılır.\n\n**eski_kod:**\n```python\n# _izle metodu içinde rejim kontrolü yapılan kısım\nif current_regime != poz.regime:\n    # rejim değişimi tespit edildi\n```\n\n**yeni_kod:**\n```python\n# _izle metodu içinde rejim kontrolü yapılan kısım\nif current_regime != poz.regime:\n    poz.regime_flip_count += 1\n    # rejim değişimi tespit edildi\n```\n\n---\n\n### 3. Parça: Kapatma Koşulunun Teyide Bağlanması\n`motor.py` satır 140-144 arasındaki agresif kapatma mantığı, sayacın belirli bir eşiği (örneğin 2) geçmesi şartına bağlanarak \"churn\" engellenir.\n\n**eski_kod:**\n```python\nif (time.time() - poz.entry_time) > rejim_karsi_cikis_sn:\n    if current_regime != poz.regime and poz.pnl < 0:\n        return \"REJIM_DONUS\"\n```\n\n**yeni_kod:**\n```python\nif (time.time() - poz.entry_time) > rejim_karsi_cikis_sn:\n    # Sadece rejim 2 veya daha fazla kez ters dönmüşse ve PnL negatifse kapat\n    if current_regime != poz.regime and poz.pnl < 0 and poz.regime_flip_count >= 2:\n        return \"REJIM_DONUS\"\n```\n\n**Operasyonel Not:** 7/24 ayakta kalma için asgari gereksinim; `RestartRecovery` (bayat emir iptali + stop restore), `LiveMirror` (emir eşleme) ve `EmergencyController` (kill switch) üçlüsünün aktif olmasıdır.",
+   "saniye": 260.1,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "olcum",
+   "tur": 1,
+   "istem_karakter": 16012,
+   "yanit": "",
+   "saniye": 0.0,
+   "hata": "google/gemma-4-31b-it → TimeoutError: The read operation timed out | meta/llama-3.3-70b-instruct → HTTP 410 {\"type\":\"about:blank\",\"title\":\"Gone\",\"status\":410,\"detail\":\"The model 'meta/llama-3.3-70b-instruct' has reached "
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "test",
+   "tur": 2,
+   "istem_karakter": 4162,
+   "yanit": "**Kabul:** `motor.py` satır 140-144'teki erken çıkışın churn sebebi olduğu tanısı doğrudur.\n\n**İtirazlar:**\n\n1. **Slippage Kanıtı Yok:** `icra` rolü kaymanın kasayı eriteceğini iddia ediyor ancak mevcut `executor.py` simülasyonunda kayma (slippage) modellemesinin nasıl yapıldığına dair bir kanıt sunulmadı. Kanıtlanmayan risk, yama önceliği belirleyemez.\n2. **Sayıcı Eşiği Belirsiz:** `ops` rolü `regime_flip_count` eklemeyi öneriyor ancak bu sayacın hangi değerde (kaç tick sonra) pozisyonu kapatacağı belirtilmemiş. Arbitrary (keyfi) bir sayı seçimi, test edilebilir bir kabul kriteri değildir.\n3. **Korelasyon Verisi Eksik:** `risk_subayi` 6 botun aynı yöne açılma riskinden bahsediyor; fakat botların sinyal korelasyon matrisi veya geçmiş replay verilerinde bu durumun gerçekleştiğine dair bir kanıt sunulmadı.",
+   "saniye": 207.5,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "icra",
+   "tur": 2,
+   "istem_karakter": 4177,
+   "yanit": "**Katıldığım nokta:** `REJIM_DONUS` çıkışlarının tek bir sinyalle tetiklenmesinin churn yarattığı ve teyit mekanizmasının gerekli olduğu doğrudur.\n\n**İtirazlar:**\n\n1. **Sayısal Kanıt Eksikliği:** `regime_flip_count >= 3` eşiğinin neden \"3\" olduğuyla ilgili herhangi bir backtest verisi veya istatistiksel kanıt sunulmamıştır; sayı rastgele seçilmiş görünmektedir.\n2. **Slippage Hesaplama Hatası:** Risk subayı, net -10$ stop'u sabit kabul etmiştir; ancak borsa reddi ve kayma (slippage) durumunda bu rakamın nasıl aşılacağı ve kasanın nasıl korunacağıyla ilgili bir \"fail-safe\" mekanizması önerilmemiştir.\n3. **Kısmi Dolum İhmali:** Ops ve Motor yamaları sadece çıkış mantığına odaklanmıştır; emrin kısmi dolması durumunda `regime_flip_count` sayacının pozisyon büyüklüğüne göre ağırlıklandırılmasına dair bir mantık kurulmamıştır.",
+   "saniye": 270.1,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "risk_subayi",
+   "tur": 2,
+   "istem_karakter": 4209,
+   "yanit": "**Katıldığım nokta:** `REJIM_DONUS` çıkışlarının teyide bağlanarak churn'ün azaltılması mantığı doğrudur.\n\n**İtirazlar:**\n\n1. **Slippage Kanıtı Eksik:** İcra rolü kaymanın tehlikesinden bahsetmiş ancak yama planında net -10$ stopu koruyacak bir \"slippage buffer\" veya \"limit order\" stratejisi sunulmamıştır. Gerçek borsada -10$ stopun nasıl garanti edileceği belirsizdir.\n2. **Korelasyon Verisi Eksik:** Risk analizinde 6 botun aynı yöne açma ihtimali \"worst-case\" olarak verilmiş; ancak botların hangi sembollerde çalıştığı ve bu sembollerin korelasyon katsayıları (beta) raporlanmamıştır.\n3. **Teyit Sayısı Kanıtı Eksik:** `sayaç >= 3` kararının hangi backtest verisine veya istatistiksel kanıta dayandığı belirtilmemiştir. Neden 2 veya 5 değil de 3 olduğu belirsizdir.",
+   "saniye": 254.4,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "ops",
+   "tur": 2,
+   "istem_karakter": 4142,
+   "yanit": "**Katıldığım nokta:** `REJIM_DONUS` churn'ü nedeniyle PF'nin 0.676'ya düşmesi ve erken çıkışların kârlılığı öldürdüğü tespiti doğrudur.\n\n**İtirazlar:**\n\n1. **Sayısal Eşik Kanıtsızlığı:** Yama önerisindeki \"örneğin 2\" sayısı tamamen keyfidir; geçmiş tick verileriyle (backtest) 2 sayısının churn'ü engellediğine ve kârlılığı artırdığına dair hiçbir veri kanıtı sunulmamıştır.\n2. **Slippage/Stop Çelişkisi:** `icra` rolü kaymanın -10$ stopu aşacağını belirtirken, yama sadece çıkış zamanlamasına odaklanmıştır; kayma anında net -10$ stopun nasıl korunacağına dair operasyonel bir mekanizma (limit/market yönetimi) eklenmemiştir.\n3. **Korelasyon Riski Eksikliği:** `risk_subayi` 6 botun aynı anda stop olması durumunu (-60$) belirtmiş ancak yamanın bu senaryoda \"bekleme süresini artırarak\" toplam risk süresini (exposure time) ne kadar uzattığına dair bir analiz sunulmamıştır.",
+   "saniye": 233.7,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "sekreter",
+   "tur": 3,
+   "istem_karakter": 11636,
+   "yanit": "",
+   "saniye": 0.0,
+   "hata": "google/gemma-4-31b-it → TimeoutError: The read operation timed out | bütçe doldu"
+  }
+ ],
+ "kullanilan_cagri": 8,
+ "kararlar": [],
+ "dusen": [],
+ "hatalar": []
+}
