@@ -1,0 +1,74 @@
+--- app/executor.py
++++ app/executor.py
+@@ -1012,7 +1012,12 @@
+-    def _rvol(self, candles: list[Candle]) -> float:
+-        from core.spike import candle_rvol
+-        return candle_rvol(
+-            [c.volume for c in candles],
+-            self.config.signal.candle_rvol_lookback,
+-        )
++    def _rvol(self, candles: list[Candle]) -> float:
++        from core.spike import candle_rvol
++        rvol = candle_rvol([c.volume for c in candles], self.config.signal.candle_rvol_lookback)
++        # KANIT: Baseline likidite altında kalan rvol'ler churn yaratır, filtrele.
++        baseline = self._baseline_liquidity(self.current_symbol) 
++        if candles[-1].volume < baseline * 1.5: 
++            return 0.0  # Sinyali öldür, churn'ü azalt.
++        return rvol
+
+@@ -288,7 +293,15 @@
+-        self.broker.manage_position_candle(
+-            symbol, candle, candle.timestamp, atr=self._atr_for(symbol),
+-            impulse_pct=self._impulse(candles), rvol=self._rvol(candles),
+-        )
++        # REJIM_DONUS KANITI: Impulse ters yöne döndüğünde ve hacim düştüğünde çık.
++        impulse = self._impulse(candles)
++        rvol = self._rvol(candles)
++        
++        # Pozisyon yönüne göre momentum kaybı kontrolü
++        is_regime_shift = (self.broker.position_side == 'LONG' and impulse < -0.5) or \
++                          (self.broker.position_side == 'SHORT' and impulse > 0.5)
++        
++        self.broker.manage_position_candle(
++            symbol, candle, candle.timestamp, 
++            atr=self._atr_for(symbol),
++            impulse_pct=impulse, 
++            rvol=rvol,
++            force_exit=is_regime_shift # REJIM_DONUS artık kanıta bağlı.
++        )
+
+@@ -895,7 +908,11 @@
+-        avg_
+Analist notu: Örneklem (44 işlem) < 100 olduğu için bu sonuçlar bir **'yön göstergesi'**dir. WR %15.9 ve PF 0.676 ile sistem şu an negatif beklentidedir. MaksDD (-30.38$) kasanın %3'ü olsa da, işlem başına net -10$ stop kuralı ile karşılaştırıldığında, churn (işlem sıklığı) ve komisyon yükü ($24.66) ana problemdir.
+
+`REJIM_DONUS` çıkışlarının %81'i (36/44) oluşturması, sistemin trendi yakalayamayıp erken çıktığını veya stopla değil, sinyal değişimiyle kapandığını gösterir.
+
+### Yama Önerisi: "Dynamic Structure-Lock" (DSL)
+
+**Hedef:** Churn'ü azaltmak için `REJIM_DONUS` çıkışlarını, fiyatın yapısal olarak bozulduğu (ATR+Swing) kanıta bağlamak ve stop mesafesini net -10$ bütçesine (0.50$ maliyet/komisyon payı ile) sabitlemek.
+
+#### 1. Stop Mesafesi ve Maliyet Uyumu
+Sistemde `initial_stop` hesaplanırken, net -10$ stop bütçesinden komisyon ve kayma payını (0.50$) düşerek, brüt stop mesafesini $\pm 9.50\$$ olarak set etmeliyiz.
+
+#### 2. REJIM_DONUS Kanıta Bağlama
+Sadece sinyal değişimiyle (`REJIM_DONUS`) çıkmak yerine, `risk.py` içerisindeki `ATR+SWING` yapısını kullanarak, fiyatın yapısal stop seviyesini ihlal etmesi şartını ekliyoruz.
+
+---
+
+### Uygulama (Diff)
+
+#### Dosya: `src/risk.py`
+**Fonksiyon:** `calculate_stop` (veya ilgili stop belirleme bloğu)
+
+
+--- src/executor.py
++++ src/executor.py
+@@ -X,X +X,X @@
+-        if exit_reason == "REJIM_DONUS":
+-            return self.close_position_market(symbol, price, "REJIM_DONUS")
++        if exit_reason == "REJIM_DONUS":
++            # Churn azaltma: Eğer pozisyon risk-free ise veya yapısal stop henüz 
++            # tetiklenmediyse, sinyal değişimine rağmen pozisyonu taşı.
++            if self._is_risk_free_position(pos) or price > pos.stop (if LONG):
++                return None # Çıkışı ertele, yapısal stopu bekle
++            return self.close_position_market(symbol, price, "REJIM_DONUS_CONFIRMED")

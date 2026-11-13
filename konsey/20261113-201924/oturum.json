@@ -1,0 +1,131 @@
+{
+ "gorev": "Altı botlu Binance+OKX vadeli işlem sistemini iyileştir. Değişmez kurallar: 1000$ kasa, 50$ giriş x10 kaldıraç (500$ notional), sınırsız pozisyon, CROSS teminat, pozisyon başına -10$ stop, evren tüm Binance+OKX vadeli pariteleri. Ölçülmüş gerçek veri (v9 smoke, 60 sembol): 44 kapanan işlem, WR %15.9, PF 0.676, en iyi +16.1$, en kötü -6.02$, maksDD -30.38$, çıkış dağılımı REJIM_DONUS 36 / STOP 8, komisyon 24.66$. Kenar ölçülmedi, churn yüksek. Görevin: havuzdaki tüm bilgileri tarayıp (1) churn'ü azaltan, (2) REJIM_DONUS çıkışını kanıta bağlayan, (3) stop mesafesini 0.50$ maliyetle uyumlu hale getiren somut, uygulanabilir bir yama önerisi üret. Dosya+fonksiyon düzeyinde diff öner.",
+ "saglayici_modelleri": {
+  "nvidia": [
+   "01-ai/yi-large",
+   "adept/fuyu-8b",
+   "ai21labs/jamba-1.5-large-instruct",
+   "aisingapore/sea-lion-7b-instruct",
+   "bigcode/starcoder2-15b",
+   "databricks/dbrx-instruct",
+   "deepseek-ai/deepseek-coder-6.7b-instruct",
+   "deepseek-ai/deepseek-v4.1-flash",
+   "google/codegemma-1.1-7b",
+   "google/codegemma-7b",
+   "google/deplot",
+   "google/gemma-2b",
+   "google/gemma-3-12b-it",
+   "google/gemma-3-4b-it",
+   "google/gemma-4-31b-it",
+   "google/recurrentgemma-2b",
+   "ibm/granite-3.0-3b-a800m-instruct",
+   "ibm/granite-3.0-8b-instruct",
+   "ibm/granite-34b-code-instruct",
+   "ibm/granite-8b-code-instruct",
+   "meta/codellama-70b",
+   "meta/llama-3.2-90b-vision-instruct",
+   "meta/llama-guard-4-12b",
+   "meta/llama2-70b",
+   "meta/muse-glimmer-30b",
+   "microsoft/kosmos-2",
+   "microsoft/phi-3-vision-128k-instruct",
+   "microsoft/phi-3.5-moe-instruct",
+   "minimaxai/minimax-m3.1-flash",
+   "mistralai/codestral-22b-instruct-v0.1",
+   "mistralai/mistral-7b-instruct-v0.3",
+   "mistralai/mistral-large",
+   "mistralai/mistral-large-2-instruct",
+   "mistralai/mistral-large-4-1t-a52b",
+   "mistralai/mixtral-8x22b-v0.1",
+   "moonshotai/kimi-k2.6",
+   "nv-mistralai/mistral-nemo-12b-instruct",
+   "nvidia/ai-synthetic-video-detector",
+   "nvidia/cosmos-reason2-8b",
+   "nvidia/embed-qa-4",
+   "nvidia/ising-calibration-1.5-31b",
+   "nvidia/llama-3.1-nemoguard-8b-content-safety",
+   "nvidia/llama-3.1-nemoguard-8b-topic-control",
+   "nvidia/llama-3.1-nemotron-51b-instruct",
+   "nvidia/llama-3.1-nemotron-70b-instruct",
+   "nvidia/llama-3.1-nemotron-safety-guard-8b-v3",
+   "nvidia/llama-3.1-nemotron-ultra-253b-v1",
+   "nvidia/llama-3.2-nemoretriever-1b-vlm-embed-v1",
+   "nvidia/llama-3.2-nv-embedqa-1b-v1",
+   "nvidia/llama-nemotron-embed-vl-1b-v2",
+   "nvidia/llama3-chatqa-1.5-70b",
+   "nvidia/mistral-nemo-minitron-8b-8k-instruct",
+   "nvidia/nemotron-3-embed-1b",
+   "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+   "nvidia/nemotron-3-super-120b-a12b",
+   "nvidia/nemotron-3-ultra-550b-a55b",
+   "nvidia/nemotron-3.5-bolt-e4b",
+   "nvidia/nemotron-3.5-content-safety",
+   "nvidia/nemotron-3.5-embed-1b",
+   "nvidia/nemotron-3.5-embed-8b"
+  ]
+ },
+ "saglayicilar": [
+  "nvidia"
+ ],
+ "modeller": {
+  "nvidia": [
+   null
+  ]
+ },
+ "cagri": [
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "mimar",
+   "tur": 1,
+   "istem_karakter": 23294,
+   "yanit": "Sistem mimarı olarak, v9 smoke verisindeki düşük WR (%15.9) ve yüksek churn'ü (REJIM_DONUS baskınlığı) çözmek için aşağıdaki yamayı öneriyorum.\n\n### 1. Analiz ve Kanıtlar\n\n*   **Churn ve REJIM_DONUS:** Mevcut sistemde çıkışların %81.8'i (36/44) `REJIM_DONUS` ile gerçekleşiyor. Bu, sinyallerin trendle uyumsuz olduğunu ve rejim değiştiği anda (muhtemelen düşük kâr veya hafif zarar ile) pozisyonun kapatıldığını gösterir.\n*   **Sinyal Kalitesi (Churn Azaltma):** `futures_bot_v37/ws_bot.py:86-117` kanıtı, \"CASCADE EŞİĞİ\" (tasfiye zinciri) kullanımının isabet oranını %60.1'den %86.3'e çıkardığını kanıtlar. Eşik 3 (60 sn'de 3 sinyal) seçilmiştir. Churn'ü azaltmak için rastgele sinyaller yerine bu \"kümelenmiş\" (cascade) sinyallerin zorunlu kılınması gerekir.\n*   **Stop Mesafesi ve Maliyet:** 50$ teminat $\\times$ 10x = 500$ notional. Pozisyon başına net -10$ stop hedefi, notional üzerinden %2'lik bir toplam kayba denk gelir. `test_trading_system.py:69-75` kanıtında `stop_distance_fraction`'ın `abs(signal.impulse_pct) / 100` olarak hesaplandığı görülmektedir. 0.50$ maliyet (komisyon) sonrası net -10$ kalması için stop mesafesinin dinamik olarak impulse'a bağlanması ancak sabit bir tavanla sınırlandırılması gerekir.\n\n### 2. Yama Önerisi (Diff)\n\n#### Yama A: Churn Azaltma (Cascade Filtresi Entegrasyonu)\nSinyal katmanına, sadece yüksek olasılıklı \"tasfiye zinciri\" anlarında giriş izni veren filtre eklenir.\n\n**Dosya:** `app/executor.py` (veya `unified_engine.py`)\n```python\n--- a/app/executor.py\n+++ b/app/executor.py\n@@ -90,5 +90,11 @@\n-        # Mevcut giriş mantığı\n+        # CASCADE FİLTRESİ (Kanıt: futures_bot_v37/ws_bot.py:86-117)\n+        if not self.orderflow.is_cascade_active(symbol, threshold=3):\n+            return self.shadow_tracker.record_blocked(\n+                symbol, signal.side, \"NO_CASCADE\", entry_ref, 0.0, ts_ms\n+            )\n```\n\n#### Yama B: Stop Mesafesi ve Maliyet Uyumu\nStop mesafesini, net -10$ kaybı (komisyon dahil) aşmayacak şekilde impulse tabanlı olarak normalize eder.\n\n**Dosya:** `core/strategy.py` (veya `FadeStrategy` sınıfı)\n```python\n--- a/core/strategy.py\n+++ b/core/strategy.py\n@@ -65,5 +65,10 @@\n-        self.stop_distance_fraction = abs(self.impulse_pct) / 100\n+        # Net -10$ Stop Hesabı: (500$ Notional * Stop%) + 0.50$ Fee = 10$\n+        # Max Stop% = (10 - 0.50) / 500 = 0.019 (1.9%)\n+        raw_stop = abs(self.impulse_pct) / 100\n+        self.stop_distance_fraction = min(raw_stop, 0.019) \n+        # Kanıt: test_trading_system.py:69-75 (impulse_pct bağımlılığı)\n```\n\n#### Yama C: REJIM_DONUS Çıkış Kanıtı ve Optimizasyonu\n`REJIM_DONUS` çıkışlarını, sadece sinyal yönüyle tamamen ters bir rejim oluştuğunda tetikleyecek şekilde sıkılaştırır.\n\n**Dosya:** `unified_engine.py`\n```python\n--- a/unified_engine.py\n+++ b/unified_engine.py\n@@ -748,5 +748,9 @@\n-                \"reason\": \"yeni_giris_durduruldu_acik_pozisyon_bekleniyor\",\n+                # REJIM_DONUS'u sadece ters sinyal + yüksek hacimle tetikle\n+                if regime_snap == \"OPPOSITE\" and pdf_core > 0.7:\n+                    return \"CLOSE_POSITION\"\n+                else:\n+                    return \"HOLD\"\n```\n\n### 3. Uygulama Özeti\n1.  **Churn:** `is_cascade_active(threshold=3)` ile sadece yüksek olasılıklı kümelenmeler alınır $\\rightarrow$ İşlem sayısı düşer, WR artar.\n2.  **Stop:** `min(raw_stop",
+   "saniye": 255.5,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "risk_subayi",
+   "tur": 1,
+   "istem_karakter": 23158,
+   "yanit": "Risk Subayı olarak veto yetkimi kullanıyorum: **Sayısal kurallar (1000$ kasa, 50$ teminat, 10x, -10$ stop) kutsaldır ve dokunulmazdır.**\n\nVerilen smoke test verileri (WR %15.9, PF 0.676) sistemin şu an \"rastgele gürültüye\" trade ettiğini ve yüksek churn (işlem sıklığı) ile komisyonların kârı yediğini gösteriyor. `REJIM_DONUS` çıkışlarının %81'i oluşturması, stratejinin trend yakalayamadığını, sadece volatilite değişimlerinde (rejim dönüşü) pozisyon kapattığını kanıtlıyor.\n\n### Risk Analizi: En Kötü Durumda Kasa Ne Olur?\n**Senaryo:** Korelasyonun %100 olduğu bir piyasa çöküşünde (Black Swan), 10 eşzamanlı pozisyonun aynı anda stop olması.\n*   **Hesap:** $10 \\text{ pozisyon} \\times (-10\\$ \\text{ stop}) = -100\\$$.\n*   **Sonuç:** Kasa $1000\\$ \\rightarrow 900\\$$ düşer. Maksimum drawdown (DD) %10 olur. \n*   **Tasfiye Mesafesi:** CROSS modunda, 500$ notional büyüklükteki bir pozisyon için %10 stop, fiyatın %1'lik hareketine denk gelir (10x kaldıraç). Kasa 1000$ olduğu için toplam tasfiye fiyatı, girişten yaklaşık %80-90 aşağıdadır. **Sistem tasfiye edilemez, sadece stop olur.**\n\n---\n\n### Yama Önerisi (Patch)\n\nChurn'ü azaltmak ve `REJIM_DONUS` çıkışlarını anlamlandırmak için \"Yönsel Risk Bütçesi\" ve \"Stop Mesafe Senkronizasyonu\" yaması öneriyorum.\n\n#### 1. Churn Azaltma ve Korelasyon Yönetimi\n`executor.py` içerisindeki `open_risk` ve `side_risk` kontrolü (satır 1323-1329) şu an sadece bütçeye bakıyor. Churn'ü azaltmak için aynı yöndeki pozisyon sayısına limit getiren bir \"Yönsel Yoğunluk\" filtresi eklenmelidir.\n\n#### 2. Stop Mesafe Uyumu (0.50$ Maliyet)\nPozisyon başına -10$ stop, 500$ notional büyüklükte tam olarak **%2'lik bir fiyat hareketi** demektir ($500 \\times 0.02 = 10$). Mevcut `risk.py`'deki `margin_stop_fraction` hesaplaması bu sabit riskle uyumlu hale getirilmelidir.\n\n#### Diff Önerisi\n\n**Dosya:** `src/executor.py`\n```python\n<<<<\n            if open_risk+candidate_risk>pool_balance*policy.total_risk_fraction or side_risk+candidate_risk>pool_balance*policy.directional_risk_fraction:\n                await self._say(f\"⛔ {symbol}: V94 aggregate directional risk budget\")\n====\n            # YAMA: Churn azaltma için yönsel pozisyon limiti (Max 3 aynı yön)\n            current_side_count = sum(1 for p in self.positions.values() if p.side == side)\n            if current_side_count >= 3:\n                await self._say(f\"⛔ {symbol}: Yönsel yoğunluk limiti (Churn Önleyici)\")\n                return\n\n            if open_risk+candidate_risk>pool_balance*policy.total_risk_fraction or side_risk+candidate_risk>pool_balance*policy.directional_risk_fraction:\n                await self._say(f\"⛔ {symbol}: V94 aggregate directional risk budget\")\n>>>>\n```\n\n**Dosya:** `src/risk.py`\n```python\n<<<<\n    def margin_stop_pct(self, leverage: int | None = None) -> float:\n        lev = max(1, int(leverage or self.leverage or 1))\n        requested = (100.0 / lev) * self.margin_stop_fraction\n        liq_dist = max(0.1, 100.0 / lev - self.maintenance_margin_pct)\n        return round(min(requested, liq_dist * self.margin_stop_liq_buffer), 4)\n====\n    def margin_stop_pct(self, leverage: int | None = None) -> float:\n        # YAMA: -10$ stop / 500$ notional = %2 sabit stop mesafesi\n        # 10x kaldıraçta %2 fiyat hareketi = %20 marj kaybı\n        return 2.0  # Sabit %2 fiyat stopu (0.50$ maliyet/komisyon payı dahil)\n>>>>\n```\n\n### Uygulama Özeti:\n1.  **Churn:** Aynı yönde maksimum 3 pozisyona izin verilerek, korele varlıklarda aynı anda 10 pozisyon açıp komisyon yakma engellendi.\n2.  **REJIM_DONUS:**",
+   "saniye": 170.8,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "icra",
+   "tur": 1,
+   "istem_karakter": 23192,
+   "yanit": "Önce temel ayrımı yapalım: **\"Kağıtta çalışır\"**, idealize edilmiş bir `MakerFillSimulator` (paper.py:54) üzerinden, kayma (slippage) ve borsa reddi (exchange reject) olmadan, emrin limit fiyata değdiği an dolduğu varsayımıdır. **\"Borsada çalışır\"** ise; `post-only` emrin borsa tarafından reddedilmesi, kısmi dolumların (partial fills) yönetimi, `amend` (emir güncelleme) sırasında oluşan gecikmeler ve stop anındaki piyasa derinliği yetersizliği nedeniyle gerçekleşen gerçek kaymadır.\n\nVerilen smoke test verileri (WR %15.9, PF 0.676) ve yüksek churn, sistemin \"kağıt\" mantığıyla çalıştığını, ancak borsadaki icra gerçekliğine çarptığını gösteriyor.\n\n### Analiz ve Yama Önerisi\n\n**1. Churn ve REJIM_DONUS Sorunu:**\n`REJIM_DONUS` çıkışlarının %81'i (36/44) oluşturması, stratejinin kârı realize edemeden rejim değişikliği nedeniyle pozisyonu kapattığını gösteriyor. Bu, girişlerin \"fazla hassas\" veya \"geç\" olduğunu kanıtlar. `paper.py:310` satırındaki `DOLUM_ANI_STOP_IHLALI` mekanizması, kağıt üzerinde emri iptal ederken, gerçek borsada bu emir çoktan kısmi dolmuş olabilir.\n\n**2. Stop Mesafesi ve Maliyet Uyumu:**\nPozisyon başına net -10$ stop, 500$ notional (10x) için %2'lik bir hareket demektir. Ancak komisyonlar (24.66$) toplam kârı eritiyor. Stop mesafesini 0.50$ maliyetle uyumlu hale getirmek için, stop tetikleyicisini \"net zarar\" yerine \"brüt zarar + tahmini komisyon\" şeklinde revize etmeliyiz.\n\n**3. Uygulanabilir Yama (Diff)**\n\nSistemin churn'ü azaltmak için `POST_ONLY_LIMIT` emirlerin dolum sonrası \"stale\" (bayat) kontrolünü sıkılaştırması ve stop mekanizmasını komisyon farkındalığına çekmesi gerekir.\n\n#### Dosya: `src/exchanges.py` (veya ilgili Broker sınıfı)\n```python\n--- a/src/exchanges.py\n+++ b/src/exchanges.py\n@@ -1114,7 +1114,12 @@\n-        oid = order.get(\"id\")\n-        filled = float(order.get(\"filled\") or 0.0)\n-        avg_px = float(order.get(\"average\") or limit_px)\n+        oid = order.get(\"id\")\n+        # Kısmi dolum kontrolü: Sadece tam dolumları değil, \n+        # notional değerinin %90'ı dolmuşsa 'tamamlandı' say (Churn azaltma)\n+        filled = float(order.get(\"filled\") or 0.0)\n+        requested_qty = float(order.get(\"quantity\") or 0.0)\n+        is_effectively_filled = filled >= (requested_qty * 0.9) if requested_qty > 0 else False\n+        avg_px = float(order.get(\"average\") or limit_px)\n```\n\n#### Dosya: `exec/paper.py` (veya Live Broker karşılığı)\n```python\n--- a/exec/paper.py\n+++ b/exec/paper.py\n@@ -310,7 +310,11 @@\n-            \"reason\": \"DOLUM_ANI_STOP_IHLALI\", \"live_price\": price,\n-            \"stop_loss\": stop, \"limit_price\": order.limit_price,\n+            # Stop mesafesini 0.50$ maliyetle uyumlu hale getir:\n+            # Net -10$ stop'u, komisyonu (approx 0.50$) içeride tutacak şekilde \n+            # tetikleme eşiğini -9.50$'a çek.\n+            \"reason\": \"DOLUM_ANI_STOP_IHLALI\", \"live_price\": price,\n+            \"stop_loss\": stop, \"limit_price\": order.limit_price,\n+            \"adjusted_stop\": stop + (0.50 / order.quantity if order.quantity > 0 else 0),\n```\n\n### Yama Özeti:\n1.  **Churn Azaltma:** `exchanges.py` üzerinde %90 dolum eşiği getirilerek, küçük miktarlardaki kısmi dolumlar nedeniyle pozisyonun \"açık/kapalı\" arasında gidip gelmesi (churn) engellenir.\n2.  **REJIM_DONUS Kanıtı:** `POST_ONLY` emirlerin dolum anındaki stop ihlali kontrolü, gerçek borsa kaymasıyla (slippage) senkronize edilerek, rejim dönüşü öncesi stopların daha sağlıklı çalışması sağlanır.\n3.  **Stop Uyumu:** Stop tetikleme mantığına 0.50$ komisyon tamponu eklenerek, net -10$ hedefi",
+   "saniye": 190.0,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "test",
+   "tur": 1,
+   "istem_karakter": 23094,
+   "yanit": "Test mühendisi şapkasıyla; mevcut v9 smoke verileri (WR %15.9, PF 0.676) sistemin \"rastgelelikten\" kurtulmadığını, yüksek churn'ün (işlem sıklığı) komisyonlar tarafından eritildiğini (24.66$) ve `REJIM_DONUS` çıkışlarının bir kanıta değil, muhtemelen zaman aşımı veya zayıf bir momentum kaybına dayandığını gösteriyor.\n\n**Analiz:**\n1.  **Churn:** `_rvol` ve `_impulse` hesaplamaları (executor.py:1012, 943, 648) sadece son 3 muma bakıyor. Bu, mikro-dalgalanmaları \"sinyal\" olarak algılayıp yüksek churn yaratıyor.\n2.  **REJIM_DONUS:** Kanıt demetinde `REJIM_DONUS`'un tetiklendiği spesifik bir mantıksal koşul (if/else) yok; ancak `manage_position_candle` fonksiyonuna (executor.py:288) gönderilen `impulse_pct` ve `rvol` değerleri çıkış kararını etkiliyor. Kanıtlanamayan çıkış, \"varsayılan\" çıkıştır.\n3.  **Stop Mesafesi:** Pozisyon başına -10$ stop, 500$ notional (10x) için %2'lik bir ters hareket demektir. Ancak `_baseline_liquidity` (executor.py:895) saniyelik hacmi ölçerken 20 mumluk ortalama alıyor. Stop mesafesi, anlık volatilite (tick-size) ile senkronize değil.\n\n**Yama Önerisi:**\n\n### 1. Churn Azaltma: Sinyal Filtresi (Sertleştirme)\n`_rvol` hesaplamasını sadece mevcut mumun hacmiyle değil, `_baseline_liquidity` ile oranlayarak \"gerçek hacim patlaması\" kanıtına bağla.\n\n### 2. REJIM_DONUS Kanıtı: Momentum Eşiği\n`REJIM_DONUS` çıkışını, `_impulse` değerinin ters yönde belirli bir eşiği aşması veya `rvol`'ün baseline altına düşmesi (hacim kaybı) şartına bağla.\n\n### 3. Stop Uyumu: Tick-Based Dynamic Offset\nStop mesafesini sabit -10$ tutarken, giriş emrinin maliyetini (slippage) `_baseline_liquidity` üzerinden hesaplanan \"market impact\" ile sınırlayarak 0.50$ maliyet hedefine çek.\n\n---\n\n### DIFF ÖNERİSİ\n\n**Dosya:** `app/executor.py`\n\n```diff\n--- app/executor.py\n+++ app/executor.py\n@@ -1012,7 +1012,12 @@\n-    def _rvol(self, candles: list[Candle]) -> float:\n-        from core.spike import candle_rvol\n-        return candle_rvol(\n-            [c.volume for c in candles],\n-            self.config.signal.candle_rvol_lookback,\n-        )\n+    def _rvol(self, candles: list[Candle]) -> float:\n+        from core.spike import candle_rvol\n+        rvol = candle_rvol([c.volume for c in candles], self.config.signal.candle_rvol_lookback)\n+        # KANIT: Baseline likidite altında kalan rvol'ler churn yaratır, filtrele.\n+        baseline = self._baseline_liquidity(self.current_symbol) \n+        if candles[-1].volume < baseline * 1.5: \n+            return 0.0  # Sinyali öldür, churn'ü azalt.\n+        return rvol\n\n@@ -288,7 +293,15 @@\n-        self.broker.manage_position_candle(\n-            symbol, candle, candle.timestamp, atr=self._atr_for(symbol),\n-            impulse_pct=self._impulse(candles), rvol=self._rvol(candles),\n-        )\n+        # REJIM_DONUS KANITI: Impulse ters yöne döndüğünde ve hacim düştüğünde çık.\n+        impulse = self._impulse(candles)\n+        rvol = self._rvol(candles)\n+        \n+        # Pozisyon yönüne göre momentum kaybı kontrolü\n+        is_regime_shift = (self.broker.position_side == 'LONG' and impulse < -0.5) or \\\n+                          (self.broker.position_side == 'SHORT' and impulse > 0.5)\n+        \n+        self.broker.manage_position_candle(\n+            symbol, candle, candle.timestamp, \n+            atr=self._atr_for(symbol),\n+            impulse_pct=impulse, \n+            rvol=rvol,\n+            force_exit=is_regime_shift # REJIM_DONUS artık kanıta bağlı.\n+        )\n\n@@ -895,7 +908,11 @@\n-        avg_",
+   "saniye": 174.0,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "olcum",
+   "tur": 1,
+   "istem_karakter": 22957,
+   "yanit": "Analist notu: Örneklem (44 işlem) < 100 olduğu için bu sonuçlar bir **'yön göstergesi'**dir. WR %15.9 ve PF 0.676 ile sistem şu an negatif beklentidedir. MaksDD (-30.38$) kasanın %3'ü olsa da, işlem başına net -10$ stop kuralı ile karşılaştırıldığında, churn (işlem sıklığı) ve komisyon yükü ($24.66) ana problemdir.\n\n`REJIM_DONUS` çıkışlarının %81'i (36/44) oluşturması, sistemin trendi yakalayamayıp erken çıktığını veya stopla değil, sinyal değişimiyle kapandığını gösterir.\n\n### Yama Önerisi: \"Dynamic Structure-Lock\" (DSL)\n\n**Hedef:** Churn'ü azaltmak için `REJIM_DONUS` çıkışlarını, fiyatın yapısal olarak bozulduğu (ATR+Swing) kanıta bağlamak ve stop mesafesini net -10$ bütçesine (0.50$ maliyet/komisyon payı ile) sabitlemek.\n\n#### 1. Stop Mesafesi ve Maliyet Uyumu\nSistemde `initial_stop` hesaplanırken, net -10$ stop bütçesinden komisyon ve kayma payını (0.50$) düşerek, brüt stop mesafesini $\\pm 9.50\\$$ olarak set etmeliyiz.\n\n#### 2. REJIM_DONUS Kanıta Bağlama\nSadece sinyal değişimiyle (`REJIM_DONUS`) çıkmak yerine, `risk.py` içerisindeki `ATR+SWING` yapısını kullanarak, fiyatın yapısal stop seviyesini ihlal etmesi şartını ekliyoruz.\n\n---\n\n### Uygulama (Diff)\n\n#### Dosya: `src/risk.py`\n**Fonksiyon:** `calculate_stop` (veya ilgili stop belirleme bloğu)\n\n```diff\n--- src/risk.py\n+++ src/risk.py\n@@ -312,7 +312,11 @@\n-            structure_stop = float(swing_low) - atr * float(structure_buffer_atr)\n-            if structure_stop > 0 and structure_stop < stop:\n-                stop, source = structure_stop, \"ATR+SWING\"\n+            # Net -10$ stop bütçesi için brüt mesafe ayarı (0.50$ komisyon/slippage payı)\n+            max_allowed_dist = 9.50 / (qty * 10) # Notional 500$ için normalize\n+            structure_stop = float(swing_low) - (atr * float(structure_buffer_atr))\n+            \n+            # Stop'u hem yapısal kanıta hem de net bütçe sınırına bağla\n+            if structure_stop > 0 and structure_stop < stop:\n+                if abs(entry - structure_stop) * qty <= 9.50:\n+                    stop, source = structure_stop, \"ATR+SWING\"\n```\n\n#### Dosya: `src/executor.py` (veya çıkış kontrol döngüsü)\n**Mantık:** `REJIM_DONUS` sinyali geldiğinde hemen kapatmak yerine, `_is_risk_free_position` kontrolü ve yapısal stop kontrolü ekle.\n\n```diff\n--- src/executor.py\n+++ src/executor.py\n@@ -X,X +X,X @@\n-        if exit_reason == \"REJIM_DONUS\":\n-            return self.close_position_market(symbol, price, \"REJIM_DONUS\")\n+        if exit_reason == \"REJIM_DONUS\":\n+            # Churn azaltma: Eğer pozisyon risk-free ise veya yapısal stop henüz \n+            # tetiklenmediyse, sinyal değişimine rağmen pozisyonu taşı.\n+            if self._is_risk_free_position(pos) or price > pos.stop (if LONG):\n+                return None # Çıkışı ertele, yapısal stopu bekle\n+            return self.close_position_market(symbol, price, \"REJIM_DONUS_CONFIRMED\")\n```\n\n### Özet Etki Analizi\n1.  **Churn Azaltma:** `REJIM_DONUS` çıkışları, fiyat yapısal olarak dönmediği sürece engellenir. Bu, WR'yi artırabilir ancak ortalama işlem süresini uzatır.\n2.  **Kanıt:** Çıkışlar artık sadece \"sinyal değişti\" değil, \"sinyal değişti VE fiyat yapısal stopu (ATR+Swing) kırdı\" kanıtına bağlanır.\n3.  **Stop Uyumu:** Brüt stop mesafesi $9.50\\$$'a çekilerek, toplam maliyetle birlikte net kaybın $-10\\$$ sınırını aşmaması garanti altına alınır.",
+   "saniye": 145.7,
+   "hata": ""
+  }
+ ],
+ "kullanilan_cagri": 5,
+ "kararlar": [],
+ "dusen": [],
+ "hatalar": []
+}
