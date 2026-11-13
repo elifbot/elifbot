@@ -112,12 +112,12 @@ def cagir(saglayici: str, mesajlar: list[dict], model: str | None = None,
         return ""
 
     adaylar: list[str] = []
-    if model:
-        adaylar.append(model)
-    if otomatik_model:
-        kesif = model_sec(saglayici)
-        if kesif and kesif not in adaylar:
-            adaylar.append(kesif)
+    if saglayici in _CALISAN:                 # bu sağlayıcıda çalışan model biliniyor
+        adaylar.append(_CALISAN[saglayici])
+    if model and model not in adaylar:
+        adaylar.insert(0, model)
+    if otomatik_model and not adaylar:
+        adaylar.extend(model_adaylari(saglayici, 4))
     for y in (s.varsayilan_model, s.yedek_model):
         if y and y not in adaylar:
             adaylar.append(y)
@@ -127,6 +127,7 @@ def cagir(saglayici: str, mesajlar: list[dict], model: str | None = None,
         metin, hata = _tek_cagri(s, m, mesajlar, butce, rol, tur,
                                  sicaklik, azami_token, istem_karakter)
         if metin:
+            _CALISAN[saglayici] = m
             return metin
         son_hata = f"{m}: {hata}"
     butce.kayitlar.append(Cagri(saglayici, adaylar[0] if adaylar else "?", rol, tur,
@@ -153,7 +154,9 @@ def _tek_cagri(s: "Saglayici", model: str, mesajlar: list[dict], butce: "Butce",
             try:
                 d = json.loads(ham)
             except json.JSONDecodeError:
-                return "", f"JSON değil ({len(ham)} bayt): {ham[:160]!r}"
+                return "", f"JSON değil ({len(ham)} bayt): {ham[:120]!r}"
+            if not d.get("choices"):
+                return "", f"choices yok ({len(ham)} bayt): {ham[:120]!r}"
             metin = (d.get("choices") or [{}])[0].get("message", {}).get("content", "") or ""
             butce.kullanilan += 1
             butce.kayitlar.append(Cagri(s.ad, model, rol, tur, istem_karakter,
@@ -202,21 +205,30 @@ def modeller_listele(saglayici: str, zaman_asimi: int = 30) -> list[str]:
     return [k for k in kimlikler if k]
 
 
-def model_sec(saglayici: str, tercihler: tuple[str, ...] = ()) -> str | None:
-    """Keşfedilen listeden kullanılabilir bir sohbet modeli seçer."""
+# sohbet modeli olduğu neredeyse kesin olan ad parçaları (öncelik sırasıyla)
+IYI = ("nemotron", "llama-3.3", "llama-3.1", "deepseek", "qwen", "mistral", "gpt", "phi",
+       "gemma", "instruct", "chat")
+KOTU = ("embed", "rerank", "guard", "bge", "e5-", "clip", "vision-only", "safety")
+
+# çalışan modeli süreç içinde hatırla: her rol için yeniden keşif yapılmasın
+_CALISAN: dict[str, str] = {}
+
+
+def model_adaylari(saglayici: str, en_fazla: int = 4) -> list[str]:
+    """`/models` listesinden sohbet için makul adayları öncelik sırasıyla döndürür."""
     mevcut = modeller_listele(saglayici)
     if not mevcut:
-        return None
-    for t in tercihler:
-        for k in mevcut:
-            if t in k.lower():
-                return k
-    # bilinen sohbet modelleri; embedding/rerank/guard dışla
-    kotu = ("embed", "rerank", "guard", "bge", "e5-", "clip")
+        return []
+    puanli = []
     for k in mevcut:
-        if not any(x in k.lower() for x in kotu):
-            return k
-    return None
+        alt = k.lower()
+        if any(x in alt for x in KOTU):
+            continue
+        puan = sum(10 - i for i, x in enumerate(IYI) if x in alt)
+        if puan:
+            puanli.append((puan, k))
+    puanli.sort(reverse=True)
+    return [k for _, k in puanli[:en_fazla]]
 
 
 def _kuru_yanit(rol: str, tur: int, istem_karakter: int) -> str:
