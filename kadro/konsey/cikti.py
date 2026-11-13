@@ -30,8 +30,10 @@ def yaz(o, d: Path) -> dict:
     yamalar = re.findall(r"```(?:diff|patch)\n(.*?)```", "\n".join(o.oneriler.values()), flags=re.S)
     (d / "yama.diff").write_text("\n".join(yamalar) if yamalar else "", encoding="utf-8")
 
+    from .saglayici import modeller_listele
     (d / "oturum.json").write_text(json.dumps({
         "gorev": o.gorev,
+        "saglayici_modelleri": {s: modeller_listele(s)[:60] for s in o.saglayicilar},
         "saglayicilar": o.saglayicilar,
         "modeller": o.modeller,
         "cagri": [c.__dict__ for c in o.butce.kayitlar],
