@@ -56,7 +56,7 @@ class Cagri:
 @dataclass
 class Butce:
     azami_cagri: int = 24
-    azami_saniye: float = 900.0
+    azami_saniye: float = float(os.environ.get("ACARBOT_SURE") or 3300)
     kullanilan: int = 0
     denemeler: int = 0
     baslangic: float = field(default_factory=time.time)
@@ -108,6 +108,8 @@ def cagir(saglayici: str, mesajlar: list[dict], model: str | None = None,
         return yanit
 
     if butce.bitti():
+        butce.kayitlar.append(Cagri(saglayici, model or _CALISAN.get(saglayici, "?"), rol, tur,
+                                    istem_karakter, "", 0.0, "bütçe/süre doldu — çağrı yapılmadı"))
         return ""
     if s.anahtar_env and not s.anahtar():
         butce.kayitlar.append(Cagri(saglayici, model or s.varsayilan_model, rol, tur,
