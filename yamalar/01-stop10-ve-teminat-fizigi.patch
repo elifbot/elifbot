@@ -1,0 +1,153 @@
+Binary files /tmp/orijinal/ACARBOT_6BOT/__pycache__/ai_models.cpython-311.pyc and bot/acarbot_6bot/__pycache__/ai_models.cpython-311.pyc differ
+Binary files /tmp/orijinal/ACARBOT_6BOT/__pycache__/apex_bot.cpython-311.pyc and bot/acarbot_6bot/__pycache__/apex_bot.cpython-311.pyc differ
+Binary files /tmp/orijinal/ACARBOT_6BOT/__pycache__/canli_6bot.cpython-311.pyc and bot/acarbot_6bot/__pycache__/canli_6bot.cpython-311.pyc differ
+Binary files /tmp/orijinal/ACARBOT_6BOT/__pycache__/cekirdek.cpython-311.pyc and bot/acarbot_6bot/__pycache__/cekirdek.cpython-311.pyc differ
+Binary files /tmp/orijinal/ACARBOT_6BOT/__pycache__/hybrid_bot.cpython-311.pyc and bot/acarbot_6bot/__pycache__/hybrid_bot.cpython-311.pyc differ
+Binary files /tmp/orijinal/ACARBOT_6BOT/__pycache__/jurnal.cpython-311.pyc and bot/acarbot_6bot/__pycache__/jurnal.cpython-311.pyc differ
+Binary files /tmp/orijinal/ACARBOT_6BOT/__pycache__/metrikler.cpython-311.pyc and bot/acarbot_6bot/__pycache__/metrikler.cpython-311.pyc differ
+Binary files /tmp/orijinal/ACARBOT_6BOT/__pycache__/test_4bot.cpython-311.pyc and bot/acarbot_6bot/__pycache__/test_4bot.cpython-311.pyc differ
+Binary files /tmp/orijinal/ACARBOT_6BOT/__pycache__/turbo_engine.cpython-311.pyc and bot/acarbot_6bot/__pycache__/turbo_engine.cpython-311.pyc differ
+diff -ruN /tmp/orijinal/ACARBOT_6BOT/cekirdek.py bot/acarbot_6bot/cekirdek.py
+--- /tmp/orijinal/ACARBOT_6BOT/cekirdek.py	2026-11-13 18:30:03.000000000 +0000
++++ bot/acarbot_6bot/cekirdek.py	2026-11-13 18:51:16.599446646 +0000
+@@ -27,7 +27,7 @@
+ TEMINAT = 50.0
+ KALDIRAC = 10
+ KOMISYON_ORANI = 0.0005
+-STOP_USD = 20.0
++STOP_USD = 10.0
+ 
+ 
+ def baz_varlik(sembol: str) -> str:
+@@ -449,7 +449,7 @@
+                     pos.taban = self.be_lock
+ 
+             if net <= -self.stop:
+-                self._kapat(pos, px, "ZARAR_KES_-20USD")
++                self._kapat(pos, px, "ZARAR_KES_-10USD")
+                 continue
+             if pos.taban > -1e8 and net <= pos.taban:
+                 sebep = "AI_TRAILING_KAR_AL" if pos.taban >= 3.0 else "BE_KAR_KORUMA"
+Binary files /tmp/orijinal/ACARBOT_6BOT/motorlar/acarbot_omega/__pycache__/__init__.cpython-311.pyc and bot/acarbot_6bot/motorlar/acarbot_omega/__pycache__/__init__.cpython-311.pyc differ
+Binary files /tmp/orijinal/ACARBOT_6BOT/motorlar/acarbot_omega/__pycache__/ai_council.cpython-311.pyc and bot/acarbot_6bot/motorlar/acarbot_omega/__pycache__/ai_council.cpython-311.pyc differ
+Binary files /tmp/orijinal/ACARBOT_6BOT/motorlar/acarbot_omega/__pycache__/config.cpython-311.pyc and bot/acarbot_6bot/motorlar/acarbot_omega/__pycache__/config.cpython-311.pyc differ
+Binary files /tmp/orijinal/ACARBOT_6BOT/motorlar/acarbot_omega/__pycache__/contracts.cpython-311.pyc and bot/acarbot_6bot/motorlar/acarbot_omega/__pycache__/contracts.cpython-311.pyc differ
+Binary files /tmp/orijinal/ACARBOT_6BOT/motorlar/acarbot_omega/__pycache__/engine.cpython-311.pyc and bot/acarbot_6bot/motorlar/acarbot_omega/__pycache__/engine.cpython-311.pyc differ
+Binary files /tmp/orijinal/ACARBOT_6BOT/motorlar/acarbot_omega/__pycache__/ledger.cpython-311.pyc and bot/acarbot_6bot/motorlar/acarbot_omega/__pycache__/ledger.cpython-311.pyc differ
+Binary files /tmp/orijinal/ACARBOT_6BOT/motorlar/acarbot_omega/__pycache__/microstructure.cpython-311.pyc and bot/acarbot_6bot/motorlar/acarbot_omega/__pycache__/microstructure.cpython-311.pyc differ
+Binary files /tmp/orijinal/ACARBOT_6BOT/motorlar/acarbot_omega/__pycache__/profit_engine.cpython-311.pyc and bot/acarbot_6bot/motorlar/acarbot_omega/__pycache__/profit_engine.cpython-311.pyc differ
+diff -ruN /tmp/orijinal/ACARBOT_6BOT/motorlar/acarbot_omega/config.py bot/acarbot_6bot/motorlar/acarbot_omega/config.py
+--- /tmp/orijinal/ACARBOT_6BOT/motorlar/acarbot_omega/config.py	2026-11-13 18:30:03.000000000 +0000
++++ bot/acarbot_6bot/motorlar/acarbot_omega/config.py	2026-11-13 18:51:16.599446646 +0000
+@@ -35,7 +35,7 @@
+     symbol_cooldown_sec: float = 25.0
+ 
+     # 2. Kesin -$20.00 Net Zarar Kes & Gerçek Maliyet Modeli (v5.5 Zarar Analizi Dersi)
+-    hard_stop_loss_usd: float = 20.0
++    hard_stop_loss_usd: float = 10.0
+     taker_fee_bps: float = 5.0        # %0.05 (5 bps)
+     maker_fee_bps: float = 2.0        # %0.02 (2 bps)
+     default_spread_bps: float = 2.5   # Yarı-makas maliyeti tahmini
+diff -ruN /tmp/orijinal/ACARBOT_6BOT/motorlar/acarbot_omega/profit_engine.py bot/acarbot_6bot/motorlar/acarbot_omega/profit_engine.py
+--- /tmp/orijinal/ACARBOT_6BOT/motorlar/acarbot_omega/profit_engine.py	2026-11-13 18:30:03.000000000 +0000
++++ bot/acarbot_6bot/motorlar/acarbot_omega/profit_engine.py	2026-11-13 18:51:16.599446646 +0000
+@@ -102,7 +102,7 @@
+                 should_close=True,
+                 exit_price=px,
+                 final_net_pnl_usd=round(capped, 4),
+-                reason="KESIN_ZARAR_KES_-20$",
++                reason="KESIN_ZARAR_KES_-10$",
+             )
+ 
+         flow_aligned = snap.orderflow_bias * pos.side
+Binary files /tmp/orijinal/ACARBOT_6BOT/motorlar/v2/__pycache__/__init__.cpython-311.pyc and bot/acarbot_6bot/motorlar/v2/__pycache__/__init__.cpython-311.pyc differ
+Binary files /tmp/orijinal/ACARBOT_6BOT/motorlar/v2/__pycache__/apex_v2.cpython-311.pyc and bot/acarbot_6bot/motorlar/v2/__pycache__/apex_v2.cpython-311.pyc differ
+Binary files /tmp/orijinal/ACARBOT_6BOT/motorlar/v2/__pycache__/hybrid_v2.cpython-311.pyc and bot/acarbot_6bot/motorlar/v2/__pycache__/hybrid_v2.cpython-311.pyc differ
+Binary files /tmp/orijinal/ACARBOT_6BOT/motorlar/v2/__pycache__/omega_v2.cpython-311.pyc and bot/acarbot_6bot/motorlar/v2/__pycache__/omega_v2.cpython-311.pyc differ
+Binary files /tmp/orijinal/ACARBOT_6BOT/motorlar/v2/__pycache__/ortak.cpython-311.pyc and bot/acarbot_6bot/motorlar/v2/__pycache__/ortak.cpython-311.pyc differ
+Binary files /tmp/orijinal/ACARBOT_6BOT/motorlar/v2/__pycache__/turbo_v2.cpython-311.pyc and bot/acarbot_6bot/motorlar/v2/__pycache__/turbo_v2.cpython-311.pyc differ
+Binary files /tmp/orijinal/ACARBOT_6BOT/motorlar/v3/__pycache__/__init__.cpython-311.pyc and bot/acarbot_6bot/motorlar/v3/__pycache__/__init__.cpython-311.pyc differ
+Binary files /tmp/orijinal/ACARBOT_6BOT/motorlar/v3/__pycache__/apex_v3.cpython-311.pyc and bot/acarbot_6bot/motorlar/v3/__pycache__/apex_v3.cpython-311.pyc differ
+Binary files /tmp/orijinal/ACARBOT_6BOT/motorlar/v3/__pycache__/hybrid_v3.cpython-311.pyc and bot/acarbot_6bot/motorlar/v3/__pycache__/hybrid_v3.cpython-311.pyc differ
+Binary files /tmp/orijinal/ACARBOT_6BOT/motorlar/v3/__pycache__/omega_v3.cpython-311.pyc and bot/acarbot_6bot/motorlar/v3/__pycache__/omega_v3.cpython-311.pyc differ
+Binary files /tmp/orijinal/ACARBOT_6BOT/motorlar/v3/__pycache__/ortak.cpython-311.pyc and bot/acarbot_6bot/motorlar/v3/__pycache__/ortak.cpython-311.pyc differ
+Binary files /tmp/orijinal/ACARBOT_6BOT/motorlar/v3/__pycache__/turbo_v3.cpython-311.pyc and bot/acarbot_6bot/motorlar/v3/__pycache__/turbo_v3.cpython-311.pyc differ
+Binary files /tmp/orijinal/ACARBOT_6BOT/motorlar/v5/__pycache__/__init__.cpython-311.pyc and bot/acarbot_6bot/motorlar/v5/__pycache__/__init__.cpython-311.pyc differ
+Binary files /tmp/orijinal/ACARBOT_6BOT/motorlar/v5/__pycache__/birlesik.cpython-311.pyc and bot/acarbot_6bot/motorlar/v5/__pycache__/birlesik.cpython-311.pyc differ
+Binary files /tmp/orijinal/ACARBOT_6BOT/motorlar/v51/__pycache__/__init__.cpython-311.pyc and bot/acarbot_6bot/motorlar/v51/__pycache__/__init__.cpython-311.pyc differ
+Binary files /tmp/orijinal/ACARBOT_6BOT/motorlar/v51/__pycache__/birlesik_v51.cpython-311.pyc and bot/acarbot_6bot/motorlar/v51/__pycache__/birlesik_v51.cpython-311.pyc differ
+Binary files /tmp/orijinal/ACARBOT_6BOT/motorlar/v6/__pycache__/__init__.cpython-311.pyc and bot/acarbot_6bot/motorlar/v6/__pycache__/__init__.cpython-311.pyc differ
+Binary files /tmp/orijinal/ACARBOT_6BOT/motorlar/v6/__pycache__/dort.cpython-311.pyc and bot/acarbot_6bot/motorlar/v6/__pycache__/dort.cpython-311.pyc differ
+Binary files /tmp/orijinal/ACARBOT_6BOT/motorlar/v7/__pycache__/__init__.cpython-311.pyc and bot/acarbot_6bot/motorlar/v7/__pycache__/__init__.cpython-311.pyc differ
+Binary files /tmp/orijinal/ACARBOT_6BOT/motorlar/v7/__pycache__/bes.cpython-311.pyc and bot/acarbot_6bot/motorlar/v7/__pycache__/bes.cpython-311.pyc differ
+diff -ruN /tmp/orijinal/ACARBOT_6BOT/turbo_engine.py bot/acarbot_6bot/turbo_engine.py
+--- /tmp/orijinal/ACARBOT_6BOT/turbo_engine.py	2026-11-13 18:30:03.000000000 +0000
++++ bot/acarbot_6bot/turbo_engine.py	2026-11-13 18:51:16.599446646 +0000
+@@ -8,7 +8,7 @@
+   2. İşlem Başı Giriş: $50.00 Teminat × 10x Kaldıraç = $500.00 Pozisyon Büyüklüğü
+   3. Marjin Tipi: ÇAPRAZ MARJİN (CROSS MARGIN — İzole Değil!)
+   4. Pozisyon Sınırı: SINIRSIZ (max_positions = 0; aynı anda sınırsız farklı pariteye girebilir)
+-  5. Sabit Zarar Kes: Net -$20.00 olduğunda anında kesin çıkış (HARD_STOP_-20USD)
++  5. Sabit Zarar Kes: Net -$10.00 olduğunda anında kesin çıkış (HARD_STOP_-10USD)
+   6. Kâr Al (TP): BOT KENDİSİ BELİRLER (4 Kademeli Otonom AI İvme + Tükeniş Kâr Motoru)
+   7. Borsa Evreni: Binance TÜM USDT-M Futures + OKX TÜM USDT-SWAP Futures (550+ Parite)
+   8. Tetikleyici & Hız: Milisaniyelik anlık akış takibi — Hacim Patlaması veya Hacim Çöküşü anında giriş!
+@@ -44,12 +44,12 @@
+     leverage: int = 10
+     margin_mode: Literal["cross"] = "cross"  # KESİNLİKLE İZOLE DEĞİL -> ÇAPRAZ (CROSS)
+     max_positions: int = 0  # 0 = SINIRSIZ İŞLEM AÇABİLİR!
+-    enforce_free_equity_check: bool = False  # True ise yalnızca bakiye <$50 kalırsa korur; adet sınırı asla yok
++    enforce_free_equity_check: bool = True  # True ise yalnızca bakiye <$50 kalırsa korur; adet sınırı asla yok
+     one_position_per_symbol: bool = True  # Aynı coine aynı saniyede üst üste çift girmeyi önler, diğer 600 coin serbest!
+     symbol_cooldown_sec: float = 20.0
+ 
+-    # Kesin Zarar Limiti (-$20.00)
+-    hard_stop_loss_usd: float = 20.0
++    # Kesin Zarar Limiti (-$10.00)
++    hard_stop_loss_usd: float = 10.0
+     taker_fee_rate: float = 0.0005  # %0.05
+ 
+     # Otonom AI Kâr Belirleme Motoru (Kârı Bot Kendisi Belirler)
+@@ -688,7 +688,7 @@
+         self._log_event(
+             "GİRİŞ",
+             f"[{tape.exchange.upper()}] {pos.side_label} {tape.symbol} @ {entry_px:.6g} | "
+-            f"$50×10x Çapraz | -$20 SL @ {hard_stop_px:.6g} | {trigger}",
++            f"$50×10x Çapraz | -$10 SL @ {hard_stop_px:.6g} | {trigger}",
+         )
+         if self.on_live_order and not self.cfg.paper_mode:
+             self.on_live_order(tape.exchange, tape.symbol, side, entry_px)
+@@ -703,13 +703,13 @@
+         if net_pnl > pos.peak_pnl_usd:
+             pos.peak_pnl_usd = round(net_pnl, 4)
+ 
+-        # 1. KESİN -$20.00 ZARAR KES KURALI (Asla -$20'yi geçmesine izin verme!)
++        # 1. KESİN -$10.00 ZARAR KES KURALI (Asla -$10'u geçmesine izin verme!)
+         hit_hard_price = (pos.side > 0 and px <= pos.hard_stop_price) or (
+             pos.side < 0 and px >= pos.hard_stop_price
+         )
+         if net_pnl <= -self.cfg.hard_stop_loss_usd or hit_hard_price:
+             capped_loss = max(net_pnl, -self.cfg.hard_stop_loss_usd)
+-            self._close_position(pos, px, capped_loss, "ZARAR_KES_-20$", now_ts)
++            self._close_position(pos, px, capped_loss, "ZARAR_KES_-10$", now_ts)
+             return
+ 
+         # 2. BOTUN KENDİ BELİRLEDİĞİ 4 KADEMELİ OTONOM AI KÂR MOTORU
+@@ -1401,7 +1401,7 @@
+     assert cfg.notional_per_trade_usd == 500.0
+     assert cfg.margin_mode == "cross"
+     assert cfg.max_positions == 0  # Sınırsız!
+-    assert cfg.hard_stop_loss_usd == 20.0
++    assert cfg.hard_stop_loss_usd == 10.0
+ 
+     eng = RealTimeVolumeShockEngine(cfg=cfg)
+     t0 = 1_760_000_000.0
+@@ -1425,7 +1425,7 @@
+     )
+     assert "binance:COIN0USDT" not in eng.active_symbol_keys
+     last_closed = eng.closed_trades[0]
+-    assert last_closed.exit_reason == "ZARAR_KES_-20$"
++    assert last_closed.exit_reason == "ZARAR_KES_-10$"
+     assert abs(last_closed.net_pnl_usd - (-20.0)) < 1e-6
+ 
+     # 3. COIN2USDT parabolik yükselip geri döndüğünde AI kâr motoru kârlı kapatmalı!

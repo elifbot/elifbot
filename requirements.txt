@@ -1,0 +1,7 @@
+# ACARBOT — çalıştırma bağımlılıkları
+websockets>=12.0
+aiohttp>=3.9
+requests>=2.31
+numpy>=1.26
+pandas>=2.1
+pytest>=8.0
