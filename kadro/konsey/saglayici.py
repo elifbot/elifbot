@@ -85,44 +85,52 @@ def _kirp(mesajlar: list[dict], esik: int = ESIK_KARAKTER) -> list[dict]:
 def cagir(saglayici: str, mesajlar: list[dict], model: str | None = None,
           butce: Butce | None = None, rol: str = "", tur: int = 1,
           sicaklik: float = 0.3, azami_token: int = 1200,
-          kuru_kosu: bool = False) -> str:
-    """Tek chat-completions çağrısı. Hata durumunda boş metin döner (konsey devam eder)."""
+          kuru_kosu: bool = False, otomatik_model: bool = True) -> str:
+    """Tek chat-completions çağrısı.
+
+    Model kimliği koda gömülmez: `/models` ucundan keşfedilir, sonra istenen model,
+    keşfedilen model, varsayılan ve yedek sırayla denenir. Sağlayıcılar modelleri
+    emekliye ayırdığı için (NVIDIA 410 Gone) bu şart.
+    """
     s = SAGLAYICILAR[saglayici]
-    model = model or s.varsayilan_model
     butce = butce or Butce()
     mesajlar = _kirp(mesajlar)
     istem_karakter = sum(len(m["content"]) for m in mesajlar)
 
     if kuru_kosu:
         yanit = _kuru_yanit(rol, tur, istem_karakter)
-        butce.kayitlar.append(Cagri(saglayici, model, rol, tur, istem_karakter, yanit, 0.0))
+        butce.kayitlar.append(Cagri(saglayici, model or s.varsayilan_model, rol, tur,
+                                    istem_karakter, yanit, 0.0))
         butce.kullanilan += 1
         return yanit
 
     if butce.bitti():
         return ""
-    anahtar = s.anahtar()
-    if s.anahtar_env and not anahtar:
-        butce.kayitlar.append(Cagri(saglayici, model, rol, tur, istem_karakter, "",
-                                    0.0, f"{s.anahtar_env} yok"))
+    if s.anahtar_env and not s.anahtar():
+        butce.kayitlar.append(Cagri(saglayici, model or s.varsayilan_model, rol, tur,
+                                    istem_karakter, "", 0.0, f"{s.anahtar_env} yok"))
         return ""
 
-    govde = json.dumps({"model": model, "messages": mesajlar,
-                        "temperature": sicaklik, "max_tokens": azami_token}).encode()
-    basliklar = {"Content-Type": "application/json"}
-    if anahtar:
-        basliklar["Authorization"] = f"Bearer {anahtar}"
+    adaylar: list[str] = []
+    if model:
+        adaylar.append(model)
+    if otomatik_model:
+        kesif = model_sec(saglayici)
+        if kesif and kesif not in adaylar:
+            adaylar.append(kesif)
+    for y in (s.varsayilan_model, s.yedek_model):
+        if y and y not in adaylar:
+            adaylar.append(y)
 
-    denenecek = [model] + ([s.yedek_model] if s.yedek_model and s.yedek_model != model else [])
-    for model_dene in denenecek:
-        metin, hata = _tek_cagri(s, model_dene, mesajlar, butce, rol, tur,
+    son_hata = "denenmedi"
+    for m in adaylar:
+        metin, hata = _tek_cagri(s, m, mesajlar, butce, rol, tur,
                                  sicaklik, azami_token, istem_karakter)
         if metin:
             return metin
-        son_hata = hata
-        if "HTTP 4" not in hata:      # 401/403/404 → yedek model de fayda etmez, dene yine de
-            continue
-    butce.kayitlar.append(Cagri(saglayici, model, rol, tur, istem_karakter, "", 0.0, son_hata))
+        son_hata = f"{m}: {hata}"
+    butce.kayitlar.append(Cagri(saglayici, adaylar[0] if adaylar else "?", rol, tur,
+                                istem_karakter, "", 0.0, son_hata[:220]))
     return ""
 
 
@@ -141,7 +149,11 @@ def _tek_cagri(s: "Saglayici", model: str, mesajlar: list[dict], butce: "Butce",
             istek = urllib.request.Request(f"{s.taban}/chat/completions", data=govde,
                                            headers=hac, method="POST")
             with urllib.request.urlopen(istek, timeout=120) as y:
-                d = json.loads(y.read().decode())
+                ham = y.read().decode(errors="ignore")
+            try:
+                d = json.loads(ham)
+            except json.JSONDecodeError:
+                return "", f"JSON değil ({len(ham)} bayt): {ham[:160]!r}"
             metin = (d.get("choices") or [{}])[0].get("message", {}).get("content", "") or ""
             butce.kullanilan += 1
             butce.kayitlar.append(Cagri(s.ad, model, rol, tur, istem_karakter,
@@ -165,6 +177,46 @@ def _tek_cagri(s: "Saglayici", model: str, mesajlar: list[dict], butce: "Butce",
                 continue
             break
     return "", son_hata
+
+
+def modeller_listele(saglayici: str, zaman_asimi: int = 30) -> list[str]:
+    """Sağlayıcının /models ucundan geçerli model kimliklerini çeker.
+
+    Neden: sağlayıcılar model emekliye ayırıyor (örn. NVIDIA 410 Gone). Kimlikleri
+    koda gömmek yerine çalışma anında soruyoruz.
+    """
+    s = SAGLAYICILAR[saglayici]
+    anahtar = s.anahtar()
+    if s.anahtar_env and not anahtar:
+        return []
+    hac = {"Accept": "application/json"}
+    if anahtar:
+        hac["Authorization"] = f"Bearer {anahtar}"
+    try:
+        istek = urllib.request.Request(f"{s.taban}/models", headers=hac)
+        with urllib.request.urlopen(istek, timeout=zaman_asimi) as y:
+            d = json.loads(y.read().decode(errors="ignore"))
+    except Exception:
+        return []
+    kimlikler = [m.get("id", "") for m in (d.get("data") or d.get("models") or []) if isinstance(m, dict)]
+    return [k for k in kimlikler if k]
+
+
+def model_sec(saglayici: str, tercihler: tuple[str, ...] = ()) -> str | None:
+    """Keşfedilen listeden kullanılabilir bir sohbet modeli seçer."""
+    mevcut = modeller_listele(saglayici)
+    if not mevcut:
+        return None
+    for t in tercihler:
+        for k in mevcut:
+            if t in k.lower():
+                return k
+    # bilinen sohbet modelleri; embedding/rerank/guard dışla
+    kotu = ("embed", "rerank", "guard", "bge", "e5-", "clip")
+    for k in mevcut:
+        if not any(x in k.lower() for x in kotu):
+            return k
+    return None
 
 
 def _kuru_yanit(rol: str, tur: int, istem_karakter: int) -> str:

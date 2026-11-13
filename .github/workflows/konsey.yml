@@ -89,9 +89,17 @@ jobs:
           git add konsey havuz/digest
           git commit -m "konsey: ${ETIKET} — çoklu model tartışması sonucu" || echo "değişiklik yok"
           git push -u origin "konsey/${ETIKET}"
-          gh pr create --base main --head "konsey/${ETIKET}" \
-            --title "Konsey kararı ${ETIKET}" \
-            --body-file "konsey/${ETIKET}/karar.md" || echo "PR açılamadı"
+          # GitHub Actions'tan PR açmak repo ayarına bağlı (Settings → Actions →
+          # "Allow GitHub Actions to create and approve pull requests"). Kapalıysa
+          # dal yine de itilir; sonucu insan/oturum PR'a çevirebilir.
+          if ! gh pr create --base main --head "konsey/${ETIKET}" \
+               --title "Konsey kararı ${ETIKET}" \
+               --body-file "konsey/${ETIKET}/karar.md" > /tmp/pr.log 2>&1; then
+            echo "PR açılamadı: $(tail -2 /tmp/pr.log)" | tee "konsey/${ETIKET}/pr-hatasi.txt"
+            git add "konsey/${ETIKET}/pr-hatasi.txt"
+            git commit --amend --no-edit -q
+            git push -f -q origin "konsey/${ETIKET}"
+          fi
 
       - name: Özet
         if: always()

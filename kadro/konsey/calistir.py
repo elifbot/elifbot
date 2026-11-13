@@ -37,6 +37,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--tur", type=int, default=3)
     ap.add_argument("--etiket", default="")
     ap.add_argument("--kuru-kosu", action="store_true", help="ağ olmadan boru hattını dene")
+    ap.add_argument("--teshis", action="store_true",
+                    help="sağlayıcı model listelerini yaz ve çık (ucuz, 1-2 çağrı)")
     a = ap.parse_args(argv)
 
     istenen = a.saglayici or ["github", "nvidia", "ollama"]
@@ -45,6 +47,22 @@ def main(argv: list[str] | None = None) -> int:
         print("Hiçbir sağlayıcı hazır değil. GITHUB_TOKEN ya da NVIDIA_API_KEY gerekli.",
               file=sys.stderr)
         return 2
+
+    if a.teshis:
+        from .saglayici import modeller_listele
+        import json as _json
+        from pathlib import Path as _Path
+        rapor = {s: {"anahtar": bool(SAGLAYICILAR[s].anahtar()),
+                     "modeller": modeller_listele(s)[:40]} for s in saglayicilar}
+        d = _Path(__file__).resolve().parents[2] / "konsey" / (a.etiket or "teshis")
+        d.mkdir(parents=True, exist_ok=True)
+        (d / "modeller.json").write_text(_json.dumps(rapor, ensure_ascii=False, indent=1),
+                                         encoding="utf-8")
+        for s, v in rapor.items():
+            print(f"{s:<8} anahtar={'var' if v['anahtar'] else 'YOK'}  model={len(v['modeller'])}")
+            for m in v["modeller"][:5]:
+                print(f"    - {m}")
+        return 0
 
     modeller: dict[str, list[str | None]] = {s: [None] for s in saglayicilar}
     for m in a.model:
