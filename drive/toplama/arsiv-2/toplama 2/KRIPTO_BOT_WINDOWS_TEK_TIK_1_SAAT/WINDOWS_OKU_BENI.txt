@@ -1,0 +1,31 @@
+KRIPTO-BOT v7.8 — WINDOWS TEK TIK 1 SAATLIK PAPER TESTI
+========================================================
+
+CALISTIRMA
+1. Bu ZIP dosyasini tamamen ayiklayin. ZIP'in icinden dogrudan calistirmayin.
+2. Ayiklanan klasorde BASLAT_1_SAAT.bat dosyasina cift tiklayin.
+3. Windows guvenlik uyarisi gosterirse "Daha fazla bilgi" -> "Yine de calistir" secin.
+4. Python yoksa betik winget ile Python 3.12 kurmayi dener.
+5. Pencereyi kapatmayin. Bilgisayar ve internet test boyunca acik kalmalidir.
+
+NE YAPAR?
+- Izole Python ortami olusturur.
+- Gerekli kutuphaneleri kurar.
+- 141 testi calistirir.
+- Temiz veritabaniyla tam 1 saat paper modda calisir.
+- Telegram ve WhatsApp'i atlar.
+- Plansiz child kapanisinda ayni oturumu en fazla 5 kez surdurur.
+- Sure sonunda paper pozisyonlarini kapatir.
+- Kabul raporunu ve tum loglari windows_sonuclar klasorune koyar.
+- Sonucu ZIP yapip Windows Gezgini'nde gosterir.
+
+BASARI KANITI
+windows_sonuclar\TARIH_SAAT\kabul_ozeti.json icinde:
+  "accepted": true
+olmalidir.
+
+NOTLAR
+- Gercek para emri gondermez; MODE=paper zorunlu olarak ayarlanir.
+- Gercek .env veya API anahtari paket icinde yoktur.
+- Ilk kurulum internet hizina gore 5-15 dakika surebilir; bir saatlik olcum kurulumdan sonra baslar.
+- Windows Defender Python icin soru sorarsa yalniz "Ozel aglar" izni yeterlidir. Windows config saglik sunucusunu 127.0.0.1'e baglar.

@@ -1,0 +1,581 @@
+{
+ "arac": "tools.loss_attribution",
+ "exchange": "okx",
+ "symbols": [
+  "okx:BTC-USDT-SWAP",
+  "okx:ETH-USDT-SWAP",
+  "okx:SOL-USDT-SWAP",
+  "okx:XRP-USDT-SWAP",
+  "okx:DOGE-USDT-SWAP",
+  "okx:ADA-USDT-SWAP"
+ ],
+ "days": 90,
+ "drawdown_peak_mode": "rolling",
+ "bilesenler": {
+  "islem": 20,
+  "net_pnl": -101.0655,
+  "brut_pnl": -70.3472,
+  "brut_kaynagi": "net + komisyon + kayma + funding (yeniden kurulum)",
+  "gross_pnl_alani_toplami": -89.2985,
+  "gross_pnl_alani_uyarisi": "Bu alan TP1 kısmi kârını İÇERMEZ; brüt olarak kullanılmaz.",
+  "komisyon": 16.0959,
+  "kayma": 14.6647,
+  "funding": -0.0424,
+  "dogrudan_maliyet": 30.7606,
+  "kazanma_orani": 0.25,
+  "ort_kazanc": 1.3734,
+  "ort_kayip": -7.1955,
+  "odeme_orani": 0.1909,
+  "r_taban_usdt": 8.0852,
+  "net_r": -0.625,
+  "brut_r": -0.435,
+  "maliyet_r": 0.1902
+ },
+ "cikis_karsilastirmasi": {
+  "gercek_brut_r": -0.435,
+  "simetrik_brut_r": -0.5,
+  "cikis_geometrisi_katkisi_r": 0.065,
+  "simetrik_net_r": -0.6902,
+  "gercek_net_r": -0.625,
+  "yorum": "Çıkış geometrisi katkisi NEGATİFSE, gerçek çıkış simetrik ±1R'den daha kötüdür: kazananı erken kesiyor veya kaybedeni fazla bekletiyor. POZİTİFSE çıkış işe yarıyor.",
+  "uyari": "Bu karşılaştırma kazanma oranını SABİT tutar. Gerçekte çıkış değişince kazanma oranı da değişir; bu yüzden bu bir ÜST/ALT sınır değil, TEŞHİS amaçlı kaba karşılaştırmadır."
+ },
+ "ayni_giris_simetrik": {
+  "eslesen_islem": 20,
+  "gercek_brut_r_ortalama": -0.4102,
+  "simetrik_kotumser_r": -0.4405,
+  "simetrik_iyimser_r": -0.4405,
+  "cikis_katkisi_kotumser_r": 0.0303,
+  "cikis_katkisi_iyimser_r": 0.0303,
+  "simetrik_kazanma_orani": 0.3,
+  "yorum": "Çıkış katkisi NEGATİFSE gerçek çıkış geometrisi, aynı girişlerde simetrik ±1R'den DAHA KÖTÜ sonuç veriyor. Bu, çıkışın kazananı erken kestiğinin doğrudan kanıtıdır."
+ },
+ "zarar_atfi": {
+  "dogrudan_maliyet_payi": 0.3044,
+  "ters_fiyat_hareketi_payi": 0.6956,
+  "olcum_kontrolu": -8.083,
+  "aciklama": "Maliyet payı = (komisyon+kayma) / toplam zarar. Kalan pay ters fiyat hareketi + çıkış asimetrisidir."
+ },
+ "maliyetsiz_net": -92.9825,
+ "maliyetli_net": -101.0655,
+ "cikis_nedenleri": {
+  "position_loss_stop": {
+   "islem": 2,
+   "net_pnl": -59.1063,
+   "ort_r": -1.1819,
+   "tp1_yapilmis": 0,
+   "ort_sure_dk": 19.0
+  },
+  "stop_loss": {
+   "islem": 13,
+   "net_pnl": -48.8263,
+   "ort_r": -0.9222,
+   "tp1_yapilmis": 0,
+   "ort_sure_dk": 65.77
+  },
+  "trailing_stop": {
+   "islem": 5,
+   "net_pnl": 6.8672,
+   "ort_r": 0.3705,
+   "tp1_yapilmis": 5,
+   "ort_sure_dk": 98.53
+  }
+ },
+ "motor": {
+  "trend": {
+   "trades": 17,
+   "net_pnl": -95.4445,
+   "win_rate": 0.2353,
+   "profit_factor": 0.0645,
+   "avg_r": -0.6401
+  },
+  "fade": {
+   "trades": 3,
+   "net_pnl": -5.621,
+   "win_rate": 0.3333,
+   "profit_factor": 0.0482,
+   "avg_r": -0.5396
+  }
+ },
+ "sembol": {
+  "okx:ETH-USDT-SWAP": {
+   "trades": 3,
+   "net_pnl": -37.6245,
+   "win_rate": 0.3333,
+   "profit_factor": 0.0443,
+   "avg_r": -0.6243
+  },
+  "okx:BTC-USDT-SWAP": {
+   "trades": 3,
+   "net_pnl": -25.2924,
+   "win_rate": 0.3333,
+   "profit_factor": 0.1405,
+   "avg_r": -0.3812
+  },
+  "okx:ADA-USDT-SWAP": {
+   "trades": 7,
+   "net_pnl": -6.7151,
+   "win_rate": 0.2857,
+   "profit_factor": 0.0474,
+   "avg_r": -0.5987
+  },
+  "okx:XRP-USDT-SWAP": {
+   "trades": 4,
+   "net_pnl": -13.989,
+   "win_rate": 0.25,
+   "profit_factor": 0.0447,
+   "avg_r": -0.6382
+  },
+  "okx:SOL-USDT-SWAP": {
+   "trades": 3,
+   "net_pnl": -17.4445,
+   "win_rate": 0.0,
+   "profit_factor": 0.0,
+   "avg_r": -0.9133
+  }
+ },
+ "yon": {
+  "SHORT": {
+   "trades": 10,
+   "net_pnl": -73.3571,
+   "win_rate": 0.4,
+   "profit_factor": 0.0653,
+   "avg_r": -0.4573
+  },
+  "LONG": {
+   "trades": 10,
+   "net_pnl": -27.7083,
+   "win_rate": 0.1,
+   "profit_factor": 0.0593,
+   "avg_r": -0.7927
+  }
+ },
+ "rejim": {
+  "TREND_DOWN": {
+   "trades": 6,
+   "net_pnl": -66.3474,
+   "win_rate": 0.3333,
+   "profit_factor": 0.0593,
+   "avg_r": -0.5239
+  },
+  "STRONG_TREND_UP": {
+   "trades": 2,
+   "net_pnl": -1.7379,
+   "win_rate": 0.0,
+   "profit_factor": 0.0,
+   "avg_r": -0.926
+  },
+  "STRONG_TREND_DOWN": {
+   "trades": 2,
+   "net_pnl": -7.1008,
+   "win_rate": 0.5,
+   "profit_factor": 0.0844,
+   "avg_r": -0.3622
+  },
+  "UNCERTAIN": {
+   "trades": 2,
+   "net_pnl": 0.0911,
+   "win_rate": 0.5,
+   "profit_factor": 1.4714,
+   "avg_r": -0.3526
+  },
+  "TREND_UP": {
+   "trades": 8,
+   "net_pnl": -25.9705,
+   "win_rate": 0.125,
+   "profit_factor": 0.063,
+   "avg_r": -0.7594
+  }
+ },
+ "risk_olcek": {
+  "enabled": true,
+  "budgets_issued": 38,
+  "blocked_count": 1079,
+  "below_floor_blocks": 989,
+  "below_floor_action": "block",
+  "binding_counts": {
+   "cost": 3,
+   "drawdown": 17,
+   "none": 2,
+   "recovery": 16
+  },
+  "min_scale_seen": 0.104978,
+  "mean_scale": 0.288482,
+  "final_recovery_cap": 0.25,
+  "observed_trades": 20,
+  "mean_recent_r": -0.625,
+  "min_risk_usdt": 2.5,
+  "max_risk_usdt": 0.0
+ },
+ "drawdown_tepe": {
+  "mod": "rolling",
+  "pencere_gun": 7,
+  "son_tepe": 898.934543,
+  "sifirlama_sayisi": 57,
+  "sifirlamalar": [
+   {
+    "ts_ms": 1786927500000,
+    "tur": "rolling",
+    "eski_tepe": 1000.0,
+    "yeni_tepe": 991.33866
+   },
+   {
+    "ts_ms": 1786927800000,
+    "tur": "rolling",
+    "eski_tepe": 991.33866,
+    "yeni_tepe": 974.317273
+   },
+   {
+    "ts_ms": 1786928100000,
+    "tur": "rolling",
+    "eski_tepe": 974.317273,
+    "yeni_tepe": 955.542896
+   },
+   {
+    "ts_ms": 1786928400000,
+    "tur": "rolling",
+    "eski_tepe": 955.542896,
+    "yeni_tepe": 954.997908
+   },
+   {
+    "ts_ms": 1786929000000,
+    "tur": "rolling",
+    "eski_tepe": 954.997908,
+    "yeni_tepe": 953.128179
+   },
+   {
+    "ts_ms": 1786929300000,
+    "tur": "rolling",
+    "eski_tepe": 953.128179,
+    "yeni_tepe": 941.465989
+   },
+   {
+    "ts_ms": 1786986000000,
+    "tur": "rolling",
+    "eski_tepe": 941.465989,
+    "yeni_tepe": 941.400158
+   },
+   {
+    "ts_ms": 1786986600000,
+    "tur": "rolling",
+    "eski_tepe": 941.400158,
+    "yeni_tepe": 941.00517
+   },
+   {
+    "ts_ms": 1786986900000,
+    "tur": "rolling",
+    "eski_tepe": 941.00517,
+    "yeni_tepe": 940.36534
+   },
+   {
+    "ts_ms": 1787016300000,
+    "tur": "rolling",
+    "eski_tepe": 940.36534,
+    "yeni_tepe": 939.148268
+   },
+   {
+    "ts_ms": 1787017800000,
+    "tur": "rolling",
+    "eski_tepe": 939.148268,
+    "yeni_tepe": 938.459892
+   },
+   {
+    "ts_ms": 1787073000000,
+    "tur": "rolling",
+    "eski_tepe": 938.459892,
+    "yeni_tepe": 938.306191
+   },
+   {
+    "ts_ms": 1787089500000,
+    "tur": "rolling",
+    "eski_tepe": 938.306191,
+    "yeni_tepe": 938.054364
+   },
+   {
+    "ts_ms": 1787090700000,
+    "tur": "rolling",
+    "eski_tepe": 938.054364,
+    "yeni_tepe": 936.769137
+   },
+   {
+    "ts_ms": 1787091000000,
+    "tur": "rolling",
+    "eski_tepe": 936.769137,
+    "yeni_tepe": 935.198304
+   },
+   {
+    "ts_ms": 1787091600000,
+    "tur": "rolling",
+    "eski_tepe": 935.198304,
+    "yeni_tepe": 933.62747
+   },
+   {
+    "ts_ms": 1787091900000,
+    "tur": "rolling",
+    "eski_tepe": 933.62747,
+    "yeni_tepe": 933.484667
+   },
+   {
+    "ts_ms": 1787092500000,
+    "tur": "rolling",
+    "eski_tepe": 933.484667,
+    "yeni_tepe": 933.341864
+   },
+   {
+    "ts_ms": 1787094300000,
+    "tur": "rolling",
+    "eski_tepe": 933.341864,
+    "yeni_tepe": 932.559281
+   },
+   {
+    "ts_ms": 1787105400000,
+    "tur": "rolling",
+    "eski_tepe": 932.559281,
+    "yeni_tepe": 932.309666
+   },
+   {
+    "ts_ms": 1787105700000,
+    "tur": "rolling",
+    "eski_tepe": 932.309666,
+    "yeni_tepe": 929.889516
+   },
+   {
+    "ts_ms": 1787113500000,
+    "tur": "rolling",
+    "eski_tepe": 929.889516,
+    "yeni_tepe": 928.714249
+   },
+   {
+    "ts_ms": 1787113800000,
+    "tur": "rolling",
+    "eski_tepe": 928.714249,
+    "yeni_tepe": 926.334074
+   },
+   {
+    "ts_ms": 1787115300000,
+    "tur": "rolling",
+    "eski_tepe": 926.334074,
+    "yeni_tepe": 925.115969
+   },
+   {
+    "ts_ms": 1787115600000,
+    "tur": "rolling",
+    "eski_tepe": 925.115969,
+    "yeni_tepe": 924.177193
+   },
+   {
+    "ts_ms": 1787115900000,
+    "tur": "rolling",
+    "eski_tepe": 924.177193,
+    "yeni_tepe": 923.989919
+   },
+   {
+    "ts_ms": 1787117700000,
+    "tur": "rolling",
+    "eski_tepe": 923.989919,
+    "yeni_tepe": 923.96466
+   },
+   {
+    "ts_ms": 1787118000000,
+    "tur": "rolling",
+    "eski_tepe": 923.96466,
+    "yeni_tepe": 923.822023
+   },
+   {
+    "ts_ms": 1787118300000,
+    "tur": "rolling",
+    "eski_tepe": 923.822023,
+    "yeni_tepe": 923.807165
+   },
+   {
+    "ts_ms": 1787118600000,
+    "tur": "rolling",
+    "eski_tepe": 923.807165,
+    "yeni_tepe": 923.746248
+   },
+   {
+    "ts_ms": 1787119200000,
+    "tur": "rolling",
+    "eski_tepe": 923.746248,
+    "yeni_tepe": 922.862197
+   },
+   {
+    "ts_ms": 1787119500000,
+    "tur": "rolling",
+    "eski_tepe": 922.862197,
+    "yeni_tepe": 922.226275
+   },
+   {
+    "ts_ms": 1787119800000,
+    "tur": "rolling",
+    "eski_tepe": 922.226275,
+    "yeni_tepe": 921.753791
+   },
+   {
+    "ts_ms": 1787120400000,
+    "tur": "rolling",
+    "eski_tepe": 921.753791,
+    "yeni_tepe": 920.802879
+   },
+   {
+    "ts_ms": 1787120700000,
+    "tur": "rolling",
+    "eski_tepe": 920.802879,
+    "yeni_tepe": 920.59504
+   },
+   {
+    "ts_ms": 1787580600000,
+    "tur": "rolling",
+    "eski_tepe": 920.59504,
+    "yeni_tepe": 919.876249
+   },
+   {
+    "ts_ms": 1787580900000,
+    "tur": "rolling",
+    "eski_tepe": 919.876249,
+    "yeni_tepe": 919.696551
+   },
+   {
+    "ts_ms": 1787582700000,
+    "tur": "rolling",
+    "eski_tepe": 919.696551,
+    "yeni_tepe": 918.798062
+   },
+   {
+    "ts_ms": 1787583000000,
+    "tur": "rolling",
+    "eski_tepe": 918.798062,
+    "yeni_tepe": 916.102593
+   },
+   {
+    "ts_ms": 1787583300000,
+    "tur": "rolling",
+    "eski_tepe": 916.102593,
+    "yeni_tepe": 913.625148
+   },
+   {
+    "ts_ms": 1787587200000,
+    "tur": "rolling",
+    "eski_tepe": 913.625148,
+    "yeni_tepe": 913.435474
+   },
+   {
+    "ts_ms": 1787588100000,
+    "tur": "rolling",
+    "eski_tepe": 913.435474,
+    "yeni_tepe": 913.27051
+   },
+   {
+    "ts_ms": 1787588400000,
+    "tur": "rolling",
+    "eski_tepe": 913.27051,
+    "yeni_tepe": 913.105546
+   },
+   {
+    "ts_ms": 1787588700000,
+    "tur": "rolling",
+    "eski_tepe": 913.105546,
+    "yeni_tepe": 913.023064
+   },
+   {
+    "ts_ms": 1787589000000,
+    "tur": "rolling",
+    "eski_tepe": 913.023064,
+    "yeni_tepe": 912.814005
+   },
+   {
+    "ts_ms": 1787638200000,
+    "tur": "rolling",
+    "eski_tepe": 912.814005,
+    "yeni_tepe": 912.103653
+   },
+   {
+    "ts_ms": 1787638500000,
+    "tur": "rolling",
+    "eski_tepe": 912.103653,
+    "yeni_tepe": 911.436352
+   },
+   {
+    "ts_ms": 1787638800000,
+    "tur": "rolling",
+    "eski_tepe": 911.436352,
+    "yeni_tepe": 910.661422
+   },
+   {
+    "ts_ms": 1787639100000,
+    "tur": "rolling",
+    "eski_tepe": 910.661422,
+    "yeni_tepe": 908.76715
+   },
+   {
+    "ts_ms": 1787639400000,
+    "tur": "rolling",
+    "eski_tepe": 908.76715,
+    "yeni_tepe": 907.144983
+   },
+   {
+    "ts_ms": 1787668800000,
+    "tur": "rolling",
+    "eski_tepe": 907.144983,
+    "yeni_tepe": 905.720075
+   },
+   {
+    "ts_ms": 1787669700000,
+    "tur": "rolling",
+    "eski_tepe": 905.720075,
+    "yeni_tepe": 902.492682
+   },
+   {
+    "ts_ms": 1787735400000,
+    "tur": "rolling",
+    "eski_tepe": 902.492682,
+    "yeni_tepe": 901.475991
+   },
+   {
+    "ts_ms": 1787736300000,
+    "tur": "rolling",
+    "eski_tepe": 901.475991,
+    "yeni_tepe": 901.319577
+   },
+   {
+    "ts_ms": 1787736600000,
+    "tur": "rolling",
+    "eski_tepe": 901.319577,
+    "yeni_tepe": 900.850335
+   },
+   {
+    "ts_ms": 1787736900000,
+    "tur": "rolling",
+    "eski_tepe": 900.850335,
+    "yeni_tepe": 900.4593
+   },
+   {
+    "ts_ms": 1787737200000,
+    "tur": "rolling",
+    "eski_tepe": 900.4593,
+    "yeni_tepe": 898.934543
+   }
+  ],
+  "taban_alti_red": 989,
+  "not": "Tepe penceresi etkin; kilit dönemsel olarak çözülür."
+ },
+ "red_dagilimi": {
+  "dusuk_hacim": 126422,
+  "fade_kosulu_yok": 12693,
+  "guclu_trend_fade_kapali": 5690,
+  "fake_breakout_or_suspect": 3623,
+  "rejim_uyumsuz": 2476,
+  "yukselen_bicak": 1322,
+  "dusen_bicak": 1207,
+  "OLCEK_TABAN_ALTINDA": 989,
+  "dusuk_puan": 459,
+  "MALIYET_BUTCESI_ASIMI": 90,
+  "yeniden_giris_beklemesi": 50,
+  "limit_bekliyor": 38
+ },
+ "sinirlar": [
+  "Funding oranları iletilmediyse funding ~0 çıkar; bu ÖLÇÜLMEDİ demektir, 'önemsiz' demektir DEĞİL.",
+  "Simetrik karşılaştırma kazanma oranını sabit tutar; teşhis amaçlıdır, kesin sınır değildir.",
+  "Evren 6 sembol, 90 gün, tek rejim."
+ ]
+}

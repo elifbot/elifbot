@@ -1,0 +1,2676 @@
+{
+  "mode": "PAPER_OFFLINE",
+  "config": {
+    "interval": 60,
+    "initial_cash": 1000,
+    "risk_fraction": 0.005,
+    "max_notional": 250,
+    "stop_atr": 1.5,
+    "target_atr": 3.0,
+    "fee_bps": 5.0,
+    "spread_bps": 4.0,
+    "slippage_bps": 2.0,
+    "min_edge_cost_ratio": 1.15,
+    "daily_loss_fraction": 0.02,
+    "cooldown_bars": 3,
+    "max_hold_bars": 30,
+    "breakeven_at_r": 0.0,
+    "trailing_atr": 0.0
+  },
+  "starting_cash": 1000,
+  "ending_cash": 993.7056212655383,
+  "net_pnl": -6.294378734461702,
+  "trade_count": 12,
+  "max_drawdown_fraction": 0.0065267068452740575,
+  "trade_metrics": {
+    "count": 12,
+    "wins": 2,
+    "losses": 10,
+    "flat": 0,
+    "win_rate": 0.16666666666666666,
+    "average_net_pnl": -0.5245315612051332,
+    "profit_factor": 0.09353739843879078,
+    "profit_factor_note": null,
+    "total_fees": 2.9997127556191097,
+    "by_exit_reason": {
+      "STOP": 10,
+      "TARGET": 2
+    },
+    "by_side": {
+      "long": 4,
+      "short": 8
+    },
+    "warning": "Az işlemde metrikler kararlılık veya kârlılık kanıtı değildir."
+  },
+  "trades": [
+    {
+      "side": "long",
+      "signal_time": 1794239100,
+      "entry_time": 1794239100,
+      "exit_time": 1794240300,
+      "entry": 75411.75264,
+      "exit": 75235.40757002696,
+      "qty": 0.0033151331357255138,
+      "gross_pnl": -0.5846073847894778,
+      "entry_fee": 0.125,
+      "exit_fee": 0.12470769630760527,
+      "net_pnl": -0.8343150810970831,
+      "reason": "STOP"
+    },
+    {
+      "side": "short",
+      "signal_time": 1794240480,
+      "entry_time": 1794240480,
+      "exit_time": 1794241680,
+      "entry": 75113.04276000001,
+      "exit": 74893.72869543132,
+      "qty": 0.0033283167718127994,
+      "gross_pnl": 0.729946679398421,
+      "entry_fee": 0.125,
+      "exit_fee": 0.1246350266603008,
+      "net_pnl": 0.48031165273812015,
+      "reason": "TARGET"
+    },
+    {
+      "side": "short",
+      "signal_time": 1794241860,
+      "entry_time": 1794241860,
+      "exit_time": 1794242040,
+      "entry": 74847.549,
+      "exit": 74999.3842639619,
+      "qty": 0.0033401227340123054,
+      "gross_pnl": -0.5071484169838915,
+      "entry_fee": 0.125,
+      "exit_fee": 0.12525357420849195,
+      "net_pnl": -0.7574019911923834,
+      "reason": "STOP"
+    },
+    {
+      "side": "short",
+      "signal_time": 1794242220,
+      "entry_time": 1794242220,
+      "exit_time": 1794243360,
+      "entry": 74903.12676000001,
+      "exit": 75042.87175393205,
+      "qty": 0.0033376443789994857,
+      "gross_pnl": -0.46641909349057675,
+      "entry_fee": 0.125,
+      "exit_fee": 0.1252332095467453,
+      "net_pnl": -0.7166523030373221,
+      "reason": "STOP"
+    },
+    {
+      "side": "short",
+      "signal_time": 1794244080,
+      "entry_time": 1794244080,
+      "exit_time": 1794244140,
+      "entry": 74752.38708,
+      "exit": 74865.36971997892,
+      "qty": 0.0033443748054821313,
+      "gross_pnl": -0.37785629460234577,
+      "entry_fee": 0.125,
+      "exit_fee": 0.12518892814730118,
+      "net_pnl": -0.628045222749647,
+      "reason": "STOP"
+    },
+    {
+      "side": "short",
+      "signal_time": 1794244320,
+      "entry_time": 1794244320,
+      "exit_time": 1794244440,
+      "entry": 74816.36148,
+      "exit": 74925.09262396209,
+      "qty": 0.003341515078447517,
+      "gross_pnl": -0.3633267570461466,
+      "entry_fee": 0.125,
+      "exit_fee": 0.12518166337852307,
+      "net_pnl": -0.6135084204246697,
+      "reason": "STOP"
+    },
+    {
+      "side": "short",
+      "signal_time": 1794244680,
+      "entry_time": 1794244680,
+      "exit_time": 1794246000,
+      "entry": 74844.5502,
+      "exit": 74719.11298593589,
+      "qty": 0.0033402565628619413,
+      "gross_pnl": 0.41899247750474905,
+      "entry_fee": 0.125,
+      "exit_fee": 0.12479050376124763,
+      "net_pnl": 0.16920197374350143,
+      "reason": "TARGET"
+    },
+    {
+      "side": "short",
+      "signal_time": 1794246180,
+      "entry_time": 1794246180,
+      "exit_time": 1794246240,
+      "entry": 74514.08244,
+      "exit": 74633.06905871053,
+      "qty": 0.003355070502294707,
+      "gross_pnl": -0.3992084946035077,
+      "entry_fee": 0.125,
+      "exit_fee": 0.12519960424730175,
+      "net_pnl": -0.6494080988508095,
+      "reason": "STOP"
+    },
+    {
+      "side": "short",
+      "signal_time": 1794246420,
+      "entry_time": 1794246420,
+      "exit_time": 1794246540,
+      "entry": 74633.43468,
+      "exit": 74751.37601866177,
+      "qty": 0.0033497051431694872,
+      "gross_pnl": -0.39506870870761546,
+      "entry_fee": 0.125,
+      "exit_fee": 0.1251975343543538,
+      "net_pnl": -0.6452662430619692,
+      "reason": "STOP"
+    },
+    {
+      "side": "long",
+      "signal_time": 1794246900,
+      "entry_time": 1794246900,
+      "exit_time": 1794247260,
+      "entry": 74809.912,
+      "exit": 74701.91483995126,
+      "qty": 0.0033418031557101687,
+      "gross_pnl": -0.36090525025859327,
+      "entry_fee": 0.125,
+      "exit_fee": 0.1248195473748707,
+      "net_pnl": -0.610724797633464,
+      "reason": "STOP"
+    },
+    {
+      "side": "long",
+      "signal_time": 1794253200,
+      "entry_time": 1794253200,
+      "exit_time": 1794253260,
+      "entry": 74985.4822,
+      "exit": 74853.93428852194,
+      "qty": 0.003333978693811747,
+      "gross_pnl": -0.4385779340832891,
+      "entry_fee": 0.12499999999999999,
+      "exit_fee": 0.12478071103295835,
+      "net_pnl": -0.6883586451162473,
+      "reason": "STOP"
+    },
+    {
+      "side": "long",
+      "signal_time": 1794253440,
+      "entry_time": 1794253440,
+      "exit_time": 1794253740,
+      "entry": 75059.21168,
+      "exit": 74893.93525865267,
+      "qty": 0.0033307037791154167,
+      "gross_pnl": -0.5504868011802153,
+      "entry_fee": 0.125,
+      "exit_fee": 0.12472475659940989,
+      "net_pnl": -0.8002115577796252,
+      "reason": "STOP"
+    }
+  ],
+  "events": [
+    {
+      "time": 1794239100,
+      "type": "SIGNAL",
+      "side": "long",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": true
+      }
+    },
+    {
+      "time": 1794239100,
+      "type": "PAPER_ENTRY",
+      "side": "long",
+      "qty": 0.0033151331357255138,
+      "signal_time": 1794239100
+    },
+    {
+      "time": 1794240480,
+      "type": "SIGNAL",
+      "side": "short",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": true
+      }
+    },
+    {
+      "time": 1794240480,
+      "type": "PAPER_ENTRY",
+      "side": "short",
+      "qty": 0.0033283167718127994,
+      "signal_time": 1794240480
+    },
+    {
+      "time": 1794241860,
+      "type": "SIGNAL",
+      "side": "short",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": false
+      }
+    },
+    {
+      "time": 1794241860,
+      "type": "PAPER_ENTRY",
+      "side": "short",
+      "qty": 0.0033401227340123054,
+      "signal_time": 1794241860
+    },
+    {
+      "time": 1794242220,
+      "type": "SIGNAL",
+      "side": "short",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": false
+      }
+    },
+    {
+      "time": 1794242220,
+      "type": "PAPER_ENTRY",
+      "side": "short",
+      "qty": 0.0033376443789994857,
+      "signal_time": 1794242220
+    },
+    {
+      "time": 1794243600,
+      "type": "SIGNAL",
+      "side": "long",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": false
+      }
+    },
+    {
+      "time": 1794243600,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794243660,
+      "type": "SIGNAL",
+      "side": "long",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": false
+      }
+    },
+    {
+      "time": 1794243660,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794243720,
+      "type": "SIGNAL",
+      "side": "long",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": false
+      }
+    },
+    {
+      "time": 1794243720,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794243780,
+      "type": "SIGNAL",
+      "side": "long",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": false
+      }
+    },
+    {
+      "time": 1794243780,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794243840,
+      "type": "SIGNAL",
+      "side": "long",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": false
+      }
+    },
+    {
+      "time": 1794243840,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794244020,
+      "type": "SIGNAL",
+      "side": "short",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": false
+      }
+    },
+    {
+      "time": 1794244020,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794244080,
+      "type": "SIGNAL",
+      "side": "short",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": true
+      }
+    },
+    {
+      "time": 1794244080,
+      "type": "PAPER_ENTRY",
+      "side": "short",
+      "qty": 0.0033443748054821313,
+      "signal_time": 1794244080
+    },
+    {
+      "time": 1794244320,
+      "type": "SIGNAL",
+      "side": "short",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": false
+      }
+    },
+    {
+      "time": 1794244320,
+      "type": "PAPER_ENTRY",
+      "side": "short",
+      "qty": 0.003341515078447517,
+      "signal_time": 1794244320
+    },
+    {
+      "time": 1794244680,
+      "type": "SIGNAL",
+      "side": "short",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": false
+      }
+    },
+    {
+      "time": 1794244680,
+      "type": "PAPER_ENTRY",
+      "side": "short",
+      "qty": 0.0033402565628619413,
+      "signal_time": 1794244680
+    },
+    {
+      "time": 1794246180,
+      "type": "SIGNAL",
+      "side": "short",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": true
+      }
+    },
+    {
+      "time": 1794246180,
+      "type": "PAPER_ENTRY",
+      "side": "short",
+      "qty": 0.003355070502294707,
+      "signal_time": 1794246180
+    },
+    {
+      "time": 1794246420,
+      "type": "SIGNAL",
+      "side": "short",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": false
+      }
+    },
+    {
+      "time": 1794246420,
+      "type": "PAPER_ENTRY",
+      "side": "short",
+      "qty": 0.0033497051431694872,
+      "signal_time": 1794246420
+    },
+    {
+      "time": 1794246900,
+      "type": "SIGNAL",
+      "side": "long",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": false
+      }
+    },
+    {
+      "time": 1794246900,
+      "type": "PAPER_ENTRY",
+      "side": "long",
+      "qty": 0.0033418031557101687,
+      "signal_time": 1794246900
+    },
+    {
+      "time": 1794247800,
+      "type": "SIGNAL",
+      "side": "long",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": false
+      }
+    },
+    {
+      "time": 1794247800,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794247980,
+      "type": "SIGNAL",
+      "side": "long",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": false
+      }
+    },
+    {
+      "time": 1794247980,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794248040,
+      "type": "SIGNAL",
+      "side": "long",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": false
+      }
+    },
+    {
+      "time": 1794248040,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794248220,
+      "type": "SIGNAL",
+      "side": "short",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": false
+      }
+    },
+    {
+      "time": 1794248220,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794248280,
+      "type": "SIGNAL",
+      "side": "short",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": true
+      }
+    },
+    {
+      "time": 1794248280,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794248340,
+      "type": "SIGNAL",
+      "side": "short",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": true
+      }
+    },
+    {
+      "time": 1794248340,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794248400,
+      "type": "SIGNAL",
+      "side": "short",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": true
+      }
+    },
+    {
+      "time": 1794248400,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794248460,
+      "type": "SIGNAL",
+      "side": "short",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": true
+      }
+    },
+    {
+      "time": 1794248460,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794248520,
+      "type": "SIGNAL",
+      "side": "short",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": false
+      }
+    },
+    {
+      "time": 1794248520,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794248580,
+      "type": "SIGNAL",
+      "side": "short",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": true
+      }
+    },
+    {
+      "time": 1794248580,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794248640,
+      "type": "SIGNAL",
+      "side": "short",
+      "votes": {
+        "ema": true,
+        "rsi": false,
+        "macd": true,
+        "volume": true
+      }
+    },
+    {
+      "time": 1794248640,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794248700,
+      "type": "SIGNAL",
+      "side": "short",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": true
+      }
+    },
+    {
+      "time": 1794248700,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794248760,
+      "type": "SIGNAL",
+      "side": "short",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": true
+      }
+    },
+    {
+      "time": 1794248760,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794248820,
+      "type": "SIGNAL",
+      "side": "short",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": true
+      }
+    },
+    {
+      "time": 1794248820,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794248880,
+      "type": "SIGNAL",
+      "side": "short",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": false
+      }
+    },
+    {
+      "time": 1794248880,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794248940,
+      "type": "SIGNAL",
+      "side": "short",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": false
+      }
+    },
+    {
+      "time": 1794248940,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794249000,
+      "type": "SIGNAL",
+      "side": "short",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": true
+      }
+    },
+    {
+      "time": 1794249000,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794249120,
+      "type": "SIGNAL",
+      "side": "short",
+      "votes": {
+        "ema": true,
+        "rsi": false,
+        "macd": true,
+        "volume": true
+      }
+    },
+    {
+      "time": 1794249120,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794249240,
+      "type": "SIGNAL",
+      "side": "short",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": false
+      }
+    },
+    {
+      "time": 1794249240,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794249300,
+      "type": "SIGNAL",
+      "side": "short",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": false
+      }
+    },
+    {
+      "time": 1794249300,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794249360,
+      "type": "SIGNAL",
+      "side": "short",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": false
+      }
+    },
+    {
+      "time": 1794249360,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794249420,
+      "type": "SIGNAL",
+      "side": "short",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": false
+      }
+    },
+    {
+      "time": 1794249420,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794249480,
+      "type": "SIGNAL",
+      "side": "short",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": false
+      }
+    },
+    {
+      "time": 1794249480,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794249780,
+      "type": "SIGNAL",
+      "side": "long",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": false
+      }
+    },
+    {
+      "time": 1794249780,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794249840,
+      "type": "SIGNAL",
+      "side": "long",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": false
+      }
+    },
+    {
+      "time": 1794249840,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794250200,
+      "type": "SIGNAL",
+      "side": "long",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": true
+      }
+    },
+    {
+      "time": 1794250200,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794250380,
+      "type": "SIGNAL",
+      "side": "long",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": false
+      }
+    },
+    {
+      "time": 1794250380,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794250800,
+      "type": "SIGNAL",
+      "side": "long",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": true
+      }
+    },
+    {
+      "time": 1794250800,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794250860,
+      "type": "SIGNAL",
+      "side": "long",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": true
+      }
+    },
+    {
+      "time": 1794250860,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794250920,
+      "type": "SIGNAL",
+      "side": "long",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": true
+      }
+    },
+    {
+      "time": 1794250920,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794250980,
+      "type": "SIGNAL",
+      "side": "long",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": true
+      }
+    },
+    {
+      "time": 1794250980,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794251040,
+      "type": "SIGNAL",
+      "side": "long",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": true
+      }
+    },
+    {
+      "time": 1794251040,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794251100,
+      "type": "SIGNAL",
+      "side": "long",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": true
+      }
+    },
+    {
+      "time": 1794251100,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794251160,
+      "type": "SIGNAL",
+      "side": "long",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": true
+      }
+    },
+    {
+      "time": 1794251160,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794251220,
+      "type": "SIGNAL",
+      "side": "long",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": false
+      }
+    },
+    {
+      "time": 1794251220,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794251280,
+      "type": "SIGNAL",
+      "side": "long",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": true
+      }
+    },
+    {
+      "time": 1794251280,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794251640,
+      "type": "SIGNAL",
+      "side": "short",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": false
+      }
+    },
+    {
+      "time": 1794251640,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794251700,
+      "type": "SIGNAL",
+      "side": "short",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": false
+      }
+    },
+    {
+      "time": 1794251700,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794251760,
+      "type": "SIGNAL",
+      "side": "short",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": true
+      }
+    },
+    {
+      "time": 1794251760,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794252000,
+      "type": "SIGNAL",
+      "side": "long",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": false
+      }
+    },
+    {
+      "time": 1794252000,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794252060,
+      "type": "SIGNAL",
+      "side": "long",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": false
+      }
+    },
+    {
+      "time": 1794252060,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794252120,
+      "type": "SIGNAL",
+      "side": "long",
+      "votes": {
+        "ema": true,
+        "rsi": false,
+        "macd": true,
+        "volume": true
+      }
+    },
+    {
+      "time": 1794252120,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794252180,
+      "type": "SIGNAL",
+      "side": "long",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": false
+      }
+    },
+    {
+      "time": 1794252180,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794252240,
+      "type": "SIGNAL",
+      "side": "long",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": true
+      }
+    },
+    {
+      "time": 1794252240,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794252300,
+      "type": "SIGNAL",
+      "side": "long",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": false
+      }
+    },
+    {
+      "time": 1794252300,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794252600,
+      "type": "SIGNAL",
+      "side": "short",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": false
+      }
+    },
+    {
+      "time": 1794252600,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794252660,
+      "type": "SIGNAL",
+      "side": "short",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": false
+      }
+    },
+    {
+      "time": 1794252660,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794252720,
+      "type": "SIGNAL",
+      "side": "short",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": false
+      }
+    },
+    {
+      "time": 1794252720,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794252780,
+      "type": "SIGNAL",
+      "side": "short",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": false
+      }
+    },
+    {
+      "time": 1794252780,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794252840,
+      "type": "SIGNAL",
+      "side": "short",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": false
+      }
+    },
+    {
+      "time": 1794252840,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794252900,
+      "type": "SIGNAL",
+      "side": "short",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": true
+      }
+    },
+    {
+      "time": 1794252900,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794252960,
+      "type": "SIGNAL",
+      "side": "short",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": false
+      }
+    },
+    {
+      "time": 1794252960,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794253020,
+      "type": "SIGNAL",
+      "side": "short",
+      "votes": {
+        "ema": true,
+        "rsi": false,
+        "macd": true,
+        "volume": true
+      }
+    },
+    {
+      "time": 1794253020,
+      "type": "ENTRY_BLOCKED",
+      "reason": "EDGE_BELOW_COST"
+    },
+    {
+      "time": 1794253200,
+      "type": "SIGNAL",
+      "side": "long",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": true
+      }
+    },
+    {
+      "time": 1794253200,
+      "type": "PAPER_ENTRY",
+      "side": "long",
+      "qty": 0.003333978693811747,
+      "signal_time": 1794253200
+    },
+    {
+      "time": 1794253440,
+      "type": "SIGNAL",
+      "side": "long",
+      "votes": {
+        "ema": true,
+        "rsi": true,
+        "macd": true,
+        "volume": true
+      }
+    },
+    {
+      "time": 1794253440,
+      "type": "PAPER_ENTRY",
+      "side": "long",
+      "qty": 0.0033307037791154167,
+      "signal_time": 1794253440
+    }
+  ],
+  "equity_curve": [
+    {
+      "time": 1794236040,
+      "equity": 1000
+    },
+    {
+      "time": 1794236100,
+      "equity": 1000
+    },
+    {
+      "time": 1794236160,
+      "equity": 1000
+    },
+    {
+      "time": 1794236220,
+      "equity": 1000
+    },
+    {
+      "time": 1794236280,
+      "equity": 1000
+    },
+    {
+      "time": 1794236340,
+      "equity": 1000
+    },
+    {
+      "time": 1794236400,
+      "equity": 1000
+    },
+    {
+      "time": 1794236460,
+      "equity": 1000
+    },
+    {
+      "time": 1794236520,
+      "equity": 1000
+    },
+    {
+      "time": 1794236580,
+      "equity": 1000
+    },
+    {
+      "time": 1794236640,
+      "equity": 1000
+    },
+    {
+      "time": 1794236700,
+      "equity": 1000
+    },
+    {
+      "time": 1794236760,
+      "equity": 1000
+    },
+    {
+      "time": 1794236820,
+      "equity": 1000
+    },
+    {
+      "time": 1794236880,
+      "equity": 1000
+    },
+    {
+      "time": 1794236940,
+      "equity": 1000
+    },
+    {
+      "time": 1794237000,
+      "equity": 1000
+    },
+    {
+      "time": 1794237060,
+      "equity": 1000
+    },
+    {
+      "time": 1794237120,
+      "equity": 1000
+    },
+    {
+      "time": 1794237180,
+      "equity": 1000
+    },
+    {
+      "time": 1794237240,
+      "equity": 1000
+    },
+    {
+      "time": 1794237300,
+      "equity": 1000
+    },
+    {
+      "time": 1794237360,
+      "equity": 1000
+    },
+    {
+      "time": 1794237420,
+      "equity": 1000
+    },
+    {
+      "time": 1794237480,
+      "equity": 1000
+    },
+    {
+      "time": 1794237540,
+      "equity": 1000
+    },
+    {
+      "time": 1794237600,
+      "equity": 1000
+    },
+    {
+      "time": 1794237660,
+      "equity": 1000
+    },
+    {
+      "time": 1794237720,
+      "equity": 1000
+    },
+    {
+      "time": 1794237780,
+      "equity": 1000
+    },
+    {
+      "time": 1794237840,
+      "equity": 1000
+    },
+    {
+      "time": 1794237900,
+      "equity": 1000
+    },
+    {
+      "time": 1794237960,
+      "equity": 1000
+    },
+    {
+      "time": 1794238020,
+      "equity": 1000
+    },
+    {
+      "time": 1794238080,
+      "equity": 1000
+    },
+    {
+      "time": 1794238140,
+      "equity": 1000
+    },
+    {
+      "time": 1794238200,
+      "equity": 1000
+    },
+    {
+      "time": 1794238260,
+      "equity": 1000
+    },
+    {
+      "time": 1794238320,
+      "equity": 1000
+    },
+    {
+      "time": 1794238380,
+      "equity": 1000
+    },
+    {
+      "time": 1794238440,
+      "equity": 1000
+    },
+    {
+      "time": 1794238500,
+      "equity": 1000
+    },
+    {
+      "time": 1794238560,
+      "equity": 1000
+    },
+    {
+      "time": 1794238620,
+      "equity": 1000
+    },
+    {
+      "time": 1794238680,
+      "equity": 1000
+    },
+    {
+      "time": 1794238740,
+      "equity": 1000
+    },
+    {
+      "time": 1794238800,
+      "equity": 1000
+    },
+    {
+      "time": 1794238860,
+      "equity": 1000
+    },
+    {
+      "time": 1794238920,
+      "equity": 1000
+    },
+    {
+      "time": 1794238980,
+      "equity": 1000
+    },
+    {
+      "time": 1794239040,
+      "equity": 1000
+    },
+    {
+      "time": 1794239100,
+      "equity": 1000
+    },
+    {
+      "time": 1794239160,
+      "equity": 999.9374815076569
+    },
+    {
+      "time": 1794239220,
+      "equity": 1000.2338544099908
+    },
+    {
+      "time": 1794239280,
+      "equity": 999.8794666777818
+    },
+    {
+      "time": 1794239340,
+      "equity": 1000.0727389395945
+    },
+    {
+      "time": 1794239400,
+      "equity": 999.9563777665305
+    },
+    {
+      "time": 1794239460,
+      "equity": 1000.1234604765712
+    },
+    {
+      "time": 1794239520,
+      "equity": 999.9984799573542
+    },
+    {
+      "time": 1794239580,
+      "equity": 1000.1310852827833
+    },
+    {
+      "time": 1794239640,
+      "equity": 1000.0574893271702
+    },
+    {
+      "time": 1794239700,
+      "equity": 1000.1155041570454
+    },
+    {
+      "time": 1794239760,
+      "equity": 1000.1506445682841
+    },
+    {
+      "time": 1794239820,
+      "equity": 1000.0521851141531
+    },
+    {
+      "time": 1794239880,
+      "equity": 1000.0515220875259
+    },
+    {
+      "time": 1794239940,
+      "equity": 1000.2156211777443
+    },
+    {
+      "time": 1794240000,
+      "equity": 1000.1440143020126
+    },
+    {
+      "time": 1794240060,
+      "equity": 999.9301882147583
+    },
+    {
+      "time": 1794240120,
+      "equity": 999.9905236378286
+    },
+    {
+      "time": 1794240180,
+      "equity": 999.7849853834135
+    },
+    {
+      "time": 1794240240,
+      "equity": 999.6629884840189
+    },
+    {
+      "time": 1794240300,
+      "equity": 999.1656849189029
+    },
+    {
+      "time": 1794240360,
+      "equity": 999.1656849189029
+    },
+    {
+      "time": 1794240420,
+      "equity": 999.1656849189029
+    },
+    {
+      "time": 1794240480,
+      "equity": 999.1656849189029
+    },
+    {
+      "time": 1794240540,
+      "equity": 999.1493303644892
+    },
+    {
+      "time": 1794240600,
+      "equity": 998.9253346457463
+    },
+    {
+      "time": 1794240660,
+      "equity": 999.090086325951
+    },
+    {
+      "time": 1794240720,
+      "equity": 998.9279972991636
+    },
+    {
+      "time": 1794240780,
+      "equity": 998.9466358730858
+    },
+    {
+      "time": 1794240840,
+      "equity": 999.1173785234798
+    },
+    {
+      "time": 1794240900,
+      "equity": 999.1336872756617
+    },
+    {
+      "time": 1794240960,
+      "equity": 999.0960772961403
+    },
+    {
+      "time": 1794241020,
+      "equity": 999.1503288595208
+    },
+    {
+      "time": 1794241080,
+      "equity": 999.2079087396731
+    },
+    {
+      "time": 1794241140,
+      "equity": 999.2561693328644
+    },
+    {
+      "time": 1794241200,
+      "equity": 999.3250654900409
+    },
+    {
+      "time": 1794241260,
+      "equity": 999.1516601862295
+    },
+    {
+      "time": 1794241320,
+      "equity": 999.251842521061
+    },
+    {
+      "time": 1794241380,
+      "equity": 999.3313892919074
+    },
+    {
+      "time": 1794241440,
+      "equity": 999.1306917905671
+    },
+    {
+      "time": 1794241500,
+      "equity": 999.3167446981114
+    },
+    {
+      "time": 1794241560,
+      "equity": 999.637261603237
+    },
+    {
+      "time": 1794241620,
+      "equity": 999.7893656797088
+    },
+    {
+      "time": 1794241680,
+      "equity": 999.645996571641
+    },
+    {
+      "time": 1794241740,
+      "equity": 999.645996571641
+    },
+    {
+      "time": 1794241800,
+      "equity": 999.645996571641
+    },
+    {
+      "time": 1794241860,
+      "equity": 999.645996571641
+    },
+    {
+      "time": 1794241920,
+      "equity": 999.2172090688599
+    },
+    {
+      "time": 1794241980,
+      "equity": 999.2041825901972
+    },
+    {
+      "time": 1794242040,
+      "equity": 998.8885945804486
+    },
+    {
+      "time": 1794242100,
+      "equity": 998.8885945804486
+    },
+    {
+      "time": 1794242160,
+      "equity": 998.8885945804486
+    },
+    {
+      "time": 1794242220,
+      "equity": 998.8885945804486
+    },
+    {
+      "time": 1794242280,
+      "equity": 998.5197020917074
+    },
+    {
+      "time": 1794242340,
+      "equity": 998.5741056950851
+    },
+    {
+      "time": 1794242400,
+      "equity": 998.8407834809672
+    },
+    {
+      "time": 1794242460,
+      "equity": 998.9776269005062
+    },
+    {
+      "time": 1794242520,
+      "equity": 998.9539296254152
+    },
+    {
+      "time": 1794242580,
+      "equity": 998.861476876117
+    },
+    {
+      "time": 1794242640,
+      "equity": 998.8060719794256
+    },
+    {
+      "time": 1794242700,
+      "equity": 998.8060719794256
+    },
+    {
+      "time": 1794242760,
+      "equity": 998.9696165539965
+    },
+    {
+      "time": 1794242820,
+      "equity": 998.7109491146241
+    },
+    {
+      "time": 1794242880,
+      "equity": 998.814416090373
+    },
+    {
+      "time": 1794242940,
+      "equity": 998.6054795522476
+    },
+    {
+      "time": 1794243000,
+      "equity": 998.7202945188852
+    },
+    {
+      "time": 1794243060,
+      "equity": 998.6739012620171
+    },
+    {
+      "time": 1794243120,
+      "equity": 998.5837848637842
+    },
+    {
+      "time": 1794243180,
+      "equity": 998.4436037998662
+    },
+    {
+      "time": 1794243240,
+      "equity": 998.4933347011133
+    },
+    {
+      "time": 1794243300,
+      "equity": 998.5140280962631
+    },
+    {
+      "time": 1794243360,
+      "equity": 998.1719422774113
+    },
+    {
+      "time": 1794243420,
+      "equity": 998.1719422774113
+    },
+    {
+      "time": 1794243480,
+      "equity": 998.1719422774113
+    },
+    {
+      "time": 1794243540,
+      "equity": 998.1719422774113
+    },
+    {
+      "time": 1794243600,
+      "equity": 998.1719422774113
+    },
+    {
+      "time": 1794243660,
+      "equity": 998.1719422774113
+    },
+    {
+      "time": 1794243720,
+      "equity": 998.1719422774113
+    },
+    {
+      "time": 1794243780,
+      "equity": 998.1719422774113
+    },
+    {
+      "time": 1794243840,
+      "equity": 998.1719422774113
+    },
+    {
+      "time": 1794243900,
+      "equity": 998.1719422774113
+    },
+    {
+      "time": 1794243960,
+      "equity": 998.1719422774113
+    },
+    {
+      "time": 1794244020,
+      "equity": 998.1719422774113
+    },
+    {
+      "time": 1794244080,
+      "equity": 998.1719422774113
+    },
+    {
+      "time": 1794244140,
+      "equity": 997.5438970546617
+    },
+    {
+      "time": 1794244200,
+      "equity": 997.5438970546617
+    },
+    {
+      "time": 1794244260,
+      "equity": 997.5438970546617
+    },
+    {
+      "time": 1794244320,
+      "equity": 997.5438970546617
+    },
+    {
+      "time": 1794244380,
+      "equity": 997.1798500113919
+    },
+    {
+      "time": 1794244440,
+      "equity": 996.930388634237
+    },
+    {
+      "time": 1794244500,
+      "equity": 996.930388634237
+    },
+    {
+      "time": 1794244560,
+      "equity": 996.930388634237
+    },
+    {
+      "time": 1794244620,
+      "equity": 996.930388634237
+    },
+    {
+      "time": 1794244680,
+      "equity": 996.930388634237
+    },
+    {
+      "time": 1794244740,
+      "equity": 996.8015480072411
+    },
+    {
+      "time": 1794244800,
+      "equity": 997.1415861253404
+    },
+    {
+      "time": 1794244860,
+      "equity": 997.0721087888329
+    },
+    {
+      "time": 1794244920,
+      "equity": 997.1312313299956
+    },
+    {
+      "time": 1794244980,
+      "equity": 997.0951565591166
+    },
+    {
+      "time": 1794245040,
+      "equity": 997.1733185626877
+    },
+    {
+      "time": 1794245100,
+      "equity": 997.1455944332158
+    },
+    {
+      "time": 1794245160,
+      "equity": 996.8743656003114
+    },
+    {
+      "time": 1794245220,
+      "equity": 997.0607519165192
+    },
+    {
+      "time": 1794245280,
+      "equity": 997.1148640728375
+    },
+    {
+      "time": 1794245340,
+      "equity": 996.985930169511
+    },
+    {
+      "time": 1794245400,
+      "equity": 996.8847203956562
+    },
+    {
+      "time": 1794245460,
+      "equity": 997.0076418371697
+    },
+    {
+      "time": 1794245520,
+      "equity": 997.0183306581707
+    },
+    {
+      "time": 1794245580,
+      "equity": 997.1559492285606
+    },
+    {
+      "time": 1794245640,
+      "equity": 996.9722351176033
+    },
+    {
+      "time": 1794245700,
+      "equity": 996.9074341402837
+    },
+    {
+      "time": 1794245760,
+      "equity": 996.8850544213126
+    },
+    {
+      "time": 1794245820,
+      "equity": 997.0630900961131
+    },
+    {
+      "time": 1794245880,
+      "equity": 997.073444891458
+    },
+    {
+      "time": 1794245940,
+      "equity": 997.1596235107799
+    },
+    {
+      "time": 1794246000,
+      "equity": 997.0995906079805
+    },
+    {
+      "time": 1794246060,
+      "equity": 997.0995906079805
+    },
+    {
+      "time": 1794246120,
+      "equity": 997.0995906079805
+    },
+    {
+      "time": 1794246180,
+      "equity": 997.0995906079805
+    },
+    {
+      "time": 1794246240,
+      "equity": 996.4501825091297
+    },
+    {
+      "time": 1794246300,
+      "equity": 996.4501825091297
+    },
+    {
+      "time": 1794246360,
+      "equity": 996.4501825091297
+    },
+    {
+      "time": 1794246420,
+      "equity": 996.4501825091297
+    },
+    {
+      "time": 1794246480,
+      "equity": 996.1119224592842
+    },
+    {
+      "time": 1794246540,
+      "equity": 995.8049162660677
+    },
+    {
+      "time": 1794246600,
+      "equity": 995.8049162660677
+    },
+    {
+      "time": 1794246660,
+      "equity": 995.8049162660677
+    },
+    {
+      "time": 1794246720,
+      "equity": 995.8049162660677
+    },
+    {
+      "time": 1794246780,
+      "equity": 995.8049162660677
+    },
+    {
+      "time": 1794246840,
+      "equity": 995.8049162660677
+    },
+    {
+      "time": 1794246900,
+      "equity": 995.8049162660677
+    },
+    {
+      "time": 1794246960,
+      "equity": 995.4857174010831
+    },
+    {
+      "time": 1794247020,
+      "equity": 995.5812929713364
+    },
+    {
+      "time": 1794247080,
+      "equity": 995.510780924751
+    },
+    {
+      "time": 1794247140,
+      "equity": 995.4947402696035
+    },
+    {
+      "time": 1794247200,
+      "equity": 995.4840464995052
+    },
+    {
+      "time": 1794247260,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794247320,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794247380,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794247440,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794247500,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794247560,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794247620,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794247680,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794247740,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794247800,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794247860,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794247920,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794247980,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794248040,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794248100,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794248160,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794248220,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794248280,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794248340,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794248400,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794248460,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794248520,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794248580,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794248640,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794248700,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794248760,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794248820,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794248880,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794248940,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794249000,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794249060,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794249120,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794249180,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794249240,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794249300,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794249360,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794249420,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794249480,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794249540,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794249600,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794249660,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794249720,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794249780,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794249840,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794249900,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794249960,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794250020,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794250080,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794250140,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794250200,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794250260,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794250320,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794250380,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794250440,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794250500,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794250560,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794250620,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794250680,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794250740,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794250800,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794250860,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794250920,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794250980,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794251040,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794251100,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794251160,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794251220,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794251280,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794251340,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794251400,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794251460,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794251520,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794251580,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794251640,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794251700,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794251760,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794251820,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794251880,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794251940,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794252000,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794252060,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794252120,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794252180,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794252240,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794252300,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794252360,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794252420,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794252480,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794252540,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794252600,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794252660,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794252720,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794252780,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794252840,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794252900,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794252960,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794253020,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794253080,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794253140,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794253200,
+      "equity": 995.1941914684343
+    },
+    {
+      "time": 1794253260,
+      "equity": 994.505832823318
+    },
+    {
+      "time": 1794253320,
+      "equity": 994.505832823318
+    },
+    {
+      "time": 1794253380,
+      "equity": 994.505832823318
+    },
+    {
+      "time": 1794253440,
+      "equity": 994.505832823318
+    },
+    {
+      "time": 1794253500,
+      "equity": 994.2728791182545
+    },
+    {
+      "time": 1794253560,
+      "equity": 994.1103407738337
+    },
+    {
+      "time": 1794253620,
+      "equity": 994.049055824298
+    },
+    {
+      "time": 1794253680,
+      "equity": 994.0224101940651
+    },
+    {
+      "time": 1794253740,
+      "equity": 993.7056212655383
+    },
+    {
+      "time": 1794253800,
+      "equity": 993.7056212655383
+    },
+    {
+      "time": 1794253860,
+      "equity": 993.7056212655383
+    },
+    {
+      "time": 1794253920,
+      "equity": 993.7056212655383
+    }
+  ],
+  "limitations": [
+    "Tek sembol; funding, likidasyon, kısmi dolum ve piyasa derinliği modellenmez.",
+    "Geçmiş test sonucu gelecek performans garantisi değildir.",
+    "Borsa kuralları, lot adımı ve minimum tutar uygulanmaz.",
+    "Stop kayması sabit varsayılır; boşluklar ve gerçek kayıp riski daha büyük olabilir."
+  ],
+  "input_sha256": "bb4b2b3da8e241f0ce19d9d4b8391b13c5bc51c4db93966beaac85a8658caefc",
+  "strategy_name": "confluence",
+  "strategy_comparison": {
+    "method": "independent_same_data",
+    "strategies": {
+      "confluence": {
+        "net_pnl": -6.294378734461702,
+        "trade_count": 12,
+        "max_drawdown_fraction": 0.0065267068452740575,
+        "trade_metrics": {
+          "count": 12,
+          "wins": 2,
+          "losses": 10,
+          "flat": 0,
+          "win_rate": 0.16666666666666666,
+          "average_net_pnl": -0.5245315612051332,
+          "profit_factor": 0.09353739843879078,
+          "profit_factor_note": null,
+          "total_fees": 2.9997127556191097,
+          "by_exit_reason": {
+            "STOP": 10,
+            "TARGET": 2
+          },
+          "by_side": {
+            "long": 4,
+            "short": 8
+          },
+          "warning": "Az işlemde metrikler kararlılık veya kârlılık kanıtı değildir."
+        }
+      },
+      "breakout": {
+        "net_pnl": -2.6121610606254535,
+        "trade_count": 7,
+        "max_drawdown_fraction": 0.0034691147091258814,
+        "trade_metrics": {
+          "count": 7,
+          "wins": 2,
+          "losses": 5,
+          "flat": 0,
+          "win_rate": 0.2857142857142857,
+          "average_net_pnl": -0.3731658658036446,
+          "profit_factor": 0.226143946335429,
+          "profit_factor_note": null,
+          "total_fees": 1.7499722603431547,
+          "by_exit_reason": {
+            "STOP": 5,
+            "TARGET": 2
+          },
+          "by_side": {
+            "long": 3,
+            "short": 4
+          },
+          "warning": "Az işlemde metrikler kararlılık veya kârlılık kanıtı değildir."
+        }
+      }
+    },
+    "warning": "Aynı veri üzerinde örneklem içi karşılaştırma, ileriye dönük doğrulama değildir."
+  },
+  "walk_forward": {
+    "method": "rolling_train_disjoint_test",
+    "train_bars": 200,
+    "test_bars": 60,
+    "window_count": 1,
+    "windows": [
+      {
+        "train_start": 1794235980,
+        "train_end_open": 1794247920,
+        "test_start": 1794247980,
+        "test_end_open": 1794251520,
+        "selected_threshold": 4,
+        "training": {
+          "2": {
+            "net_pnl": -4.814202629609667,
+            "trades": 10
+          },
+          "3": {
+            "net_pnl": -4.805808531565731,
+            "trades": 10
+          },
+          "4": {
+            "net_pnl": -3.3217735158162895,
+            "trades": 7
+          }
+        },
+        "test_net_pnl": 0,
+        "test_trades": 0,
+        "test_drawdown_fraction": 0,
+        "test_trade_details": []
+      }
+    ],
+    "sum_independent_test_pnl": 0,
+    "warning": "Pencereler bağımsız bakiyeyle başlar; sonuçlar bileşik getiri veya gelecekte kârlılık kanıtı değildir. Funding ve gerçek piyasa etkisi modellenmez."
+  },
+  "live_parity": false,
+  "research_warning": "Araştırma motoru sonraki mum açılışını ve sabit spreadi kullanır; canlı PAPER motorunda iki strateji uyumu, taze bid/ask ve funding kapısı vardır. Funding, likidasyon ve kısmi dolum modellenmez. Bu geçmiş sonuç gelecekte kârlılık kanıtı değildir."
+}

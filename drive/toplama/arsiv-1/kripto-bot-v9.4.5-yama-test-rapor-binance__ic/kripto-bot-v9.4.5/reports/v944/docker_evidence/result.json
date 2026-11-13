@@ -1,0 +1,10 @@
+{
+  "scope": "isolated synthetic HTTP; not natural live PENDING or exchange fills",
+  "http_samples": 33,
+  "young_owned_pending_200_cases": 4,
+  "all_health_requests_durable_db_unchanged": true,
+  "controlled_pending_http_verified": true,
+  "pending_in_flight_observed_live": false,
+  "natural_entry_fill_or_close_observed": false,
+  "real_money_approved": false
+}

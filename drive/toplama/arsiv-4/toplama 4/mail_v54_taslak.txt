@@ -1,0 +1,155 @@
+ACARBOT v5.4 — GİRİŞ KENARI TESTİ: önceki teşhis çürütüldü
+
+Merhaba Ömer,
+
+Gönderdiğin üç bloğu inceledim. Ortadaki eleştiri haklıydı ve benim
+v5.3 teşhisimi çürüttü. Son blok ise yapılmamış bir işi yapılmış gibi
+sunuyordu; o sayıları raporlara koymadım, kendim ölçtüm.
+
+=== 1. ÖNCEKİ TEŞHİSİM YANLIŞTI ===
+
+v5.3 "kök neden çıkış geometrisi, ödül/risk 5,53 kat açık" diyordu.
+Bu akıl yürütme eksikti: kazananların +0,44R'de kapanması "çıkış kötü"
+kadar "fiyat zaten lehimize gitmiyor" ile de açıklanabilir.
+
+Ayırmak için çıkışı SABİT ve SİMETRİK tutup bütün adayları ölçtüm.
+Kapıların hiçbiri uygulanmadı (drawdown koruması dahil). 1.121 aday:
+
+  Simetrik 1R çıkış, brüt beklenti: -0,0246 R
+  %95 güven aralığı:               [-0,0778, +0,0285]
+  Ortalama maliyet:                 0,5352 R
+  Skorun ileri getiriyle korelasyonu: 0,040
+
+Güven aralığı sıfırı içeriyor -> GİRİŞ YAZI-TURA. Skor bilgi taşımıyor.
+
+Ve şu eşleşme her şeyi açıklıyor:
+  Gözlenen gerçek beklenti (v5.3):  -0,5679 R
+  Yazı-tura eksi maliyet tahmini:   -0,535 R
+
+Zarar, kenarsız girişe ödenen ücretten ibaret. Çıkışı düzeltmek bunu
+değiştirmez.
+
+=== 2. ÖNERİLEN ÇIKIŞ GEOMETRİSİNİ ÖLÇTÜM ===
+
+Aynı adaylar, aynı maliyetler, yalnız çıkış değişti:
+
+                        MEVCUT      ÖNERİLEN
+  Net beklenti          -0,5429 R   -0,4076 R
+  %95 GA                [-0,603,-0,483]  [-0,466,-0,349]
+  Kazanma oranı         %36,47      %36,11  (DÜŞTÜ)
+  Maliyet               0,5338 R    0,4004 R
+  TP1'e ulaşan          511         184     (ÇÖKTÜ)
+
+İyileşme var ama kâr yok. Ve iyileşmenin kaynağı belli:
+
+  Beklenti iyileşmesi = +0,1353 R
+  Maliyet tasarrufu   = +0,1334 R  -> iyileşmenin %98,6'sı
+
+Yani kazanılan şey trailing mantığı değil, stop genişlediği için
+maliyet payının küçülmesi. "Kâr kilitleniyor" iddiası veride görünmüyor.
+
+Senin tablondaki "+0,0311 R beklenti, +1,10 R ortalama kazanç" değerleri
+bu ölçümle uyuşmuyor; o değerler bir koşudan gelmiyor.
+
+=== 3. YAPISAL KALDIRAÇ — asıl mesele ===
+
+  maliyet_payı = maliyet_oranı / stop_kesri
+
+Çıkış parametreleri bu oranı DEĞİŞTİRMEZ. Ölçülen:
+  maliyet %0,214 · stop %0,419 -> pay %51,0
+  %15 hedefi için stop 3,40 kat genişlemeli
+  ATR ~ sqrt(zaman) -> 3,40^2 = 11,6 -> 5dk x 11,6 = 58 dk ~ 1 SAAT
+
+Ölçüm bunu doğruladı. Zaman dilimi merdiveni:
+
+  Zaman dilimi  Aday   Maliyet(R)  Simetrik net   %95 GA              Skor r
+  5m            1121   0,535       -0,0246 R      [-0,078,+0,029]     0,040
+  15m            412   0,332       +0,0729 R      [-0,019,+0,165]     0,078
+  1h             105   0,154       +0,0669 R      [-0,115,+0,248]     0,235
+
+Yön doğru: maliyet payı düşüyor, skor 1h'de bilgi taşımaya başlıyor
+(r=0,235). AMA üçünde de hüküm GİRİŞ KENARI YOK ve örneklem yetersiz.
+15m'de GA alt sınırı -0,019 — sıfıra çok yakın ama geçmiyor.
+
+=== 4. BULDUĞUM GERÇEK HATALAR (senin şüphen doğruydu) ===
+
+a) Taze hesapta "drawdown bağlayıcı" bir HATA idi, ama sebebi farklı:
+   binding = min(components, ...) — hepsi 1,0 olduğunda sözlüğün ilk
+   anahtarı ('drawdown') seçiliyordu. v5.3 raporundaki "drawdown 6 kez
+   bağladı" ifadesi YANLIŞTI. Artık scale>=1 ise binding="none".
+
+b) DAHA CİDDİ: risk tabanı, ölçekleyicinin isteğini YUKARI çekiyordu.
+   Ölçekleyici 0,039 USDT hesaplıyor, min_risk_usdt tabanı 2,50 USDT'ye
+   çıkarıyordu — 64 KAT. "Asla yukarı ölçeklenmez" garantisi sessizce
+   deliniyordu. Artık tabanın altındaysa işlem AÇILMIYOR.
+
+c) TTL: tek kaynak artık config.exit.order_ttl_seconds. Ama önerdiğin
+   "return 45000" tek başına YANLIŞ ve zararlı: emir N. mumda kurulup
+   N+1. mumda denetleniyor, fark tam 300.000 ms -> HİÇBİR emir dolmazdı.
+   Doğru model: emir mum kapanışında kurulur, dolum TTL penceresindeki
+   1m alt mumlarda aranır; çözülemiyorsa DOLDURULMAZ. 1m'de bile 45 sn
+   tam çözülemez (60s>45s), o yüzden dolum ÜST SINIR; tick gerekir.
+
+ç) Bu değişiklik bir KİLİTLENME ortaya çıkardı: dürüst model 1m ister,
+   indirici yalnız işlem olan yere 1m çekerdi -> 1m yok -> dolum yok ->
+   işlem yok -> hedef yok -> 1m yok. İlk koşu 0 işlem üretti. Düzelttim:
+   artık aday pencereleri de hedefleniyor.
+
+d) n<30 yön iddiası yasaklandı (senin eleştirin doğruydu).
+
+e) Funding: motor destekliyor ama validate_strategy HİÇ İLETMİYOR.
+   Tespit edildi, açık iş olarak bırakıldı.
+
+=== 5. ÇÜRÜTTÜĞÜM İDDİALAR ===
+
+"518 sembol elendi, huni daraldı" — YANLIŞ. Kendi raporumuz:
+  {"policy":"warn", "checked":518, "unverified":518,
+   "excluded_symbols": [], "allowed_symbols": 518}
+Hiçbiri elenmedi. warn politikada unverified GEÇER, yalnız raporlanır.
+Gerçek risk başka: ızgara doğrulanmamış (spot aynası tick'i futures
+tick'iyle aynı olmayabilir) — bu emir doğruluğu riski, huni daralması değil.
+
+"Endpoint rotasyonu 451'i çözer" — YANLIŞ. 451 gövdesi:
+  "Service unavailable from a restricted location according to
+   'b. Eligibility' in Binance Terms"
+Bu YASAL UYGUNLUK kısıtı. Ölçtüm: fapi1/fapi2 -> 302 (web sitesine),
+binance.com/fapi -> 301, binance.us/fapi -> 301 (ayrı borsa, vadeli yok).
+Önerdiğin "https://://binance.com" bozuk URL (netloc=":").
+Proxy desteği (BINANCE_BASE_URL) kodda ZATEN vardı. Proxy ile kısıt
+aşmak kullanım şartları uyumu kararı; kod bunu sessizce yapmamalı.
+
+"Kapılar bizi zarardan kurtardı bir doğrulamadır" — senin eleştirin
+doğru: bu bir ALARM. Üç reddedilen popülasyon da zarardaysa temel
+beklenti negatif demektir. n=14'te %18,9 vs %28,6 farkı gürültü.
+
+=== 6. YENİ DENEME TASARIMI (kabul kriterli) ===
+
+Çıkış parametre ayarı şu an YASAK — giriş kenarı kanıtlanmadı.
+
+Adım 1: Zaman dilimi 15m/1h + ilk 30-50 likit sözleşme.
+        Kriter: maliyet payı <= %15.
+Adım 2: >=1 yıl veri, n >= 1.000 aday.
+        Kriter: simetrik çıkış GA alt sınırı > 0 ve permütasyon p<0,05
+        (çoklu karşılaştırma düzeltmeli).
+Adım 3: Skor kalibrasyonu — dilim bazlı monotonluk.
+Adım 4: Funding bağlanması.
+Adım 5: Tick dolum modeli + dolum sonrası markout.
+Adım 6: ANCAK kenar varsa çıkış tasarımı.
+Adım 7: Canlıya geçiş: >=300 OOS işlem, beklenti >+0,1R,
+        bootstrap alt sınır >0, PF>1,3, çoklu sembol/TF tutarlı.
+
+Hiçbiri bugün karşılanmıyor. GERÇEK PARA YASAK; pozisyon başına azami
+kayıp 2,5-5 USDT.
+
+=== 7. AÇIK SINIRLAR ===
+
+- Mum içi sıra bilinmez -> iki sınır raporlandı.
+- 15m/1h, 5m önbellekten toplandı; emir defteri mikro yapısı yok.
+- TP1'de tam çıkış modellendi, kısmi çıkış yok.
+- Funding hâlâ modellenmiyor.
+- Evren 6 majör; canlı mikro altları da tarıyor, orada maliyet ölçülmedi.
+- 90 gün tek rejim. Permütasyon saat eşleşmeli, otokorelasyon tam
+  kontrol edilmiyor.
+- Kapsama oranı v5.3 ile karşılaştırılamaz: payda değişti (bekleyen
+  emir denetimi de artık yol çağırıyor). Mutlak 1m bar sayısına bakılmalı.
+- Testnet yok.

@@ -1,0 +1,22 @@
+{
+  "created_utc": "2026-11-03T19:45:19.081792+00:00",
+  "release": "9.5.2-paper-rc1",
+  "profile": "mild",
+  "active_sec": 600,
+  "drain_max_sec": 120,
+  "port": 8080,
+  "report_prefix": "natural10m_mild",
+  "initial_virtual_usdt": 1000,
+  "paper_only": true,
+  "shadow_profile": "baseline",
+  "shadow_orders": 0,
+  "comparison_scope": "same-input first-observed symbol/bar signals, NOT paired portfolio/PnL",
+  "no_forced_trades": true,
+  "start_after_verified_email": true,
+  "recipient": "omeracar56@gmail.com",
+  "external_diagnostic_sha256": {
+    "launch.py": "29675ee5324c5ecb93222fdb2e490d5d37b18cace7583a391106f9102e597640",
+    "observe.py": "246f4432623e2187529457c4fa4c3f6ccab8cce18a27be607ea0c3ca650e33e8",
+    "snapshot_preview.py": "ed81cfc97773647f0a7d2d8b112e316279313bbc970314395d43e29591100f92"
+  }
+}

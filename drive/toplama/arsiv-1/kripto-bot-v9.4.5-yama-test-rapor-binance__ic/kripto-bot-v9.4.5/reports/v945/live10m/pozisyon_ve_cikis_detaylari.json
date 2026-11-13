@@ -1,0 +1,32 @@
+{
+  "positions": [
+    {
+      "symbol": "ENA/USDT",
+      "side": "LONG",
+      "exchange": "binance",
+      "qty": 2926.2868346355312,
+      "entry": 0.17086,
+      "mark": 0.170685,
+      "stop": 0.16984447244820727,
+      "margin_usdt": 50.0,
+      "leverage": 10,
+      "entry_notional_usdt": 499.9853685658269,
+      "mark_notional_usdt": 499.47326836976566,
+      "signed_mark_notional_usdt": 499.47326836976566,
+      "mark_to_stop_pct": 0.49244371315155416,
+      "mark_to_stop_usdt": 2.459624708959501,
+      "stop_pnl_from_entry_ex_fees_usdt": -2.9717249050207437,
+      "entry_loss_at_current_stop_ex_fees_usdt": 2.9717249050207437
+    }
+  ],
+  "long_count": 1,
+  "short_count": 0,
+  "gross_mark_notional_usdt": 499.47326836976566,
+  "net_signed_mark_notional_usdt": 499.47326836976566,
+  "gross_exposure_over_equity": 0.49977918184246156,
+  "total_margin_usdt": 50.0,
+  "aggregate_mark_to_stop_usdt": 2.459624708959501,
+  "aggregate_entry_loss_at_current_stops_ex_fees_usdt": 2.9717249050207437,
+  "exits": [],
+  "risk_limitations": "Quote snapshot, not guaranteed max loss; excludes gap/slippage/future fees/correlation. Stopped PAPER positions are not monitored."
+}

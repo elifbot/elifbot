@@ -1,0 +1,57 @@
+{
+  "files": [
+    {
+      "path": "kripto-bot-v9.5.3-PAPER-RC1-kod-test-rapor.zip",
+      "bytes": 5832522,
+      "sha256": "455a575c9c33454ef61dc2346f0d7a113db7002198731277e41dfd141552b41b"
+    },
+    {
+      "path": "v953-DUZELTME-TESLIM.md",
+      "bytes": 2569,
+      "sha256": "d01873b9c5809afe7ff6f31f2e0bdd404a8a8a8a3e0d08c5f98a6a4162f9df1f"
+    },
+    {
+      "path": "v953-package-verification.json",
+      "bytes": 575,
+      "sha256": "ff6e00f3203210defff68bf75876b51f97faa8932f993facbaa3d9cc907ac9fe"
+    },
+    {
+      "path": "v953-clean-package-regression.txt",
+      "bytes": 341,
+      "sha256": "043ee0b289c2cf953a38cbeb22ba58c46eae62152d6a2d930c21975f1cf0e0b4"
+    },
+    {
+      "path": "v953-clean-package-integrity.json",
+      "bytes": 184,
+      "sha256": "d9d3cfe91eb2bfe4c34527816ae9e347aab55b281b9e90a2f537cfb7c6078ad5"
+    },
+    {
+      "path": "gozetimli-10dk/launch.py",
+      "bytes": 3225,
+      "sha256": "babf94bf9a78d5e3d7fd821070b414409c832b69c0b658a714ff043f04d3efa8"
+    },
+    {
+      "path": "gozetimli-10dk/finite_supervise.py",
+      "bytes": 4324,
+      "sha256": "7b5e9f249569e04732e1e4576b6c4880bd9c5cc95ed992a72150d2a3108d1967"
+    },
+    {
+      "path": "gozetimli-10dk/snapshot_preview.py",
+      "bytes": 1952,
+      "sha256": "c183d8e8c2e62f8d9b16d7b28817d54d32b2e2aea75e61d29c9bd55496dd62a8"
+    },
+    {
+      "path": "gozetimli-10dk/plan.json",
+      "bytes": 721,
+      "sha256": "95863e0c5b6dd1935b6cd813478b59b7d4443a463c56deb8090682904f8af16d"
+    },
+    {
+      "path": "gozetimli-10dk/ONCE_OKUYUN.md",
+      "bytes": 1071,
+      "sha256": "62df4061de4d3f22555db68f0df74c8fdf684b9af3016b6f0b1784f4e2bd28bf"
+    }
+  ],
+  "run_started": false,
+  "paper_only": true,
+  "host_clock_repair_claimed": false
+}

@@ -1,0 +1,620 @@
+name: paper-live
+
+on:
+  push:
+    branches:
+      - arena/9f6488eb-newkripto
+      - main
+    paths:
+      - configs/paper-60-shadow-request.json
+      - configs/paper-60-1000-request.json
+      - configs/paper-60-v2-request.json
+      - configs/paper-120-v2-request.json
+  workflow_dispatch:
+    inputs:
+      duration_minutes:
+        description: "Gerçek piyasa verili paper oturumu süresi"
+        required: true
+        type: choice
+        options:
+          - "5"
+          - "15"
+          - "30"
+          - "55"
+          - "60"
+          - "120"
+          - "355"
+        default: "60"
+      runner_label:
+        description: "ubuntu-latest veya Binance erişimli self-hosted runner etiketi"
+        required: true
+        type: string
+        default: "ubuntu-latest"
+      config_profile:
+        description: "Kontrollü deney veya değiştirilmemiş config.yaml"
+        required: true
+        type: choice
+        options:
+          - "controlled-60-v2-1000-no-cross-rescue"
+          - "controlled-1000-no-cross-rescue"
+          - "controlled-v2-1000-no-cross-rescue"
+          - "controlled-no-cross-rescue"
+          - "default"
+        default: "controlled-60-v2-1000-no-cross-rescue"
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  # Çevrimdışı eski self-hosted kuyruğundan ayrı; yeni istekler kendi içinde seri.
+  group: paper-live-hosted-shadow
+  cancel-in-progress: false
+
+jobs:
+  paper-session:
+    name: Canlı verili paper oturumu
+    runs-on: ${{ inputs.runner_label || 'ubuntu-latest' }}
+    timeout-minutes: 400
+    env:
+      MODE: paper
+      PYTHONUNBUFFERED: "1"
+      BINANCE_PUBLIC_WWW: "1"
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      PAPER_MINUTES: ${{ inputs.duration_minutes || '60' }}
+      PAPER_INPUT_MINUTES: ${{ inputs.duration_minutes }}
+      PAPER_CONFIG_PROFILE: ${{ inputs.config_profile || '' }}
+      CONFIG_FILE: ${{ inputs.config_profile != 'default' && 'paper-experiment.yaml' || '' }}
+
+    steps:
+      - name: Kodu indir
+        uses: actions/checkout@v7
+
+      - name: Telegram bildirimlerini doğrula
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          import re
+          import urllib.error
+          import urllib.request
+
+          def mask_desc(text: str) -> str:
+              s = re.sub(r"\b(?:bot)?\d{6,}:[A-Za-z0-9_-]+\b", "[REDACTED]", str(text))
+              s = re.sub(r"\b-?\d{6,}\b", "[REDACTED_ID]", s)
+              return re.sub(r"[\r\n]+", " ", s)[:160]
+
+          raw_tok = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip().strip("\"'").strip()
+          m_tok = re.search(r"(\d{6,15}:[A-Za-z0-9_-]{20,})", raw_tok)
+          tok = m_tok.group(1) if m_tok else raw_tok
+          if re.match(r"(?i)^bot\d{6,}:", tok):
+              tok = tok[3:]
+
+          raw_cid = os.environ.get("TELEGRAM_CHAT_ID", "").strip().strip("\"'").strip()
+          if raw_cid.startswith("@"):
+              cid = raw_cid.split()[0]
+          else:
+              m_cid = re.search(r"(-?\d{5,20})", raw_cid)
+              cid = m_cid.group(1) if m_cid else raw_cid
+
+          if tok:
+              print(f"::add-mask::{tok}")
+          if cid:
+              print(f"::add-mask::{cid}")
+
+          if not tok or not cid:
+              missing = []
+              if not tok:
+                  missing.append("TELEGRAM_BOT_TOKEN")
+              if not cid:
+                  missing.append("TELEGRAM_CHAT_ID")
+              print(f"::error::Eksik GitHub Secret: {', '.join(missing)}")
+              raise SystemExit(1)
+
+          # 1) Token dogrulamasi (/getMe)
+          try:
+              req_me = urllib.request.Request(
+                  f"https://api.telegram.org/bot{tok}/getMe", method="GET"
+              )
+              with urllib.request.urlopen(req_me, timeout=15) as resp_me:
+                  me_body = json.loads(resp_me.read().decode("utf-8", errors="replace"))
+                  if resp_me.status != 200 or not me_body.get("ok"):
+                      print(f"::error::Telegram getMe basarisiz: {mask_desc(me_body)}")
+                      raise SystemExit(1)
+          except urllib.error.HTTPError as exc:
+              err_raw = exc.read().decode("utf-8", errors="replace")
+              print(f"::error::Telegram TOKEN gecersiz (getMe HTTP {exc.code}): {mask_desc(err_raw)}")
+              raise SystemExit(1)
+
+          # 2) Mesaj gonderim dogrulamasi (/sendMessage)
+          payload = json.dumps(
+              {
+                  "chat_id": cid,
+                  "text": (
+                      "✅ KRIPTO-BOT v7.3 — Telegram bağlantısı doğrulandı!\n"
+                      "⏱️ 60 dakikalık canlı çift-borsa (Binance + OKX) PAPER oturumu başlatılıyor.\n"
+                      "🛡️ Yükseltmeler: BTC/ETH Kapsamlı Sigorta | Saf Kripto Filtresi | Net-Exit + Volatility Gate | PDF v3 + Türev İstihbaratı\n"
+                      "💰 Kasa: $1,000 | Boyut: $50 marj × 10x | Stop: $40 | Shadow Lab (8 Kohort): AÇIK"
+                  ),
+              }
+          ).encode("utf-8")
+          req_send = urllib.request.Request(
+              f"https://api.telegram.org/bot{tok}/sendMessage",
+              data=payload,
+              headers={"Content-Type": "application/json"},
+              method="POST",
+          )
+          try:
+              with urllib.request.urlopen(req_send, timeout=15) as resp:
+                  body = json.loads(resp.read().decode("utf-8", errors="replace"))
+                  if resp.status != 200 or not body.get("ok"):
+                      print(f"::error::Telegram sendMessage reddedildi: {mask_desc(body)}")
+                      raise SystemExit(1)
+          except urllib.error.HTTPError as exc:
+              err_raw = exc.read().decode("utf-8", errors="replace")
+              print(
+                  f"::error::Telegram CHAT_ID / izin hatasi (sendMessage HTTP {exc.code}): "
+                  f"{mask_desc(err_raw)}"
+              )
+              raise SystemExit(1)
+
+          env_path = os.environ["GITHUB_ENV"]
+          with open(env_path, "a", encoding="utf-8") as fh:
+              fh.write("TELEGRAM_ACTIVE=true\n")
+              fh.write(f"TELEGRAM_BOT_TOKEN={tok}\n")
+              fh.write(f"TELEGRAM_CHAT_ID={cid}\n")
+          print("Telegram getMe + sendMessage dogrulamasi HTTP 200 OK ile basarili.")
+          PY
+
+      - name: Python 3.11 kur
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Bağımlılıkları kur
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+
+      - name: Push isteğinin paper profilini çöz
+        run: |
+          if [ -z "$PAPER_CONFIG_PROFILE" ]; then
+            profile="controlled-60-v2-1000-no-cross-rescue"
+            minutes="60"
+            if [ "${GITHUB_EVENT_NAME}" = "push" ]; then
+              changed_files="$(git diff-tree --no-commit-id --name-only -r "$GITHUB_SHA")"
+              if printf '%s\n' "$changed_files" | grep -qx "configs/paper-120-v2-request.json"; then
+                profile="controlled-v2-1000-no-cross-rescue"
+                minutes="120"
+              elif printf '%s\n' "$changed_files" | grep -qx "configs/paper-60-1000-request.json"; then
+                profile="controlled-1000-no-cross-rescue"
+                minutes="60"
+              elif printf '%s\n' "$changed_files" | grep -qx "configs/paper-60-shadow-request.json"; then
+                profile="controlled-no-cross-rescue"
+                minutes="60"
+              elif printf '%s\n' "$changed_files" | grep -qx "configs/paper-60-v2-request.json"; then
+                profile="controlled-60-v2-1000-no-cross-rescue"
+                minutes="60"
+              fi
+            fi
+            echo "PAPER_CONFIG_PROFILE=$profile" >> "$GITHUB_ENV"
+            echo "PAPER_MINUTES=$minutes" >> "$GITHUB_ENV"
+            echo "Push paper profili: $profile / $minutes dakika"
+          fi
+
+      - name: Kontrollü deney config profilini hazırla
+        run: |
+          if [ "$PAPER_CONFIG_PROFILE" = "default" ]; then
+            echo "Değiştirilmemiş config.yaml kullanılacak."
+            echo "PAPER_START_BALANCE=100000" >> "$GITHUB_ENV"
+            exit 0
+          fi
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          import yaml
+
+          profile = os.environ["PAPER_CONFIG_PROFILE"]
+          profiles = {
+              "controlled-no-cross-rescue": "configs/paper-120-control.json",
+              "controlled-1000-no-cross-rescue": "configs/paper-60-1000-control.json",
+              "controlled-60-v2-1000-no-cross-rescue": "configs/paper-60-v2-control.json",
+              "controlled-v2-1000-no-cross-rescue": "configs/paper-120-v2-control.json",
+          }
+          if profile not in profiles:
+              raise SystemExit(f"Bilinmeyen paper profili: {profile}")
+          base = yaml.safe_load(Path("config.yaml").read_text(encoding="utf-8"))
+          experiment = json.loads(Path(profiles[profile]).read_text(encoding="utf-8"))
+          for section, values in experiment.get("overrides", {}).items():
+              if section not in base or not isinstance(base[section], dict):
+                  raise SystemExit(f"Bilinmeyen config bölümü: {section}")
+              base[section].update(values)
+          Path("paper-experiment.yaml").write_text(
+              yaml.safe_dump(base, allow_unicode=True, sort_keys=False),
+              encoding="utf-8",
+          )
+          balance = float(base["paper"]["bakiye"])
+          with open(os.environ["GITHUB_ENV"], "a", encoding="utf-8") as env_file:
+              env_file.write(f"PAPER_START_BALANCE={balance:g}\n")
+              if not os.environ.get("PAPER_INPUT_MINUTES"):
+                  minutes = int(experiment.get("paper_session_minutes", 60))
+                  env_file.write(f"PAPER_MINUTES={minutes}\n")
+          print("Kontrollü profil hazır; override'lar: " + json.dumps(experiment["overrides"]))
+          print(f"Paper başlangıç kasası: {balance:g} USDT")
+          PY
+
+      - name: Süreden bağımsız iki borsa ön-kontrolü
+        run: |
+          python - <<'PY'
+          import asyncio
+          import json
+          import os
+          from pathlib import Path
+
+          from src.config import load_config
+          from src.exchanges import ExchangeManager
+          from src.security import mask_secrets, safe_exception_msg
+
+          async def probe():
+              manager = ExchangeManager(load_config())
+              try:
+                  info = await manager.discover_futures(
+                      min_leverage=10,
+                      max_symbols=0,
+                  )
+                  counts = info.get("per_exchange", {})
+                  errors = dict(info.get("errors", {}))
+                  # Kısa teknik doğrulamada bile OKX-only sonuç çift-borsa
+                  # kohortu gibi raporlanmasın; iki canlı kaynak her sürede şart.
+                  required = True
+                  missing = [
+                      name for name in ("binance", "okx")
+                      if int(counts.get(name, 0) or 0) <= 0
+                  ] if required else []
+                  samples = {}
+                  for name in ("binance", "okx"):
+                      if name in missing or name not in manager._ex:
+                          continue
+                      try:
+                          exchange = manager._ex[name]
+                          symbol = manager._ccxt_symbol("BTC/USDT")
+                          rows, ticker, funding, oi = await asyncio.gather(
+                              exchange.fetch_ohlcv(symbol, "5m", limit=5),
+                              exchange.fetch_ticker(symbol),
+                              exchange.fetch_funding_rate(symbol),
+                              exchange.fetch_open_interest(symbol),
+                          )
+                          last = float(ticker.get("last") or 0)
+                          raw_bid = float(ticker.get("bid") or 0)
+                          raw_ask = float(ticker.get("ask") or 0)
+                          # ExchangeManager.fetch_bid_ask ile aynı davranış:
+                          # 24h ticker bid/ask taşımıyorsa son fiyat kullanılır.
+                          bid = raw_bid or last
+                          ask = raw_ask or last
+                          oi_value = (
+                              oi.get("openInterestValue")
+                              or oi.get("openInterestAmount")
+                              or oi.get("info", {}).get("openInterest")
+                          )
+                          sample = {
+                              "ohlcv_rows": len(rows),
+                              "ohlcv_last_close": float(rows[-1][4]) if rows else 0,
+                              "ticker_last": last,
+                              "bid": bid,
+                              "ask": ask,
+                              "quote_source": (
+                                  "ticker" if raw_bid > 0 and raw_ask > 0
+                                  else "last_fallback"
+                              ),
+                              "funding_rate": float(funding.get("fundingRate") or 0),
+                              "open_interest": float(oi_value) if oi_value is not None else None,
+                          }
+                          if (
+                              len(rows) < 2
+                              or last <= 0
+                              or bid <= 0
+                              or ask <= 0
+                              or sample["open_interest"] is None
+                          ):
+                              raise RuntimeError(f"Eksik Futures veri örneği: {sample}")
+                          samples[name] = sample
+                      except Exception as exc:
+                          errors[f"{name}_sample"] = safe_exception_msg(exc)
+                          if required and name not in missing:
+                              missing.append(name)
+                  evidence = {
+                      "status": "failed" if missing else "passed",
+                      "required_both": required,
+                      "per_exchange": counts,
+                      "public_rest_urls": info.get("public_rest_urls", {}),
+                      "samples": samples,
+                      "errors": errors,
+                      "missing": missing,
+                  }
+                  Path("preflight.json").write_text(
+                      json.dumps(evidence, ensure_ascii=False, indent=2),
+                      encoding="utf-8",
+                  )
+                  print("Futures ön-kontrol: " + mask_secrets(json.dumps(
+                      evidence, ensure_ascii=False
+                  )))
+                  if missing:
+                      raise SystemExit(
+                          "İki-borsa ölçümü başlatılmadı; "
+                          f"Futures katalog/veri ön-kontrolü eksik: {', '.join(missing)}"
+                      )
+              finally:
+                  await manager.close()
+
+          asyncio.run(probe())
+          PY
+
+      - name: Sabit paper güvenlik ayarlarını doğrula
+        run: |
+          python - <<'PY'
+          import os
+
+          from src.config import load_config
+
+          cfg = load_config()
+          assert cfg["genel"]["mod"] == "paper"
+          assert int(cfg["genel"]["kaldıraç"]) == 10
+          assert float(cfg["boyutlandirma"]["sabit_marj_usdt"]) == 50.0
+          assert cfg["risk"]["stop_modeli"] == "marj"
+          assert float(cfg["risk"]["marj_zarar_orani"]) == 0.80
+          assert not cfg["risk"]["sinirsiz_ekleme"]
+          assert not cfg["islem_plani"]["aktif"]
+          assert cfg["futures"]["tum_pariteler"]
+          assert not cfg["arbitraj"]["aktif"]
+          if os.environ.get("PAPER_CONFIG_PROFILE") != "default":
+              assert not cfg["risk"]["capraz_kurtarma"]
+              assert cfg["shadow_lab"]["aktif"]
+          else:
+              assert not cfg["shadow_lab"]["aktif"]
+          assert cfg["risk"]["paper_genis_pozisyon_limiti"]
+          expected_balance = float(os.environ["PAPER_START_BALANCE"])
+          assert float(cfg["paper"]["bakiye"]) == expected_balance
+          if cfg["shadow_lab"]["aktif"]:
+              assert float(cfg["shadow_lab"]["sanal_kasa_usdt"]) == expected_balance
+          if os.environ.get("PAPER_CONFIG_PROFILE") == "controlled-v2-1000-no-cross-rescue":
+              assert cfg["pdf_v2"]["aktif"]
+              assert cfg["shadow_lab"]["pdf_confluence"]["aktif"]
+              assert int(os.environ["PAPER_MINUTES"]) == 120
+          if os.environ.get("PAPER_CONFIG_PROFILE") == "controlled-60-v2-1000-no-cross-rescue":
+              assert cfg["pdf_v2"]["aktif"]
+              assert cfg["shadow_lab"]["pdf_confluence"]["aktif"]
+              assert int(os.environ["PAPER_MINUTES"]) == 60
+          print(
+              f"GÜVENLİ MOD: PAPER | {expected_balance:g} USDT | tüm USDT perpetual | "
+              "50 USDT marj | 10x | 40 USDT stop | "
+              f"çapraz kurtarma={'KAPALI' if not cfg['risk']['capraz_kurtarma'] else 'AÇIK'} | "
+              f"Shadow Lab={'AÇIK' if cfg['shadow_lab']['aktif'] else 'KAPALI'}"
+          )
+          PY
+
+      - name: Temiz paper oturumu aç
+        run: |
+          rm -f bot_state.db bot_state.db-shm bot_state.db-wal
+          export BOT_DB_FILE="$PWD/bot_state.db"
+          PAPER_SESSION_HOURS=$(python -c "print(${PAPER_MINUTES} / 60)")
+          export PAPER_SESSION_HOURS
+          set +e
+          # İç oturum sayacı raporu gönderir; dış timeout yalnız güvenlik payıdır.
+          timeout --signal=INT --kill-after=20s "$((PAPER_MINUTES + 15))m" python -m src.main 2>&1 | tee paper-session.log
+          status=${PIPESTATUS[0]}
+          set -e
+          if [ "$status" -eq 124 ]; then
+            echo "::error::Oturum iç sayaç/kontrollü kapanış yerine dış zaman aşımıyla durdu; nihai mutabakat başarılı sayılmaz."
+            exit 1
+          fi
+          exit "$status"
+
+      - name: Paper oturum logunu sakla
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: paper-session-${{ github.run_number }}
+          path: |
+            preflight.json
+            paper-session.log
+            reports/gunluk_*.txt
+            reports/oturum_analizi_*.json
+            reports/islem_gecmisi_*.json
+            reports/shadow_analysis_*.json
+            reports/shadow_report_*.md
+            reports/partial_gunluk.txt
+            reports/partial_oturum_analizi.json
+            reports/partial_islem_gecmisi.json
+            reports/partial_shadow_analysis.json
+            reports/partial_shadow_report.md
+          if-no-files-found: warn
+          retention-days: 7
+
+      - name: Oturum özetini yaz
+        if: always()
+        run: |
+          {
+            echo "### ${PAPER_START_BALANCE} USDT paper oturumu"
+            echo "- Mod: **PAPER** — gerçek emir yok"
+            echo "- Profil: **${PAPER_CONFIG_PROFILE}**"
+            echo "- Planlanan süre: **${PAPER_MINUTES} dakika**"
+            echo "- Telegram bildirimleri: **${TELEGRAM_ACTIVE:-false}**"
+            echo "- Sonuç: **${{ job.status }}**"
+            echo "- Ayrıntı: **paper-session** log, günlük rapor, oturum analizi ve tam işlem geçmişi JSON artifact'ları"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  record-analysis:
+    name: Oturum kanıtını GitHub dalına kaydet
+    needs: paper-session
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Kodu indir
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.ref }}
+          fetch-depth: 0
+
+      - name: Paper artifact'ını indir
+        continue-on-error: true
+        uses: actions/download-artifact@v7
+        with:
+          run-id: ${{ github.run_id }}
+          name: paper-session-${{ github.run_number }}
+          path: recovered
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Log ve işlem kayıtlarını maskele
+        env:
+          PAPER_JOB_RESULT: ${{ needs.paper-session.result }}
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import re
+          from pathlib import Path
+
+          run_id = os.environ["GITHUB_RUN_ID"]
+          dest = Path("analysis") / f"run_{run_id}"
+          dest.mkdir(parents=True, exist_ok=True)
+          replacements = [
+              (r"\b\d{6,12}:[A-Za-z0-9_-]{20,}\b", "[REDACTED_TOKEN]"),
+              (r"\b(?:ghp|gho|ghu|ghs|ghr)_[A-Za-z0-9_]{20,}\b", "[REDACTED_TOKEN]"),
+              (r"\bgithub_pat_[A-Za-z0-9_]{20,}\b", "[REDACTED_TOKEN]"),
+              (r"(?i)(chat[_ -]?id\s*[:=]\s*)\d+", r"\1[REDACTED]"),
+              (r"(?i)((?:api[_ -]?key|api[_ -]?secret|token)\s*[:=]\s*)\S+", r"\1[REDACTED]"),
+          ]
+
+          def clean(text):
+              for pattern, replacement in replacements:
+                  text = re.sub(pattern, replacement, text)
+              return text
+
+          sources = list(Path("recovered").rglob("*")) if Path("recovered").exists() else []
+          mapping = [
+              ("preflight.json", "preflight.json"),
+              ("paper-session.log", "paper-session.txt"),
+              ("gunluk_", "gunluk.txt"),
+              ("oturum_analizi_", "oturum_analizi.json"),
+              ("islem_gecmisi_", "islem_gecmisi.json"),
+              ("shadow_analysis_", "shadow-analysis.json"),
+              ("shadow_report_", "shadow-report.md"),
+              ("partial_gunluk", "partial-gunluk.txt"),
+              ("partial_oturum_analizi", "partial-oturum-analizi.json"),
+              ("partial_islem_gecmisi", "partial-islem-gecmisi.json"),
+              ("partial_shadow_analysis", "partial-shadow-analysis.json"),
+              ("partial_shadow_report", "partial-shadow-report.md"),
+          ]
+          written = []
+          for prefix, target in mapping:
+              matches = [p for p in sources if p.is_file() and p.name.startswith(prefix)]
+              if not matches:
+                  continue
+              source = sorted(matches, key=lambda p: p.stat().st_mtime)[-1]
+              (dest / target).write_text(
+                  clean(source.read_text(encoding="utf-8", errors="replace")),
+                  encoding="utf-8",
+              )
+              written.append(target)
+          has_session = any(
+              name in written
+              for name in ("paper-session.txt", "gunluk.txt", "oturum_analizi.json", "islem_gecmisi.json")
+          )
+          has_final = any(
+              name in written
+              for name in ("gunluk.txt", "oturum_analizi.json", "islem_gecmisi.json")
+          )
+          partial_files = [name for name in written if name.startswith("partial-")]
+          manifest = {
+              "run_id": int(run_id),
+              "paper_job_result": os.environ.get("PAPER_JOB_RESULT", "unknown"),
+              "files": written,
+              "partial_files": partial_files,
+              "partial_only": bool(partial_files) and not has_final,
+              "note": (
+                  "Maskelenmiş paper oturumu kanıtı; paper_job_result alanını birlikte okuyun."
+                  if has_final else
+                  "Erken durdurma/ara checkpoint kanıtı; planlı closeout veya nihai Shadow raporu değildir."
+                  if partial_files else
+                  "Yalnız ön-kontrol/başlatma kanıtı; iki-borsa oturumu veya nihai mutabakat kanıtı değildir."
+              ),
+          }
+          (dest / "run.json").write_text(
+              json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8"
+          )
+          print(json.dumps(manifest, ensure_ascii=False))
+          PY
+
+      - name: Kohort ve shadow incelemelerini üret
+        if: always()
+        run: |
+          RUN_DIR="analysis/run_${GITHUB_RUN_ID}"
+          TRADES_FILE="$RUN_DIR/islem_gecmisi.json"
+          ANALYSIS_FILE="$RUN_DIR/oturum_analizi.json"
+          COHORT_PREFIX="cohort-report"
+          if [ ! -f "$TRADES_FILE" ] && [ -f "$RUN_DIR/partial-islem-gecmisi.json" ]; then
+            TRADES_FILE="$RUN_DIR/partial-islem-gecmisi.json"
+            ANALYSIS_FILE="$RUN_DIR/partial-oturum-analizi.json"
+            COHORT_PREFIX="partial-cohort-report"
+          fi
+          if [ -f "$TRADES_FILE" ]; then
+            ANALYSIS_ARGS=()
+            if [ -f "$ANALYSIS_FILE" ]; then
+              ANALYSIS_ARGS=(--analysis "$ANALYSIS_FILE")
+            fi
+            PYTHONPATH=. python -m src.cohort_report \
+              "$TRADES_FILE" \
+              "${ANALYSIS_ARGS[@]}" \
+              --output-prefix "$RUN_DIR/$COHORT_PREFIX" > /dev/null
+          fi
+          SHADOW_FILE="$RUN_DIR/shadow-analysis.json"
+          SHADOW_PREFIX="shadow-review"
+          if [ ! -f "$SHADOW_FILE" ] && [ -f "$RUN_DIR/partial-shadow-analysis.json" ]; then
+            SHADOW_FILE="$RUN_DIR/partial-shadow-analysis.json"
+            SHADOW_PREFIX="partial-shadow-review"
+          fi
+          if [ -f "$SHADOW_FILE" ]; then
+            PYTHONPATH=. python -m src.shadow_review \
+              "$SHADOW_FILE" \
+              --output-prefix "$RUN_DIR/$SHADOW_PREFIX" > /dev/null
+          fi
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          path = Path("analysis") / f"run_{os.environ['GITHUB_RUN_ID']}" / "run.json"
+          if not path.exists():
+              raise SystemExit(0)
+          manifest = json.loads(path.read_text(encoding="utf-8"))
+          files = manifest.setdefault("files", [])
+          for name in (
+              "cohort-report.md", "cohort-report.json",
+              "shadow-review.md", "shadow-review.json",
+              "partial-cohort-report.md", "partial-cohort-report.json",
+              "partial-shadow-review.md", "partial-shadow-review.json",
+          ):
+              if (path.parent / name).exists() and name not in files:
+                  files.append(name)
+          path.write_text(
+              json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8"
+          )
+          PY
+
+      - name: Kanıtı dala kaydet
+        run: |
+          git config user.name "arena-analysis"
+          git config user.email "actions@users.noreply.github.com"
+          git add "analysis/run_${GITHUB_RUN_ID}"
+          if git diff --cached --quiet; then
+            echo "Oturum kanıtı zaten güncel."
+            exit 0
+          fi
+          git commit -m "chore: record paper session ${GITHUB_RUN_ID} [skip ci]"
+          git pull --rebase origin "${GITHUB_REF_NAME}" || true
+          git push origin "HEAD:${GITHUB_REF_NAME}"

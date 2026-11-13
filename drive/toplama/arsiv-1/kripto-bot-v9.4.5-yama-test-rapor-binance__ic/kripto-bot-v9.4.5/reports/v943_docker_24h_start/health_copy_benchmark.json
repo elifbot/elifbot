@@ -1,0 +1,46 @@
+{
+  "synthetic_padding_not_real_trade_population": true,
+  "scope": "isolated ledger health snapshot, not full API or thread race benchmark",
+  "results": [
+    {
+      "padding_mib": 0,
+      "db_bytes": 81920,
+      "draws": 10,
+      "wall_p50_ms": 0.7001999983913265,
+      "wall_p95_ms": 2.514466003049165,
+      "wall_max_ms": 2.514466003049165,
+      "cpu_mean_ms": 0.8863792999999981,
+      "process_peak_rss_kib_so_far": 27384
+    },
+    {
+      "padding_mib": 1,
+      "db_bytes": 1134592,
+      "draws": 10,
+      "wall_p50_ms": 1.2248730017745402,
+      "wall_p95_ms": 1.4954700018279254,
+      "wall_max_ms": 1.4954700018279254,
+      "cpu_mean_ms": 1.2662389999999912,
+      "process_peak_rss_kib_so_far": 28040
+    },
+    {
+      "padding_mib": 10,
+      "db_bytes": 10588160,
+      "draws": 10,
+      "wall_p50_ms": 7.615913997142343,
+      "wall_p95_ms": 20.167046001006383,
+      "wall_max_ms": 20.167046001006383,
+      "cpu_mean_ms": 8.849907500000004,
+      "process_peak_rss_kib_so_far": 38832
+    },
+    {
+      "padding_mib": 100,
+      "db_bytes": 105082880,
+      "draws": 5,
+      "wall_p50_ms": 88.80686700285878,
+      "wall_p95_ms": 101.18662199965911,
+      "wall_max_ms": 101.18662199965911,
+      "cpu_mean_ms": 88.67807360000002,
+      "process_peak_rss_kib_so_far": 137844
+    }
+  ]
+}

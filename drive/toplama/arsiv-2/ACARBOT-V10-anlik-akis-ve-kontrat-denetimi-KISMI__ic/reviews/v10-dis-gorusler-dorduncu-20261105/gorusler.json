@@ -1,0 +1,65 @@
+{
+  "timestamp_utc": "2026-11-05T12:16:36.046911+00:00",
+  "models_attempted": 3,
+  "models_ok": 2,
+  "note": "Yanıtlar dış modellerin görüşüdür; otomatik emir onayı değildir. Sağlayıcı model etiketi kimlik doğrulaması sayılmaz.",
+  "results": [
+    {
+      "provider": "OVHcloud",
+      "requested_model": "Meta-Llama-3_3-70B-Instruct",
+      "endpoint": "https://oai.endpoints.kepler.ai.cloud.ovh.net/v1/chat/completions",
+      "sent_files": [
+        "acarbot/strategy.py",
+        "acarbot/ledger.py",
+        "acarbot/runner.py"
+      ],
+      "prompt_sha256": "e31380193cd7faf0463cf519c1df28f97b0cf2e65878eb0d670634187bc0d95c",
+      "http_status": 200,
+      "status": "OK",
+      "response_model": "Meta-Llama-3_3-70B-Instruct",
+      "answer": "Aşağıdaki 6 somut hata veya riskli tasarım kararı tespit edilmiştir:\n\n1. **`decide` fonksiyonunda `c` listesinin sıralanması**: `decide` fonksiyonunda `c` listesi `open_ms` değerine göre sıralanmaktadır. Ancak, bu sıralama işleminin zaman karmaşıklığı O(n log n) dir. Büyük veri setlerinde bu işlem performansı olumsuz etkileyebilir. \n   - Düzeltme önerisi: Veri setinin zaten sıralı olduğu varsayılırsa, bu sıralama işleminin atlanması mümkündür.\n\n2. **`Ledger` sınıfının `open` ve `close` metodlarında risk kontrolü**: `Ledger` sınıfının `open` ve `close` metodlarında risk kontrolü yapılmaktadır. Ancak, bu kontrollerin yeterli olup olmadığı veya daha advanced risk kontrol yöntemlerinin uygulanıp uygulanmadığı belirsizdir.\n   - Düzeltme önerisi: Daha advanced risk kontrol yöntemlerinin uygulanması veya mevcut kontrol yöntemlerinin güncellenmesi düşünülebilir.\n\n3. **`runner` fonksiyonunda zaman aşımı kontrolü**: `runner` fonksiyonunda zaman aşımı kontrolü yapılmaktadır. Ancak, bu kontrolün yeterli olup olmadığı veya daha advanced zaman aşımı kontrol yöntemlerinin uygulanıp uygulanmadığı belirsizdir.\n   - Düzeltme önerisi: Daha advanced zaman aşımı kontrol yöntemlerinin uygulanması veya mevcut kontrol yöntemlerinin güncellenmesi düşünülebilir.\n\n4. **`candles` ve `quotes` dictionary'lerinin güncellenmesi**: `candles` ve `quotes` dictionary'leri `get_c` ve `get_q` fonksiyonları tarafından güncellenmektedir. Ancak, bu güncellemelerin thread-safe olup olmadığı belirsizdir.\n   - Düzeltme önerisi: Bu güncellemelerin thread-safe olması için gerekli önlemlerin alınması düşünülebilir.\n\n5. **`funding` dictionary'sinin güncellenmesi**: `funding` dictionary'si `get_f` fonksiyonu tarafından güncellenmektedir. Ancak, bu güncellemelerin yeterli olup olmadığı veya daha advanced funding kontrol yöntemlerinin uygulanıp uygulanmadığı belirsizdir.\n   - Düzeltme önerisi: Daha advanced funding kontrol yöntemlerinin uygulanması veya mevcut kontrol yöntemlerinin güncellenmesi düşünülebilir.\n\n6. **Hata işleme**: Kodda hata işleme mekanizmaları bulunmaktadır. Ancak, bu mekanizmaların yeterli olup olmadığı veya daha advanced hata işleme yöntemlerinin uygulanıp uygulanmadığı belirsizdir.\n   - Düzeltme önerisi: Daha advanced hata işleme yöntemlerinin uygulanması veya mevcut mekanizmaların güncellenmesi düşünülebilir.",
+      "usage": {
+        "prompt_tokens": 5122,
+        "completion_tokens": 607,
+        "total_tokens": 5729
+      }
+    },
+    {
+      "provider": "OVHcloud",
+      "requested_model": "gpt-oss-120b",
+      "endpoint": "https://oai.endpoints.kepler.ai.cloud.ovh.net/v1/chat/completions",
+      "sent_files": [
+        "acarbot/strategy.py",
+        "acarbot/ledger.py",
+        "acarbot/runner.py"
+      ],
+      "prompt_sha256": "e31380193cd7faf0463cf519c1df28f97b0cf2e65878eb0d670634187bc0d95c",
+      "http_status": 200,
+      "status": "ERROR",
+      "error": "empty model response"
+    },
+    {
+      "provider": "OVHcloud",
+      "requested_model": "Qwen3.6-27B",
+      "endpoint": "https://oai.endpoints.kepler.ai.cloud.ovh.net/v1/chat/completions",
+      "sent_files": [
+        "acarbot/strategy.py",
+        "acarbot/ledger.py",
+        "acarbot/runner.py"
+      ],
+      "prompt_sha256": "e31380193cd7faf0463cf519c1df28f97b0cf2e65878eb0d670634187bc0d95c",
+      "http_status": 200,
+      "status": "OK",
+      "response_model": "Qwen3.6-27B",
+      "answer": "Bağımsız yazılım ve risk denetçisi olarak `acarbot` kod tabanını inceledim. Kod, \"Paper Trading\" (simülasyon) amaçlı olsa da, gerçek piyasa koşullarını yansıtmada kritik mantık hataları, veri bütünlüğü ihlalleri ve risk yönetimi boşlukları içermektedir.\n\nİşte öncelik sırasına göre tespit edilen 6 somut hata/risk:\n\n### 1. Kritik Mantık Hatası: `strategy.py` - `decide` fonksiyonu içinde RSI Hesaplama Performansı ve Doğruluğu\n*   **Dosya:** `acarbot/strategy.py`\n*   **İşlev:** `decide` (iç içe `one` fonksiyonu)\n*   **Neden:** `rsirev` ve `kombin` stratejileri için RSI hesaplanırken `rsi(v[:i+1])` ve `rsi(v[:i])` çağrıları kullanılıyor. `v` listesi 250+ elemanlıdır. Her yeni mumda (veya her sinyal kontrolünde) RSI fonksiyonu tüm geçmiş veriyi baştan hesaplar. Bu, $O(N^2)$ karmaşıklığı yaratır. Daha önemlisi, `rsi` fonksiyonunun (dışarıdan import edildiği varsayılıyor) `v` dizisinin son elemanına göre RSI döndürdüğü varsayılıyor ancak `v[:i]` gibi dilimleme işlemleri, eğer `rsi` fonksiyonu global bir state tutmuyorsa doğru çalışır; ancak `one(i)` fonksiyonu içinde `r=rsi(v[:i+1])` çağrısı, `i` indeksi son eleman olduğunda tüm diziyi işler. Eğer `rsi` fonksiyonu verimli değilse veya `v` dizisi çok büyükse bu aşırı yavaşlatır. Ancak en büyük risk: **RSI'nın `v` dizisinin tamamı üzerinden hesaplanması yerine, sadece gerekli periyot üzerinden hesaplanması gerekir.** Mevcut kod, `v[:i+1]` ile her seferinde yeni bir liste oluşturur ve RSI'yı baştan hesaplar. Bu, `i` arttıkça maliyeti artırır.\n*   **Düzeltme Önerisi:** RSI hesaplamasını `decide` fonksiyonunun başında, tüm `v` dizisi için tek seferde yapın (`rsi_values = rsi(v)`). Ardından `one(i)` içinde `r = rsi_values[i]` şeklinde indeksleyin. Bu, performansı $O(N)$'e indirir ve bellek basını azaltır.\n\n### 2. Veri Bütünlüğü Hatası: `strategy.py` - `closed_candles` ve Zaman Damgası Kontrolü\n*   **Dosya:** `acarbot/strategy.py`\n*   **İşlev:** `closed_candles` ve `decide`\n*   **Neden:** `closed_candles` fonksiyonu, `c.open_ms + interval_ms <= now_ms` koşulunu kullanır. Ancak `decide` fonksiyonunda `c = sorted(...)` işlemi yapılır. Eğer API'den gelen mumlar zaten sıralıysa bu gereksizdir, ancak daha kritik olan: `decide` fonksiyonunun başında `if len(c) < 250` kontrolü vardır. Ancak `closed_candles` fonksiyonu, `now_ms` anında *kapanmış* olan mumları filtreler. Eğer `now_ms` değeri, en son mumun kapanışından hemen sonraysa, o mum `closed_candles` listesine girer. Ancak `decide` fonksiyonunun içindeki `one(i)` fonksiyonu, `i=len(c)-1` (en son kapanmış mum) üzerinde işlem yapar. Sorun şu: `decide` fonksiyonu, `now_ms` anında *hala açık* olan mumu (current bar) hesaba katmaz, bu doğru. Ancak `closed_candles` fonksiyonundaki `c.closed` kontrolüne güvenmek risklidir. API bazen `closed=False` olan mumları da listeleyebilir. Kod, `c.closed` flag'ine güveniyor ancak aynı zamanda `open_ms + interval_ms <= now_ms` ile de doğruluyor. Bu iyi. **Ancak**, `decide` fonksiyonunda `if any(c[i].open_ms - c[i-1].open_ms != 300000 ...)` kontrolü var. Bu kontrol, mumların *kesintisiz* olduğunu varsayar. Kripto piyasalarında, özellikle düşük likiditeli coinlerde veya API hatalarında mum atlamaları (gap) olabilir. Kod, bir gap durumunda `CANDLE_GAP` döner ve işlem açmaz. Bu güvenli bir tasarım gibi görünse de, `decide` fonksiyonu her çağrıldığında tüm mumları tekrar tarar. Daha büyük risk: **`decide` fonksiyonu, `now_ms` anına göre filtreleme yapar ancak `strategy` seçimine göre farklı periyotlar (örn. MACD için 12,26,9) kullanılır. `v` dizisi `close` fiyatlarıdır. `ema_series` fonksiyonu `v` dizisinin başından itibaren hesaplar. Eğer `v` dizisi 250 elemanlıysa, EMA'lar ilk 20-50 elemanda \"soğuk başlangıç\" (cold start) etkisinden etkilenir. Kod, `len(c) < 250` kontrolü yapar ama EMA'ların stabil olup olmadığını kontrol etmez. 250 mum, 200 EMA için yeterli olabilir ama 50 EMA için ilk 50 mumun EMA değeri gerçek ortalama değildir.**\n*   **Düzeltme Önerisi:** EMA hesaplamalarında, periyottan daha eski verileri atmak veya EMA'nın \"soğuk başlangıç\" etkisini minimize etmek için `v` dizisinin başından itibaren periyot kadar elemanı atmak yerine, EMA hesaplamasını tüm veri üzerinde yapmak ama sinyal üretirken sadece EMA'nın stabil olduğu (örn. periyot * 2 kadar geçmiş veri) indekslerden sonra sinyal üretmek gerekir. Mevcut kod, `i=len(c)-1` (en son mum) için sinyal üretir. 250 mumluk veri, 200 EMA için sınırda kalır. `len(c) < 250` yerine `len(c) < 200 + buffer` gibi daha güvenli bir eşik konulmalı veya EMA hesaplaması, verinin başından itibaren değil, mevcut pozisyona göre optimize edilmelidir.\n\n### 3. Risk Yönetimi Hatası: `ledger.py` - `open` fonksiyonunda Pozisyon Büyüklüğü Hesabı\n*   **Dosya:** `acarbot/ledger.py`\n*   **İşlev:** `open`\n*   **Neden:** `plan=self.risk.plan(side,px,atr)` çağrısı yapılır. `RiskManager`'ın `plan` fonksiyonu, `risk_per_trade_pct` (0.35%) ve `atr_stop_mult` (2.5) gibi parametreleri kullanarak pozisyon büyüklüğünü hesaplar. Ancak `ledger.open` fonksiyonunda, `exposure` kontrolü yapılır: `if exposure+plan.notional>self.risk.cfg.max_gross_exposure: return None`. Bu doğru. **Ancak**, `plan.qty` değeri, `RiskManager`'ın döndürdüğü miktardır. `Trade` nesnesi oluşturulurken `entry_fee` hesaplanır: `px*plan.qty*self.fee`. Burada `self.fee` (5.5 bps) kullanılır. Sorun şu: **`RiskManager`'ın `plan` fonksiyonu, komisyonları (fees) hesaba kat",
+      "usage": {
+        "prompt_tokens": 5385,
+        "completion_tokens": 1800,
+        "total_tokens": 7185,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      }
+    }
+  ]
+}

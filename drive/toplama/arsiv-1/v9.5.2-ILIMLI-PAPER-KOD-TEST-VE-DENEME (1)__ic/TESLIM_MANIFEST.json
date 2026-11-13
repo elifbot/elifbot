@@ -1,0 +1,57 @@
+{
+  "files": [
+    {
+      "path": "kripto-bot-v9.5.2-PAPER-RC1-mild-kod-test-rapor.zip",
+      "bytes": 5780217,
+      "sha256": "1679f75fe6be8a1ff3f22380c389715d7397e3c61b6f83b8e10eae64adeb9c31"
+    },
+    {
+      "path": "v952-ILIMLI-PAPER-TESLIM.md",
+      "bytes": 2663,
+      "sha256": "faf69e4434a1f4a95ebe82094252a8b45f8550ddfe0438c5c86015ba94b22ae6"
+    },
+    {
+      "path": "v952-package-verification.json",
+      "bytes": 661,
+      "sha256": "9bd8184351f35b3894c087f92261d8678a8785e23f5d66d92e47360c35abf643"
+    },
+    {
+      "path": "v952-clean-package-regression.txt",
+      "bytes": 341,
+      "sha256": "2e3c2f3152ba5134964c62b47a31d1b69f1fda5472d02a5f11cf4236667ac463"
+    },
+    {
+      "path": "v952-clean-package-integrity.json",
+      "bytes": 184,
+      "sha256": "14335df32bb24913da65e3fb6238fd03a9d5294d3444647ed9ba2ef12630b66a"
+    },
+    {
+      "path": "10dk-protokol/launch.py",
+      "bytes": 3213,
+      "sha256": "29675ee5324c5ecb93222fdb2e490d5d37b18cace7583a391106f9102e597640"
+    },
+    {
+      "path": "10dk-protokol/observe.py",
+      "bytes": 2369,
+      "sha256": "246f4432623e2187529457c4fa4c3f6ccab8cce18a27be607ea0c3ca650e33e8"
+    },
+    {
+      "path": "10dk-protokol/snapshot_preview.py",
+      "bytes": 1946,
+      "sha256": "ed81cfc97773647f0a7d2d8b112e316279313bbc970314395d43e29591100f92"
+    },
+    {
+      "path": "10dk-protokol/plan.json",
+      "bytes": 820,
+      "sha256": "3e7cc9056dcfd433117be25d519d110d9eedad7fe9a937ea2f640be098efb8da"
+    },
+    {
+      "path": "10dk-protokol/ONCE_OKUYUN.md",
+      "bytes": 884,
+      "sha256": "b9987ed161ec368cc8afef00455d85d836a37522aed019e30971bdd20c68f31d"
+    }
+  ],
+  "run_started": false,
+  "baseline_shadow_orders": 0,
+  "paper_only": true
+}

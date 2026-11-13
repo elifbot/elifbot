@@ -1,0 +1,46 @@
+[
+  {
+    "trades": 41,
+    "slippage_bps_per_side": 0.0,
+    "gross_pnl": -7.488611,
+    "fees": 10.263165,
+    "funding_fee": 0.0,
+    "funding": "bilinmiyor",
+    "net_pnl": -17.751776,
+    "wins": 19,
+    "win_rate": 0.463415
+  },
+  {
+    "trades": 41,
+    "slippage_bps_per_side": 5.0,
+    "gross_pnl": -17.751776,
+    "fees": 10.263167,
+    "funding_fee": 0.0,
+    "funding": "bilinmiyor",
+    "net_pnl": -28.014943,
+    "wins": 16,
+    "win_rate": 0.390244
+  },
+  {
+    "trades": 41,
+    "slippage_bps_per_side": 10.0,
+    "gross_pnl": -28.014941,
+    "fees": 10.263169,
+    "funding_fee": 0.0,
+    "funding": "bilinmiyor",
+    "net_pnl": -38.278111,
+    "wins": 14,
+    "win_rate": 0.341463
+  },
+  {
+    "trades": 41,
+    "slippage_bps_per_side": 20.0,
+    "gross_pnl": -48.541272,
+    "fees": 10.263173,
+    "funding_fee": 0.0,
+    "funding": "bilinmiyor",
+    "net_pnl": -58.804445,
+    "wins": 14,
+    "win_rate": 0.341463
+  }
+]

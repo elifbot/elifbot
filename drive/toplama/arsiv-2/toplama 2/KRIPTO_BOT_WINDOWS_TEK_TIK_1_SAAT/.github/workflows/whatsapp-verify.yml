@@ -1,0 +1,198 @@
+name: whatsapp-verify
+
+on:
+  push:
+    branches:
+      - "arena/**"
+      - main
+    paths:
+      - configs/whatsapp-check.json
+      - .github/workflows/whatsapp-verify.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  verify-whatsapp:
+    name: WhatsApp Bildirim Doğrulaması
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      WHATSAPP_PHONE: ${{ secrets.WHATSAPP_PHONE }}
+      WHATSAPP_API_KEY: ${{ secrets.WHATSAPP_API_KEY }}
+      WHATSAPP_CLOUD_TOKEN: ${{ secrets.WHATSAPP_CLOUD_TOKEN }}
+      WHATSAPP_PHONE_NUMBER_ID: ${{ secrets.WHATSAPP_PHONE_NUMBER_ID }}
+      WHATSAPP_WEBHOOK_URL: ${{ secrets.WHATSAPP_WEBHOOK_URL }}
+    steps:
+      - name: Kodu indir
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.ref }}
+          fetch-depth: 0
+
+      - name: WhatsApp Secret ve Gönderim Kontrolü
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          import re
+          import time
+          import urllib.error
+          import urllib.request
+          from pathlib import Path
+          from urllib.parse import quote_plus
+
+          raw_phone = os.environ.get("WHATSAPP_PHONE", "").strip().strip("\"'")
+          raw_key_orig = os.environ.get("WHATSAPP_API_KEY", "").strip().strip("\"'")
+          m_uk = re.search(r"(?i)apikey(?:\s+is|\s+for\s+you:|\s*[=:])\s*\*?\*?([A-Za-z0-9]{4,24})", raw_key_orig)
+          if m_uk:
+              raw_key = m_uk.group(1)
+          elif raw_key_orig.isdigit() or re.fullmatch(r"[A-Za-z0-9_-]{4,32}", raw_key_orig):
+              raw_key = raw_key_orig
+          else:
+              cand_nums = [n for n in re.findall(r"\d{5,9}", raw_key_orig) if not n.startswith("905")]
+              raw_key = cand_nums[0] if len(cand_nums) == 1 else raw_key_orig
+          raw_ctok = os.environ.get("WHATSAPP_CLOUD_TOKEN", "").strip().strip("\"'")
+          raw_pid = os.environ.get("WHATSAPP_PHONE_NUMBER_ID", "").strip().strip("\"'")
+          raw_hook = os.environ.get("WHATSAPP_WEBHOOK_URL", "").strip().strip("\"'")
+
+          digits = re.sub(r"[^\d]", "", raw_phone)
+          if digits.startswith("00"):
+              digits = digits[2:]
+          elif digits.startswith("0") and len(digits) == 11:
+              digits = "90" + digits[1:]
+          elif len(digits) == 10 and digits.startswith("5"):
+              digits = "90" + digits
+
+          for val in (raw_phone, digits, raw_key_orig, raw_key, raw_ctok, raw_hook):
+              if val and len(val) >= 4:
+                  print(f"::add-mask::{val}")
+
+          def safe_msg(txt: str) -> str:
+              s = str(txt or "")
+              for val in (raw_phone, digits, raw_key_orig, raw_key, raw_ctok, raw_hook):
+                  if val and len(val) >= 4:
+                      s = s.replace(val, "[REDACTED]")
+              s = re.sub(r"\b\d{6,15}\b", "[REDACTED_NUM]", s)
+              s = re.sub(r"<[^>]+>", " ", s)
+              return re.sub(r"\s+", " ", s).strip()[:200]
+
+          result = {
+              "checked_at_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+              "has_whatsapp_phone": bool(digits),
+              "phone_digit_length": len(digits),
+              "has_whatsapp_api_key": bool(raw_key),
+              "api_key_is_numeric": bool(raw_key.isdigit()),
+              "api_key_length": len(raw_key),
+              "has_whatsapp_cloud_token": bool(raw_ctok and raw_pid),
+              "has_whatsapp_webhook": bool(raw_hook),
+              "provider_used": "none",
+              "http_status": None,
+              "delivered": False,
+              "detail": "",
+          }
+
+          test_text = (
+              "✅ KRIPTO-BOT — WhatsApp bağlantısı başarıyla doğrulandı!\n"
+              "Bundan sonra tüm işlem açılış/kapanış ve saatlik rapor bildirimleri "
+              "Telegram ile eşzamanlı olarak WhatsApp'ına da gelecek."
+          )
+
+          try:
+              if raw_ctok and raw_pid and digits:
+                  result["provider_used"] = "meta_cloud_api"
+                  req = urllib.request.Request(
+                      f"https://graph.facebook.com/v20.0/{raw_pid}/messages",
+                      data=json.dumps({
+                          "messaging_product": "whatsapp",
+                          "to": digits,
+                          "type": "text",
+                          "text": {"preview_url": False, "body": test_text},
+                      }).encode("utf-8"),
+                      headers={
+                          "Authorization": f"Bearer {raw_ctok}",
+                          "Content-Type": "application/json",
+                      },
+                      method="POST",
+                  )
+                  with urllib.request.urlopen(req, timeout=15) as resp:
+                      body = resp.read().decode("utf-8", errors="replace")
+                      result["http_status"] = resp.status
+                      result["delivered"] = 200 <= resp.status < 300
+                      result["detail"] = safe_msg(body)
+              elif raw_key and digits:
+                  if raw_key.isdigit():
+                      result["provider_used"] = "callmebot"
+                      url = (
+                          f"https://api.callmebot.com/whatsapp.php?"
+                          f"phone={digits}&text={quote_plus(test_text)}&apikey={quote_plus(raw_key)}"
+                      )
+                  else:
+                      result["provider_used"] = "textmebot"
+                      url = (
+                          f"https://api.textmebot.com/send.php?"
+                          f"recipient=%2B{digits}&apikey={quote_plus(raw_key)}&text={quote_plus(test_text)}"
+                      )
+                  req = urllib.request.Request(
+                      url,
+                      headers={"User-Agent": "kripto-bot-whatsapp-verify/1.0"},
+                  )
+                  with urllib.request.urlopen(req, timeout=25) as resp:
+                      body = resp.read().decode("utf-8", errors="replace")
+                      result["http_status"] = resp.status
+                      low = body.lower()
+                      err_tokens = ("apikey is invalid", "error:", "error!", "not whitelisted", "paused", "not connected", "disconnected")
+                      has_err = any(tok in low for tok in err_tokens) and "success" not in low and "message queued" not in low
+                      result["delivered"] = (200 <= resp.status < 300) and not has_err
+                      result["detail"] = safe_msg(body)
+              elif raw_hook:
+                  result["provider_used"] = "webhook"
+                  req = urllib.request.Request(
+                      raw_hook,
+                      data=json.dumps({"phone": digits, "text": test_text}).encode("utf-8"),
+                      headers={"Content-Type": "application/json"},
+                      method="POST",
+                  )
+                  with urllib.request.urlopen(req, timeout=15) as resp:
+                      result["http_status"] = resp.status
+                      result["delivered"] = 200 <= resp.status < 300
+                      result["detail"] = "webhook_ok"
+              else:
+                  missing = []
+                  if not digits:
+                      missing.append("WHATSAPP_PHONE")
+                  if not raw_key and not (raw_ctok and raw_pid) and not raw_hook:
+                      missing.append("WHATSAPP_API_KEY")
+                  result["detail"] = f"Eksik Secret adlari: {', '.join(missing)}"
+          except urllib.error.HTTPError as exc:
+              err_body = exc.read().decode("utf-8", errors="replace")
+              result["http_status"] = exc.code
+              result["detail"] = safe_msg(err_body)
+          except Exception as exc:
+              result["detail"] = f"{type(exc).__name__}"
+
+          out_dir = Path("analysis") / "connectivity"
+          out_dir.mkdir(parents=True, exist_ok=True)
+          (out_dir / "whatsapp-status.json").write_text(
+              json.dumps(result, ensure_ascii=False, indent=2) + "\n",
+              encoding="utf-8",
+          )
+          print(json.dumps(result, ensure_ascii=False))
+          if not result["delivered"]:
+              raise SystemExit(1)
+          PY
+
+      - name: Sonucu dala kaydet
+        if: always()
+        run: |
+          git config user.name "arena-analysis"
+          git config user.email "actions@users.noreply.github.com"
+          git add analysis/connectivity/whatsapp-status.json
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "chore: record whatsapp verification status [skip ci]"
+          git pull --rebase origin "${GITHUB_REF_NAME}" || true
+          git push origin "HEAD:${GITHUB_REF_NAME}"

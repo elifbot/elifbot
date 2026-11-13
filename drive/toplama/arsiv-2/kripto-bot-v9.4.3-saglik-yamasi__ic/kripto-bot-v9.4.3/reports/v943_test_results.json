@@ -1,0 +1,65 @@
+{
+  "version": "9.4.3",
+  "scope": "health/telemetry only",
+  "regression_tests": 121,
+  "new_health_tests": 34,
+  "checks": {
+    "completed_900s": true,
+    "binance_ticks_positive": true,
+    "aggTrade_errors_zero": true,
+    "both_tapes_healthy": true,
+    "observed_active_post_grace_health_200": true,
+    "endpoint_fields_correct": true,
+    "frozen_source_unchanged": true,
+    "final_strict_ledger_ok": true,
+    "no_sampling_errors_before_completion": true
+  },
+  "live_operational_checks_passed": true,
+  "http_sample_counts": {
+    "200": 59
+  },
+  "post_grace_active_samples": 56,
+  "bad_post_grace_samples": 0,
+  "observed_live_in_flight_samples": 0,
+  "final_strict_ledger": {
+    "ok": true,
+    "empty": true,
+    "reason": "clean_empty_db"
+  },
+  "real_money_approved": false,
+  "closed_count": 0,
+  "open_count": 0,
+  "equity_delta": 0.0,
+  "venues": {
+    "binance": {
+      "healthy": true,
+      "bbo_healthy": true,
+      "trade_tape_healthy": true,
+      "fresh_pairs": 34,
+      "ticks": 93336,
+      "bbo_updates": 2096582,
+      "last_ts": 1793697401.1967278,
+      "last_bbo_ts": 1793697401.1967278,
+      "last_trade_ts": 1793697401.1873736,
+      "errors": 0,
+      "errors_aggTrade": 0,
+      "errors_bookTicker": 0,
+      "endpoint_aggTrade": "fstream.binance.com/market",
+      "endpoint_bookTicker": "fstream.binance.com/public",
+      "endpoint": "see stream-specific endpoints"
+    },
+    "okx": {
+      "healthy": true,
+      "bbo_healthy": true,
+      "trade_tape_healthy": true,
+      "fresh_pairs": 35,
+      "ticks": 88525,
+      "bbo_updates": 435958,
+      "endpoint": "wss://ws.okx.com/ws/v5/public",
+      "last_ts": 1793697401.1905985,
+      "last_bbo_ts": 1793697401.1905985,
+      "last_trade_ts": 1793697401.1745703,
+      "errors": 0
+    }
+  }
+}

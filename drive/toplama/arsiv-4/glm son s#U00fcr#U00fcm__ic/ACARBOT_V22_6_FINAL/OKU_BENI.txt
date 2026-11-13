@@ -1,0 +1,32 @@
+ACARBOT V22.6-FINAL (22.6.0)
+============================
+
+Bu surum "sinyal geliyor ama kar yok" problemini kokuden cozer. Detayli analiz:
+docs/V22_6_FINAL_BUILD_REPORT.md
+
+KURAL SETIN (bozulmadi, tutarli hale getirildi)
+  Kasa          : 1000 USD
+  Giris         : 50 USD teminat x 10x = 500 USD nominal (PHOENIX_ENTRY_MODE=margin)
+  Zarar-kes     : -20 USD sabit -> ~%3.9 fiyat hareketi, tasfiyenin ICINDE (stop GERCEK)
+  Kar-al        : Indikator belirler; net kar >= $10 (0.5R) olmadan kapanmaz
+  Koruma        : +$10'da stop basabasoya ceker, +$20'de takip eden stop devreye girer
+  Pozisyon      : Sinirsiz adet; tek sinir teminat (~19-20 eszamanli pozisyon)
+
+NEDEN ONCEKI SURUMLER KAR YAPAMIYORDU (kisa)
+  1) Kazananlar +$0.10'da kesiliyor, kaybedenler stopa kadar kosuyordu (odul/risk ~1:40).
+     Ayni sinyallerle olcum: V22.5 kurallari -53.15 USD, V22.6 +61.45 USD.
+  2) -$20 stop $50 nominalde ~%40 demekti -> tasfiye (~%10) stop'tan ONCE vuruyordu.
+     50 USD teminat yorumuyla stop ~%3.9'e iner ve GERCEKLESIR.
+  3) Skor mikro-yapi gurultusuyla karisik, asiri uzamis hareketlere giriyordu ->
+     RSI(14) kapisi + OI x fiyat uyumu + zaman-cercevesi celiski cezasi eklendi.
+  4) LIVE modunda indikator TP yoktu ve koruma dogrulamasi hatayla acil-kapatma tetikliyordu ->
+     LIVE cikis motoru yazildi (borsada stop tasima + reduce-only kapatma).
+
+KURULUM / CALISTIRMA
+  pip install -r requirements.txt
+  pytest -q                                   # 159 test
+  python -m phoenix.live --paper --duration 3600 --poll 15 --report reports/paper.json
+  python tools/read_report.py reports/paper.json   # paper ozeti + trade_stats (payoff, expectancy)
+
+ONCELI JALON: 24-72 saat PAPER (gercek piyasa verisi). trade_stats'ta payoff >= ~0.8 ve
+expectancy > 0 gorunceye kadar LIVE'a dokunma. LIVE icin: .env'e API anahtarlari + PHOENIX_CONFIRM_LIVE=YES.

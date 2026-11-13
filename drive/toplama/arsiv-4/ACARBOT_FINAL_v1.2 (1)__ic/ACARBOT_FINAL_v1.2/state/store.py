@@ -1,0 +1,1 @@
+class LocalStore: pass

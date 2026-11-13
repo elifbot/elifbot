@@ -1,0 +1,68 @@
+{
+  "run": {
+    "mode": "PAPER",
+    "duration_sec": 600,
+    "drain_sec": 120,
+    "warmup_sec": 60,
+    "venues": [
+      "binance_vision",
+      "gateio"
+    ],
+    "symbols_per_venue": 150,
+    "candle_interval": "1m",
+    "candle_refresh_sec": 45,
+    "quote_refresh_sec": 4,
+    "candle_limit": 120,
+    "out_dir": "runs",
+    "log_level": "INFO",
+    "use_websocket": true,
+    "fresh_state": true,
+    "profile": "natural"
+  },
+  "detector": {
+    "window_ms": 2000,
+    "ret_window_ms": 180000,
+    "rvol_min": 2.5,
+    "ret_min_pct": 0.35,
+    "min_volume_usd": 25000,
+    "min_volume_24h_usd": 2000000,
+    "context_enabled": true,
+    "context_min_vratio3": 1.25,
+    "min_breadth_ratio": 0.1,
+    "cooldown_ms": 60000
+  },
+  "policy": {
+    "strategy": "fade",
+    "maker_only": true,
+    "max_spread_bps": 8.0,
+    "require_mtf": true,
+    "min_edge_ratio": 1.15,
+    "roundtrip_fee_bps": 7.0,
+    "slippage_bps_per_side": 3.0,
+    "one_attempt_per_closed_bar": true
+  },
+  "risk": {
+    "equity_start": 10000,
+    "risk_per_trade_pct": 0.35,
+    "max_open_positions": 6,
+    "max_position_notional": 1500,
+    "atr_stop_mult": 1.6,
+    "atr_tp_mult": 2.6,
+    "max_hold_sec": 1800,
+    "daily_loss_limit_pct": 3.0
+  },
+  "paper": {
+    "maker_timeout_sec": 20,
+    "require_trade_through": true,
+    "max_fill_ratio_per_tick": 0.25,
+    "taker_slippage_bps": 3.0
+  },
+  "council": {
+    "enabled": true,
+    "veto_enabled": true,
+    "min_consensus_score": 55.0,
+    "max_members": 20,
+    "timeout_sec": 6.0,
+    "max_concurrency": 6
+  }
+}

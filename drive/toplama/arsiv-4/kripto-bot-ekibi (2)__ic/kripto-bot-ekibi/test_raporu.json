@@ -1,0 +1,303 @@
+{
+ "baslangic": "2026-11-08 12:14:29",
+ "turlar": [
+  {
+   "segment": 1,
+   "tur": 1,
+   "tamam": false,
+   "sure_sn": 160,
+   "sonuc": null,
+   "bakiye": 1000.0,
+   "acik_sayisi": 0
+  },
+  {
+   "segment": 1,
+   "tur": 2,
+   "tamam": false,
+   "sure_sn": 81,
+   "sonuc": null,
+   "bakiye": 1000.0,
+   "acik_sayisi": 1
+  },
+  {
+   "segment": 2,
+   "tur": 3,
+   "tamam": false,
+   "sure_sn": 163,
+   "sonuc": null,
+   "bakiye": 1000.0,
+   "acik_sayisi": 1
+  },
+  {
+   "segment": 2,
+   "tur": 4,
+   "tamam": true,
+   "sure_sn": 51,
+   "sonuc": "1 pozisyon açıldı",
+   "bakiye": 1000.0,
+   "acik_sayisi": 2
+  },
+  {
+   "segment": 3,
+   "tur": 5,
+   "tamam": false,
+   "sure_sn": 160,
+   "sonuc": null,
+   "bakiye": 1000.0,
+   "acik_sayisi": 2
+  },
+  {
+   "segment": 3,
+   "tur": 6,
+   "tamam": true,
+   "sure_sn": 82,
+   "sonuc": "1 pozisyon açıldı",
+   "bakiye": 1000.0,
+   "acik_sayisi": 3
+  }
+ ],
+ "acilan": [
+  {
+   "id": 1,
+   "sembol": "RSRUSDT",
+   "taraf": "LONG",
+   "kaldirac": 1,
+   "miktar": 60613.40768578009,
+   "giris": 0.0016486,
+   "sl": 0.0016089363597552072,
+   "tp": 0.0017147060670746547,
+   "mod": "kagit"
+  },
+  {
+   "id": 2,
+   "sembol": "SOXLUSDT",
+   "taraf": "LONG",
+   "kaldirac": 1,
+   "miktar": 2.1486892995272884,
+   "giris": 46.51,
+   "sl": 45.69743801919709,
+   "tp": 47.864269968004855,
+   "mod": "kagit"
+  },
+  {
+   "id": 3,
+   "sembol": "WLDUSDT",
+   "taraf": "SHORT",
+   "kaldirac": 1,
+   "miktar": 305.5300947143294,
+   "giris": 0.3269,
+   "sl": 0.33121173303267687,
+   "tp": 0.31971377827887193,
+   "mod": "kagit"
+  }
+ ],
+ "kapanan": [],
+ "segmentler": [
+  {
+   "segment": 1,
+   "turlar": [
+    {
+     "segment": 1,
+     "tur": 1,
+     "tamam": false,
+     "sure_sn": 160,
+     "sonuc": null,
+     "bakiye": 1000.0,
+     "acik_sayisi": 0
+    },
+    {
+     "segment": 1,
+     "tur": 2,
+     "tamam": false,
+     "sure_sn": 81,
+     "sonuc": null,
+     "bakiye": 1000.0,
+     "acik_sayisi": 1
+    }
+   ],
+   "bakiye": 1000.0,
+   "acik": [
+    {
+     "sembol": "RSRUSDT",
+     "taraf": "LONG",
+     "kaldirac": 1,
+     "giris": 0.0016486,
+     "sl": 0.0016089363597552072,
+     "tp": 0.0017147060670746547
+    }
+   ],
+   "istatistik": {
+    "toplam_pnl": 0,
+    "islem": 0,
+    "kazanc": 0,
+    "kayip": 0,
+    "win_rate": 0,
+    "acik": 1,
+    "bugun": {
+     "pnl": 0,
+     "islem": 0,
+     "kazanc": 0,
+     "kayip": 0
+    },
+    "bakiye": 1000.0
+   },
+   "oda_son": [
+    "⚙️ Sistem: Bot ekibi kuruldu! Bota görev verebilirsin: 'BTC analiz et', 'piyasayı tara', ya da bota doğrudan soru sor. Botlar birbirlerini kontrol eder ve kararı",
+    "⚙️ Sistem: ▶️ OTO İŞLEM başladı: KAĞIT (simülasyon) • mod KAGIT • bakiye 1,000.00 USDT • risk: %10.0/pozisyon, maks 3 pozisyon, 5x tavan, günlük zarar limiti %5.",
+    "Hakem: RSRUSDT için oyum: LONG (güven %85, risk orta) — Fiyat yükselişi ve yüksek hacim, RSI'nın aşırı alım bölgesinde olması, teknik motor skorunun güçlü lo",
+    "Tarayıcı: RSRUSDT için oyum: LONG (güven %75, risk orta) — Yüksek OI artışı ve negatif fonlama oranı, yükselen fiyatta güçlü bir short squeeze potansiyeline işa",
+    "⚙️ Sistem: ❌ Kaptan oy veremedi: API HTTP 503: {\"error\":{\"message\":\"Model şu anda dolu, lütfen kısa bir süre sonra tekrar deneyin.\",\"type\":\"api_error\",\"param\":nu",
+    "Nişancı: RSRUSDT için oyum: LONG (güven %68, risk yüksek) — Negatif funding ile sert OI artışı, yükselişin squeeze destekli olduğunu gösteriyor. Ancak RSI aşır",
+    "Denetçi: RSRUSDT için oyum: NÖTR (güven %65, risk yüksek) — Fiyat, EMA ve ATR değerlerinin 0.00 görünmesi veri kalitesini bozuyor; RSI 74.6 ile aşırı alım bölg",
+    "⚙️ Sistem: 🤖 POZİSYON AÇILDI [KAGIT] RSRUSDT LONG 1x\n• Miktar: 60613.4076857801 (~100 USDT)\n• Giriş: 0.001649 | SL: 0.001609 | TP: 0.001715\n• Konsensus: %76 güve"
+   ]
+  },
+  {
+   "segment": 2,
+   "turlar": [
+    {
+     "segment": 2,
+     "tur": 3,
+     "tamam": false,
+     "sure_sn": 163,
+     "sonuc": null,
+     "bakiye": 1000.0,
+     "acik_sayisi": 1
+    },
+    {
+     "segment": 2,
+     "tur": 4,
+     "tamam": true,
+     "sure_sn": 51,
+     "sonuc": "1 pozisyon açıldı",
+     "bakiye": 1000.0,
+     "acik_sayisi": 2
+    }
+   ],
+   "bakiye": 1000.0,
+   "acik": [
+    {
+     "sembol": "SOXLUSDT",
+     "taraf": "LONG",
+     "kaldirac": 1,
+     "giris": 46.51,
+     "sl": 45.69743801919709,
+     "tp": 47.864269968004855
+    },
+    {
+     "sembol": "RSRUSDT",
+     "taraf": "LONG",
+     "kaldirac": 1,
+     "giris": 0.0016486,
+     "sl": 0.0016089363597552072,
+     "tp": 0.0017147060670746547
+    }
+   ],
+   "istatistik": {
+    "toplam_pnl": 0,
+    "islem": 0,
+    "kazanc": 0,
+    "kayip": 0,
+    "win_rate": 0,
+    "acik": 2,
+    "bugun": {
+     "pnl": 0,
+     "islem": 0,
+     "kazanc": 0,
+     "kayip": 0
+    },
+    "bakiye": 1000.0
+   },
+   "oda_son": [
+    "Tarayıcı: ICNTUSDT için oyum: LONG (güven %82, risk orta) — EMA dizilimi güçlü yükseliş trendini onaylarken, negatif funding oranı potansiyel bir short squeeze ",
+    "Kaptan: ICNTUSDT için oyum: LONG (güven %78, risk orta) — EMA dizilimi (9>21>50) tam boğa, RSI 58.6 ile aşırı alım öncesi alan mevcut ve +8.76% yükselişe rağm",
+    "Nişancı: ICNTUSDT için oyum: LONG (güven %65, risk yüksek) — EMA yükseliş yapısı, pozitif MACD ve 1h teknik sinyal alıcıları destekliyor; ancak OI'nın sabit ka",
+    "Denetçi: ICNTUSDT için oyum: LONG (güven %60, risk yüksek) — EMA dizilimi ve teknik skor güçlü LONG yönünü destekliyor; RSI 58.6 aşırı alım değil. Ancak OI değ",
+    "Hakem: SOXLUSDT için oyum: LONG (güven %78, risk orta) — Fiyat EMA9 ve EMA21 üzerinde, RSI orta seviyede ve MACD pozitif, teknik motor skoru güçlü pozitif. F",
+    "⚙️ Sistem: ❌ Kaptan oy veremedi: API HTTP 503: {\"error\":{\"message\":\"Model şu anda dolu, lütfen kısa bir süre sonra tekrar deneyin.\",\"type\":\"api_error\",\"param\":nu",
+    "Denetçi: SOXLUSDT için oyum: NÖTR (güven %60, risk yüksek) — Kısa EMA'ların üzerinde ve MACD pozitif olsa da fiyat EMA50 altında ve hacim düşük; funding poziti",
+    "Nişancı: SOXLUSDT için oyum: LONG (güven %70, risk orta) — Kısa vadeli ortalamalar üzerindeki fiyat ve artış gösteren açık pozisyonlar yeni long girişlerinin s",
+    "Tarayıcı: SOXLUSDT için oyum: LONG (güven %68, risk orta) — Fiyat EMA9 ve EMA21 üzerindeyken açık pozisyonlardaki %9.2'lik artış yükseliş ivmesini onaylıyor. Po",
+    "⚙️ Sistem: 🤖 POZİSYON AÇILDI [KAGIT] SOXLUSDT LONG 1x\n• Miktar: 2.1486892995 (~100 USDT)\n• Giriş: 46.51 | SL: 45.7 | TP: 47.86\n• Konsensus: %73 güven, %75 oydaşl"
+   ]
+  },
+  {
+   "segment": 3,
+   "turlar": [
+    {
+     "segment": 3,
+     "tur": 5,
+     "tamam": false,
+     "sure_sn": 160,
+     "sonuc": null,
+     "bakiye": 1000.0,
+     "acik_sayisi": 2
+    },
+    {
+     "segment": 3,
+     "tur": 6,
+     "tamam": true,
+     "sure_sn": 82,
+     "sonuc": "1 pozisyon açıldı",
+     "bakiye": 1000.0,
+     "acik_sayisi": 3
+    }
+   ],
+   "bakiye": 1000.0,
+   "acik": [
+    {
+     "sembol": "WLDUSDT",
+     "taraf": "SHORT",
+     "kaldirac": 1,
+     "giris": 0.3269,
+     "sl": 0.33121173303267687,
+     "tp": 0.31971377827887193
+    },
+    {
+     "sembol": "SOXLUSDT",
+     "taraf": "LONG",
+     "kaldirac": 1,
+     "giris": 46.51,
+     "sl": 45.69743801919709,
+     "tp": 47.864269968004855
+    },
+    {
+     "sembol": "RSRUSDT",
+     "taraf": "LONG",
+     "kaldirac": 1,
+     "giris": 0.0016486,
+     "sl": 0.0016089363597552072,
+     "tp": 0.0017147060670746547
+    }
+   ],
+   "istatistik": {
+    "toplam_pnl": 0,
+    "islem": 0,
+    "kazanc": 0,
+    "kayip": 0,
+    "win_rate": 0,
+    "acik": 3,
+    "bugun": {
+     "pnl": 0,
+     "islem": 0,
+     "kazanc": 0,
+     "kayip": 0
+    },
+    "bakiye": 1000.0
+   },
+   "oda_son": [
+    "Denetçi: 1000PEPEUSDT için oyum: NÖTR (güven %55, risk orta) — EMA/ATR verileri sıfır ve OI, fiyat artışına rağmen -%1.6 azalıyor; bu yükselişin yeni alımlarla",
+    "Tarayıcı: 1000PEPEUSDT için oyum: LONG (güven %60, risk orta) — Pozitif fiyat hareketi ve yükselen RSI ivmeyi destekliyor. Ancak düşen açık pozisyonlar (OI) yen",
+    "Kaptan: 1000PEPEUSDT için oyum: NÖTR (güven %50, risk yüksek) — Fiyat +2.08% ve RSI 64 ile yukarı momentum var, ancak OI'nin -1.6% düşüşü yükselişin yeni long",
+    "Nişancı: 1000PEPEUSDT için oyum: NÖTR (güven %55, risk orta) — Fiyat yukarı yönlü ama OI düşüşü momentumu yeni pozisyonlarla desteklemiyor; funding nötr ve ind",
+    "Hakem: WLDUSDT için oyum: SHORT (güven %78, risk orta) — Fiyat düşüş trendinde, RSI alçak seviyede ve teknik motor negatif skor veriyor. Funding pozitif ama ",
+    "Tarayıcı: WLDUSDT için oyum: SHORT (güven %65, risk orta) — Fiyat EMA50 altında ve teknik skor negatifte. Düşük RSI aşırı satıma yakın olsa da trend henüz yukar",
+    "Nişancı: WLDUSDT için oyum: SHORT (güven %54, risk orta) — Fiyat EMA50 altında ve teknik motor hafif kısa yönüne işaret ederken funding/OI tarafında güçlü bir ",
+    "Kaptan: WLDUSDT için oyum: SHORT (güven %58, risk orta) — Fiyat EMA50 altında, 24s -3.39% düşüş ve teknik motor skoru (-23) SHORT yönünü destekliyor; hafif po",
+    "Denetçi: WLDUSDT için oyum: SHORT (güven %42, risk yüksek) — EMA50 altında zayıf seyir ve negatif teknik skor kısa yönü destekliyor; hafif pozitif funding de k",
+    "⚙️ Sistem: 🤖 POZİSYON AÇILDI [KAGIT] WLDUSDT SHORT 1x\n• Miktar: 305.5300947143 (~100 USDT)\n• Giriş: 0.3269 | SL: 0.3312 | TP: 0.3197\n• Konsensus: %69 güven, %100"
+   ]
+  }
+ ],
+ "hatalar": []
+}

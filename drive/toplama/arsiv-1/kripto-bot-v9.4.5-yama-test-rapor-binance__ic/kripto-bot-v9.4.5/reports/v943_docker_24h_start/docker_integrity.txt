@@ -1,0 +1,2 @@
+SOURCE OK: 90 files; v943_packaging_freeze_manifest.json
+PACKAGE OK: 149 files; canonical report and scoped JSON fields verified

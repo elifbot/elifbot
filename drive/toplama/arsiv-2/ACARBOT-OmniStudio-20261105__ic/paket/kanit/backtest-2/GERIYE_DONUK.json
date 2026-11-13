@@ -1,0 +1,232 @@
+{
+  "strategy": "trend",
+  "config": {
+    "equity_start": 1000.0,
+    "fixed_notional": 200.0,
+    "taker_fee_bps": 5.0,
+    "slippage_bps": 2.0,
+    "atr_stop_mult": 2.5,
+    "tp_over_stop": 2.0,
+    "max_hold_bars": 24,
+    "risk_per_trade_pct": 0.35,
+    "max_notional": 300.0,
+    "min_notional": 10.0,
+    "max_positions": 8,
+    "max_per_market": 4,
+    "max_same_side": 6,
+    "daily_loss_limit_pct": 3.0,
+    "max_consecutive_losses": 5
+  },
+  "status": "COMPLETED",
+  "symbols_tested": 240,
+  "markets": {
+    "binance_usdm": 157,
+    "okx_swap": 38,
+    "gateio_usdt": 45
+  },
+  "breadth": {
+    "available": true,
+    "up": 59,
+    "down": 168,
+    "ratio": 0.2599118942731278,
+    "sample": 227
+  },
+  "council_mode": "RULE_BASED_QUANT",
+  "layers": [
+    {
+      "layer": "A",
+      "label": "Temel (maildeki gibi)",
+      "trades": 372,
+      "win_rate_pct": 18.55,
+      "net": -839.4439,
+      "profit_factor": 0.226,
+      "avg_r": -0.745,
+      "fees": 74.536,
+      "funding": 0.0,
+      "max_dd": 849.9661,
+      "equity_start": 1000.0,
+      "equity_end": 160.56,
+      "exit_breakdown": {
+        "STOP_LOSS": 237,
+        "MAX_HOLD": 130,
+        "TAKE_PROFIT": 5
+      },
+      "per_market": {
+        "binance_usdm": 251,
+        "okx_swap": 57,
+        "gateio_usdt": 64
+      },
+      "rejects": {},
+      "decide_reasons": {
+        "VOLUME_CONFIRMATION": 2670,
+        "SIGNAL": 372,
+        "NO_SIGNAL": 4140,
+        "CONFIRMATION": 340
+      },
+      "council": {
+        "calls": 0,
+        "approve": 0,
+        "reject": 0
+      }
+    },
+    {
+      "layer": "B",
+      "label": "A + gerçek funding",
+      "trades": 372,
+      "win_rate_pct": 18.55,
+      "net": -842.0465,
+      "profit_factor": 0.224,
+      "avg_r": -0.755,
+      "fees": 74.536,
+      "funding": 2.6026,
+      "max_dd": 852.5668,
+      "equity_start": 1000.0,
+      "equity_end": 157.95,
+      "exit_breakdown": {
+        "STOP_LOSS": 237,
+        "MAX_HOLD": 130,
+        "TAKE_PROFIT": 5
+      },
+      "per_market": {
+        "binance_usdm": 251,
+        "okx_swap": 57,
+        "gateio_usdt": 64
+      },
+      "rejects": {},
+      "decide_reasons": {
+        "VOLUME_CONFIRMATION": 2670,
+        "SIGNAL": 372,
+        "NO_SIGNAL": 4140,
+        "CONFIRMATION": 340
+      },
+      "council": {
+        "calls": 0,
+        "approve": 0,
+        "reject": 0
+      }
+    },
+    {
+      "layer": "C",
+      "label": "B + konsey (ölçülmüş bağlam)",
+      "trades": 147,
+      "win_rate_pct": 28.57,
+      "net": -381.5301,
+      "profit_factor": 0.245,
+      "avg_r": -0.512,
+      "fees": 29.4637,
+      "funding": -0.4858,
+      "max_dd": 386.9983,
+      "equity_start": 1000.0,
+      "equity_end": 618.47,
+      "exit_breakdown": {
+        "MAX_HOLD": 69,
+        "STOP_LOSS": 77,
+        "TAKE_PROFIT": 1
+      },
+      "per_market": {
+        "okx_swap": 24,
+        "binance_usdm": 95,
+        "gateio_usdt": 28
+      },
+      "rejects": {},
+      "decide_reasons": {
+        "VOLUME_CONFIRMATION": 3889,
+        "SIGNAL": 689,
+        "NO_SIGNAL": 4915,
+        "CONFIRMATION": 453
+      },
+      "council": {
+        "calls": 689,
+        "approve": 147,
+        "reject": 542
+      }
+    },
+    {
+      "layer": "D",
+      "label": "C + portföy riski & 1R koruma",
+      "trades": 21,
+      "win_rate_pct": 28.57,
+      "net": -31.8992,
+      "profit_factor": 0.174,
+      "avg_r": -0.443,
+      "fees": 2.76,
+      "funding": 0.1081,
+      "max_dd": 31.8992,
+      "equity_start": 1000.0,
+      "equity_end": 968.1,
+      "exit_breakdown": {
+        "MAX_HOLD": 12,
+        "STOP_LOSS": 9
+      },
+      "per_market": {
+        "okx_swap": 7,
+        "binance_usdm": 14
+      },
+      "rejects": {
+        "BREAKER": 222
+      },
+      "decide_reasons": {
+        "VOLUME_CONFIRMATION": 5089,
+        "SIGNAL": 840,
+        "NO_SIGNAL": 5215,
+        "CONFIRMATION": 513
+      },
+      "council": {
+        "calls": 840,
+        "approve": 243,
+        "reject": 597
+      }
+    },
+    {
+      "layer": "E",
+      "label": "D + funding kaçışı",
+      "trades": 21,
+      "win_rate_pct": 28.57,
+      "net": -31.8992,
+      "profit_factor": 0.174,
+      "avg_r": -0.443,
+      "fees": 2.76,
+      "funding": 0.1081,
+      "max_dd": 31.8992,
+      "equity_start": 1000.0,
+      "equity_end": 968.1,
+      "exit_breakdown": {
+        "MAX_HOLD": 12,
+        "STOP_LOSS": 9
+      },
+      "per_market": {
+        "okx_swap": 7,
+        "binance_usdm": 14
+      },
+      "rejects": {
+        "BREAKER": 222
+      },
+      "decide_reasons": {
+        "VOLUME_CONFIRMATION": 5089,
+        "SIGNAL": 840,
+        "NO_SIGNAL": 5215,
+        "CONFIRMATION": 513
+      },
+      "council": {
+        "calls": 840,
+        "approve": 243,
+        "reject": 597
+      }
+    }
+  ],
+  "best_layer_by_net": {
+    "layer": "D",
+    "net": -31.8992
+  },
+  "bars_per_symbol": 300,
+  "window_hours": 25.0,
+  "elapsed_sec": 45.5,
+  "real_orders": 0,
+  "limits": [
+    "Geçmiş 5dk mum penceresi ~25 saat; kârlılık kanıtı değildir.",
+    "Bar içi stop/hedef çakışmasında STOP varsayıldı (kötümser).",
+    "Akış (CVD) geçmişi arşivlenmediği için konsey akış boyutunu nötr bıraktı; bu katman akış katkısını ölçmez.",
+    "Funding oranı ölçüm anındaki anlık değerdir; geçmiş oranlar farklı olabilir.",
+    "Gerçek emir, kısmi dolum, kuyruk önceliği ve likidasyon motoru yok."
+  ]
+}

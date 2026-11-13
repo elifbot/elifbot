@@ -1,0 +1,127 @@
+{
+ "arac": "tools.exit_geometry",
+ "days": 90,
+ "symbols": [
+  "okx:BTC-USDT-SWAP",
+  "okx:ETH-USDT-SWAP",
+  "okx:SOL-USDT-SWAP",
+  "okx:XRP-USDT-SWAP",
+  "okx:DOGE-USDT-SWAP",
+  "okx:ADA-USDT-SWAP"
+ ],
+ "aday": 1127,
+ "max_bars": 48,
+ "maliyet_kaynagi": "ÖLÇÜLMÜŞ",
+ "yol_cozunurlugu": "5m kaba mum; mum içi sıra İKİ SINIR",
+ "tp1_modeli": "TP1'de TAM çıkış (kısmi çıkış modellenmedi)",
+ "summary": {
+  "MEVCUT": {
+   "geometri": {
+    "ad": "MEVCUT",
+    "stop_atr": 1.5,
+    "tp1_r": 1.0,
+    "be_activation_r": 1.0,
+    "trail_activation_r": 0.75,
+    "trail_atr": 2.0
+   },
+   "net_kotumser": {
+    "n": 1127,
+    "mean_r": -0.542937,
+    "se": 0.030805,
+    "ci_low": -0.603314,
+    "ci_high": -0.48256,
+    "kazanma_orani": 0.3647,
+    "ort_kazanc_r": 0.642549,
+    "ort_kayip_r": -1.223432,
+    "odul_risk": 0.525202
+   },
+   "net_iyimser": {
+    "n": 1127,
+    "mean_r": -0.533256,
+    "se": 0.030863,
+    "ci_low": -0.593748,
+    "ci_high": -0.472765,
+    "kazanma_orani": 0.3691,
+    "ort_kazanc_r": 0.643544,
+    "ort_kayip_r": -1.221792,
+    "odul_risk": 0.526721
+   },
+   "maliyet_r": {
+    "n": 1127,
+    "mean_r": 0.533819,
+    "se": 0.014625,
+    "ci_low": 0.505155,
+    "ci_high": 0.562484,
+    "kazanma_orani": 1.0,
+    "ort_kazanc_r": 0.533819,
+    "ort_kayip_r": 0.0,
+    "odul_risk": null
+   },
+   "cikis_nedenleri": {
+    "stop": 573,
+    "tp1": 511,
+    "ufuk": 37,
+    "stop_belirsiz": 6
+   }
+  },
+  "ONERILEN": {
+   "geometri": {
+    "ad": "ONERILEN",
+    "stop_atr": 2.0,
+    "tp1_r": 1.5,
+    "be_activation_r": 0.75,
+    "trail_activation_r": 1.0,
+    "trail_atr": 1.0
+   },
+   "net_kotumser": {
+    "n": 1127,
+    "mean_r": -0.407586,
+    "se": 0.029677,
+    "ci_low": -0.465753,
+    "ci_high": -0.34942,
+    "kazanma_orani": 0.3611,
+    "ort_kazanc_r": 0.715062,
+    "ort_kayip_r": -1.042195,
+    "odul_risk": 0.686112
+   },
+   "net_iyimser": {
+    "n": 1127,
+    "mean_r": -0.39573,
+    "se": 0.0301,
+    "ci_low": -0.454726,
+    "ci_high": -0.336735,
+    "kazanma_orani": 0.3647,
+    "ort_kazanc_r": 0.739077,
+    "ort_kayip_r": -1.047135,
+    "odul_risk": 0.705809
+   },
+   "maliyet_r": {
+    "n": 1127,
+    "mean_r": 0.400365,
+    "se": 0.010969,
+    "ci_low": 0.378866,
+    "ci_high": 0.421863,
+    "kazanma_orani": 1.0,
+    "ort_kazanc_r": 0.400365,
+    "ort_kayip_r": 0.0,
+    "odul_risk": null
+   },
+   "cikis_nedenleri": {
+    "stop": 853,
+    "tp1": 184,
+    "ufuk": 70,
+    "stop_belirsiz": 20
+   }
+  }
+ },
+ "yapisal_kaldirac": {
+  "ort_maliyet_orani": 0.00213909,
+  "ort_mevcut_stop_kesri": 0.00419172,
+  "hedef_maliyet_payi": 0.15,
+  "gereken_stop_kesri": 0.01426057,
+  "gereken_genisleme_kati": 3.4021,
+  "yorum": "Maliyet payı = maliyet_oranı / stop_kesri. Çıkış parametreleri bunu DEĞİŞTİRMEZ. Payı düşürmenin tek yolu stop mesafesini genişletmek (daha yüksek zaman dilimi) veya daha likit sembol. Önerilen 1.5→2.0 ATR değişikliği payı yalnız 1,33x düşürür."
+ },
+ "verdict": "IYILESME_VAR_AMA_NEGATIF",
+ "verdict_detail": "Önerilen geometri beklentiyi iyileştirdi (-0.542937 → -0.407586 R) ama hâlâ NEGATİF. Giriş kenarı olmadan çıkış ayarı zararı ancak azaltır; kâr üretmez. Yapısal sorun maliyetin stop mesafesine oranı."
+}

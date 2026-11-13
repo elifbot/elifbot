@@ -1,0 +1,57 @@
+{
+  "status": "PARTIAL",
+  "started_utc": "2026-11-05T12:43:49.420707+00:00",
+  "finished_utc": "2026-11-05T13:02:34.125267+00:00",
+  "active_sec": 859.354,
+  "total_sec": 1124.705,
+  "markets": {
+    "binance_usdm": {
+      "status": "AVAILABLE",
+      "discovered": 804,
+      "selected": 804
+    },
+    "okx_futures": {
+      "status": "AVAILABLE",
+      "discovered": 287,
+      "selected": 287
+    },
+    "okx_swap": {
+      "status": "AVAILABLE",
+      "discovered": 540,
+      "selected": 540
+    },
+    "binance_coinm": {
+      "status": "AVAILABLE",
+      "discovered": 30,
+      "selected": 30
+    }
+  },
+  "symbols_selected": 1661,
+  "paper_eligible": 1047,
+  "paper_unsupported": 614,
+  "counts": {
+    "candles_ok": 6644,
+    "fresh_quotes": 135125,
+    "ticker_fetch_ok": 348,
+    "bars_evaluated": 3322,
+    "strategy_STALE_CANDLE": 3322
+  },
+  "execution": {
+    "open": [],
+    "closed": [],
+    "closed_trades": 0,
+    "realized_net": 0,
+    "equity_realized": 1000,
+    "fees_on_closed": 0.0
+  },
+  "errors": [],
+  "real_orders": 0,
+  "real_money_approved": false,
+  "limitations": [
+    "Binance www kamu uçları erişilemezse sonuç eksiktir; testnet veya başka borsayla ikame yok.",
+    "Yalnız lineer USDT sürekli sözleşmeler PAPER; inverse ve vadeli yalnız izlenir.",
+    "Tüm sözleşme listesi yalnız başlangıçta alınır.",
+    "Piyasa derinliği, funding muhasebesi ve gerçek dolum garanti edilmez.",
+    "Bağımsız YZ incelemesi tasarım içindir; canlı işlem hakemi değildir."
+  ]
+}

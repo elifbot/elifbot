@@ -1,0 +1,381 @@
+{
+  "files": [
+    {
+      "file": "omnistudio/__init__.py",
+      "size": 248,
+      "sha256": "3b9b518a5fe86ed9918ced2dd8f8635d70cb3b3f18016c3950e8596f395fb9a1"
+    },
+    {
+      "file": "omnistudio/ai/adapters.py",
+      "size": 10847,
+      "sha256": "555e1dfc29c59cd7e22f3577cd6c2620e66217eb9dc8bb6e92b91e7aa2219410"
+    },
+    {
+      "file": "omnistudio/ai/__init__.py",
+      "size": 32,
+      "sha256": "39df030077145090213e47aaf98dcf950ccacd19f7b7e13db291c775507c1a4e"
+    },
+    {
+      "file": "omnistudio/ai/council.py",
+      "size": 19973,
+      "sha256": "03666319727413fda48bd48d85801975859918573394c2e0b5a7581e29632717"
+    },
+    {
+      "file": "omnistudio/ai/registry.py",
+      "size": 7704,
+      "sha256": "987964abc9fb1c4f18f79eafa3f3aa795af1d528d603895ad76e51b29f54ab5f"
+    },
+    {
+      "file": "omnistudio/state/__init__.py",
+      "size": 32,
+      "sha256": "39df030077145090213e47aaf98dcf950ccacd19f7b7e13db291c775507c1a4e"
+    },
+    {
+      "file": "omnistudio/state/store.py",
+      "size": 8688,
+      "sha256": "8440d4c10d15b8e08f3d559cc236eb590e63378a5e2c015254f3262d90e1722f"
+    },
+    {
+      "file": "omnistudio/risk/__init__.py",
+      "size": 32,
+      "sha256": "39df030077145090213e47aaf98dcf950ccacd19f7b7e13db291c775507c1a4e"
+    },
+    {
+      "file": "omnistudio/risk/manager.py",
+      "size": 9598,
+      "sha256": "53c8c8f960917ae688f5bb7604e62ce4b6c9d2d773f32726c34955300a7ee1a6"
+    },
+    {
+      "file": "omnistudio/runtime/__init__.py",
+      "size": 32,
+      "sha256": "39df030077145090213e47aaf98dcf950ccacd19f7b7e13db291c775507c1a4e"
+    },
+    {
+      "file": "omnistudio/runtime/engine.py",
+      "size": 28720,
+      "sha256": "cf4c267e06047a020d9e8acd1c6d03571797870e0c1c83200ffe0798a71df65f"
+    },
+    {
+      "file": "omnistudio/runtime/supervisor.py",
+      "size": 6525,
+      "sha256": "dfe0477edb8d048462e20246a81821925412ccc290027757b057e4951195d610"
+    },
+    {
+      "file": "omnistudio/reporting/__init__.py",
+      "size": 32,
+      "sha256": "39df030077145090213e47aaf98dcf950ccacd19f7b7e13db291c775507c1a4e"
+    },
+    {
+      "file": "omnistudio/reporting/report.py",
+      "size": 5705,
+      "sha256": "a2a9b6a7a1b5f9c033c05702461dfa119d3c1b71a1ba8bad4351146d89480001"
+    },
+    {
+      "file": "omnistudio/core/__init__.py",
+      "size": 32,
+      "sha256": "39df030077145090213e47aaf98dcf950ccacd19f7b7e13db291c775507c1a4e"
+    },
+    {
+      "file": "omnistudio/core/clock.py",
+      "size": 6685,
+      "sha256": "ec968da6ca9dbb3c463a0d52ebc838a1372a5db8fffed712572a436a4f2df7dc"
+    },
+    {
+      "file": "omnistudio/core/types.py",
+      "size": 7505,
+      "sha256": "ebeccb77540d7f2a29746350ea90f165ca978a2c4b27ad3d2cc61a12cf4fcf3e"
+    },
+    {
+      "file": "omnistudio/core/config.py",
+      "size": 7191,
+      "sha256": "b36cf1a7a91727d592b1f0e49326e3286cd5ab6ea6358530e448cacd83081c7f"
+    },
+    {
+      "file": "omnistudio/strategy/price_history.py",
+      "size": 5957,
+      "sha256": "50885da66314d78ffaa2354e895445484b033ac71e076e43e8d31692033f92b5"
+    },
+    {
+      "file": "omnistudio/strategy/policy.py",
+      "size": 9409,
+      "sha256": "080a6ab72889c5b4ebd23e34d75ea516f90c0fd3bd945bb9ad9886f224e9016d"
+    },
+    {
+      "file": "omnistudio/strategy/__init__.py",
+      "size": 32,
+      "sha256": "39df030077145090213e47aaf98dcf950ccacd19f7b7e13db291c775507c1a4e"
+    },
+    {
+      "file": "omnistudio/strategy/detector.py",
+      "size": 16778,
+      "sha256": "6d8af321a3c3dbcd958574fdf3a5ba1d2116c5848319ecea38e7712350374e24"
+    },
+    {
+      "file": "omnistudio/strategy/indicators.py",
+      "size": 4913,
+      "sha256": "255fc58ffb40548ceee228976c119320bd312790f67543c675c732efd4237269"
+    },
+    {
+      "file": "omnistudio/execution/paper.py",
+      "size": 12676,
+      "sha256": "62980b47d3e59c3a74fdad237ca7f5c33c39b1d07584f8e42fca157cc16f5103"
+    },
+    {
+      "file": "omnistudio/execution/live_guard.py",
+      "size": 1520,
+      "sha256": "f8639405587727239ba97f25f05da9dfb83fb5a92d5c79d9c10b3a0e47a25c47"
+    },
+    {
+      "file": "omnistudio/execution/__init__.py",
+      "size": 32,
+      "sha256": "39df030077145090213e47aaf98dcf950ccacd19f7b7e13db291c775507c1a4e"
+    },
+    {
+      "file": "omnistudio/market/__init__.py",
+      "size": 32,
+      "sha256": "39df030077145090213e47aaf98dcf950ccacd19f7b7e13db291c775507c1a4e"
+    },
+    {
+      "file": "omnistudio/market/data.py",
+      "size": 23791,
+      "sha256": "57e66e00accd6e968c12659d777336f9ca3a4b441041a30bf368927531f0e022"
+    },
+    {
+      "file": "omnistudio/ai/providers/__init__.py",
+      "size": 54,
+      "sha256": "99ba0fd5449ff8300c5fd448a8066e160200f1a9703e91814250bbcb4860a094"
+    },
+    {
+      "file": "acarbot/10DK_TEST_RAPORU.md",
+      "size": 2247,
+      "sha256": "684d8c310db001b9772dcf8b03726665aeeac8e4fde9ea63f7960c5f664655c2"
+    },
+    {
+      "file": "acarbot/ai_review.py",
+      "size": 3708,
+      "sha256": "408b60663be7027fcfcb2e3e9804966f5d6716dca050e8011d499be1237aecfa"
+    },
+    {
+      "file": "acarbot/kaynak-v10.html",
+      "size": 283828,
+      "sha256": "d384e8447aeffeadd9fd1f5e3f7e17890f6eda65bb235b0535fd50cd049ca9d2"
+    },
+    {
+      "file": "acarbot/V10_GUNCEL_RAPOR.md",
+      "size": 3275,
+      "sha256": "432f9bced11d4fd26bf4c223a37df94f77a2d6654c51356e5851c2137e5493cd"
+    },
+    {
+      "file": "acarbot/BINANCE_OKX_DURUM.md",
+      "size": 3716,
+      "sha256": "a6f8f1a088052e1688f25526d68925263ac64eb0461034bd064263fe8bd17004"
+    },
+    {
+      "file": "acarbot/parite.py",
+      "size": 2453,
+      "sha256": "e62bc556cc1cb3b902183c660ae0ce94cb8a10ed0284f24c98ddf6c61058a7f7"
+    },
+    {
+      "file": "acarbot/__init__.py",
+      "size": 63,
+      "sha256": "ec5bebbc01a73aeedb0bcdddea288b1e403e5eb0b75ae76e377dbffa6775099f"
+    },
+    {
+      "file": "acarbot/futures_paper.py",
+      "size": 10743,
+      "sha256": "68c002325def7285352db243cccbec263844d56205290c0edf5f73bd73d2d7d6"
+    },
+    {
+      "file": "acarbot/README.md",
+      "size": 4780,
+      "sha256": "a1793a8096e734837c76de3796f6f4ef1ae84cb08dd119125311f6ac8090aa65"
+    },
+    {
+      "file": "acarbot/INCELEME.md",
+      "size": 2331,
+      "sha256": "e0e6f46f68e8184cda3246acccf2600256fc10d99560d0198b6d652c30a4c7b6"
+    },
+    {
+      "file": "acarbot/futures_scan.py",
+      "size": 5123,
+      "sha256": "c358ecba27de35bf07318de0ac1a84aa0c50ffbc59b537756b08fbbf0c4b1766"
+    },
+    {
+      "file": "acarbot/test.py",
+      "size": 8655,
+      "sha256": "045d511a548f4b5d6779702979eafdcab266773d16a81ca43f770d402f286356"
+    },
+    {
+      "file": "acarbot/DIS_YZ_GORUSLERI.md",
+      "size": 3145,
+      "sha256": "381fb796f89464760c970eb05c703a1a563d77c521425629522a2823bf7f0a9e"
+    },
+    {
+      "file": "acarbot/ledger.py",
+      "size": 3675,
+      "sha256": "a489d24ed6136f09d997704fe2fb1d3e4a9f1952664f580c905f857de504a2bd"
+    },
+    {
+      "file": "acarbot/futures_market.py",
+      "size": 4487,
+      "sha256": "de9853d3cb94a438aa870546e918e83f118b006c4b63dccee26a79a78c250149"
+    },
+    {
+      "file": "acarbot/main.py",
+      "size": 797,
+      "sha256": "95d84a435cc95041ae9e8a361f12fc13b765fdafba1361ebe90c41b8e95d1c14"
+    },
+    {
+      "file": "acarbot/strategy.py",
+      "size": 3681,
+      "sha256": "80e6d1fbdb5fbf2d0528c0abe7e511a0ae0561dd7a7a2123f8bb0793c2f88076"
+    },
+    {
+      "file": "acarbot/runner.py",
+      "size": 10273,
+      "sha256": "5dbe4db13a5ca43cbccf2d2fc3ba6201f76ece5935046a7f8f3299555ee768aa"
+    },
+    {
+      "file": "tests/test_omnistudio.py",
+      "size": 44541,
+      "sha256": "017daffdf381c9c05cdf0abf81c7d79f84e6ca8e5db2680d650dc5e811f63b33"
+    },
+    {
+      "file": "runs/acarbot-v10-10dk-20261105/config.json",
+      "size": 325,
+      "sha256": "b8cf934b735f22cb5a399c24c695402591297d61f711dc3a4bf399daf094787f"
+    },
+    {
+      "file": "runs/acarbot-v10-10dk-20261105/SONUC.json",
+      "size": 7563,
+      "sha256": "b5c3979b953c43ef85243d30bc3239562e2c4658cad263dfedeee593785d6e4b"
+    },
+    {
+      "file": "runs/acarbot-v10-10dk-20261105/events.jsonl",
+      "size": 1390,
+      "sha256": "026c5ed4c86f900e18d42cf84bbe2b0f737f632a57514beb8f8092699dabd262"
+    },
+    {
+      "file": "runs/binance-okx-futures-tarama-20261105/SONUC.json",
+      "size": 1766,
+      "sha256": "e54b22e0b82e4596a2feb95f884a1867bb17c84f447f44f00dfed85e71c8882b"
+    },
+    {
+      "file": "runs/binance-okx-futures-tarama-20261105/ENSTRUMANLAR.jsonl",
+      "size": 279982,
+      "sha256": "c041056906da3747d03f2609d1e1063d12bfb8c5797ca801f97788f0bcd5a692"
+    },
+    {
+      "file": "runs/binance-okx-paper-ontest20-20261105/SONUC.json",
+      "size": 1630,
+      "sha256": "e56f24c183a67312d38f5ab19cae51e380597cfb9ab157207410ee18d8734e06"
+    },
+    {
+      "file": "runs/binance-okx-paper-ontest20-20261105/events.jsonl",
+      "size": 144,
+      "sha256": "350aac1db5b17e6435ff1bb8d7f65be45f0abedb40ec8e844ac70da71511a10b"
+    },
+    {
+      "file": "runs/binance-okx-paper-10dk-son-20261105/SONUC.json",
+      "size": 3172,
+      "sha256": "1f14f0a1e4ab3d9ca7363f56106a1156890f62428de277aff98c859492703e14"
+    },
+    {
+      "file": "runs/binance-okx-paper-10dk-son-20261105/events.jsonl",
+      "size": 1804,
+      "sha256": "467b7ab41c3d43d6110c09c7dfc70766707603af9218d3c0bebfff11fc9d5749"
+    },
+    {
+      "file": "reviews/v10-dis-gorusler-20261105/gorusler.json",
+      "size": 6139,
+      "sha256": "3023bd8c9e4428a7838aeb09c11112471e9e0fa6db218fd33c9e634db8fe72c2"
+    },
+    {
+      "file": "reviews/v10-dis-gorusler-ikinci-20261105/gorusler.json",
+      "size": 28217,
+      "sha256": "77f97a36bb500feb216d303043a78c0ae0bf86927a68f17b622fcbb258fbd26c"
+    },
+    {
+      "file": "reviews/v10-dis-gorusler-ucuncu-20261105/gorusler.json",
+      "size": 31783,
+      "sha256": "3569372ed2b6d60f1e53c3957f7fdba0ff78ac847e96d959f8b7f22cb0f85175"
+    },
+    {
+      "file": "reviews/v10-dis-gorusler-dorduncu-20261105/gorusler.json",
+      "size": 10285,
+      "sha256": "fb3571b9ded1fe88c23f93d11fa6ace1bd60ef27c6d6b53f0b72b87bb68725e1"
+    },
+    {
+      "file": "main.py",
+      "size": 126,
+      "sha256": "fd5a5b15543deaa39e618289f7d7e22753eaa319ad43f4a58839e63f51b42d06"
+    },
+    {
+      "file": "test.py",
+      "size": 169,
+      "sha256": "4a0b203d2b183324e1e8e23e8d0fd7e8daf53003fd9c01e33f97bbfa2937a02e"
+    },
+    {
+      "file": "requirements.txt",
+      "size": 32,
+      "sha256": "9958c7063e7db144f687beeadab21c39f58f1fdba82e5489252311fb98cb5a5b"
+    },
+    {
+      "file": "requirements-dev.txt",
+      "size": 57,
+      "sha256": "c98387f43c0b47c4310c66a296066fe604aaf94640b113b51ef0e4ff40a691cc"
+    },
+    {
+      "file": "pytest.ini",
+      "size": 130,
+      "sha256": "a4a5dbeca9d9b6aae78a409f75e6d7ef342f5541ee4c72f4d1289de974864ccf"
+    },
+    {
+      "file": "README.md",
+      "size": 7804,
+      "sha256": "6b82916f83bf74a6782933573deb69da203986456c8c0bbc8478a710d5b4de35"
+    },
+    {
+      "file": "acarbot/GECMIS_BOT_DUZELTME_RAPORU.md",
+      "size": 5793,
+      "sha256": "cf7ffc9f664fefa100fafee7abfc9f0fd80144c43af16b20d7e07519ff4b6e08"
+    },
+    {
+      "file": "acarbot/GECMIS_BOT_KANITLARI.md",
+      "size": 2496,
+      "sha256": "f216de0bc4e0acfe2fc8b402db1e15ee1890ae04a43e0fc02596a4efc1e613b5"
+    },
+    {
+      "file": "runs/binance-okx-eski-bot-baglanti-evren-duzeltilmis-20261105/ENSTRUMANLAR.jsonl",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "runs/binance-okx-eski-bot-baglanti-evren-duzeltilmis-20261105/SONUC.json",
+      "size": 1444,
+      "sha256": "0794a711772ccc33649a40a9b3a517eeb331721595a357366272c942bccdba29"
+    },
+    {
+      "file": "runs/binance-okx-eski-bot-baglanti-10dk-duzeltilmis-20261105/SONUC.json",
+      "size": 1530,
+      "sha256": "1c96e08f51ac84ebc933865e944955b58e47b0663a4f14e651dafc013be3d048"
+    },
+    {
+      "file": "runs/binance-okx-eski-bot-baglanti-10dk-duzeltilmis-20261105/events.jsonl",
+      "size": 148,
+      "sha256": "33d2cd22bb22b2874e9eb8db9d65ae58ec5eb7eee52b4423bdc4e895584220f5"
+    },
+    {
+      "file": "runs/binance-okx-geldikce-degerlendirme-10dk-20261105/SONUC.json",
+      "size": 4775,
+      "sha256": "a403e6a37afad83b9e34f079453a82a00883c33275bbabc05a9edc6385204e4c"
+    },
+    {
+      "file": "runs/binance-okx-geldikce-degerlendirme-10dk-20261105/events.jsonl",
+      "size": 4249,
+      "sha256": "c4a40fcda5479ff18538e0ded250a9eae139687304958511a374b4ffd3bfa912"
+    }
+  ],
+  "source": "Kullanıcıya verilen kısmi araştırma paketi",
+  "paper_only": true
+}

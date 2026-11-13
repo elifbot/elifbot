@@ -1,0 +1,164 @@
+# =====================================================================
+# KRIPTO-BOT ANA AYAR DOSYASI (v6 — Multi-Timeframe 1h/4h Trend Filtresi +
+# 20 Kademe Emir Defteri Derinlik Analizi (Bid/Ask Ratio) + Discord & PagerDuty Acil Alarm +
+# Multi-Exchange Failover + SQLite WAL & 24s VACUUM GC + Prometheus /health & /metrics +
+# Security Hardening + Dinamik Kaldıraç 20x/10x/5x + %0.30 Kayma & Chase Order)
+# Not: API anahtarları ve Webhook URL'leri ASLA bu dosyaya yazılmaz; yalnızca .env üzerinden okunur.
+# =====================================================================
+genel:
+  borsalar: ["binance", "okx"]                     # Birincil (binance) + Yedek (okx)
+  semboller: ["BTC/USDT", "ETH/USDT", "SOL/USDT"]  # İşlem yapılacak pariteler
+  zaman_dilimi: "5m"                               # Hızlı işlem mumu: 1m / 5m / 15m
+  mod: "paper"                                     # paper | testnet | live (.env'deki MODE ezer)
+  short_izni: true                                 # Short (düşüşe) işlem açılsın mı?
+  kaldıraç: 20                                     # Baz kaldıraç 20x (oynaklıkta dinamik 10x / 5x)
+
+# --- YENİ: Çoklu Zaman Dilimi (Multi-Timeframe 1h/4h) Ana Trend Filtresi ---
+mtf_filtre:
+  aktif: true                   # 1h ve 4h büyük trend yönü kontrol edilsin mi?
+  zaman_dilimleri: ["1h", "4h"] # Kontrol edilecek büyük zaman dilimleri
+  dusus_engelleme_esigi: -15.0  # 1h/4h skor <= -15 ise (BEARISH) 1m/5m tepkilerde LONG açılmaz!
+  yukselis_engelleme_esigi: 15.0 # 1h/4h skor >= +15 ise (BULLISH) ters yönlü SHORT açılmaz!
+
+# --- YENİ: Discord & PagerDuty Acil Durum Bildirimleri (.env üzerinden anahtar alır) ---
+bildirimler:
+  telegram_aktif: true
+  discord_aktif: true           # DISCORD_WEBHOOK_URL (.env) tanımlıysa zengin Embed + @everyone gönderir
+  pagerduty_aktif: true         # PAGERDUTY_ROUTING_KEY (.env) tanımlıysa kritik hatada telefon alarmı çalar
+  sadece_kritik_pagerduty: true # PagerDuty yalnızca Circuit Breaker / Kill-Switch / Failover anında çalsın
+
+# --- A) Multi-Exchange Failover (Borsa Kesinti Sigortası) ---
+failover:
+  aktif: true
+  timeout_esigi: 3              # Birincil borsada ardı ardına 3 timeout hatasında yedek borsaya (OKX) geç
+  soguma_saniye: 300            # Kesintili borsayı 300 sn devre dışı tut, sonra tekrar sağlığını sına
+
+# --- B) SQLite WAL Modu & 24 Saatlik VACUUM Çöp Toplayıcı (Garbage Collector) ---
+veritabani:
+  dosya: "bot_state.db"
+  wal_modu: true                # Otomatik PRAGMA journal_mode=WAL
+  cop_toplayici_saniye: 86400   # Her 24 saatte bir eski kayıtları .jsonl.gz arşivle ve VACUUM çalıştır
+  max_islem_gecmisi: 2000       # Aktif tabloda tutulacak maksimum işlem kaydı
+  max_equity_gecmisi: 2000      # Aktif tabloda tutulacak maksimum bakiye noktası
+  max_arbitraj_gecmisi: 1000    # Aktif tabloda tutulacak maksimum arbitraj kaydı
+
+# --- C) Gerçek Zamanlı Sağlık & Prometheus Metrik Endpoint'i ---
+health_check:
+  aktif: true
+  host: "0.0.0.0"
+  port: 8502                    # Bağımsız /health ve /metrics portu (Web paneli 8501 üzerinde de sunulur)
+
+risk:
+  stop_loss_yuzde: 5.0          # ZARAR STOP %5: girişten %5 ters hareket = kapat
+  kar_kilit_tetikleyici: 10.0   # Kâr %10'u geçince...
+  kar_kilit_seviyesi: 5.0       # ...stop +%5 kâra çekilir (kâr garantilenir)
+  trailing_yuzde: 5.0           # Zirveden %5 geri dönüş = kapat (kârı maksimize eder)
+  kasa_giris_yuzde: 10.0        # KASANIN HER ZAMAN %10'U İLE GİRİŞ YAPILIR
+  dinamik_kaldirac: true        # Sakin piyasada 20x, yüksek ATR'de 10x, aşırı ATR/Veto'da 5x
+  atr_yuksek_oynaklik_yuzde: 1.5  # ATR/Fiyat >= %1.5 ise kaldıraç 10x'e düşer
+  atr_asiri_oynaklik_yuzde: 3.0   # ATR/Fiyat >= %3.0 veya VETO yaklaşımında kaldıraç 5x'e düşer
+  max_kayma_yuzde: 0.30         # Fiyat >%0.30 kaymışsa market iptal → Chase Order (Limit)
+  islem_basina_risk_yuzde: 1.0  # ATR/Kelly modunda baz risk yüzdesi
+  max_pozisyon: 3               # Normalde maks pozisyon (tümü artıdaysa sınırsız!)
+  sinirsiz_ekleme: true         # ARTIDA OLDUKÇA SINIRSIZ POZİSYON EKLEMESİ (Pyramiding)
+  ekleme_min_kar_yuzde: 0.25    # Artıda yeni kademe eklemek için min. fiyat ilerlemesi (%)
+  capraz_kurtarma: true         # BİRİ ARTIDA BİRİ EKSİDE İSE UFAK KÂR/ZARARLA İKİSİNİ KAPAT
+  kurtarma_min_zarar_yuzde: 0.5 # Tersteki pozisyon en az bu kadar eksideyse kurtarma aranır
+  gunluk_max_zarar_yuzde: 5.0   # Günlük toplam zarar %5'i geçerse Circuit Breaker durdurur
+  mola_saniye: 300              # Stop olduktan sonra aynı coin'de bekleme süresi
+  # --- Sert tavanlar (sınırsız ekleme bu tavanların İÇİNDE çalışır) ---
+  max_kademe: 6                 # Tek pozisyonda en fazla pyramiding kademesi
+  mutlak_max_pozisyon: 6        # Hepsi artıda olsa bile en fazla açık pozisyon
+  ayni_yon_max_pozisyon: 4      # Aynı yönde (LONG/SHORT) en fazla pozisyon (BTC/ETH/SOL korelasyonlu)
+  toplam_marj_tavani_yuzde: 60.0  # Toplam kullanılan marj / bakiye (%)
+  haftalik_max_zarar_yuzde: 12.0  # Haftalık zarar (HESAP bakiyesinin %'si) aşılırsa hafta sonuna kadar yeni giriş yok
+  likidasyon_stop_tamponu: 0.70 # Stop mesafesi ≤ likidasyon mesafesinin %70'i (20x'te stop ≈ %3.15)
+
+# --- Acil Durum Sigortası (Circuit Breaker & Auth Kill-Switch) ---
+sigorta:
+  max_ardisik_yetki_hatasi: 3   # Ard arda 3 API kimlik/yetki hatasında Emergency Kill-Switch + Sistem Kilidi
+  max_ardisik_emir_hatasi: 3    # Ard arda 3 emir hatası alınırsa botu acil durdur
+  gunluk_max_zarar_yuzde: 5.0   # Günlük zarar %5'i geçerse botu acil durdur
+  ws_kopma_saniye: 10.0         # WebSocket 10 sn'den uzun koparsa botu acil durdur
+  flash_crash_yuzde: 8.0        # Anlık >%8 şokta acil durdur
+
+# --- Pozisyon Boyutlandırma: %10 Kasa × Dinamik 20x/10x/5x Kaldıraç ---
+boyutlandirma:
+  mod: "kasa_10_20x"            # kasa_10_20x | atr_kelly | atr | kelly | sabit
+  kasa_yuzde: 10.0              # Her girişte kasanın %10'u marj olarak kullanılır
+  kaldirac: 20                  # Baz 20x kaldıraç (dinamik sarmalla 20x/10x/5x)
+  atr_periyot: 14               # ATR periyodu (mum sayısı)
+  atr_katsayi: 1.5              # Risk mesafesi = max(%5 stop, ATR × 1.5)
+  kelly_kesir: 0.5              # 0.5 = yarım-Kelly
+  kelly_min_risk: 0.25          # Kelly alt sınırı
+  kelly_max_risk: 2.0           # Kelly üst sınırı
+  kelly_min_islem: 20           # Kelly için min. işlem sayısı
+
+# --- Emir yürütme: Maker + Chase Order + Borsa Koruması ---
+emirler:
+  giris_tipi: "maker"           # market | maker (post-only: komisyon avantajı)
+  maker_zaman_asimi_sn: 3       # Maker dolmazsa kalan market/chase ile tamamlansın
+  max_kayma_yuzde: 0.30         # Maksimum izin verilen slippage (%0.30 üstü Chase Order olur)
+  komisyon_maker_yuzde: 0.02    # Paper simülasyonunda maker komisyonu
+  komisyon_taker_yuzde: 0.05    # Paper simülasyonunda taker komisyonu
+  borsa_korumasi: true          # Stop'u borsaya native yaz (OCO/stop)
+
+# --- Sinyal ve Makine Öğrenmesi (LightGBM / XGBoost / NumPy GBDT) ---
+sinyal:
+  agirlik_indikator: 0.40       # Teknik indikatörlerin ağırlığı
+  agirlik_para_akisi: 0.25      # Para giriş/çıkış + 20 Kademe Emir Defteri + OI/Squeeze ağırlığı
+  agirlik_haber: 0.20           # Haber/duygu analizinin ağırlığı
+  agirlik_ml: 0.15              # Makine Öğrenmesi (ML) yön tahmini ağırlığı
+  long_esik: 55                 # Toplam skor >= 55 ise LONG
+  short_esik: -55               # Toplam skor <= -55 ise SHORT
+  cikis_esik: 15                # Skor bu seviyeye dönerse kârı alıp çık
+
+makine_ogrenmesi:
+  aktif: true                   # ML yön tahmini aktif mi?
+  ufuk_mum: 3                   # Kaç mum sonrasının yönünü tahmin etsin
+  min_egitim_mumu: 80           # Eğitim için en az mum sayısı
+  yeniden_egitim_araligi: 15    # Kaç mumda bir modeli yeniden eğitsin
+
+# --- Para Akışı + 20 Kademe Emir Defteri Derinliği + Açık Faiz (OI) + Likidasyon Squeeze ---
+para_akisi:
+  balina_esik_usdt: 100000      # Tek işlemde bu tutarı geçerse BALİNA sayılır
+  likidasyon_squeeze_usdt: 50000 # Squeeze tespiti için likidasyon eşiği ($)
+  emir_defteri_kademe: 20       # Emir defteri derinlik analizi kademe sayısı (20 kademe Bid/Ask Ratio)
+  pencere_saniye: 300           # Son 5 dakikalık akış analiz edilir
+  hacim_patlama_katsayi: 2.5    # Ortalamanın 2.5 katı hacim = patlama
+
+# --- Çapraz Borsa Arbitrajı (Binance ↔ OKX) ---
+arbitraj:
+  aktif: true                   # Çapraz borsa arbitraj tarayıcısı ve yürütücüsü
+  min_net_kar_yuzde: 0.08       # Komisyon + kayma sonrası min. net kâr eşiği (%)
+  islem_tutari_usdt: 1000.0     # Arbitraj başına işlem büyüklüğü ($)
+  mola_saniye: 10.0             # Aynı paritede iki arbitraj arası bekleme
+
+haberler:
+  kontrol_saniye: 30            # Haberler kaç saniyede bir taransın
+  veto_guc: true                # Kritik kötü haber gelirse YENİ işlem açma
+  korku_acgozluluk: true        # Korku/açgözlülük psikoloji motoru açık mı
+  korku_veto_alt: 15            # Skor bunun altına düşerse (panik) TÜM girişler durur
+  acgozluluk_long_veto_ust: 85  # Skor bunun üstüne çıkarsa yeni LONG durur
+  kaynaklar:
+    - "https://www.coindesk.com/arc/outboundfeeds/rss/"
+    - "https://cointelegraph.com/rss"
+    - "https://decrypt.co/feed"
+    - "https://bitcoinmagazine.com/.rss/full/"
+
+# --- Walk-forward & Out-of-Sample Optimizasyon ---
+optimizasyon:
+  otomatik_params: false        # true yaparsan params_best.json yüklenir
+  params_dosyasi: "params_best.json"
+  oos_egitim_orani: 0.70        # Out-of-Sample testinde %70 öğrenme / %30 görmediği veri
+
+# --- Gerçek Zamanlı Web Paneli (Dashboard) ---
+panel:
+  aktif: true
+  host: "0.0.0.0"
+  port: 8501
+
+hiz:
+  mum_yenileme_saniye: 15       # Mum verisi yenileme aralığı
+  reconnect_saniye: 5           # WebSocket koparsa tekrar bağlanma süresi
+  ws_ping_saniye: 15            # WebSocket Keep-Alive Ping/Pong aralığı

@@ -1,0 +1,30 @@
+# Gizli bilgiler
+.env
+.env.*
+!.env.ornek
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+.venv-windows/
+venv/
+.cache/
+
+# Çalışma zamanı / veritabanı
+*.db
+*.db-shm
+*.db-wal
+*.db.bak
+kelly_stats.json
+reports/
+run/
+archive/
+gitlab_artifacts/
+windows_sonuclar/
+
+# Yerel paket/çıktı
+*.log
+*.tmp
+.DS_Store

@@ -1,0 +1,234 @@
+{
+  "synthetic": true,
+  "natural_paper_run": false,
+  "market_subscriptions": false,
+  "duration_sec": 35,
+  "real_exchange_orders": false,
+  "state": {
+    "product_version": "9.4.4",
+    "product_label": "Kripto Bot v9.4.4",
+    "phase": "TEST_FIXTURE",
+    "elapsed_sec": 155.04543209075928,
+    "drain_elapsed_sec": 0.0,
+    "run_completion": {
+      "active_duration_target_sec": 0.0,
+      "active_window_completed": false,
+      "stop_reason": null,
+      "completed": false,
+      "scope": "time protocol only; not trade-cycle or profitability approval"
+    },
+    "evaluation_telemetry": {
+      "evaluation_calls_total": 0,
+      "entry_retry_suppressed": 0,
+      "position_retry_suppressed": 0,
+      "retry_suppressed_total": 0,
+      "non_retry_evaluation_calls": 0,
+      "retry_suppression_pct": null,
+      "counter_consistent": true,
+      "non_retry_reason_counts": {},
+      "unique_signal_count": null,
+      "scope": "Call counters, NOT unique opportunities, mature cohorts, or independent signals",
+      "strategy_policy_changed": false
+    },
+    "balance": 1000.0,
+    "starting_balance": 1000.0,
+    "equity": 1000.0,
+    "net_pnl": 0.0,
+    "closed_net_pnl": 0.0,
+    "gross_pnl": 0.0,
+    "total_fees": 0.0,
+    "total_funding": 0.0,
+    "closed_count": 0,
+    "wins": 0,
+    "losses": 0,
+    "win_rate": 0.0,
+    "margin_mode": "cross",
+    "per_trade_margin_usdt": 50.0,
+    "leverage": 10,
+    "hard_stop_usdt": -40.0,
+    "max_positions": 1000,
+    "unrealized_pnl": 0.0,
+    "breadth_ratio": 0.0,
+    "universe_counts": {
+      "union_pure": 0,
+      "binance_pure": 0,
+      "okx_pure": 0,
+      "active_deep_pool": 0,
+      "excluded_non_crypto": {
+        "okx_stocks_commodities": 0,
+        "binance_non_crypto": 0
+      }
+    },
+    "v94": {
+      "closed_candle_core": true,
+      "policy": {
+        "stop_atr": 1.8,
+        "min_stop_pct": 0.35,
+        "max_stop_pct": 1.2,
+        "trail_atr": 2.0,
+        "activation_r": 1.5,
+        "profit_floor_r": 0.25,
+        "total_risk_fraction": 0.02,
+        "directional_risk_fraction": 0.015,
+        "cooldown_bars": 3,
+        "max_spread_pct": 0.05,
+        "max_entry_drift_atr": 0.5
+      },
+      "entry_rejections": {},
+      "entry_rejections_includes_retry_suppression": true,
+      "open_stop_risk_usdt": 0,
+      "active_duration_target_sec": 0.0,
+      "real_money_approved": false
+    },
+    "engine_metrics": {
+      "ticks_processed": 0,
+      "universe_ticks_processed": 0,
+      "candles_ingested": 0,
+      "signals_evaluated": 0,
+      "regime_blocks": 0,
+      "bearish_long_blocks": 0,
+      "volume_divergence_triggers": 0,
+      "breadth_blocks": 0,
+      "warmup_blocks": 0,
+      "basis_divergence_blocks": 0,
+      "funding_proximity_blocks": 0,
+      "council_vetoes": 0,
+      "ten_agent_vetoes": 0,
+      "llm_referee_vetoes": 0,
+      "commission_blocks": 0,
+      "win_loss_trap_blocks": 0,
+      "flow_trend_exits": 0,
+      "shadow_legacy_135s_tags": 0,
+      "stagnant_cuts": 0,
+      "v4_vwap_atr_blocks": 0,
+      "maker_unfilled_skips": 0,
+      "entries_routed": 0
+    },
+    "analytics": {
+      "engine_version": "9.4.0",
+      "edge_separation": {
+        "trade_count": 0,
+        "low_sample_warning": true,
+        "sample_warning_text": "D\u00dc\u015e\u00dcK \u00d6RNEKLEM (0 < 30): kazanma oran\u0131 ve g\u00fcven aral\u0131\u011f\u0131 istatistiksel kan\u0131t say\u0131lmaz.",
+        "gross_total_usdt": 0,
+        "fees_total_usdt": 0,
+        "net_total_usdt": 0,
+        "pre_fee_expectancy_usdt": 0.0,
+        "fee_per_trade_usdt": 0.0,
+        "post_fee_expectancy_usdt": 0.0,
+        "pre_fee_edge_bps": 0.0,
+        "fee_cost_bps": 0.0,
+        "post_fee_edge_bps": 0.0,
+        "fee_to_abs_gross_ratio": null,
+        "bootstrap_95_ci_gross_per_trade_usdt": null,
+        "bootstrap_95_ci_net_per_trade_usdt": null,
+        "r_multiple_distribution": {
+          "one_r_usdt": 40.0,
+          "mean_r": 0.0,
+          "median_r": 0.0,
+          "min_r": 0.0,
+          "max_r": 0.0
+        },
+        "max_drawdown_usdt": 0.0,
+        "max_drawdown_pct": 0.0
+      },
+      "maker_queue": {
+        "submitted": 0,
+        "filled": 0,
+        "partial_filled": 0,
+        "expired_unfilled": 0,
+        "post_only_rejected": 0,
+        "open_resting": 0,
+        "fill_rate_pct": 0.0,
+        "avg_wait_ms": 0.0,
+        "avg_unfilled_runaway_bps": 0.0
+      },
+      "ten_agent_council": {
+        "mode": "TEN_AGENT_3ROUND_MUTUAL_AUDIT",
+        "min_consensus_votes": 7,
+        "dynamic_min_gross_fee_mult": 3.5,
+        "stats": {
+          "entry_audits": 0,
+          "entry_approved": 0,
+          "entry_rejected": 0,
+          "peer_downgrades": 0,
+          "peer_upgrades": 0,
+          "position_audits": 0,
+          "position_hold_decisions": 0,
+          "position_exit_decisions": 0
+        },
+        "recent_dialogues": []
+      },
+      "counterfactual": {
+        "gate_asymmetry_and_forward_returns": {},
+        "measurement_notes": {
+          "asof_epoch": 1793701840.6575441,
+          "horizon_tolerance_sec": 30.0,
+          "sample_unit": "gate-symbol-side-venue-decision_id when supplied, otherwise 45s temporal dedup",
+          "not_independent": "Horizons overlap and symbols share market factors. No IID significance claim.",
+          "cost_scenario": "Base = 7bps fee + 2x3bps slippage + recorded spread; stress = 7 + 2x8 + spread. No fill queue/funding/stop-path PnL simulation.",
+          "mae_scope": "Observed quote path only; absence of an observed barrier touch is not proof the exchange price never touched it.",
+          "causality": "First failing gates see a conditional, order-dependent sample; no automatic gate-removal recommendation."
+        },
+        "shadow_135s_cut_comparison": {
+          "completed_count": 0,
+          "active_open_shadow_count": 0,
+          "net_advantage_of_holding_usdt": 0,
+          "comparisons": []
+        }
+      },
+      "operational_health": {
+        "healthy": true,
+        "feed_lag_sec": 1.0,
+        "ledger_reconciled": true,
+        "ledger_status": "RECONCILED",
+        "ledger_reason": "clean_empty_db",
+        "committed_ledger_valid": true,
+        "pending_operations": [],
+        "memory_open_count": 0,
+        "sqlite_open_count": 0,
+        "alarms": [],
+        "warnings": []
+      }
+    },
+    "venue_trade_counts": {
+      "binance": 0,
+      "okx": 0
+    },
+    "venues": {
+      "binance": {
+        "healthy": true,
+        "bbo_healthy": true,
+        "trade_tape_healthy": true,
+        "fresh_pairs": 0,
+        "ticks": 1,
+        "bbo_updates": 1,
+        "last_ts": 1793701839.6538925,
+        "last_bbo_ts": 1793701839.6538925,
+        "last_trade_ts": 1793701839.6538925,
+        "errors": 0,
+        "errors_aggTrade": 0,
+        "errors_bookTicker": 0,
+        "endpoint_aggTrade": "init",
+        "endpoint_bookTicker": "init",
+        "endpoint": "see stream-specific endpoints"
+      },
+      "okx": {
+        "healthy": true,
+        "bbo_healthy": true,
+        "trade_tape_healthy": true,
+        "fresh_pairs": 0,
+        "ticks": 1,
+        "bbo_updates": 1,
+        "endpoint": "wss://ws.okx.com/ws/v5/public",
+        "last_ts": 1793701839.6538925,
+        "last_bbo_ts": 1793701839.6538925,
+        "last_trade_ts": 1793701839.6538925,
+        "errors": 0
+      }
+    },
+    "open_positions": [],
+    "closed_trades": [],
+    "market_board": []
+  }
+}

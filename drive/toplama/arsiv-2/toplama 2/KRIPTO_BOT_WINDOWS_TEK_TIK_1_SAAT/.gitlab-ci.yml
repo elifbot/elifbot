@@ -1,0 +1,57 @@
+# GitLab.com — KRIPTO-BOT v7.8 kontrollü 1 saatlik paper kabul testi
+# Job yalnız manuel başlatılır. Telegram/WhatsApp bu ölçümde kullanıcı talebiyle kapalıdır.
+
+image: python:3.12-slim
+
+stages:
+  - acceptance
+
+variables:
+  PIP_DISABLE_PIP_VERSION_CHECK: "1"
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  PYTHONUNBUFFERED: "1"
+  MODE: "paper"
+  PAPER_SESSION_HOURS: "1"
+  BOT_DB_FILE: "gitlab_artifacts/bot_state_gitlab_${CI_PIPELINE_ID}.db"
+  REQUIRE_NOTIFICATIONS: "0"
+  NOTIFICATION_STARTUP_TEST: "0"
+  BINANCE_PUBLIC_WWW: "1"
+
+cache:
+  key:
+    files:
+      - requirements.txt
+  paths:
+    - .cache/pip/
+
+bir_saatlik_paper_kabul:
+  stage: acceptance
+  timeout: 1h 40m
+  interruptible: false
+  resource_group: kripto-bot-paper-kabul
+  when: manual
+  allow_failure: false
+  before_script:
+    - python --version
+    - python -m pip install --upgrade pip
+    - python -m pip install -r requirements.txt pytest
+    - mkdir -p gitlab_artifacts reports run
+    - |
+      if ! MODE="" PAPER_SESSION_HOURS="0" REQUIRE_NOTIFICATIONS="0" python -m pytest -q tests > gitlab_artifacts/pytest.log 2>&1; then
+        cat gitlab_artifacts/pytest.log
+        exit 1
+      fi
+      cat gitlab_artifacts/pytest.log
+  script:
+    - echo "Bir saatlik temiz paper oturumu başlıyor. Pipeline=$CI_PIPELINE_ID"
+    - python deploy/bir_saat_gozetmen.py --hours 1 --db-file "$BOT_DB_FILE" --max-restarts 5 --health-grace-sec 180 --skip-notifications
+    - python deploy/gitlab_kabul_kontrol.py --db "$BOT_DB_FILE"
+  artifacts:
+    name: "kripto-bot-1saat-$CI_PIPELINE_ID"
+    when: always
+    expire_in: 14 days
+    paths:
+      - gitlab_artifacts/
+      - reports/
+      - run/*.log
+      - run/bir_saat_gozetmen_state.json

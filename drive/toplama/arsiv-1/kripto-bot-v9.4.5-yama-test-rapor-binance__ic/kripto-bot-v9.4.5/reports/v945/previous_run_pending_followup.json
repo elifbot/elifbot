@@ -1,0 +1,57 @@
+[
+  {
+    "operation_id": "5342b9b1152f4e6aa78f7cf25db2be96",
+    "symbol": "BTC/USDT",
+    "terminal": "OPEN",
+    "created_epoch": 1793703924.455365,
+    "terminal_observed_epoch": 1793703925.0249126,
+    "terminal_observation_upper_bound_sec": 0.5695476531982422,
+    "reconciled_observed_epoch": 1793703930.6025596,
+    "reconciled_observation_upper_bound_sec": 6.1471946239471436,
+    "both_observed_under_15sec": true
+  },
+  {
+    "operation_id": "6ea90f3651ba49708bbc12808925c6aa",
+    "symbol": "NEAR/USDT",
+    "terminal": "OPEN",
+    "created_epoch": 1793703925.0948489,
+    "terminal_observed_epoch": 1793703927.629345,
+    "terminal_observation_upper_bound_sec": 2.5344960689544678,
+    "reconciled_observed_epoch": 1793703930.6025596,
+    "reconciled_observation_upper_bound_sec": 5.507710695266724,
+    "both_observed_under_15sec": true
+  },
+  {
+    "operation_id": "91b4d580135f409d9f6e056a20a0d017",
+    "symbol": "WLD/USDT",
+    "terminal": "OPEN",
+    "created_epoch": 1793703927.764858,
+    "terminal_observed_epoch": 1793703929.8355036,
+    "terminal_observation_upper_bound_sec": 2.070645570755005,
+    "reconciled_observed_epoch": 1793703930.6025596,
+    "reconciled_observation_upper_bound_sec": 2.8377015590667725,
+    "both_observed_under_15sec": true
+  },
+  {
+    "operation_id": "f3b678dcee984e679d5b08e4550043fa",
+    "symbol": "SOL/USDT",
+    "terminal": "OPEN",
+    "created_epoch": 1793704209.9527142,
+    "terminal_observed_epoch": 1793704212.266179,
+    "terminal_observation_upper_bound_sec": 2.313464879989624,
+    "reconciled_observed_epoch": 1793704213.0263212,
+    "reconciled_observation_upper_bound_sec": 3.0736069679260254,
+    "both_observed_under_15sec": true
+  },
+  {
+    "operation_id": "e46b4e89048c45289fd4340d51f927a3",
+    "symbol": "ACU/USDT",
+    "terminal": "OPEN",
+    "created_epoch": 1793704220.4953904,
+    "terminal_observed_epoch": 1793704222.317617,
+    "terminal_observation_upper_bound_sec": 1.8222265243530273,
+    "reconciled_observed_epoch": 1793704223.0954292,
+    "reconciled_observation_upper_bound_sec": 2.600038766860962,
+    "both_observed_under_15sec": true
+  }
+]

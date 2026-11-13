@@ -1,0 +1,133 @@
+name: CI
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install ruff==0.8.4
+      # Kritik hata taraması (söz dizimi + pyflakes F kuralları)
+      - run: ruff check . --select E9,F63,F7,F82
+      # v5.1: genişletilmiş tarama — kullanılmayan import/değişken (F),
+      # söz dizimi (E9), None/True karşılaştırması (E711/E712), çıplak
+      # except (E722). İsimlendirme stili (E741) zorunlu değil.
+      - run: ruff check . --select F,E9,E711,E712,E722 --output-format concise
+      - run: python -m compileall -q .
+
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -r requirements-dev.txt
+      - run: python -m pytest tests/ -q
+
+  # v5.1: SÜRÜM REGRESYON KAPISI
+  # Paket sürümü değiştiğinde backtest kanıtı yeniden üretilmemişse KIRMIZI.
+  # Ağ gerektirmez: deterministik fixture çevrimdışı yeniden koşulur.
+  regression-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -r requirements.txt
+      - name: Backtest kanıtı güncel mi?
+        run: |
+          python - <<'PY'
+          import sys
+          from app import __version__
+          from backtest.regression_gate import (
+              REFERENCE_PATH, check_reference, load_reference,
+          )
+          reference = load_reference(REFERENCE_PATH)
+          if not reference:
+              print("::error::Referans dosyası yok: " + REFERENCE_PATH)
+              print("Üretmek için: python3 -m tools.make_reference")
+              sys.exit(1)
+          gate = check_reference(reference, __version__, strict_dataset=False)
+          for failure in gate.failures:
+              print("::error::" + failure)
+          for warning in gate.warnings:
+              print("::warning::" + warning)
+          if not gate.ok:
+              sys.exit(1)
+          print(f"Kapı YEŞİL — referans sürümü {__version__}, fixture yeniden üretildi")
+          PY
+      - name: Maliyet modeli kapalı olamaz
+        run: |
+          python - <<'PY'
+          import sys
+          from backtest.regression_gate import REFERENCE_PATH, load_reference
+          reference = load_reference(REFERENCE_PATH)
+          costs = reference.get("cost_model") or {}
+          if costs.get("optimistic_warning") or not costs.get("enabled", True):
+              print("::error::Referans backtest maliyetsiz koşulmuş — iyimser sonuç kanıt sayılamaz")
+              sys.exit(1)
+          print("Maliyet modeli açık:", costs.get("source"))
+          PY
+
+  # v5.2: RAPOR TUTARLILIK KAPISI
+  # Hukum, raporun KENDI verisiyle celisiyorsa KIRMIZI. Kullanici tespiti:
+  # v5.1 "orneklem yetersiz" diyordu ama WF 0/6 karli pencere / -433 USDT idi.
+  report-consistency:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -r requirements.txt
+      - name: Hukum kanitla celisiyor mu?
+        run: |
+          python - <<'PY'
+          import glob, json, sys
+          from backtest.regression_gate import check_report_consistency
+          paths = sorted(glob.glob("docs/dogrulama_v5.2*.json"))
+          if not paths:
+              print("::warning::Guncel dogrulama raporu yok; kapi atlandi")
+              sys.exit(0)
+          failed = False
+          for path in paths:
+              with open(path, encoding="utf-8") as handle:
+                  report = json.load(handle)
+              gate = check_report_consistency(report)
+              print(f"== {path} ==")
+              for failure in gate.failures:
+                  print("::error::" + failure)
+              for warning in gate.warnings:
+                  print("::warning::" + warning)
+              failed = failed or not gate.ok
+          if failed:
+              sys.exit(1)
+          print("Rapor tutarlilik kapisi YESIL")
+          PY
+      - name: JSON kati mi (Infinity/NaN yok)?
+        run: |
+          python - <<'PY'
+          import glob, json, sys
+          def reject(token):
+              raise ValueError("Gecersiz JSON sabiti: " + token)
+          bad = []
+          for path in sorted(glob.glob("docs/*.json")):
+              try:
+                  with open(path, encoding="utf-8") as handle:
+                      json.load(handle, parse_constant=reject)
+              except ValueError as exc:
+                  bad.append(f"{path}: {exc}")
+          for item in bad:
+              print("::error::" + item)
+          if bad:
+              sys.exit(1)
+          print("Tum docs/*.json kati JSON")
+          PY

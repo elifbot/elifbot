@@ -1,0 +1,63 @@
+{
+  "packaging_revision": 3,
+  "snapshot_at_utc": "2026-11-03T09:54:57.700034+00:00",
+  "runtime_financial_or_health_source_python_changed": false,
+  "original_docker_pytest": {
+    "exit_code": 2,
+    "collection_errors": 4,
+    "cause": "PyYAML missing from original dependencies",
+    "evidence": "reports/v943_docker_24h_start/docker_pytest.txt"
+  },
+  "corrected_docker_pytest": {
+    "exit_code": 0,
+    "passed": 121,
+    "duration_sec": 11.73,
+    "evidence": "reports/v943_docker_24h_start/docker_pytest_pinned.txt"
+  },
+  "dependency_fix": [
+    "PyYAML==6.0.3 added to tested pins",
+    "Dockerfile installs requirements-tested.txt"
+  ],
+  "docker_image_id": "sha256:2d00ac1d88982dccfdf938e18c10a9f6ae702000b1909892dfaef79abfe0da9a",
+  "actual_docker_healthcheck_status_at_startup": "healthy",
+  "docker_network_mode": "host; default bridge/Compose networking was not tested",
+  "source_freeze_files": 90,
+  "source_freeze_sha256": "0e25d335a79668b01e1cddf801fb5e3a7268cf76db80c7c2e9b67f85d3e329f7",
+  "config_sha256": "c2a3c7e91620113fbb0e5872b178f61f7173cb165ea76bd2d0bbc529c56e67a0",
+  "plan_file_sha256": "0dd8a0e0f8c114255ad6356f46d5f3a579ea9e822db86c726df9b8b4d3e3e589",
+  "plan_identity": "fa0ee81b69f925c465d4a86178ec8f5813c3b8afc8cf59d11eafae5e5518660f",
+  "registered_at_utc": "2026-11-03T09:51:12.044050+00:00",
+  "container_started_at_utc": "2026-11-03T09:51:31.424232461Z",
+  "long_paper_status_at_snapshot": "RUNNING",
+  "duration_sec": 86400,
+  "max_drain_sec": 600,
+  "long_run_complete": false,
+  "progress_at_snapshot": {
+    "status": "RUNNING",
+    "observed_at_epoch": 1793699695.6209168,
+    "plan_sha256": "fa0ee81b69f925c465d4a86178ec8f5813c3b8afc8cf59d11eafae5e5518660f",
+    "counts": {
+      "health_samples": 40,
+      "http_200": 40,
+      "http_503": 0,
+      "http_errors": 0,
+      "owned_young_pending_http200": 0,
+      "real_closed_trades": 0,
+      "natural_entry_fills": 0,
+      "pending_events": 0,
+      "db_read_errors": 0
+    },
+    "matched_pending_operation_ids": [],
+    "live_pending_http_observed": false,
+    "live_open_close_cycle_observed": false,
+    "long_run_complete": false,
+    "real_money_approved": false,
+    "elapsed_sec": 193.31165480613708,
+    "event_sufficiency_not_profitability": true
+  },
+  "live_evidence_directory": "/home/user/v943-long-paper-evidence",
+  "container_process_id": "v9-4-3-docker-i-inde-24-saat-pap-c2a4a1d2",
+  "observer_process_id": "24-saatlik-ko-u-pending-odakl-sa-ec58bbe9",
+  "image_package_integrity_file_count_before_documentation_update": 149,
+  "image_documentation_is_prelaunch_snapshot": "Running immutable image has same frozen90 runtime; postlaunch report/docs are in this ZIP, not retroactively inserted into running image."
+}

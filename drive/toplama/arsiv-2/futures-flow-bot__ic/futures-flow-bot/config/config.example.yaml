@@ -1,0 +1,83 @@
+# Calisan ayar icin: cp config/config.example.yaml config/config.yaml
+mode: paper            # paper | testnet | live  (live icin ayrica LIVE_TRADING_CONFIRM gerekir)
+
+risk:
+  margin_per_trade_usd: 50       # islem basina marjin
+  leverage: 10
+  margin_mode: isolated
+  stop_loss_usd: 25              # pozisyonda bu kadar zararda stop (500$ notional'da ~%5 fiyat hareketi)
+  free_margin_reserve_pct: 5     # komisyon/funding icin bosta tutulan pay
+  symbol_cooldown_sec: 300       # ayni coine tekrar giris icin bekleme
+  max_open_positions: null       # null = sinir yok (bakiye belirler)
+  daily_loss_limit_usd: null     # null = kapali
+  max_same_direction_positions: null   # null = kapali
+
+exchanges:
+  binance:
+    enabled: true
+    paper_balance_usd: 500       # kasanin Binance'e ayrilan yarisi (paper simulasyon)
+    maker_fee: 0.0002            # hesap seviyenize gore degisir, dogrulayin
+    taker_fee: 0.0005
+    min_24h_volume_usd: 10000000 # dusuk likidite filtresi (asagi cekmek = daha cok coin ama daha cok tuzak)
+    max_symbols: 450
+  okx:
+    enabled: true
+    paper_balance_usd: 500
+    maker_fee: 0.0002
+    taker_fee: 0.0005
+    min_24h_volume_usd: 10000000
+    max_symbols: 300
+
+scanner:
+  flow_window_sec: 10
+  volume_window_sec: 60
+  baseline_minutes: 30
+  indicator_candle_seconds: 60   # RSI/MACD mum suresi (isinma ~36 mum)
+  min_flow_usd: 3000             # son 10 sn'de en az bu kadar islem hacmi
+  eval_interval_sec: 1.0
+
+entry:
+  threshold: 4                   # 5 kriterden en az 4'u (delta + hacim zorunlu)
+  delta_min: 0.35
+  vol_ratio_min: 3.0
+  change_min_pct: 0.10
+  rsi_long_min: 50
+  rsi_long_max: 78
+  rsi_short_min: 22
+  rsi_short_max: 50
+
+entry_order:
+  mode: maker                    # maker (post-only) | taker
+  timeout_sec: 5                 # dolmazsa iptal, kovalama yok
+
+exit:
+  score_threshold: 3             # 5 cikis kriterinden en az 3'u
+  min_net_profit_usd: 0.5        # bunun altinda kazancta akis donusu cikis sebebi sayilmaz
+  exit_when_losing_on_reversal: true
+  delta_flip: 0.0
+  vol_ratio_fade: 1.0
+  rsi_overbought: 70
+  rsi_oversold: 30
+  adverse_change_pct: 0.10
+  breakeven_activation_usd: 5
+  breakeven_buffer_pct: 0.10
+  trail_activation_usd: 6
+  trail_giveback_pct: 40
+  time_stop_minutes: 30
+
+paper:
+  slippage_pct: 0.03             # taker dolumlarda kayma
+  stop_slippage_pct: 0.05
+
+safety:                          # kayipla ilgisiz ariza korumalari
+  halt_on_stale_data_sec: 10
+  resume_after_fresh_sec: 15
+  max_consecutive_api_errors: 5
+  api_error_pause_sec: 60
+
+alerts:
+  notify_trades: false
+  summary_interval_min: 60
+
+storage:
+  path: data/tradebot.db

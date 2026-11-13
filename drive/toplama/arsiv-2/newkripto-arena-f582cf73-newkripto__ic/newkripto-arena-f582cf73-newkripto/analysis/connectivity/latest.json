@@ -1,0 +1,198 @@
+{
+  "macos-latest": {
+    "binance_usdm": {
+      "status": 451
+    },
+    "binance_usdm_api_host": {
+      "status": 451
+    },
+    "binance_usdm_www_host": {
+      "catalog": 931,
+      "status": 200
+    },
+    "binance_ws_api_depth": {
+      "asks": 5,
+      "bids": 5,
+      "event": null,
+      "message_type": "dict",
+      "status": 200
+    },
+    "binance_ws_market_trade": {
+      "event": "aggTrade",
+      "message_type": "dict",
+      "status": 200
+    },
+    "binance_ws_public_book": {
+      "event": "bookTicker",
+      "message_type": "dict",
+      "status": 200
+    },
+    "okx_swap": {
+      "catalog": 522,
+      "status": 200
+    }
+  },
+  "ubuntu-24.04-arm": {
+    "binance_usdm": {
+      "status": 451
+    },
+    "binance_usdm_api_host": {
+      "status": 451
+    },
+    "binance_usdm_www_host": {
+      "catalog": 931,
+      "status": 200
+    },
+    "binance_ws_api_depth": {
+      "asks": 5,
+      "bids": 5,
+      "event": null,
+      "message_type": "dict",
+      "status": 200
+    },
+    "binance_ws_market_trade": {
+      "event": "aggTrade",
+      "message_type": "dict",
+      "status": 200
+    },
+    "binance_ws_public_book": {
+      "event": "bookTicker",
+      "message_type": "dict",
+      "status": 200
+    },
+    "okx_swap": {
+      "catalog": 522,
+      "status": 200
+    }
+  },
+  "ubuntu-26.04": {
+    "binance_usdm": {
+      "status": 451
+    },
+    "binance_usdm_api_host": {
+      "status": 451
+    },
+    "binance_usdm_www_host": {
+      "catalog": 931,
+      "status": 200
+    },
+    "binance_ws_api_depth": {
+      "asks": 5,
+      "bids": 5,
+      "event": null,
+      "message_type": "dict",
+      "status": 200
+    },
+    "binance_ws_market_trade": {
+      "event": "aggTrade",
+      "message_type": "dict",
+      "status": 200
+    },
+    "binance_ws_public_book": {
+      "event": "bookTicker",
+      "message_type": "dict",
+      "status": 200
+    },
+    "okx_swap": {
+      "catalog": 522,
+      "status": 200
+    }
+  },
+  "ubuntu-26.04-arm": {
+    "binance_usdm": {
+      "status": 451
+    },
+    "binance_usdm_api_host": {
+      "status": 451
+    },
+    "binance_usdm_www_host": {
+      "catalog": 931,
+      "status": 200
+    },
+    "binance_ws_api_depth": {
+      "asks": 5,
+      "bids": 5,
+      "event": null,
+      "message_type": "dict",
+      "status": 200
+    },
+    "binance_ws_market_trade": {
+      "event": "aggTrade",
+      "message_type": "dict",
+      "status": 200
+    },
+    "binance_ws_public_book": {
+      "event": "bookTicker",
+      "message_type": "dict",
+      "status": 200
+    },
+    "okx_swap": {
+      "catalog": 522,
+      "status": 200
+    }
+  },
+  "ubuntu-latest": {
+    "binance_usdm": {
+      "status": 451
+    },
+    "binance_usdm_api_host": {
+      "status": 451
+    },
+    "binance_usdm_www_host": {
+      "catalog": 931,
+      "status": 200
+    },
+    "binance_ws_api_depth": {
+      "asks": 5,
+      "bids": 5,
+      "event": null,
+      "message_type": "dict",
+      "status": 200
+    },
+    "binance_ws_market_trade": {
+      "event": "aggTrade",
+      "message_type": "dict",
+      "status": 200
+    },
+    "binance_ws_public_book": {
+      "event": "bookTicker",
+      "message_type": "dict",
+      "status": 200
+    },
+    "okx_swap": {
+      "catalog": 522,
+      "status": 200
+    }
+  },
+  "windows-latest": {
+    "binance_usdm": {
+      "status": 451
+    },
+    "binance_usdm_api_host": {
+      "status": 451
+    },
+    "binance_usdm_www_host": {
+      "catalog": 931,
+      "status": 200
+    },
+    "binance_ws_api_depth": {
+      "detail": "'charmap' codec can't encode character '\\u0131' in position 45: character maps to <undefined>",
+      "error": "UnicodeEncodeError",
+      "status": null
+    },
+    "binance_ws_market_trade": {
+      "detail": "'charmap' codec can't encode character '\\u0131' in position 48: character maps to <undefined>",
+      "error": "UnicodeEncodeError",
+      "status": null
+    },
+    "binance_ws_public_book": {
+      "detail": "'charmap' codec can't encode character '\\u0131' in position 47: character maps to <undefined>",
+      "error": "UnicodeEncodeError",
+      "status": null
+    },
+    "okx_swap": {
+      "catalog": 522,
+      "status": 200
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "120m-1000-usdt-pdf-v2-shadow",
+  "description": "PDF v2 OHLCV teknik paketi ve pdf-confluence Shadow varyanti ile 1000 USDT baslangic paper kasasi; her Shadow varyanti icin 1000 USDT izole kasa. Baseline sinyal/cikis esikleri, 50 USDT marj, sabit 10x, kademesiz yapi ve trailing + order-flow cikisi korunur; capraz kurtarma kapalidir. Yeni indikatörler canli baseline kuralina otomatik promosyon edilmez.",
+  "overrides": {
+    "paper": {
+      "bakiye": 1000.0
+    },
+    "risk": {
+      "capraz_kurtarma": false
+    },
+    "shadow_lab": {
+      "aktif": true,
+      "sanal_kasa_usdt": 1000.0,
+      "pdf_confluence": {
+        "aktif": true,
+        "min_aligned_families": 4,
+        "max_opposed_families": 2
+      }
+    },
+    "pdf_v2": {
+      "aktif": true
+    }
+  },
+  "paper_session_minutes": 120,
+  "do_not_auto_promote": true
+}

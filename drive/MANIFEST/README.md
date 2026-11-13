@@ -18,6 +18,12 @@ Dosyalar:
 - `toplama-<n>-icerik.txt` — arşiv içindeki her dosyanın tam listesi + boyutu
 - `ozet.json` — makine okunur özet (boyut, dosya sayısı, uzantı dağılımı)
 
+## Açılmış içerik
+
+Dört arşiv açıldı; içindeki kod/doküman/konfig (`2.414` dosya, `31.9 MB`) repoya alındı:
+`drive/toplama/`. İç içe zip'ler de açıldı. İkili dosyalar ve 300 KB üstü içerik Drive'da
+kaldı; nedeni `drive/toplama/excluded.csv`'de satır satır yazılı.
+
 ## Neden önemli
 
 Bu arşivlerde **gerçek piyasa tick verisi yok** (`.indir`, `.py`, `.zip`, `.html`, `.pdf`,

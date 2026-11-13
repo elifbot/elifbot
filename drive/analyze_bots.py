@@ -9,7 +9,7 @@ Kullanim:
 
 from openai import OpenAI
 
-NVIDIA_API_KEY = "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"
+NVIDIA_API_KEY= "***REDACTED***"
 nvidia = OpenAI(base_url="https://integrate.api.nvidia.com/v1", api_key=NVIDIA_API_KEY)
 
 # Tam birlesik bot kodunu oku

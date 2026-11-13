@@ -1,0 +1,124 @@
+{
+  "metrics": {
+    "net_pnl": -6.6794,
+    "trade_count": 8,
+    "win_rate": 0.5,
+    "profit_factor": 0.3109,
+    "max_drawdown_usdt": 8.1515,
+    "max_drawdown_pct": 0.814,
+    "sharpe_per_trade": -0.4753,
+    "avg_win": 0.7533,
+    "avg_loss": -2.4232,
+    "expectancy_usdt": -0.8349,
+    "expectancy_r": -0.297,
+    "max_consecutive_losses": 1,
+    "total_fees": 2.105,
+    "total_funding": -0.0499,
+    "total_slippage": 1.5046,
+    "avg_r_multiple": -0.297,
+    "by_engine": {
+      "trend": {
+        "trades": 7,
+        "net_pnl": -7.0795,
+        "win_rate": 0.4286,
+        "profit_factor": 0.2696,
+        "avg_r": -0.3643
+      },
+      "fade": {
+        "trades": 1,
+        "net_pnl": 0.4001,
+        "win_rate": 1.0,
+        "profit_factor": Infinity,
+        "avg_r": 0.1739
+      }
+    },
+    "by_symbol": {
+      "BTCUSDT": {
+        "trades": 8,
+        "net_pnl": -6.6794,
+        "win_rate": 0.5,
+        "profit_factor": 0.3109,
+        "avg_r": -0.297
+      }
+    },
+    "by_side": {
+      "LONG": {
+        "trades": 3,
+        "net_pnl": 2.6132,
+        "win_rate": 1.0,
+        "profit_factor": Infinity,
+        "avg_r": 0.3788
+      },
+      "SHORT": {
+        "trades": 5,
+        "net_pnl": -9.2926,
+        "win_rate": 0.2,
+        "profit_factor": 0.0413,
+        "avg_r": -0.7025
+      }
+    },
+    "by_regime": {
+      "TREND_UP": {
+        "trades": 3,
+        "net_pnl": 2.6132,
+        "win_rate": 1.0,
+        "profit_factor": Infinity,
+        "avg_r": 0.3788
+      },
+      "STRONG_TREND_DOWN": {
+        "trades": 4,
+        "net_pnl": -9.6927,
+        "win_rate": 0.0,
+        "profit_factor": 0.0,
+        "avg_r": -0.9216
+      },
+      "TREND_DOWN": {
+        "trades": 1,
+        "net_pnl": 0.4001,
+        "win_rate": 1.0,
+        "profit_factor": Infinity,
+        "avg_r": 0.1739
+      }
+    }
+  },
+  "rejection_counts": {
+    "dusuk_hacim": 1531,
+    "fade_kosulu_yok": 170,
+    "rejim_uyumsuz": 30,
+    "fake_breakout_or_suspect": 17,
+    "limit_bekliyor": 9,
+    "emir_dolmadi": 1,
+    "yeniden_giris_beklemesi": 16,
+    "guclu_trend_fade_kapali": 79,
+    "dusen_bicak": 4,
+    "yukselen_bicak": 3,
+    "mtf_uyumsuz": 1
+  },
+  "expired_orders": 1,
+  "partial_fills": 4,
+  "monte_carlo": {
+    "simulations": 2000,
+    "final_pnl_p5": -14.3142,
+    "final_pnl_p25": -9.7565,
+    "final_pnl_p50": -6.6596,
+    "final_pnl_p75": -3.5826,
+    "final_pnl_p95": 0.5935,
+    "max_dd_p50_pct": 0.801,
+    "max_dd_p95_pct": 1.502,
+    "prob_loss": 0.923,
+    "prob_ruin": 0.0,
+    "trade_count": 8
+  },
+  "shock_tests": {
+    "checked": 9,
+    "blocked": 0,
+    "unavailable": 0
+  },
+  "betas": {
+    "BTCUSDT": 1.0
+  },
+  "spread": "uygulanmadi",
+  "slippage_bps": 0.0,
+  "latency_ms": 0,
+  "data_source": "perp"
+}

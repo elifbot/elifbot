@@ -1,0 +1,18 @@
+{
+  "created_utc": "2026-11-03T20:18:00.368152+00:00",
+  "release": "9.5.3-paper-rc1",
+  "profile": "mild",
+  "active_sec": 600,
+  "max_drain_sec": 120,
+  "port": 8080,
+  "report_prefix": "natural10m_continuity",
+  "initial_virtual_usdt": 1000,
+  "paper_only": true,
+  "execution_mode": "bounded foreground supervisor; wait to completion within current agent response",
+  "supervisor_child_budget_sec": 850,
+  "external_diagnostic_sha256": {
+    "launch.py": "babf94bf9a78d5e3d7fd821070b414409c832b69c0b658a714ff043f04d3efa8",
+    "finite_supervise.py": "7b5e9f249569e04732e1e4576b6c4880bd9c5cc95ed992a72150d2a3108d1967",
+    "snapshot_preview.py": "c183d8e8c2e62f8d9b16d7b28817d54d32b2e2aea75e61d29c9bd55496dd62a8"
+  }
+}

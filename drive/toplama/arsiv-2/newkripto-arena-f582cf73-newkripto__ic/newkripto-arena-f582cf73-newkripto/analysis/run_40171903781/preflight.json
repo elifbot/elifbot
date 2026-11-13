@@ -1,0 +1,35 @@
+{
+  "status": "passed",
+  "required_both": true,
+  "per_exchange": {
+    "binance": 741,
+    "okx": 507
+  },
+  "public_rest_urls": {
+    "binance": "https://www.binance.com/fapi/v1"
+  },
+  "samples": {
+    "binance": {
+      "ohlcv_rows": 5,
+      "ohlcv_last_close": 80581.7,
+      "ticker_last": 80581.7,
+      "bid": 80581.7,
+      "ask": 80581.7,
+      "quote_source": "last_fallback",
+      "funding_rate": 5.521e-05,
+      "open_interest": 93303.117
+    },
+    "okx": {
+      "ohlcv_rows": 5,
+      "ohlcv_last_close": 80589.9,
+      "ticker_last": 80589.9,
+      "bid": 80589.8,
+      "ask": 80589.9,
+      "quote_source": "ticker",
+      "funding_rate": 9.16487368611e-05,
+      "open_interest": 2400306309.9427285
+    }
+  },
+  "errors": {},
+  "missing": []
+}

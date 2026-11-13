@@ -1,0 +1,371 @@
+{
+  "version": "5.1-final",
+  "generated_at": "2026-11-07T19:19:05+00:00",
+  "profile": "apex",
+  "target_net_risk": 25.0,
+  "initial_balance": 1000.0,
+  "dataset": {
+    "exchange": "okx",
+    "symbols": 6,
+    "symbol_list": [
+      "okx:ADA-USDT-SWAP",
+      "okx:BTC-USDT-SWAP",
+      "okx:DOGE-USDT-SWAP",
+      "okx:ETH-USDT-SWAP",
+      "okx:SOL-USDT-SWAP",
+      "okx:XRP-USDT-SWAP"
+    ],
+    "days": 90,
+    "total_bars": 155520,
+    "fine_days": 3,
+    "fine_bars": 25920,
+    "fine_symbols": 6
+  },
+  "cost_model": {
+    "source": "measured",
+    "enabled": true,
+    "measured_at": "2026-11-07T18:47:18+00:00",
+    "measured_symbols": 6,
+    "optimistic_warning": false,
+    "by_exchange": {
+      "binance": {
+        "spread_bps": 1.5,
+        "slippage_bps": 2.0,
+        "latency_ms": 250,
+        "exit_slippage_bps": 3.0,
+        "maker_fee": 0.0002,
+        "taker_fee": 0.0005
+      },
+      "okx": {
+        "spread_bps": 0.988,
+        "slippage_bps": 3.0,
+        "latency_ms": 350,
+        "exit_slippage_bps": 4.0,
+        "maker_fee": 0.0002,
+        "taker_fee": 0.0005
+      }
+    },
+    "measured_spread_bps": {
+      "okx:BTC-USDT-SWAP": 0.0132,
+      "okx:ETH-USDT-SWAP": 0.0447,
+      "okx:SOL-USDT-SWAP": 1.1153,
+      "okx:XRP-USDT-SWAP": 0.8607,
+      "okx:DOGE-USDT-SWAP": 1.3909,
+      "okx:ADA-USDT-SWAP": 5.496
+    },
+    "measured_slippage_bps": {
+      "okx:BTC-USDT-SWAP": 0.0066,
+      "okx:ETH-USDT-SWAP": 0.0224,
+      "okx:SOL-USDT-SWAP": 0.5576,
+      "okx:XRP-USDT-SWAP": 2.7908,
+      "okx:DOGE-USDT-SWAP": 21.8745,
+      "okx:ADA-USDT-SWAP": 14.2751
+    },
+    "measured_exit_slippage_bps": {
+      "okx:BTC-USDT-SWAP": 0.0066,
+      "okx:ETH-USDT-SWAP": 0.0224,
+      "okx:SOL-USDT-SWAP": 0.5576,
+      "okx:XRP-USDT-SWAP": 1.9976,
+      "okx:DOGE-USDT-SWAP": 23.9115,
+      "okx:ADA-USDT-SWAP": 14.4538
+    },
+    "measured_latency_ms": {
+      "okx:BTC-USDT-SWAP": 200,
+      "okx:ETH-USDT-SWAP": 191,
+      "okx:SOL-USDT-SWAP": 150,
+      "okx:XRP-USDT-SWAP": 148,
+      "okx:DOGE-USDT-SWAP": 150,
+      "okx:ADA-USDT-SWAP": 148
+    }
+  },
+  "cost_summary": "Maliyet modeli: ÖLÇÜLMÜŞ · 6 sembol ölçüldü · binance: spread 1.50bps, kayma 2.00bps, çıkış kayması 3.00bps, gecikme 250ms | okx: spread 0.99bps, kayma 3.00bps, çıkış kayması 4.00bps, gecikme 350ms",
+  "runs": [
+    {
+      "label": "birincil (1m yol + maliyet)",
+      "path_source": "adverse_first",
+      "metrics": {
+        "net_pnl": -87.111,
+        "trade_count": 5,
+        "win_rate": 0.2,
+        "profit_factor": 0.0075,
+        "max_drawdown_usdt": 87.111,
+        "max_drawdown_pct": 8.7111,
+        "sharpe_per_trade": -1.0912,
+        "avg_win": 0.6544,
+        "avg_loss": -21.9414,
+        "expectancy_usdt": -17.4222,
+        "expectancy_r": -0.8412,
+        "max_consecutive_losses": 3,
+        "total_fees": 11.5462,
+        "total_funding": 0.0,
+        "total_slippage": 13.3577,
+        "avg_r_multiple": -0.8412,
+        "by_engine": {
+          "trend": {
+            "trades": 5,
+            "net_pnl": -87.111,
+            "win_rate": 0.2,
+            "profit_factor": 0.0075,
+            "avg_r": -0.8412
+          }
+        },
+        "by_symbol": {
+          "okx:ETH-USDT-SWAP": {
+            "trades": 1,
+            "net_pnl": -33.6577,
+            "win_rate": 0.0,
+            "profit_factor": 0.0,
+            "avg_r": -1.346
+          },
+          "okx:BTC-USDT-SWAP": {
+            "trades": 1,
+            "net_pnl": -25.4486,
+            "win_rate": 0.0,
+            "profit_factor": 0.0,
+            "avg_r": -1.0177
+          },
+          "okx:ADA-USDT-SWAP": {
+            "trades": 1,
+            "net_pnl": -1.1827,
+            "win_rate": 0.0,
+            "profit_factor": 0.0,
+            "avg_r": -0.9328
+          },
+          "okx:XRP-USDT-SWAP": {
+            "trades": 1,
+            "net_pnl": 0.6544,
+            "win_rate": 1.0,
+            "profit_factor": 0.0,
+            "avg_r": 0.1893
+          },
+          "okx:SOL-USDT-SWAP": {
+            "trades": 1,
+            "net_pnl": -27.4764,
+            "win_rate": 0.0,
+            "profit_factor": 0.0,
+            "avg_r": -1.0988
+          }
+        },
+        "by_side": {
+          "SHORT": {
+            "trades": 4,
+            "net_pnl": -85.9283,
+            "win_rate": 0.25,
+            "profit_factor": 0.0076,
+            "avg_r": -0.8183
+          },
+          "LONG": {
+            "trades": 1,
+            "net_pnl": -1.1827,
+            "win_rate": 0.0,
+            "profit_factor": 0.0,
+            "avg_r": -0.9328
+          }
+        },
+        "by_regime": {
+          "TREND_DOWN": {
+            "trades": 2,
+            "net_pnl": -59.1063,
+            "win_rate": 0.0,
+            "profit_factor": 0.0,
+            "avg_r": -1.1819
+          },
+          "STRONG_TREND_UP": {
+            "trades": 1,
+            "net_pnl": -1.1827,
+            "win_rate": 0.0,
+            "profit_factor": 0.0,
+            "avg_r": -0.9328
+          },
+          "STRONG_TREND_DOWN": {
+            "trades": 2,
+            "net_pnl": -26.822,
+            "win_rate": 0.5,
+            "profit_factor": 0.0238,
+            "avg_r": -0.4548
+          }
+        }
+      },
+      "metrics_text": "== BIRINCIL (1M YOL + MALIYET) ==\nNet PnL: -87.11 USDT\nİşlem: 5 | Kazanma: %20.0\nProfit Factor: 0.01 | Sharpe: -1.09\nMax DD: 87.11 USDT (%8.7)\nBeklenen değer: -17.422 USDT (-0.84R)\nOrt. kazanç/kayıp: +0.65 / -21.94\nArdışık kayıp: 3\nÜcret: 11.55 | Funding: 0.00 | Kayma: 13.36\n-- Motorlar --\ntrend: 5 işlem, net -87.11, PF 0.0075\n-- Rejimler (v2.0) --\nTREND_DOWN: 2 işlem, net -59.11, kazanma %0\nSTRONG_TREND_DOWN: 2 işlem, net -26.82, kazanma %50\nSTRONG_TREND_UP: 1 işlem, net -1.18, kazanma %0\n-- Yön --\nLONG: 1 işlem, net -1.18, PF 0.0\nSHORT: 4 işlem, net -85.93, PF 0.0076",
+      "monte_carlo": {
+        "simulations": 2000,
+        "final_pnl_p5": -141.5356,
+        "final_pnl_p25": -113.214,
+        "final_pnl_p50": -87.111,
+        "final_pnl_p75": -61.0079,
+        "final_pnl_p95": -28.5329,
+        "max_dd_p50_pct": 8.711,
+        "max_dd_p95_pct": 14.154,
+        "prob_loss": 0.996,
+        "prob_ruin": 0.0135,
+        "trade_count": 5
+      },
+      "walk_forward": {
+        "windows": [
+          {
+            "index": 1,
+            "start_ts": 1786301400000,
+            "end_ts": 1787597400000,
+            "net_pnl": -89.4523,
+            "trades": 5,
+            "win_rate": 0.2,
+            "max_dd_pct": 8.9452,
+            "profitable": false
+          },
+          {
+            "index": 2,
+            "start_ts": 1787597400000,
+            "end_ts": 1788893400000,
+            "net_pnl": -23.3584,
+            "trades": 15,
+            "win_rate": 0.5333,
+            "max_dd_pct": 8.9524,
+            "profitable": false
+          },
+          {
+            "index": 3,
+            "start_ts": 1788893400000,
+            "end_ts": 1790189400000,
+            "net_pnl": -45.6862,
+            "trades": 13,
+            "win_rate": 0.4615,
+            "max_dd_pct": 9.7321,
+            "profitable": false
+          },
+          {
+            "index": 4,
+            "start_ts": 1790189400000,
+            "end_ts": 1791485400000,
+            "net_pnl": -80.3102,
+            "trades": 4,
+            "win_rate": 0.25,
+            "max_dd_pct": 8.9374,
+            "profitable": false
+          },
+          {
+            "index": 5,
+            "start_ts": 1791485400000,
+            "end_ts": 1792781400000,
+            "net_pnl": -102.1114,
+            "trades": 17,
+            "win_rate": 0.5294,
+            "max_dd_pct": 10.2111,
+            "profitable": false
+          },
+          {
+            "index": 6,
+            "start_ts": 1792781400000,
+            "end_ts": 1794077400001,
+            "net_pnl": -92.7194,
+            "trades": 7,
+            "win_rate": 0.4286,
+            "max_dd_pct": 9.2778,
+            "profitable": false
+          }
+        ],
+        "profitable_windows": 0,
+        "total_windows": 6,
+        "total_net_pnl": -433.6379,
+        "worst_window_net_pnl": -102.1114
+      },
+      "intrabar": {
+        "real_1m_bars": 0,
+        "synthetic_bars": 30,
+        "partial_coverage_bars": 0,
+        "inconsistent_bars": 0,
+        "single_step_bars": 0,
+        "real_coverage_ratio": 0.0
+      },
+      "risk_audit": {
+        "breach_ratio_threshold": 1.3,
+        "closed_trades": 5,
+        "losing_trades": 4,
+        "breaches": [
+          {
+            "symbol": "okx:ETH-USDT-SWAP",
+            "reason": "position_loss_stop",
+            "pnl": -33.6577,
+            "target_net_risk": 25.005,
+            "realized_over_target": 1.346,
+            "stop_overshoot_ratio": 0.7755,
+            "breach": true
+          }
+        ],
+        "breach_count": 1,
+        "breach_rate": 0.25,
+        "max_realized_over_target": 1.346,
+        "mean_realized_over_target": 1.0988,
+        "max_stop_overshoot_ratio": 0.7755,
+        "trades": [
+          {
+            "symbol": "okx:ETH-USDT-SWAP",
+            "reason": "position_loss_stop",
+            "pnl": -33.6577,
+            "target_net_risk": 25.005,
+            "realized_over_target": 1.346,
+            "stop_overshoot_ratio": 0.7755,
+            "breach": true
+          },
+          {
+            "symbol": "okx:BTC-USDT-SWAP",
+            "reason": "position_loss_stop",
+            "pnl": -25.4486,
+            "target_net_risk": 25.005,
+            "realized_over_target": 1.0177,
+            "stop_overshoot_ratio": 0.3265,
+            "breach": false
+          },
+          {
+            "symbol": "okx:ADA-USDT-SWAP",
+            "reason": "stop_loss",
+            "pnl": -1.1827,
+            "target_net_risk": 1.2679,
+            "realized_over_target": 0.9328,
+            "stop_overshoot_ratio": 0.1126,
+            "breach": false
+          },
+          {
+            "symbol": "okx:XRP-USDT-SWAP",
+            "reason": "trailing_stop",
+            "pnl": 0.6544,
+            "target_net_risk": 3.4577,
+            "realized_over_target": 0.0,
+            "stop_overshoot_ratio": 0.0,
+            "breach": false
+          },
+          {
+            "symbol": "okx:SOL-USDT-SWAP",
+            "reason": "position_loss_stop",
+            "pnl": -27.4764,
+            "target_net_risk": 25.005,
+            "realized_over_target": 1.0988,
+            "stop_overshoot_ratio": 0.4508,
+            "breach": false
+          }
+        ]
+      },
+      "rejection_counts": {
+        "dusuk_hacim": 126652,
+        "fade_kosulu_yok": 12728,
+        "guclu_trend_fade_kapali": 5704,
+        "yukselen_bicak": 1323,
+        "dusuk_puan": 460,
+        "fake_breakout_or_suspect": 3624,
+        "dusen_bicak": 1207,
+        "limit_bekliyor": 9,
+        "yeniden_giris_beklemesi": 13,
+        "emir_dolmadi": 4,
+        "rejim_uyumsuz": 2480,
+        "kismi_dolum": 2,
+        "PORTFOLIO_DRAWDOWN_PROTECTION": 1117
+      },
+      "expired_orders": 4,
+      "partial_fills": 3,
+      "cost_model_source": "measured",
+      "net_pnl": -87.111,
+      "trade_count": 5
+    }
+  ],
+  "verdict": "🔴 **KENAR KANITLANMADI — örneklem yetersiz.** Birincil koşuda 5 işlem var; istatistiksel hüküm için en az 200 gerekir. Daha uzun veri veya daha çok sembol ile tekrar koşun. Bu sonuçla gerçek paraya ölçekleme YAPILMAMALIDIR.",
+  "_json_sanitized": "v5.2: bu dosyada Infinity/NaN vardi; kati JSON gecersiz oldugu icin 0.0'a cevrildi. profit_factor=0.0 'tanimmsiz' demektir (hic kayip yok), sifir kârlilik DEGIL."
+}

@@ -1,0 +1,57 @@
+{
+  "started_utc": "2026-11-05T12:06:30.819014+00:00",
+  "mode": "OBSERVE_NO_ORDERS",
+  "markets": {
+    "binance_usdm": {
+      "discovered": 0,
+      "quoted": 0,
+      "status": "ERROR",
+      "error": "RuntimeError: HTTP 451: {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a restricted location according to 'b. Eligibility' in https://www.bin"
+    },
+    "okx_futures": {
+      "discovered": 287,
+      "quoted": 287,
+      "status": "AVAILABLE",
+      "error": ""
+    },
+    "binance_coinm": {
+      "discovered": 0,
+      "quoted": 0,
+      "status": "ERROR",
+      "error": "RuntimeError: HTTP 451: {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a restricted location according to 'b. Eligibility' in https://www.bin"
+    },
+    "okx_swap": {
+      "discovered": 540,
+      "quoted": 540,
+      "status": "AVAILABLE",
+      "error": ""
+    }
+  },
+  "instruments": 827,
+  "quotes": 827,
+  "candles_requested": 827,
+  "candles_ok": 827,
+  "signals": 0,
+  "errors": [],
+  "real_orders": 0,
+  "real_money_approved": false,
+  "strategy_reasons": {
+    "STALE_CANDLE": 827
+  },
+  "rate_limit": {
+    "rate_per_sec": 8.0,
+    "base_rate_per_sec": 8.0,
+    "throttles_429": 0,
+    "queued_waits": 823,
+    "queued_wait_sec": 101.835
+  },
+  "finished_utc": "2026-11-05T12:08:14.065277+00:00",
+  "status": "PARTIAL",
+  "limitations": [
+    "Bu mod gözlemdir; PAPER dahi emir açmaz.",
+    "Binance erişimi yoksa sonuç PARTIAL; hiçbir alternatif borsa Binance yerine gösterilmez.",
+    "Tüm aktif sözleşmeler keşfedilir; inverse/teslimatlı sözleşmeler için PAPER hesaplama henüz uygulanmadı.",
+    "Tek tarama sürekli izleme veya kârlılık kanıtı değildir.",
+    "COIN-M quote hacmi fiyatla yaklaşık dönüştürülür."
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "reporting_only_post_run_diagnostic": true,
+  "trading_sources_or_acceptance_thresholds_modified": false,
+  "binance_aggtrade_stream": {
+    "observed_ticks": 0,
+    "recorded_connection_errors": 133,
+    "observed_bbo_updates": 1773328,
+    "underlying_cause_verified": false,
+    "fixed_in_this_frozen_release": false
+  },
+  "okx_trade_stream": {"observed_ticks": 70112, "recorded_connection_errors": 0},
+  "general_healthy_flag_blind_spot": "Fresh quote timestamps can show healthy despite missing Binance trade tape. This field is not full stream or execution approval.",
+  "paper_orders": 0,
+  "paper_fills": 0,
+  "live_end_to_end_order_execution_validated": false,
+  "gate_cohort_coverage": {
+    "predeclared_families": ["TREND", "FLOW", "MARKET"],
+    "planned_family_side_hypotheses": 6,
+    "historical_market_single_blocker_cohorts": 0,
+    "old_v93_six_gates_matured_15m_denominators": "UNKNOWN_NOT_RECORDED",
+    "other_hard_guard_counterfactual_ci": "NOT_INSTRUMENTED_AS_SEPARATE_COHORT_HYPOTHESES",
+    "live_matured_15m_cohorts": 0,
+    "live_one_day_cannot_meet_min_10_utc_days": true
+  },
+  "independence": "v9.3-informed criteria; historical block predates development; prior interrupted run opened it. Not fully independent confirmatory or forward-OOS validation.",
+  "real_money_approved": false,
+  "repair_requires_separate_new_freeze_and_validation": true
+}

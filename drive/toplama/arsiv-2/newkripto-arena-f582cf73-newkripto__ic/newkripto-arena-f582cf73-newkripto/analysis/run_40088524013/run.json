@@ -1,0 +1,9 @@
+{
+  "run_id": 40088524013,
+  "paper_job_result": "cancelled",
+  "files": [
+    "preflight.json",
+    "paper-session.txt"
+  ],
+  "note": "Maskelenmiş paper oturumu kanıtı; paper_job_result alanını birlikte okuyun."
+}

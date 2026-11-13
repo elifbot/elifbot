@@ -1,0 +1,65 @@
+{
+  "version": "v17",
+  "purpose": "kisa canli public-veri entegrasyon smoke testi; performans/edge testi degil",
+  "started_utc": "2026-10-28T12:11:34Z",
+  "duration_s": 182,
+  "exit_code": 0,
+  "scan_dk": 2,
+  "drain_limit_dk": 1,
+  "signals": 13,
+  "main": {
+    "trades": 13,
+    "wins": 6,
+    "net_usdt": 3.3999889364,
+    "reasons": {
+      "take_profit": 2,
+      "drain_end": 11
+    },
+    "exchanges": {
+      "binance": 10,
+      "okx": 3
+    }
+  },
+  "shadow": {
+    "trades": 3,
+    "wins": 0,
+    "net_usdt": -2.8094724249,
+    "reasons": {
+      "drain_end": 3
+    },
+    "exchanges": {
+      "binance": 3
+    },
+    "fees_usdt": 0.7489697487
+  },
+  "flow": {
+    "total_trades": 224989,
+    "binance_trades": 155191,
+    "okx_trades": 69798,
+    "binance_connections": 3,
+    "binance_errors": 0,
+    "callback_errors": 0,
+    "data_errors": 0,
+    "signal_rows": 13,
+    "close_rows": 13,
+    "csv_errors": 0,
+    "shadow_errors": 0,
+    "candle_errors": 0
+  },
+  "reconciliation": {
+    "main_open": 13,
+    "main_closed_csv": 13,
+    "main_open_positions": 0,
+    "shadow_open": 3,
+    "shadow_closed": 3,
+    "shadow_open_positions": 0,
+    "drain_rejected_signals": 12,
+    "all_closed": true
+  },
+  "notes": [
+    "Binance uretim /market/ aggTrade uc baglantiyla calisti; 155191 trade islendi.",
+    "Uc Binance golge pozisyon acildi ve drain_end ile kapandi; boylece Binance giris/cikis yolu canli veriyle dogrulandi.",
+    "Iki ana pozisyon drain sirasinda take_profit ile dogal kapandi; kalan 11 ana ve 3 golge pozisyon ust surede drain_end oldu.",
+    "Kisa ve kucuk orneklem; PnL strateji basarisi veya kalici parametre karari olarak yorumlanmamali."
+  ]
+}

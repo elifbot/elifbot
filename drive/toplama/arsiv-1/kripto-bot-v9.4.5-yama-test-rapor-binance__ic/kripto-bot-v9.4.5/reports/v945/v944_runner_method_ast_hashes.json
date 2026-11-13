@@ -1,0 +1,21 @@
+{
+  "__init__": "d88b2f91f3d632177470f62c3d230a4c8d3bdda3a141c5c7777ac443186a6fa0",
+  "discover_full_pure_crypto_universe": "15c4fcf85d34a3b652a8d6a760f2793e4211b79a8a899c02a8190d4c3d449121",
+  "_fetch_binance_perp_candles": "4d07527037b86d79528d033e415ba53c29e3b76dc8ed8d303201446d4895e21d",
+  "_fetch_okx_candles": "576a50d8246fd43349713bbe342582ae58e65443d3f2a22054a9589537f4bdf9",
+  "_fetch_candles_best_source": "54b04a69f5b59935ef9c29fbf2d716b8a8a00a8bb4faff0d5fa42c711c5e5c05",
+  "_rows_to_df": "e4f36425c5f3777f7990be153a06c35fbc00ace0ae4e6cf517aad4d7e7196884",
+  "_ingest_1m_rows": "dce809e7445af2d7c5880f414585b785c377bd8b694bab2b85686df1851a6d6e",
+  "warmup_symbol": "6ffb65bbd4cc556073f8705a9c9a816fcc4d0e35b18092a8752e4b4199756123",
+  "warmup_all": "aebf6c465d8a0d842a256f9f655052d452248f9ac93486c7e7c401753eaadd28",
+  "full_universe_bbo_and_scanner_loop": "fb6b9b26ad594e8c975be901c9a11270fc95f0d817442c0c8937e97c7a29ca11",
+  "_binance_single_ws": "8c989558a3d1c571e98cab06d3c4a43539808a2c5aa2e70221406398b833a1e8",
+  "binance_ws_loop": "6275770cce042d6fda3d91b1bb6a14d0e8798b43b29a8cebb66d614d9ac59207",
+  "okx_ws_loop": "af890326f7f4b2d7b3b995e4cd0415090b07da9ee17357d178892ba310566fa7",
+  "candle_refresh_loop": "534ba237b1421b1e96ee98f50d1cc0e937f19e90315d37f8739ba59f6263ab2e",
+  "open_positions_fast_quote_loop": "3c643aae867bdb1455e9c052a36e81eee99946dc7de375b52a6af3a91c936321",
+  "strategy_eval_loop": "d77b381a041146b9fa0155517af6ba9a0cf50de862d6022cab1aa51d21f6959d",
+  "build_state_payload": "c6dea870050954088cbd689e48361107809e58949baa2f3f4f6ec17785c71554",
+  "start_web_server": "708628ba06ae76d2c382953953890fa1b32c0c959452ac4e23ce33a971dce0ec",
+  "run": "ee15f2d00b23b6283366e8059925d8aab8370e33ec27399e2ce37c02b50c2685"
+}

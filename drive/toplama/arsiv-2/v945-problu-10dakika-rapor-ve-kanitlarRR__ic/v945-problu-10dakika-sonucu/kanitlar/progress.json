@@ -1,0 +1,14 @@
+{
+  "status": "RUNNING",
+  "counts": {
+    "http_200": 549,
+    "http_503": 0,
+    "http_errors": 0,
+    "pending_http_matches": 0,
+    "db_errors": 0
+  },
+  "elapsed_sec": 599.3050439357758,
+  "phase": "ACTIVE",
+  "max_observer_poll_gap_sec": 1.9993716120000045,
+  "observed_at_epoch": 1793713750.640006
+}

@@ -1,0 +1,5 @@
+# ACARBOT v5.3 — bağımlılıklar (SABİT sürümler; reprodukabilir kurulum)
+# Yükseltmeden önce test paketini koşturun: python -m pytest tests/ -q
+aiohttp==3.13.3
+websockets==16.0
+pytest==9.0.2

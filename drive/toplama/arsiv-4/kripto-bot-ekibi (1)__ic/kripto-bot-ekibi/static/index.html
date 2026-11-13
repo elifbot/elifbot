@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kripto Bot Ekibi — Bot Odası + Konsensus Sinyalleri</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header>
+  <div class="logo">🤖 Kripto Bot Ekibi</div>
+  <div class="sub">İsimli AI Bot Kadrosu • Bot Odası • Konsensus Sinyalleri • OTO İŞLEM (Binance/OKX Futures)</div>
+  <div id="model-chips" class="chips"></div>
+  <div id="bildirim-badge" class="badge"></div>
+</header>
+
+<main class="grid">
+  <aside>
+    <section class="card">
+      <h3>👥 Bot Kadrosu</h3>
+      <div id="bot-liste"></div>
+      <details class="bot-ekle">
+        <summary>➕ Bot Ekle</summary>
+        <input id="bot-ad" placeholder="Bot adı (ör: Kovan)" spellcheck="false">
+        <div class="row">
+          <input id="bot-emoji" placeholder="🐝" maxlength="4" style="flex:0 0 64px">
+          <select id="bot-rol"></select>
+        </div>
+        <select id="bot-model"></select>
+        <button id="btn-bot-ekle" class="btn primary">Kadroya Ekle</button>
+        <p id="bot-ekle-mesaj" class="hint"></p>
+      </details>
+      <p class="hint">Her bot ayrı bir AI modelidir. Rolünü/modelini değiştirebilir,
+      pasife alabilir veya kadrodan çıkarabilirsin. Botlar odaya yazdığında
+      gerçekten kendi modeli konuşur.</p>
+    </section>
+
+    <section class="card">
+      <h3>🔎 Sembol Analizi</h3>
+      <input id="sembol" placeholder="BTCUSDT" spellcheck="false">
+      <button id="btn-analiz" class="btn primary">🧠 Bot Ekibiyle Analiz Et</button>
+      <div id="hizli" class="quick"></div>
+      <div id="analiz-durum" class="status hidden"></div>
+    </section>
+
+    <section class="card">
+      <h3>👁 İzleme Listesi</h3>
+      <div class="row">
+        <input id="izle-sembol" placeholder="SOLUSDT" spellcheck="false">
+        <button id="btn-izle" class="btn">Ekle</button>
+      </div>
+      <ul id="izleme-liste" class="izleme"></ul>
+      <p class="hint">Listedeki semboller her <b id="aralik-info">15</b> dakikada taranır.
+      Eşik aşılırsa bot ekibi konsensusu doğrular, geçerse <b>masaüstü bildirimi</b> gelir.</p>
+    </section>
+
+    <section class="card">
+      <h3>⚙️ Ayarlar</h3>
+      <label>Tarama aralığı (dk)
+        <input id="ayar-dk" type="number" min="5" max="240"></label>
+      <label>Alarm eşiği (|teknik skor|)
+        <input id="ayar-esik" type="number" min="10" max="80"></label>
+      <button id="btn-ayar" class="btn">Kaydet</button>
+      <p id="ayar-mesaj" class="hint"></p>
+    </section>
+  </aside>
+
+  <section class="main">
+    <section class="card trade-card">
+      <h3>⚡ OTO İŞLEM — Zekâlar Otomatik Pozisyona Girer
+        <span id="trade-rozet" class="rozet">KAPALI</span>
+        <span id="trade-mod-rozet" class="rozet mod">KAĞIT</span>
+        <span id="trade-borsa-rozet" class="rozet">—</span>
+      </h3>
+      <div class="trade-durum">
+        <div class="td-kutu"><div class="td-etiket">Bakiye</div>
+          <div id="trade-bakiye" class="td-deger">—</div></div>
+        <div class="td-kutu"><div class="td-etiket">Bugün PnL</div>
+          <div id="trade-gun-pnl" class="td-deger">—</div></div>
+        <div class="td-kutu"><div class="td-etiket">Toplam PnL</div>
+          <div id="trade-toplam-pnl" class="td-deger">—</div></div>
+        <div class="td-kutu"><div class="td-etiket">Kazanma</div>
+          <div id="trade-win" class="td-deger">—</div></div>
+        <div class="td-kutu"><div class="td-etiket">Açık pozisyon</div>
+          <div id="trade-acik-sayi" class="td-deger">—</div></div>
+      </div>
+      <div class="trade-dugmeler">
+        <button id="btn-trade-baslat" class="btn primary" style="width:auto">▶ Başlat</button>
+        <button id="btn-trade-durdur" class="btn" style="width:auto">⏸ Durdur</button>
+        <button id="btn-trade-tara" class="btn" style="width:auto">🔎 Şimdi Tara</button>
+        <button id="btn-trade-pasif" class="btn hidden" style="width:auto">🔓 Pasifi Sıfırla</button>
+        <button id="btn-trade-kill" class="btn kill">🚨 KILL SWITCH (tümünü kapat + dur)</button>
+      </div>
+      <p id="trade-mesaj" class="hint"></p>
+      <div id="trade-pozisyonlar">
+        <table id="pozisyon-tablo" class="tablo"></table>
+      </div>
+      <details class="trade-ayarlar">
+        <summary>⚙️ Oto İşlem Ayarları (mod, borsa, risk kapıları)</summary>
+        <div class="two-col">
+          <label>İşlem modu
+            <select id="t-mod">
+              <option value="kagit">KAĞIT — simülasyon, para riski yok ✅</option>
+              <option value="testnet">TESTNET — borsa test ağı (sahte para)</option>
+              <option value="gercek">GERÇEK EMİRLER — kendi paran! ⚠️</option>
+            </select></label>
+          <label>Borsa
+            <select id="t-borsa">
+              <option value="binance">Binance Futures</option>
+              <option value="okx">OKX Swap</option>
+            </select></label>
+          <label>Pozisyon büyüklüğü (bakiyenin %'si — marjin)
+            <input id="t-pos-pct" type="number" step="0.5" min="0.5" max="50"></label>
+          <label>Aynı anda maks pozisyon
+            <input id="t-max-pos" type="number" min="1" max="10"></label>
+          <label>Kaldıraç tavanı (x)
+            <input id="t-max-lev" type="number" min="1" max="20"></label>
+          <label>Günlük zarar limiti (%'de dur)
+            <input id="t-daily-loss" type="number" min="1" max="50"></label>
+          <label>AI güven eşiği (%'nin altında işlem yok)
+            <input id="t-min-guven" type="number" min="30" max="95"></label>
+          <label>Tur başına taranan sembol
+            <input id="t-scan-max" type="number" min="5" max="150"></label>
+          <label>Min 24s hacim (USDT)
+            <input id="t-min-volume" type="number" min="1000000" step="1000000"></label>
+          <label>Pozisyon maks. süresi (saat)
+            <input id="t-timeout" type="number" min="1" max="168" step="1"></label>
+          <label>Kapanan sembole soğuma (saat)
+            <input id="t-cooldown" type="number" min="0" max="48" step="0.5"></label>
+          <label>Kağıt mod sanal bakiyesi (USDT)
+            <input id="t-paper" type="number" min="100" step="100"></label>
+        </div>
+        <label id="t-onay-satiri" class="onay hidden">
+          <input id="t-onay" type="checkbox">
+          GERÇEK EMİRLER riskini biliyorum: kaldıraçlı vadeli işlemlerde
+          pozisyonun tamamını kaybedebilir, likide olabilirsin. Sorumluluk bende.
+        </label>
+        <p class="hint" id="t-anahtar-durum"></p>
+        <button id="btn-trade-ayar" class="btn">Ayarları Kaydet</button>
+        <p id="t-ayar-mesaj" class="hint"></p>
+      </details>
+      <details class="trade-ayarlar">
+        <summary>📜 Trade Logu (canlı)</summary>
+        <div id="trade-log" class="trade-log"></div>
+      </details>
+    </section>
+
+    <section class="card oda-card">
+      <h3>💬 Bot Odası
+        <button id="btn-oda-temizle" class="btn small">Temizle</button></h3>
+      <div id="oda-mesajlar" class="oda-mesajlar"></div>
+      <div id="oda-mesgul" class="status hidden"><span class="spin"></span>Botlar çalışıyor…</div>
+      <div class="row oda-giris">
+        <input id="oda-metin" spellcheck="false"
+          placeholder="Bota görev ver: 'BTC analiz et', 'piyasayı tara', 'Hakem ne düşünür?'">
+        <button id="btn-oda-gonder" class="btn primary" style="width:auto">Gönder</button>
+      </div>
+      <div id="oda-hizli" class="quick"></div>
+    </section>
+
+    <div id="sonuc" class="hidden"></div>
+
+    <section class="card">
+      <h3>💰 Kapanan İşlemler</h3>
+      <table id="islemler-tablo" class="tablo"></table>
+    </section>
+
+    <section class="card">
+      <h3>🔍 Piyasa Taraması
+        <button id="btn-tarama" class="btn small">Tara</button></h3>
+      <div id="tarama-alan"><p class="hint">"Tara" düğmesine bas — popüler coinler teknik skorla sıralanır. Dilersen bot odaya da "piyasayı tara" görevi verebilirsin; Tarayıcı bot yorumuyla özetler.</p></div>
+    </section>
+
+    <section class="card">
+      <h3>🚨 Son Alarmlar</h3>
+      <table id="alarm-tablo" class="tablo"></table>
+    </section>
+
+    <section class="card">
+      <h3>🕓 Son Analizler</h3>
+      <table id="gecmis-tablo" class="tablo"></table>
+    </section>
+  </section>
+</main>
+
+<footer>
+  ⚠️ Tüm sinyaller otomatik bot analizi ve teknik motorla üretilir,
+  <b>yatırım tavsiyesi değildir</b>.
+  Vadeli işlemler kaldıraç nedeniyle yüksek risk taşır — <b>OTO İŞLEM</b>
+  gerçek modda kendi paranla emir gönderir; önce KAĞIT modda test et.
+  <span id="panel-sag"></span>
+</footer>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

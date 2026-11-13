@@ -1,0 +1,96 @@
+{
+  "rows": [
+    {
+      "gate": "commission_viability",
+      "blocked_long": 0,
+      "blocked_short": 16,
+      "total": 16,
+      "sampled_unique": 6,
+      "blocked_signal_5m_signed_bps": 1.87,
+      "blocked_signal_15m_signed_bps": 45.1,
+      "blocked_signal_latest_signed_bps": 29.29,
+      "verified_against_saved_v93_summary": true,
+      "matured_15m_denominator": "UNKNOWN_NOT_RECORDED_IN_V93",
+      "causal_interpretation": "UNSUPPORTED",
+      "execution_profit_interpretation": "UNSUPPORTED"
+    },
+    {
+      "gate": "win_loss_shield",
+      "blocked_long": 71,
+      "blocked_short": 135,
+      "total": 206,
+      "sampled_unique": 36,
+      "blocked_signal_5m_signed_bps": -55.64,
+      "blocked_signal_15m_signed_bps": 44.03,
+      "blocked_signal_latest_signed_bps": -37.38,
+      "verified_against_saved_v93_summary": true,
+      "matured_15m_denominator": "UNKNOWN_NOT_RECORDED_IN_V93",
+      "causal_interpretation": "UNSUPPORTED",
+      "execution_profit_interpretation": "UNSUPPORTED"
+    },
+    {
+      "gate": "quant_rule_council",
+      "blocked_long": 29,
+      "blocked_short": 267,
+      "total": 296,
+      "sampled_unique": 63,
+      "blocked_signal_5m_signed_bps": -4.46,
+      "blocked_signal_15m_signed_bps": 18.55,
+      "blocked_signal_latest_signed_bps": 24.42,
+      "verified_against_saved_v93_summary": true,
+      "matured_15m_denominator": "UNKNOWN_NOT_RECORDED_IN_V93",
+      "causal_interpretation": "UNSUPPORTED",
+      "execution_profit_interpretation": "UNSUPPORTED"
+    },
+    {
+      "gate": "vwap_overextension_gate",
+      "blocked_long": 10,
+      "blocked_short": 186,
+      "total": 196,
+      "sampled_unique": 33,
+      "blocked_signal_5m_signed_bps": 6.92,
+      "blocked_signal_15m_signed_bps": 9.53,
+      "blocked_signal_latest_signed_bps": -2.19,
+      "verified_against_saved_v93_summary": true,
+      "matured_15m_denominator": "UNKNOWN_NOT_RECORDED_IN_V93",
+      "causal_interpretation": "UNSUPPORTED",
+      "execution_profit_interpretation": "UNSUPPORTED"
+    },
+    {
+      "gate": "ten_agent_mutual_audit",
+      "blocked_long": 25,
+      "blocked_short": 208,
+      "total": 233,
+      "sampled_unique": 47,
+      "blocked_signal_5m_signed_bps": -4.01,
+      "blocked_signal_15m_signed_bps": -8.55,
+      "blocked_signal_latest_signed_bps": 6.42,
+      "verified_against_saved_v93_summary": true,
+      "matured_15m_denominator": "UNKNOWN_NOT_RECORDED_IN_V93",
+      "causal_interpretation": "UNSUPPORTED",
+      "execution_profit_interpretation": "UNSUPPORTED"
+    },
+    {
+      "gate": "global_leader_breadth_gate",
+      "blocked_long": 71,
+      "blocked_short": 314,
+      "total": 385,
+      "sampled_unique": 60,
+      "blocked_signal_5m_signed_bps": -10.4,
+      "blocked_signal_15m_signed_bps": -64.18,
+      "blocked_signal_latest_signed_bps": -7.3,
+      "verified_against_saved_v93_summary": true,
+      "matured_15m_denominator": "UNKNOWN_NOT_RECORDED_IN_V93",
+      "causal_interpretation": "UNSUPPORTED",
+      "execution_profit_interpretation": "UNSUPPORTED"
+    }
+  ],
+  "xlsx_attached": false,
+  "images_compared": 4,
+  "warnings": [
+    "sampled_unique is not matured_15m_n",
+    "counts are occurrences before deduplication",
+    "fixed horizon gross mark return is not executable net trade return",
+    "relative win-rate deficit should be stated as percentage POINTS"
+  ]
+}

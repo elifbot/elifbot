@@ -1,0 +1,93 @@
+{
+  "name": "60m-1000-usdt-v7.8-pure-crypto-winning-core-collision-shield-whatsapp",
+  "description": "v7.8: Binance-dogrulamali %100 Saf Kripto + Borsa Sembol Cakismasi Kalkani (BB/BlackBerry engeli) + Kazanan Indikator Cekirdegi (Taker Delta + CVD + OBV/MACD/VWAP/EMA/Supertrend) + %50 Zirve Kar Kilidi ($1.25+) + Odakli Max 6 Pozisyon (Firsat Takasi KAPALI, son 7 dk yeni giris korumasi) + Telegram & WhatsApp.",
+  "overrides": {
+    "paper": {
+      "bakiye": 1000.0
+    },
+    "risk": {
+      "marj_modu": "cross",
+      "capraz_max_kullanim_yuzde": 45.0,
+      "capraz_min_serbest_usdt": 100.0,
+      "firsat_takasi_aktif": false,
+      "firsat_takasi_min_dakika": 12.0,
+      "capraz_kurtarma": false,
+      "paper_max_pozisyon": 6,
+      "paper_ayni_yon_max_pozisyon": 4,
+      "son_dakika_giris_engeli_dk": 7.0,
+      "erken_kar_kilit_tetik": 0.24,
+      "erken_kar_kilit_seviye": 0.12,
+      "zirve_kar_koruma_min_usdt": 1.25,
+      "zirve_kar_koruma_orani": 0.50,
+      "atr_trailing_carpani": 2.2,
+      "kar_kilit_tetikleyici": 0.80,
+      "kar_kilit_seviyesi": 0.30,
+      "trailing_yuzde": 1.50
+    },
+    "cikis": {
+      "kosan_kar": true,
+      "net_basabas_aktif": true,
+      "net_kar_tamponu_usdt": 0.08,
+      "orderflow_min_kar_yuzde": 0.42,
+      "erken_bozulma_cikisi_aktif": false
+    },
+    "sinyal": {
+      "tukenme_korumasi_aktif": true,
+      "short_min_rsi": 28.0,
+      "short_min_mfi": 18.0,
+      "long_max_rsi": 74.0,
+      "long_max_mfi": 82.0,
+      "yatay_akis_engeli_aktif": true,
+      "teknik_uyum_aktif": true,
+      "max_karsit_teknik_bilesen": 2,
+      "min_teknik_skor": 20.0,
+      "likidasyon_miknatis_aktif": true,
+      "likidasyon_miknatis_mesafe_yuzde": 0.18,
+      "likidasyon_miknatis_akis_istisna": 68.0,
+      "kazanan_cekirdek_aktif": true,
+      "min_cekirdek_onay": 3
+    },
+    "para_akisi": {
+      "baslangic_isinma_saniye": 35.0,
+      "hafif_akis_teyidi_aktif": true,
+      "min_hafif_kapsama_saniye": 10.0,
+      "min_hafif_islem_sayisi": 2,
+      "min_hafif_notional_usdt": 100.0,
+      "canli_akis_guveni_aktif": false,
+      "anlik_akis_tetik_aktif": true,
+      "anlik_tetik_min_kapsama_saniye": 12.0,
+      "anlik_tetik_min_notional_usdt": 200.0
+    },
+    "futures": {
+      "kripto_disi_filtre": true,
+      "tarama_araligi_saniye": 75,
+      "tarama_paralellik": 8
+    },
+    "shadow_lab": {
+      "aktif": true,
+      "sanal_kasa_usdt": 1000.0,
+      "portfolio": {
+        "ayni_yon_max_pozisyon": 6
+      },
+      "pdf_confluence": {
+        "aktif": true,
+        "min_aligned_families": 4,
+        "max_opposed_families": 2
+      },
+      "pdf_v3_confluence": {
+        "aktif": true,
+        "min_aligned_signals": 2,
+        "max_opposed_signals": 2
+      }
+    },
+    "pdf_v2": {
+      "aktif": true
+    },
+    "pdf_v3": {
+      "aktif": true,
+      "turev_istihbarat_aktif": true,
+      "turev_cache_sn": 180.0,
+      "asiri_kalabalik_engeli": true
+    }
+  }
+}

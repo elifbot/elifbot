@@ -1,0 +1,3 @@
+# ACARBOT v5.6.2 — ÇALIŞMA bağımlılıkları (SABİT sürümler)
+# Test aracı için: pip install -r requirements-dev.txt
+websockets==16.0

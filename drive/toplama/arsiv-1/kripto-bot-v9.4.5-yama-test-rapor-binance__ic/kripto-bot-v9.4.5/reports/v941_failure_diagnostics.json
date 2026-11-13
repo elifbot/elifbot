@@ -1,0 +1,135 @@
+{
+  "posthoc_diagnostics_only_no_rule_changes": true,
+  "net": -354.98390167578486,
+  "gross": -222.6454084189265,
+  "fees": 132.29716673754675,
+  "funding_cost": 0.041326519311869585,
+  "mean_win": 2.48346536218154,
+  "mean_loss": -2.1370125256056287,
+  "win_rate_pct": 25.925925925925924,
+  "grouped": {
+    "reason": {
+      "CONFIRMED_THESIS_FAILURE": {
+        "n": 144,
+        "net": -200.95056112513723,
+        "gross": -150.41913750237103,
+        "win_rate_pct": 6.25,
+        "mean_holding_minutes": 82.5
+      },
+      "PROFIT_LOCK_STOP": {
+        "n": 85,
+        "net": 233.6150363671005,
+        "gross": 263.1997953141511,
+        "win_rate_pct": 100.0,
+        "mean_holding_minutes": 72.52941176470588
+      },
+      "STOP_GAP": {
+        "n": 2,
+        "net": 3.6774547539063605,
+        "gross": 4.377867225166133,
+        "win_rate_pct": 100.0,
+        "mean_holding_minutes": 107.5
+      },
+      "TACTICAL_STOP": {
+        "n": 144,
+        "net": -392.22580987041147,
+        "gross": -341.7553740246838,
+        "win_rate_pct": 0.0,
+        "mean_holding_minutes": 36.736111111111114
+      },
+      "TEST_END_MARK_TO_MARKET": {
+        "n": 3,
+        "net": 0.8999781987567435,
+        "gross": 1.9514405688111034,
+        "win_rate_pct": 66.66666666666666,
+        "mean_holding_minutes": 105.0
+      }
+    },
+    "side": {
+      "LONG": {
+        "n": 173,
+        "net": -173.6444708873986,
+        "gross": -113.02776868866793,
+        "win_rate_pct": 26.011560693641616,
+        "mean_holding_minutes": 64.91329479768787
+      },
+      "SHORT": {
+        "n": 205,
+        "net": -181.33943078838647,
+        "gross": -109.61763973025856,
+        "win_rate_pct": 25.853658536585368,
+        "mean_holding_minutes": 61.63414634146341
+      }
+    },
+    "symbol": {
+      "AVAXUSDT": {
+        "n": 45,
+        "net": -10.013025265316795,
+        "gross": 5.714327737207973,
+        "win_rate_pct": 44.44444444444444,
+        "mean_holding_minutes": 55.22222222222222
+      },
+      "BNBUSDT": {
+        "n": 48,
+        "net": -16.74496934502395,
+        "gross": 0.06178835194081035,
+        "win_rate_pct": 29.166666666666668,
+        "mean_holding_minutes": 71.45833333333333
+      },
+      "BTCUSDT": {
+        "n": 52,
+        "net": -61.86585718086532,
+        "gross": -43.609056118337925,
+        "win_rate_pct": 17.307692307692307,
+        "mean_holding_minutes": 71.73076923076923
+      },
+      "DOGEUSDT": {
+        "n": 51,
+        "net": -55.23931365678017,
+        "gross": -37.32439464830147,
+        "win_rate_pct": 25.49019607843137,
+        "mean_holding_minutes": 67.05882352941177
+      },
+      "ETHUSDT": {
+        "n": 45,
+        "net": -44.9156881123555,
+        "gross": -29.170465156733055,
+        "win_rate_pct": 33.33333333333333,
+        "mean_holding_minutes": 63.44444444444444
+      },
+      "SOLUSDT": {
+        "n": 41,
+        "net": -69.03969092603863,
+        "gross": -54.76177772343597,
+        "win_rate_pct": 14.634146341463413,
+        "mean_holding_minutes": 66.58536585365853
+      },
+      "SUIUSDT": {
+        "n": 52,
+        "net": -58.233778027519804,
+        "gross": -40.075064714073115,
+        "win_rate_pct": 23.076923076923077,
+        "mean_holding_minutes": 57.78846153846154
+      },
+      "XRPUSDT": {
+        "n": 44,
+        "net": -38.93157916188494,
+        "gross": -23.480766147193744,
+        "win_rate_pct": 20.454545454545457,
+        "mean_holding_minutes": 50.22727272727273
+      }
+    }
+  },
+  "rejections": {
+    "NO_LOCAL_TREND": 10795,
+    "LOW_TREND_EFFICIENCY": 6030,
+    "INSUFFICIENT_REAL_FLOW": 4110,
+    "CLOSED_HTF_DISAGREEMENT": 4202,
+    "DO_NOT_CHASE": 1163,
+    "WAIT_FOR_RECLAIM_OR_BREAKOUT": 394,
+    "RSI_EXHAUSTION": 977,
+    "AGGREGATE_RISK_BUDGET": 27,
+    "ATR_EXCEEDS_RISK_CAP": 1
+  },
+  "warning": "Hypothesis-generation only. No tuning or symbol/side selection on this validation block."
+}

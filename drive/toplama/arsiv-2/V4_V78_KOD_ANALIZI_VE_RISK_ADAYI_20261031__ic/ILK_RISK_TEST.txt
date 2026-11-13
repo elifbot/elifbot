@@ -1,0 +1,118 @@
+F..FF....F.FF.                                                           [100%]
+=================================== FAILURES ===================================
+_______ test_new_utc_day_allows_entry_when_only_yesterdays_loss_blocked ________
+
+tmp_path = PosixPath('/tmp/pytest-of-user/pytest-305/test_new_utc_day_allows_entry_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fc67cc495b0>
+
+    def test_new_utc_day_allows_entry_when_only_yesterdays_loss_blocked(tmp_path,monkeypatch):
+        b=make_bot(tmp_path,monkeypatch);b._risk_gun_utc='2026-10-30'
+        b.portfoy.day_start_balance=1000.;b.portfoy.balance=940.
+        assert b.portfoy.daily_loss_limit_hit()
+        monkeypatch.setattr(ws_bot.time,'time',lambda:DAY2/1000)
+>       assert b._pozisyon_ac(sig(DAY2))=='acildi'
+E       AssertionError: assert 'engel:gunluk_risk_bilinmiyor' == 'acildi'
+E         
+E         - acildi
+E         + engel:gunluk_risk_bilinmiyor
+
+tests/test_utc_gunluk_risk.py:29: AssertionError
+___________ test_state_write_failure_rolls_back_rollover_and_blocks ____________
+
+tmp_path = PosixPath('/tmp/pytest-of-user/pytest-305/test_state_write_failure_rolls0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fc67cc74c00>
+
+    def test_state_write_failure_rolls_back_rollover_and_blocks(tmp_path,monkeypatch):
+        b=make_bot(tmp_path,monkeypatch);b._risk_gun_utc='2026-10-30'
+        b.portfoy.day_start_balance=1000.;b.portfoy.balance=940.
+        def fail(**kw):raise OSError('synthetic state failure')
+        monkeypatch.setattr(b,'_durum_kaydet',fail)
+>       assert b._gunluk_risk_guncelle(DAY2)==(False,'gunluk_risk_state_yazilamadi')
+E       AssertionError: assert (False, 'gunl...k_bilinmiyor') == (False, 'gunl...e_yazilamadi')
+E         
+E         At index 1 diff: 'gunluk_risk_bilinmiyor' != 'gunluk_risk_state_yazilamadi'
+E         Use -v to get more diff
+
+tests/test_utc_gunluk_risk.py:62: AssertionError
+------------------------------ Captured log call -------------------------------
+ERROR    ws_bot:ws_bot.py:1602 gozlem boslugu kalici kaydedilemedi
+Traceback (most recent call last):
+  File "/home/user/v4_v78_saat_boslugu_inceleme_20261031/aday/ws_bot.py", line 1600, in _gunluk_risk_guncelle
+    self._durum_kaydet(strict=True)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/user/v4_v78_saat_boslugu_inceleme_20261031/aday/tests/test_utc_gunluk_risk.py", line 60, in fail
+    def fail(**kw):raise OSError('synthetic state failure')
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: synthetic state failure
+__________ test_manual_safety_block_is_never_cleared_by_utc_rollover ___________
+
+tmp_path = PosixPath('/tmp/pytest-of-user/pytest-305/test_manual_safety_block_is_ne0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fc67cc757b0>
+
+    def test_manual_safety_block_is_never_cleared_by_utc_rollover(tmp_path,monkeypatch):
+        b=make_bot(tmp_path,monkeypatch);b._risk_gun_utc='2026-10-30';b.portfoy.blocked_new_positions=True
+>       assert b._gunluk_risk_guncelle(DAY2)==(True,'')
+E       AssertionError: assert (False, 'gunl...k_bilinmiyor') == (True, '')
+E         
+E         At index 0 diff: False != True
+E         Use -v to get more diff
+
+tests/test_utc_gunluk_risk.py:68: AssertionError
+______________ test_entry_is_rolled_back_on_precommit_state_error ______________
+
+tmp_path = PosixPath('/tmp/pytest-of-user/pytest-305/test_entry_is_rolled_back_on_p0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fc67cafdfd0>
+
+    def test_entry_is_rolled_back_on_precommit_state_error(tmp_path,monkeypatch):
+        monkeypatch.setattr(ws_bot.time,'time',lambda:DAY1/1000)
+        b=make_bot(tmp_path,monkeypatch);b._risk_gun_utc='2026-10-30';balance=b.portfoy.balance
+        def fail(**kw):raise OSError('synthetic precommit failure')
+        monkeypatch.setattr(b,'_durum_kaydet',fail)
+>       assert b._pozisyon_ac(sig(DAY1))=='engel:pozisyon_state_yazilamadi'
+E       AssertionError: assert 'engel:gunluk...te_yazilamadi' == 'engel:pozisy...te_yazilamadi'
+E         
+E         - engel:pozisyon_state_yazilamadi
+E         ?       ^^^  ^^^
+E         + engel:gunluk_risk_state_yazilamadi
+E         ?       ^^^^^^^^  ^
+
+tests/test_utc_gunluk_risk.py:117: AssertionError
+_____________ test_ambiguous_fsync_at_rollover_never_allows_entry ______________
+
+tmp_path = PosixPath('/tmp/pytest-of-user/pytest-305/test_ambiguous_fsync_at_rollov0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fc67cc53110>
+
+    def test_ambiguous_fsync_at_rollover_never_allows_entry(tmp_path,monkeypatch):
+        b=make_bot(tmp_path,monkeypatch);b._risk_gun_utc='2026-10-30'
+        monkeypatch.setattr(b,'_durum_kaydet',lambda **kw:False)
+>       assert b._gunluk_risk_guncelle(DAY2)==(False,'gunluk_risk_state_kalicilik_belirsiz')
+E       AssertionError: assert (False, 'gunl...k_bilinmiyor') == (False, 'gunl...lik_belirsiz')
+E         
+E         At index 1 diff: 'gunluk_risk_bilinmiyor' != 'gunluk_risk_state_kalicilik_belirsiz'
+E         Use -v to get more diff
+
+tests/test_utc_gunluk_risk.py:134: AssertionError
+____ test_ambiguous_fsync_at_entry_keeps_position_and_blocks_later_entries _____
+
+tmp_path = PosixPath('/tmp/pytest-of-user/pytest-305/test_ambiguous_fsync_at_entry_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fc67cb40050>
+
+    def test_ambiguous_fsync_at_entry_keeps_position_and_blocks_later_entries(tmp_path,monkeypatch):
+        monkeypatch.setattr(ws_bot.time,'time',lambda:DAY1/1000)
+        b=make_bot(tmp_path,monkeypatch);b._risk_gun_utc='2026-10-30'
+        monkeypatch.setattr(b,'_durum_kaydet',lambda **kw:False)
+>       assert b._pozisyon_ac(sig(DAY1))=='acildi'
+E       AssertionError: assert 'engel:gunluk...ilik_belirsiz' == 'acildi'
+E         
+E         - acildi
+E         + engel:gunluk_risk_state_kalicilik_belirsiz
+
+tests/test_utc_gunluk_risk.py:143: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_utc_gunluk_risk.py::test_new_utc_day_allows_entry_when_only_yesterdays_loss_blocked
+FAILED tests/test_utc_gunluk_risk.py::test_state_write_failure_rolls_back_rollover_and_blocks
+FAILED tests/test_utc_gunluk_risk.py::test_manual_safety_block_is_never_cleared_by_utc_rollover
+FAILED tests/test_utc_gunluk_risk.py::test_entry_is_rolled_back_on_precommit_state_error
+FAILED tests/test_utc_gunluk_risk.py::test_ambiguous_fsync_at_rollover_never_allows_entry
+FAILED tests/test_utc_gunluk_risk.py::test_ambiguous_fsync_at_entry_keeps_position_and_blocks_later_entries
+6 failed, 8 passed in 0.19s

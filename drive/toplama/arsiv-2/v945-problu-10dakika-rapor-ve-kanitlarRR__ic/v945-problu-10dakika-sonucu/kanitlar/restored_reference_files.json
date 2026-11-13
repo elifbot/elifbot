@@ -1,0 +1,12 @@
+{
+  "source_archive": "/home/user/kripto-bot-v9.4.4-Phase1-dogruluk-yamasi.zip",
+  "source_archive_sha256": "bc0d561ab906d823aab040a2bab42ac914dad338640558608c55503202bf993e",
+  "restored": [
+    "reports/v94_0_interrupted/v94_freeze_manifest.json",
+    "reports/v943_reference_sources/src/state_store.py",
+    "reports/v943_reference_sources/src/unified_engine.py",
+    "reports/v945/v944_runner_method_ast_hashes.json"
+  ],
+  "method_ast_reference": "Reconstructed using test canonical_ast from authenticated v944 runner, not current v945 source",
+  "v945_sources_verified_against_previous_preregistered_plan": 100
+}

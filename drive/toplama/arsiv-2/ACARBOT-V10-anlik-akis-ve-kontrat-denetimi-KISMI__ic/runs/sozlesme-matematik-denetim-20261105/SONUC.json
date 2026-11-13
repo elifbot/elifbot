@@ -1,0 +1,261 @@
+{
+  "status": "METADATA_AND_SYNTHETIC_MATH_ONLY",
+  "markets": {
+    "binance_usdm": {
+      "source": "public exchange metadata",
+      "mapped": 804,
+      "failed": 0,
+      "total": 804,
+      "errors": [],
+      "kinds": {
+        "linear": 804
+      },
+      "settlements": {
+        "USDT": 760,
+        "BTC": 1,
+        "USDC": 38,
+        "USD1": 3,
+        "U": 2
+      },
+      "synthetic_roundtrips": 1608,
+      "status": "OK"
+    },
+    "okx_futures": {
+      "source": "public exchange metadata",
+      "mapped": 287,
+      "failed": 0,
+      "total": 287,
+      "errors": [],
+      "kinds": {
+        "linear": 275,
+        "inverse": 12
+      },
+      "settlements": {
+        "USD": 275,
+        "BTC": 6,
+        "ETH": 6
+      },
+      "synthetic_roundtrips": 574,
+      "status": "OK"
+    },
+    "okx_swap": {
+      "source": "public exchange metadata",
+      "mapped": 540,
+      "failed": 0,
+      "total": 540,
+      "errors": [],
+      "kinds": {
+        "inverse": 15,
+        "linear": 525
+      },
+      "settlements": {
+        "BTC": 1,
+        "ETH": 1,
+        "SOL": 1,
+        "DOGE": 1,
+        "XRP": 1,
+        "BCH": 1,
+        "ADA": 1,
+        "DOT": 1,
+        "ETC": 1,
+        "FIL": 1,
+        "HYPE": 1,
+        "LINK": 1,
+        "LTC": 1,
+        "SUI": 1,
+        "UNI": 1,
+        "USDT": 525
+      },
+      "synthetic_roundtrips": 1080,
+      "status": "OK"
+    },
+    "binance_coinm": {
+      "source": "public exchange metadata",
+      "mapped": 30,
+      "failed": 0,
+      "total": 30,
+      "errors": [],
+      "kinds": {
+        "inverse": 30
+      },
+      "settlements": {
+        "BTC": 3,
+        "AAVE": 1,
+        "ADA": 1,
+        "AVAX": 1,
+        "BCH": 1,
+        "BNB": 3,
+        "DOGE": 1,
+        "DOT": 1,
+        "ETC": 1,
+        "ETH": 3,
+        "FIL": 1,
+        "LINK": 1,
+        "LTC": 1,
+        "NEAR": 1,
+        "SOL": 3,
+        "SUI": 1,
+        "TRX": 1,
+        "UNI": 1,
+        "XLM": 1,
+        "XRP": 3
+      },
+      "synthetic_roundtrips": 60,
+      "status": "OK"
+    }
+  },
+  "examples": [
+    {
+      "market": "binance_usdm",
+      "symbol": "ETHBTC",
+      "kind": "linear",
+      "settlement": "BTC",
+      "face": "1",
+      "lot_step": "0.01",
+      "entry": "100",
+      "exit": "110",
+      "long_pnl_native": "0.10",
+      "prices_are_synthetic": true
+    },
+    {
+      "market": "binance_usdm",
+      "symbol": "BTCUSDC",
+      "kind": "linear",
+      "settlement": "USDC",
+      "face": "1",
+      "lot_step": "0.001",
+      "entry": "100",
+      "exit": "110",
+      "long_pnl_native": "0.010",
+      "prices_are_synthetic": true
+    },
+    {
+      "market": "binance_usdm",
+      "symbol": "ETHUSDC",
+      "kind": "linear",
+      "settlement": "USDC",
+      "face": "1",
+      "lot_step": "0.001",
+      "entry": "100",
+      "exit": "110",
+      "long_pnl_native": "0.010",
+      "prices_are_synthetic": true
+    },
+    {
+      "market": "binance_usdm",
+      "symbol": "BNBUSDC",
+      "kind": "linear",
+      "settlement": "USDC",
+      "face": "1",
+      "lot_step": "0.01",
+      "entry": "100",
+      "exit": "110",
+      "long_pnl_native": "0.10",
+      "prices_are_synthetic": true
+    },
+    {
+      "market": "binance_usdm",
+      "symbol": "SOLUSDC",
+      "kind": "linear",
+      "settlement": "USDC",
+      "face": "1",
+      "lot_step": "0.01",
+      "entry": "100",
+      "exit": "110",
+      "long_pnl_native": "0.10",
+      "prices_are_synthetic": true
+    },
+    {
+      "market": "binance_usdm",
+      "symbol": "XRPUSDC",
+      "kind": "linear",
+      "settlement": "USDC",
+      "face": "1",
+      "lot_step": "0.1",
+      "entry": "100",
+      "exit": "110",
+      "long_pnl_native": "1.0",
+      "prices_are_synthetic": true
+    },
+    {
+      "market": "binance_usdm",
+      "symbol": "DOGEUSDC",
+      "kind": "linear",
+      "settlement": "USDC",
+      "face": "1",
+      "lot_step": "1",
+      "entry": "100",
+      "exit": "110",
+      "long_pnl_native": "10",
+      "prices_are_synthetic": true
+    },
+    {
+      "market": "binance_usdm",
+      "symbol": "SUIUSDC",
+      "kind": "linear",
+      "settlement": "USDC",
+      "face": "1",
+      "lot_step": "0.1",
+      "entry": "100",
+      "exit": "110",
+      "long_pnl_native": "1.0",
+      "prices_are_synthetic": true
+    },
+    {
+      "market": "binance_usdm",
+      "symbol": "LINKUSDC",
+      "kind": "linear",
+      "settlement": "USDC",
+      "face": "1",
+      "lot_step": "0.01",
+      "entry": "100",
+      "exit": "110",
+      "long_pnl_native": "0.10",
+      "prices_are_synthetic": true
+    },
+    {
+      "market": "binance_usdm",
+      "symbol": "ORDIUSDC",
+      "kind": "linear",
+      "settlement": "USDC",
+      "face": "1",
+      "lot_step": "0.1",
+      "entry": "100",
+      "exit": "110",
+      "long_pnl_native": "1.0",
+      "prices_are_synthetic": true
+    },
+    {
+      "market": "binance_usdm",
+      "symbol": "1000PEPEUSDC",
+      "kind": "linear",
+      "settlement": "USDC",
+      "face": "1",
+      "lot_step": "1",
+      "entry": "100",
+      "exit": "110",
+      "long_pnl_native": "10",
+      "prices_are_synthetic": true
+    },
+    {
+      "market": "binance_usdm",
+      "symbol": "WLDUSDC",
+      "kind": "linear",
+      "settlement": "USDC",
+      "face": "1",
+      "lot_step": "0.1",
+      "entry": "100",
+      "exit": "110",
+      "long_pnl_native": "1.0",
+      "prices_are_synthetic": true
+    }
+  ],
+  "real_orders": 0,
+  "paper_strategy_orders": 0,
+  "limits": [
+    "not wired to live strategy",
+    "synthetic prices, not live executions or profitability",
+    "fee schedule, FX, margin risk, X-perp funding and expiry not validated",
+    "no 1:1 currency conversion"
+  ]
+}

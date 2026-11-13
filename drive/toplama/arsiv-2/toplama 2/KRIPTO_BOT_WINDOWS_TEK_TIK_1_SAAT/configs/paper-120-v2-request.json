@@ -1,0 +1,10 @@
+{
+  "request": "pdf-v2-1000-usdt-120m-shadow",
+  "config_profile": "controlled-v2-1000-no-cross-rescue",
+  "duration_minutes": 120,
+  "mode": "paper",
+  "starting_balance_usdt": 1000.0,
+  "margin_per_trade_usdt": 50.0,
+  "leverage": 10,
+  "note": "Bu dosyanin dala push edilmesi PDF v2 teknik paketi ve pdf-confluence Shadow varyanti ile 1000 USDT paper kasa, 50 USDT marj/islem, sabit 10x ve 120 dakika hosted cift-borsa oturumunu tetikler. Gercek emir yoktur; baseline degismez ve otomatik canli kural/parametre promosyonu yoktur."
+}

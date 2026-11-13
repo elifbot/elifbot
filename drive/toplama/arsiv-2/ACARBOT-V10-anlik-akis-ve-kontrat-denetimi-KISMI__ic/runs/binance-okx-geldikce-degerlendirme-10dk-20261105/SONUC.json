@@ -1,0 +1,156 @@
+{
+  "status": "PARTIAL",
+  "started_utc": "2026-11-05T13:03:10.726892+00:00",
+  "finished_utc": "2026-11-05T13:17:36.131075+00:00",
+  "active_sec": 600.038,
+  "total_sec": 865.404,
+  "markets": {
+    "binance_usdm": {
+      "status": "AVAILABLE",
+      "discovered": 804,
+      "selected": 804
+    },
+    "okx_futures": {
+      "status": "AVAILABLE",
+      "discovered": 287,
+      "selected": 287
+    },
+    "okx_swap": {
+      "status": "AVAILABLE",
+      "discovered": 540,
+      "selected": 540
+    },
+    "binance_coinm": {
+      "status": "AVAILABLE",
+      "discovered": 30,
+      "selected": 30
+    }
+  },
+  "symbols_selected": 1661,
+  "paper_eligible": 1047,
+  "paper_unsupported": 614,
+  "counts": {
+    "fresh_quotes": 129794,
+    "ticker_fetch_ok": 336,
+    "candles_ok": 5187,
+    "bars_evaluated": 2735,
+    "strategy_VOLUME_CONFIRMATION": 637,
+    "strategy_SIGNAL": 234,
+    "signals": 234,
+    "reject_contract_type_not_supported": 105,
+    "strategy_NO_SIGNAL": 356,
+    "strategy_CONFIRMATION": 56,
+    "opened": 5,
+    "reject_spread": 45,
+    "strategy_VOLUME_UNAVAILABLE": 50,
+    "reject_cost": 67,
+    "reject_price_deviation": 5,
+    "reject_portfolio": 6,
+    "strategy_STALE_CANDLE": 1402,
+    "reject_already_open": 1
+  },
+  "execution": {
+    "open": [],
+    "closed": [
+      {
+        "symbol": "binance:binance_usdm:牛来USDT",
+        "side": "SHORT",
+        "qty": 2773.81663329759,
+        "entry": 0.061677662,
+        "stop": 0.06293946134101812,
+        "target": 0.05915406331796376,
+        "entry_fee": 0.0940953886171787,
+        "opened_ms": 1793884214906,
+        "exit": 0.061672331999999996,
+        "exit_fee": 0.09408725717371819,
+        "closed_ms": 1793884656129,
+        "reason": "RUN_END",
+        "net": -0.1733982031354075,
+        "initial_risk_distance": 0.00126179934101812,
+        "breakeven": false
+      },
+      {
+        "symbol": "okx:okx_swap:ZEC-USDT-SWAP",
+        "side": "SHORT",
+        "qty": 0.19256242395459547,
+        "entry": 1298.280292,
+        "stop": 1314.6671413048582,
+        "target": 1265.5065933902833,
+        "entry_fee": 0.13749999999999998,
+        "opened_ms": 1793884264407,
+        "exit": 1306.151178,
+        "exit_fee": 0.13833360028775668,
+        "closed_ms": 1793884656129,
+        "reason": "RUN_END",
+        "net": -1.7914704871180767,
+        "initial_risk_distance": 16.38684930485828,
+        "breakeven": false
+      },
+      {
+        "symbol": "okx:okx_swap:APP-USDT-SWAP",
+        "side": "LONG",
+        "qty": 0.3832661164198879,
+        "entry": 332.286444,
+        "stop": 323.15440792883953,
+        "target": 350.55051614232093,
+        "entry_fee": 0.07004477421197002,
+        "opened_ms": 1793884269272,
+        "exit": 331.253736,
+        "exit_fee": 0.06982708312046434,
+        "closed_ms": 1793884656129,
+        "reason": "RUN_END",
+        "net": -0.5356738418881892,
+        "initial_risk_distance": 9.132036071160458,
+        "breakeven": false
+      },
+      {
+        "symbol": "okx:okx_swap:AXTI-USDT-SWAP",
+        "side": "SHORT",
+        "qty": 5.378687742988178,
+        "entry": 44.871024000000006,
+        "stop": 45.521740339605834,
+        "target": 43.56959132078835,
+        "entry_fee": 0.13274097474227062,
+        "opened_ms": 1793884271900,
+        "exit": 45.079014,
+        "exit_fee": 0.13335626703728587,
+        "closed_ms": 1793884656129,
+        "reason": "RUN_END",
+        "net": -1.384810505443642,
+        "initial_risk_distance": 0.6507163396058281,
+        "breakeven": false
+      },
+      {
+        "symbol": "okx:okx_swap:CAP-USDT-SWAP",
+        "side": "LONG",
+        "qty": 1193.25324094979,
+        "entry": 0.102310458,
+        "stop": 0.09937730024279659,
+        "target": 0.10817677351440685,
+        "entry_fee": 0.06714525707535657,
+        "opened_ms": 1793884277516,
+        "exit": 0.10232953,
+        "exit_fee": 0.06715777382455283,
+        "closed_ms": 1793884656129,
+        "reason": "RUN_END",
+        "net": -0.111545305088521,
+        "initial_risk_distance": 0.002933157757203421,
+        "breakeven": false
+      }
+    ],
+    "closed_trades": 5,
+    "realized_net": -3.9968983426738363,
+    "equity_realized": 996.0031016573262,
+    "fees_on_closed": 1.0042883760905539
+  },
+  "errors": [],
+  "real_orders": 0,
+  "real_money_approved": false,
+  "limitations": [
+    "Binance www kamu uçları erişilemezse sonuç eksiktir; testnet veya başka borsayla ikame yok.",
+    "Yalnız lineer USDT sürekli sözleşmeler PAPER; inverse ve vadeli yalnız izlenir.",
+    "Tüm sözleşme listesi yalnız başlangıçta alınır.",
+    "Piyasa derinliği, funding muhasebesi ve gerçek dolum garanti edilmez.",
+    "Bağımsız YZ incelemesi tasarım içindir; canlı işlem hakemi değildir."
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "request": "v7.3-pdf-v3-pure-crypto-scoped-cb-1000-usdt-60m",
+  "requested_at": "2026-10-25T12:12:00+03:00",
+  "config_profile": "controlled-60-v2-1000-no-cross-rescue",
+  "duration_minutes": 60,
+  "runner": "ubuntu-latest",
+  "mode": "paper",
+  "real_orders": false,
+  "baseline_strategy_changes": true,
+  "starting_balance_usdt": 1000.0,
+  "margin_per_trade_usdt": 50.0,
+  "leverage": 10,
+  "note": "KRIPTO-BOT v7.3: BTC/ETH kapsamli global Flash Crash sigortasi, saf kripto kontrat filtresi, 1000* ikiz sembol korumasi, canli volatility-gate + net-exit ve PDF v3 + ucretsiz turev istihbarati ile 60 dakikalik 1000 USDT cift-borsa paper oturumu."
+}

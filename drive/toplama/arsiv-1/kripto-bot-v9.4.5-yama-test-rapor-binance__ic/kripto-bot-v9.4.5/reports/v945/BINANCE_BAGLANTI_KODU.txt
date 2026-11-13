@@ -1,0 +1,196 @@
+# v9.4.5 mevcut Binance kaynak alıntısı — bağımsız çalıştırıcı DEĞİLDİR
+# Tam kaynak: src/live_runner.py; URL yardımcıları: src/feed_health.py
+
+
+# src/live_runner.py:787
+async def _fetch_binance_perp_candles(
+        self, session: aiohttp.ClientSession, sym: str, interval: str, limit: int
+    ) -> list[list[float]]:
+        """Binance USDⓈ-M Perpetual `/fapi/v1/klines` mumlarını (gerçek vadeli taker-buy hacmi dahil) çeker."""
+        raw = _sym_to_binance_raw(sym)
+        url = f"https://www.binance.com/fapi/v1/klines?symbol={raw}&interval={interval}&limit={limit}"
+        async with session.get(url, timeout=10) as resp:
+            if resp.status != 200:
+                return []
+            rows = await resp.json()
+        parsed = []
+        for r in rows:
+            ts_ms = int(r[0])
+            o, h, l, c = float(r[1]), float(r[2]), float(r[3]), float(r[4])
+            base_v = float(r[5])
+            quote_v = float(r[7])
+            taker_buy_base = float(r[9]) if len(r) > 9 else base_v * 0.5
+            parsed.append([ts_ms, o, h, l, c, base_v, quote_v, taker_buy_base, float(r[10])])
+        return parsed
+
+# src/live_runner.py:1041
+async def _binance_single_ws(
+        self, session: aiohttp.ClientSession, stream_suffix: str, label: str
+    ) -> None:
+        bn_syms = [s for s in self.symbols[:40] if s in self.binance_pure_symbols]
+        if not bn_syms:
+            return
+        raw_to_sym = {_sym_to_binance_raw(s): s for s in bn_syms}
+        stream_path = "/".join(f"{_sym_to_binance_raw(s).lower()}@{stream_suffix}" for s in bn_syms)
+        # Denetim 2.c: Önce birincil vadeli fstream.binance.com denenir; bölgesel kısıtta spot+perpAnchor yedeğe düşer
+        ws_candidates = [
+            (binance_futures_ws_url(stream_suffix, stream_path), True, 3.5),
+            ("wss://data-stream.binance.vision/stream?streams=" + stream_path, False, 8.0),
+        ]
+        if self.cfg.get("v94", {}).get("enabled", False):
+            ws_candidates = ws_candidates[:1]  # Never label spot+anchor prices as executable futures BBO.
+        idx = 0
+        while not self.stop_Flag:
+            ws_url, is_perp_ws, conn_timeout = ws_candidates[idx % len(ws_candidates)]
+            short_ep = binance_futures_ws_url(stream_suffix, "").split("/stream")[0].replace("wss://", "") if is_perp_ws else "data-stream.binance.vision+perpAnchor"
+            try:
+                async with session.ws_connect(
+                    ws_url, heartbeat=15.0, timeout=conn_timeout, receive_timeout=6.0
+                ) as ws:
+                    self.venue_stats["binance"][f"endpoint_{label}"] = short_ep
+                    log.info("BINANCE WebSocket (%s) bağlandı: %s", label, short_ep)
+                    async for msg in ws:
+                        if self.stop_Flag:
+                            break
+                        if msg.type != aiohttp.WSMsgType.TEXT:
+                            if msg.type in (aiohttp.WSMsgType.CLOSED, aiohttp.WSMsgType.ERROR):
+                                break
+                            continue
+                        payload = json.loads(msg.data)
+                        data = payload.get("data") or payload
+                        sym = raw_to_sym.get(str(data.get("s", "")))
+                        if not sym:
+                            continue
+                        now_s = time.time()
+                        if stream_suffix == "bookTicker":
+                            bid = float(data.get("b") or 0.0)
+                            ask = float(data.get("a") or 0.0)
+                            if bid > 0 and ask >= bid:
+                                raw_mid = (bid + ask) / 2.0
+                                if not is_perp_ws:
+                                    self.binance_spot_mid[sym] = raw_mid
+                                    perp_anchor = self.binance_perp_bbo.get(sym)
+                                    if perp_anchor and (now_s - perp_anchor[2]) <= 12.0:
+                                        pmid = (perp_anchor[0] + perp_anchor[1]) / 2.0
+                                        offset = pmid - raw_mid
+                                        self.binance_basis_offset[sym] = offset
+                                        self.engine.set_spot_perp_basis(sym, pmid, raw_mid)
+                                    else:
+                                        offset = self.binance_basis_offset.get(sym, 0.0)
+                                    bid += offset
+                                    ask += offset
+                                if bid > 0 and ask >= bid:
+                                    self.broker.update_live_bbo("binance", sym, bid, ask, now_s)
+                                    self.venue_stats["binance"]["bbo_updates"] += 1
+                                    self.venue_stats["binance"]["last_ts"] = now_s
+                                    self.venue_stats["binance"]["last_bbo_ts"] = now_s
+                                    await self.executor.on_price_tick(
+                                        sym, (bid + ask) / 2.0, exchange="binance"
+                                    )
+                        else:
+                            px = float(data.get("p") or 0.0)
+                            qty = float(data.get("q") or 0.0)
+                            ts_ms = int(data.get("T") or int(now_s * 1000))
+                            is_bm = bool(data.get("m", False))
+                            if px > 0 and qty > 0:
+                                if not is_perp_ws:
+                                    px += self.binance_basis_offset.get(sym, 0.0)
+                                if px > 0:
+                                    self.venue_stats["binance"]["ticks"] += 1
+                                    self.venue_stats["binance"]["last_ts"] = now_s
+                                    self.venue_stats["binance"]["last_trade_ts"] = now_s
+                                    await self.engine.on_trade(
+                                        "binance", sym, px, qty, is_buyer_maker=is_bm, ts_ms=ts_ms
+                                    )
+            except Exception as exc:
+                self.venue_stats["binance"]["errors"] += 1
+                self.venue_stats["binance"][f"errors_{label}"] = self.venue_stats["binance"].get(f"errors_{label}", 0) + 1
+                idx += 1
+                log.info("Binance WS (%s) geçişi (%s -> yedek aday): %s", label, short_ep, exc)
+                await asyncio.sleep(0.4)
+
+# src/live_runner.py:1126
+async def binance_ws_loop(self, session: aiohttp.ClientSession) -> None:
+        await asyncio.gather(
+            self._binance_single_ws(session, "aggTrade", "aggTrade"),
+            self._binance_single_ws(session, "bookTicker", "bookTicker"),
+        )
+
+# Tam src/feed_health.py
+"""v9.4.2 — Veri akışı sağlığı ve Binance USDⓈ-M WebSocket yönlendirmesi.
+
+Bağımlılıksız (aiohttp/ccxt gerektirmez) saf yardımcılar:
+
+1. Binance 2026-03-06 duyurusuyla vadeli WS'i /public, /market, /private diye böldü;
+   eski /ws ve /stream adresleri 2026-04-23'te kapatıldı. Taşınmamış bağlantı YALNIZ
+   /public verisini (bookTicker, depth) alır; aggTrade/markPrice/kline/ticker
+   (/market) sessizce susar. v9.4.1 canlı testinde "BBO var, aggTrade 0, hata 133"
+   kusurunun kök nedeni budur.
+2. Eski `healthy` bayrağı tek bir last_ts'e bakıyordu; BBO güncellemesi trade-tape
+   yokluğunu maskeliyordu. Burada BBO ve trade-tape ayrı ayrı denetlenir.
+"""
+from __future__ import annotations
+
+from typing import Any
+
+BINANCE_FUTURES_WS_BASE = "wss://fstream.binance.com"
+
+# Binance duyurusundaki kategori eşlemesi (Important WebSocket Change Notice, 2026-03-06).
+_PUBLIC_PREFIXES = ("bookTicker", "!bookTicker", "depth")
+_MARKET_PREFIXES = (
+    "aggTrade", "markPrice", "!markPrice", "kline", "ticker", "!ticker", "miniTicker",
+    "!miniTicker", "forceOrder", "!forceOrder", "compositeIndex", "!contractInfo", "assetIndex",
+    "!assetIndex",
+)
+
+
+def binance_futures_stream_category(stream_suffix: str) -> str:
+    """'bookTicker' -> 'public'; 'aggTrade' -> 'market'. Bilinmeyen akış hata verir (sessiz susmayı önler)."""
+    s = str(stream_suffix)
+    if s.startswith(_PUBLIC_PREFIXES):
+        return "public"
+    if s.startswith(_MARKET_PREFIXES):
+        return "market"
+    raise ValueError(f"Bilinmeyen Binance vadeli akış türü (kategori belirlenemedi): {stream_suffix!r}")
+
+
+def binance_futures_ws_url(stream_suffix: str, stream_path: str) -> str:
+    """Birleşik (combined) akış adresi. Kategoriler tek bağlantıda KARIŞTIRILAMAZ."""
+    cat = binance_futures_stream_category(stream_suffix)
+    return f"{BINANCE_FUTURES_WS_BASE}/{cat}/stream?streams={stream_path}"
+
+
+def binance_futures_single_stream_url(stream_name: str) -> str:
+    """Tek akış için /{kategori}/ws/ adresi. '!ticker@arr' -> /market ; 'btcusdt@aggTrade' -> /market."""
+    key = stream_name.split("@", 1)[0] if stream_name.startswith("!") else stream_name.split("@", 1)[-1]
+    return f"{BINANCE_FUTURES_WS_BASE}/{binance_futures_stream_category(key)}/ws/{stream_name}"
+
+
+def venue_feed_status(
+    stats: dict[str, Any],
+    now_s: float,
+    *,
+    bbo_max_age_sec: float = 20.0,
+    trade_max_age_sec: float = 30.0,
+    started_at: float | None = None,
+    warmup_grace_sec: float = 60.0,
+    require_trades: bool = True,
+) -> dict[str, Any]:
+    """Venue sağlığı = taze BBO VE taze trade-tape. Biri eksikse healthy=False ve alarm üretir."""
+    last_bbo = float(stats.get("last_bbo_ts") or 0.0)
+    last_trade = float(stats.get("last_trade_ts") or 0.0)
+    bbo_ok = last_bbo > 0 and (now_s - last_bbo) < bbo_max_age_sec
+    trade_ok = last_trade > 0 and (now_s - last_trade) < trade_max_age_sec
+    in_grace = started_at is not None and (now_s - started_at) < warmup_grace_sec
+    alarms: list[str] = []
+    if not bbo_ok and not in_grace:
+        alarms.append("BBO_STALE")
+    if require_trades and not trade_ok and not in_grace:
+        alarms.append("TRADE_TAPE_STALE" if int(stats.get("ticks") or 0) > 0 else "TRADE_TAPE_ABSENT")
+    healthy = (bbo_ok and (trade_ok or not require_trades)) or (in_grace and not alarms)
+    return {
+        "healthy": bool(healthy),
+        "bbo_healthy": bool(bbo_ok),
+        "trade_tape_healthy": bool(trade_ok),
+        "alarms": alarms,
+    }

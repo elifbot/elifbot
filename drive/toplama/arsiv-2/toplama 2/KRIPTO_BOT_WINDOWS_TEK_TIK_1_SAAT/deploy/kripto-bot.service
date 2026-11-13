@@ -1,0 +1,33 @@
+[Unit]
+Description=KRIPTO-BOT v7.8 (paper/testnet/live islem motoru)
+After=network-online.target
+Wants=network-online.target
+# Çökme/SIGKILL sonrası yeniden başlatmayı oran sınırına takma.
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+User=kriptobot
+Group=kriptobot
+WorkingDirectory=/opt/kripto-bot/kripto-bot-v7.8
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/opt/kripto-bot/.venv/bin/python -m src.main
+# Çökme/SIGKILL'de yeniden başlat; planlı süre sonu (exit 0) yeniden başlamaz.
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=90
+KillSignal=SIGTERM
+# Kaynak sinirlari (kucuk VPS icin)
+LimitNOFILE=65535
+MemoryHigh=1200M
+# Guvenlik sikilastirma
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ReadWritePaths=/opt/kripto-bot/kripto-bot-v7.8
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=kripto-bot
+
+[Install]
+WantedBy=multi-user.target

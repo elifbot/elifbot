@@ -1,0 +1,2662 @@
+{
+  "schema": "partial-paper-review-v1",
+  "run_id": 40088524013,
+  "run_url": "https://github.com/omeracar56/kripto-bot/actions/runs/40088524013",
+  "run_status": "completed",
+  "paper_job_result": "cancelled",
+  "review_window": "Oturum logundaki 1–20. dakika heartbeat kesiti; işlem satırlarında bağımsız timestamp yok.",
+  "planned_duration_minutes": 60,
+  "starting_balance_usdt": 100000.0,
+  "margin_per_trade_usdt": 50.0,
+  "leverage": 10,
+  "real_orders": false,
+  "exchanges_required": [
+    "binance",
+    "okx"
+  ],
+  "preflight": {
+    "status": "passed",
+    "required_both": true,
+    "per_exchange": {
+      "binance": 741,
+      "okx": 507
+    },
+    "public_rest_urls": {
+      "binance": "https://www.binance.com/fapi/v1"
+    },
+    "samples": {
+      "binance": {
+        "ohlcv_rows": 5,
+        "ohlcv_last_close": 80669.9,
+        "ticker_last": 80670.0,
+        "bid": 80670.0,
+        "ask": 80670.0,
+        "quote_source": "last_fallback",
+        "funding_rate": 3.714e-05,
+        "open_interest": 94352.209
+      },
+      "okx": {
+        "ohlcv_rows": 5,
+        "ohlcv_last_close": 80684.8,
+        "ticker_last": 80684.8,
+        "bid": 80684.7,
+        "ask": 80684.8,
+        "quote_source": "ticker",
+        "funding_rate": 9.93473844572e-05,
+        "open_interest": 2473307599.0425706
+      }
+    },
+    "errors": {},
+    "missing": []
+  },
+  "entries": 6,
+  "closes": 6,
+  "open_positions_at_20m": 0,
+  "normal_strategy_closes": 0,
+  "forced_or_early_closes": 6,
+  "close_reasons": {
+    "FLASH CRASH SİGORTASI": 6
+  },
+  "gross_pnl_usdt": 0.4699999999999999,
+  "fees_usdt": 2.0999,
+  "funding_usdt": 0.0,
+  "net_pnl_usdt": -1.6199999999999999,
+  "net_win_count": 1,
+  "net_loss_count": 5,
+  "median_net_usdt": -0.58,
+  "profit_factor_net": 0.49845201238390097,
+  "gross_positive_net_loss_count": 2,
+  "by_exchange": {
+    "binance": {
+      "trades": 2,
+      "net_pnl_usdt": -1.18,
+      "fees_usdt": 0.6998
+    },
+    "okx": {
+      "trades": 4,
+      "net_pnl_usdt": -0.43999999999999984,
+      "fees_usdt": 1.4001000000000001
+    }
+  },
+  "by_regime": {
+    "BREAKOUT": {
+      "trades": 1,
+      "net_pnl_usdt": -0.88,
+      "fees_usdt": 0.3498
+    },
+    "TREND": {
+      "trades": 5,
+      "net_pnl_usdt": -0.7399999999999998,
+      "fees_usdt": 1.7501000000000002
+    }
+  },
+  "entry_quality_recheck": {
+    "note": "Bu alan mevcut kodla giriş anındaki bağlamın yeniden hesaplanmasıdır; çalışmanın gerçek Shadow final raporu değildir.",
+    "flow_confidence_data_ready_count": 1,
+    "technical_harmony_accept_count": 1,
+    "volatility_gate_accept_count": 5
+  },
+  "shadow_final_report_available": false,
+  "limitations": [
+    "Run erken iptal edildi; planlı süre-sonu closeout ve shadow-analysis.json oluşmadı.",
+    "Tüm kapanışlar FLASH CRASH SİGORTASI; normal trailing/order-flow çıkış performansı ölçülmedi.",
+    "MFE/MAE, kaçırılan kazananlar, trailing maliyet zararı ve bağımsız Net Exit sonuçları bu kesitten doğrulanamaz.",
+    "20. dakikadan sonraki heartbeat/WS satırları bu raporun performans hesabına dahil edilmedi.",
+    "Tek kısa kesit zararsızlık veya gelecek kâr garantisi değildir; otomatik parametre/canlı kural kararı verilmez."
+  ],
+  "trades": [
+    {
+      "position_id": "bcdae5a14e0e41659f307bb8395414de",
+      "symbol": "ALCH/USDT",
+      "side": "LONG",
+      "exchange": "binance",
+      "entry_price": 0.03773,
+      "leverage": 10,
+      "margin_usdt": 49.99999999999999,
+      "combined_score": 32.6,
+      "raw_signal": "BEKLE",
+      "trigger": "PARA_GIRISI",
+      "indicator_score": 59.4,
+      "flow_score": 54.1,
+      "regime": "BREAKOUT",
+      "buy_usdt": 792.1,
+      "sell_usdt": 18.4,
+      "cvd_slope": 779.2,
+      "trade_count": 13,
+      "window_coverage_sec": 14.3,
+      "book_levels": 0,
+      "book_age_sec": null,
+      "data_ready": false,
+      "data_missing": [
+        "kapsama 14.3sn<60.0sn",
+        "emir defteri yok",
+        "defter yaşı yok>10.0sn"
+      ],
+      "technical_harmony_accepted_at_entry": true,
+      "technical_opposed_count": 0,
+      "volatility_gate_accepted_at_entry": true,
+      "bb_width_pct": 3.375719,
+      "atr_pct": 0.489444,
+      "close": {
+        "position_id": "bcdae5a14e0e41659f307bb8395414de",
+        "symbol": "ALCH/USDT",
+        "reason": "FLASH CRASH SİGORTASI",
+        "qty": 13255.56734,
+        "gross_pnl_usdt": -0.53,
+        "fees_usdt": 0.3498,
+        "funding_usdt": 0.0,
+        "net_pnl_usdt": -0.88
+      },
+      "entry_context": {
+        "indicators": {
+          "price": 0.03761,
+          "score": 59.4,
+          "active_components": {
+            "ema_trend": 14.399999999999999,
+            "ma_trend": 8.0,
+            "macd": 4.0,
+            "adx": 4.0,
+            "obv": 4.0,
+            "session_vwap": 4.0,
+            "supertrend": 8.0,
+            "anchored_vwap": 4.0,
+            "volume_profile": 3.0,
+            "confirmed_breakout": 6.0,
+            "funding": 0.0
+          },
+          "active_score_unclipped": 59.4,
+          "ma20": 0.036945500000000006,
+          "ma50": 0.0369412,
+          "ema9": 0.03725366812279032,
+          "ema21": 0.037062241637825705,
+          "ema50": 0.03688772484949916,
+          "ema200": 0.036582973747355516,
+          "rsi": 70.50608411138461,
+          "adx": 28.383351768985918,
+          "macd": 0.0001610176252783771,
+          "macd_signal": 8.200432326793886e-05,
+          "macd_hist": 7.901330201043823e-05,
+          "mfi": 86.97687602752826,
+          "cci": 171.07815110035102,
+          "vwap": 0.036606238405777106,
+          "session_vwap": 0.036606238405777106,
+          "weekly_vwap": 0.03625429824226367,
+          "cumulative_vwap": 0.036254298242263665,
+          "anchored_vwap": 0.036885268401973904,
+          "anchored_vwap_pos": 230,
+          "williams_r": -16.101694915254456,
+          "supertrend": 0.036959282037045925,
+          "supertrend_direction": 1,
+          "volume_profile_poc": 0.036927916666666664,
+          "volume_profile_vah": 0.037269166666666666,
+          "volume_profile_val": 0.036283333333333334,
+          "bollinger_bandwidth_pct": 3.375718771797624,
+          "bb_width_pct": 3.375718771797624,
+          "atr": 0.00018407990812060494,
+          "atr_pct": 0.48944405243447214,
+          "bb_kc_squeeze": false,
+          "squeeze_release": false,
+          "breakout_long": true,
+          "breakout_short": false,
+          "volume_zscore": 2.495471830571331,
+          "volume_z_threshold": 1.5,
+          "regime": "BREAKOUT",
+          "setup": "BREAKOUT",
+          "regime_aware": true,
+          "entry_allowed": true,
+          "entry_block_reason": "",
+          "components": {
+            "ema_trend": 12.0,
+            "ma_trend": 8.0,
+            "rsi": -5,
+            "macd": 4.0,
+            "bollinger": -6,
+            "stoch_rsi": -6,
+            "williams_r": -5,
+            "adx": 4,
+            "cci": -6,
+            "mfi": -6,
+            "obv": 4,
+            "vwap": 4,
+            "donchian": 5,
+            "funding": 0,
+            "supertrend": 8.0,
+            "session_vwap": 4.0,
+            "anchored_vwap": 4.0,
+            "volume_profile": 3.0,
+            "confirmed_breakout": 6.0
+          },
+          "funding_rate": 5e-05,
+          "candle_ts": 1792839600000.0
+        },
+        "combined": {
+          "total": 32.6,
+          "signal": "LONG",
+          "raw_signal": "BEKLE",
+          "trigger": "PARA_GIRISI",
+          "entry_allowed": true,
+          "entry_block_reason": "",
+          "orderflow_veto": "",
+          "regime": "BREAKOUT"
+        },
+        "orderflow": {
+          "score": 54.1,
+          "score_unclipped": 54.09392978447066,
+          "score_components": {
+            "taker_delta": 40.09392978447066,
+            "cvd_direction": 14,
+            "whale_balance": 0.0,
+            "orderbook_depth": 0.0,
+            "oi_liquidation": 0.0,
+            "volume_spike": 0.0
+          },
+          "buy_usdt": 792.1,
+          "sell_usdt": 18.4,
+          "net_usdt": 773.7,
+          "cvd": 773.7,
+          "cvd_slope": 779.2,
+          "trade_count": 13,
+          "window_coverage_sec": 14.3,
+          "book_age_sec": null,
+          "whale_buy_usdt": 0,
+          "whale_sell_usdt": 0,
+          "volume_spike": false,
+          "spike_mult": 0.0,
+          "obi": 0.0,
+          "weighted_obi": 0.0,
+          "bid_ask_ratio": 1.0,
+          "bid_depth_usdt": 0.0,
+          "ask_depth_usdt": 0.0,
+          "bid_wall_price": 0.0,
+          "bid_wall_usdt": 0.0,
+          "ask_wall_price": 0.0,
+          "ask_wall_usdt": 0.0,
+          "book_levels": 0,
+          "wall_signal": "DENGELI",
+          "depth_score_boost": 0.0,
+          "open_interest": 103447475.0,
+          "oi_change_pct": 0.0,
+          "price_change_pct": 0.0,
+          "oi_signal": "NOTR",
+          "oi_flow_confirmation": "CVD_VERI_YOK",
+          "short_liq_usdt": 0,
+          "long_liq_usdt": 0,
+          "squeeze": "YOK",
+          "oi_liq_boost": 0.0,
+          "cvd_divergence": "YOK",
+          "absorption": "YOK",
+          "cvd_60s": 779.2,
+          "absorption_price_change_pct": 0.2925,
+          "absorption_depth_change_pct": 0.0,
+          "absorption_buy_usdt": 792.1,
+          "absorption_sell_usdt": 18.4,
+          "vpvr_source": "TICK_VPVR",
+          "vpvr_poc": 0.03771875,
+          "vpvr_vah": 0.03772,
+          "vpvr_val": 0.03765,
+          "vpvr_trades": 13,
+          "vpvr_total_usdt": 810.49,
+          "vpvr_coverage_sec": 4.7,
+          "vpvr_warm": false,
+          "verdict": "GÜÇLÜ GİRİŞ"
+        },
+        "news": {
+          "score": 0.0,
+          "veto": false,
+          "veto_long": false,
+          "veto_short": false,
+          "veto_approaching": false,
+          "fear_greed": 50.0,
+          "count": 45,
+          "latest": {
+            "title": "Senate's top Democratic investigator looking into Tether payments to Bo Hines' firm",
+            "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+            "score": 0.0,
+            "urgent": false,
+            "fear_greed": 50.0
+          }
+        },
+        "mtf": {
+          "trend": "BULLISH",
+          "score": 65.6,
+          "allow_long": true,
+          "allow_short": false,
+          "tf_1h": {
+            "timeframe": "1h",
+            "trend": "UP",
+            "score": 70.0,
+            "ema20": 0.0366,
+            "ema50": 0.0364,
+            "ema200": 0.0365,
+            "rsi": 62.2,
+            "adx": 35.5
+          },
+          "tf_4h": {
+            "timeframe": "4h",
+            "trend": "UP",
+            "score": 62.0,
+            "ema20": 0.0364,
+            "ema50": 0.0371,
+            "ema200": 0.0409,
+            "rsi": 56.2,
+            "adx": 20.5
+          },
+          "reason": "1h/4h Ana Trend YÜKSELİŞ (+65.6) → Ters yönlü SHORT engellendi"
+        },
+        "ml": {
+          "score": -31.4,
+          "prob_up": 0.3432,
+          "direction": "SHORT",
+          "confidence": 31.4,
+          "backend": "numpy_gbdt",
+          "trained_samples": 271
+        },
+        "decision_inputs": {
+          "news_score": 0.0,
+          "ml_score": -31.4,
+          "veto": false,
+          "veto_long": false,
+          "veto_short": false
+        },
+        "dynamic_leverage": {
+          "value": 10,
+          "reason": "sabit 10x"
+        },
+        "entry_reason": "skor 32.6 | tetik: PARA_GIRISI",
+        "side": "LONG",
+        "entry_price": 0.03773,
+        "leverage": 10,
+        "margin_usdt": 49.99999999999999,
+        "exchange": "binance",
+        "attribution": {
+          "technical": {
+            "ema_trend": {
+              "contribution": 14.4,
+              "decisive": false,
+              "without_action": "LONG",
+              "without_signal": "LONG",
+              "without_total": 26.8
+            },
+            "ma_trend": {
+              "contribution": 8.0,
+              "decisive": false,
+              "without_action": "LONG",
+              "without_signal": "LONG",
+              "without_total": 29.4
+            },
+            "macd": {
+              "contribution": 4.0,
+              "decisive": false,
+              "without_action": "LONG",
+              "without_signal": "LONG",
+              "without_total": 31.0
+            },
+            "adx": {
+              "contribution": 4.0,
+              "decisive": false,
+              "without_action": "LONG",
+              "without_signal": "LONG",
+              "without_total": 31.0
+            },
+            "obv": {
+              "contribution": 4.0,
+              "decisive": false,
+              "without_action": "LONG",
+              "without_signal": "LONG",
+              "without_total": 31.0
+            },
+            "session_vwap": {
+              "contribution": 4.0,
+              "decisive": false,
+              "without_action": "LONG",
+              "without_signal": "LONG",
+              "without_total": 31.0
+            },
+            "supertrend": {
+              "contribution": 8.0,
+              "decisive": false,
+              "without_action": "LONG",
+              "without_signal": "LONG",
+              "without_total": 29.4
+            },
+            "anchored_vwap": {
+              "contribution": 4.0,
+              "decisive": false,
+              "without_action": "LONG",
+              "without_signal": "LONG",
+              "without_total": 31.0
+            },
+            "volume_profile": {
+              "contribution": 3.0,
+              "decisive": false,
+              "without_action": "LONG",
+              "without_signal": "LONG",
+              "without_total": 31.4
+            },
+            "confirmed_breakout": {
+              "contribution": 6.0,
+              "decisive": false,
+              "without_action": "LONG",
+              "without_signal": "LONG",
+              "without_total": 30.2
+            },
+            "funding": {
+              "contribution": 0.0,
+              "decisive": false,
+              "without_action": "LONG",
+              "without_signal": "LONG",
+              "without_total": 32.6
+            }
+          },
+          "orderflow": {
+            "taker_delta": {
+              "contribution": 40.09393,
+              "decisive": true,
+              "without_action": "yok",
+              "without_signal": "BEKLE",
+              "without_total": 22.6
+            },
+            "cvd_direction": {
+              "contribution": 14.0,
+              "decisive": true,
+              "without_action": "yok",
+              "without_signal": "BEKLE",
+              "without_total": 29.1
+            },
+            "whale_balance": {
+              "contribution": 0.0,
+              "decisive": false,
+              "without_action": "LONG",
+              "without_signal": "LONG",
+              "without_total": 32.6
+            },
+            "orderbook_depth": {
+              "contribution": 0.0,
+              "decisive": false,
+              "without_action": "LONG",
+              "without_signal": "LONG",
+              "without_total": 32.6
+            },
+            "oi_liquidation": {
+              "contribution": 0.0,
+              "decisive": false,
+              "without_action": "LONG",
+              "without_signal": "LONG",
+              "without_total": 32.6
+            },
+            "volume_spike": {
+              "contribution": 0.0,
+              "decisive": false,
+              "without_action": "LONG",
+              "without_signal": "LONG",
+              "without_total": 32.6
+            }
+          },
+          "modules": {
+            "technical_all": {
+              "contribution": 59.4,
+              "decisive": true,
+              "without_action": "yok",
+              "without_signal": "BEKLE",
+              "without_total": 8.8
+            },
+            "orderflow_all": {
+              "contribution": 54.1,
+              "decisive": true,
+              "without_action": "yok",
+              "without_signal": "BEKLE",
+              "without_total": 19.1
+            },
+            "news_score": {
+              "contribution": 0.0,
+              "decisive": false,
+              "without_action": "LONG",
+              "without_signal": "LONG",
+              "without_total": 32.6
+            },
+            "ml_score": {
+              "contribution": -31.4,
+              "decisive": false,
+              "without_action": "LONG",
+              "without_signal": "LONG",
+              "without_total": 37.3
+            },
+            "mtf_filter": {
+              "contribution": 0.0,
+              "decisive": false,
+              "without_action": "LONG",
+              "without_signal": "LONG",
+              "without_total": 32.6
+            }
+          }
+        }
+      }
+    },
+    {
+      "position_id": "fb11d56a7ee24dd9ae30b34892e0e6d6",
+      "symbol": "BEAT/USDT",
+      "side": "SHORT",
+      "exchange": "okx",
+      "entry_price": 0.06858,
+      "leverage": 10,
+      "margin_usdt": 50.0,
+      "combined_score": -34.0,
+      "raw_signal": "BEKLE",
+      "trigger": "PARA_CIKISI",
+      "indicator_score": -37.4,
+      "flow_score": -56.5,
+      "regime": "TREND",
+      "buy_usdt": 16.9,
+      "sell_usdt": 1687.5,
+      "cvd_slope": -1415.5,
+      "trade_count": 13,
+      "window_coverage_sec": 44.5,
+      "book_levels": 20,
+      "book_age_sec": 0.518,
+      "data_ready": false,
+      "data_missing": [
+        "kapsama 44.5sn<60.0sn"
+      ],
+      "technical_harmony_accepted_at_entry": false,
+      "technical_opposed_count": 2,
+      "volatility_gate_accepted_at_entry": true,
+      "bb_width_pct": 0.87358,
+      "atr_pct": 0.239505,
+      "close": {
+        "position_id": "fb11d56a7ee24dd9ae30b34892e0e6d6",
+        "symbol": "BEAT/USDT",
+        "reason": "FLASH CRASH SİGORTASI",
+        "qty": 7298.737318,
+        "gross_pnl_usdt": -0.51,
+        "fees_usdt": 0.3506,
+        "funding_usdt": 0.0,
+        "net_pnl_usdt": -0.86
+      },
+      "entry_context": {
+        "indicators": {
+          "price": 0.06863,
+          "score": -37.4,
+          "active_components": {
+            "ema_trend": -14.399999999999999,
+            "ma_trend": -8.0,
+            "macd": 4.0,
+            "adx": -4.0,
+            "obv": 4.0,
+            "session_vwap": -4.0,
+            "supertrend": -8.0,
+            "anchored_vwap": -4.0,
+            "volume_profile": -3.0,
+            "confirmed_breakout": 0.0,
+            "funding": 0.0
+          },
+          "active_score_unclipped": -37.4,
+          "ma20": 0.068715,
+          "ma50": 0.0691024,
+          "ema9": 0.06864096456290679,
+          "ema21": 0.06875451659913345,
+          "ema50": 0.06904676306529031,
+          "ema200": 0.07004214802095064,
+          "rsi": 42.0975684359039,
+          "adx": 30.482617544755357,
+          "macd": -0.00014375838893181114,
+          "macd_signal": -0.00015834205642444415,
+          "macd_hist": 1.4583667492633004e-05,
+          "mfi": 40.233029377209675,
+          "cci": -35.9116022099467,
+          "vwap": 0.06959149361184196,
+          "session_vwap": 0.06959149361184196,
+          "weekly_vwap": 0.07127872084215497,
+          "cumulative_vwap": 0.07127872084215495,
+          "anchored_vwap": 0.069222585798798,
+          "anchored_vwap_pos": 236,
+          "williams_r": -63.49206349206394,
+          "supertrend": 0.06899027318349174,
+          "supertrend_direction": -1,
+          "volume_profile_poc": 0.06994604166666665,
+          "volume_profile_vah": 0.07013458333333333,
+          "volume_profile_val": 0.06900333333333333,
+          "bollinger_bandwidth_pct": 0.8735802024581798,
+          "bb_width_pct": 0.8735802024581798,
+          "atr": 0.0001643724822514686,
+          "atr_pct": 0.23950529251270378,
+          "bb_kc_squeeze": false,
+          "squeeze_release": true,
+          "breakout_long": false,
+          "breakout_short": false,
+          "volume_zscore": -0.7198639301178882,
+          "volume_z_threshold": 1.5,
+          "regime": "TREND",
+          "setup": "PULLBACK",
+          "regime_aware": true,
+          "entry_allowed": true,
+          "entry_block_reason": "",
+          "components": {
+            "ema_trend": -12.0,
+            "ma_trend": -8.0,
+            "rsi": -2,
+            "macd": 4.0,
+            "bollinger": -2,
+            "stoch_rsi": -2,
+            "williams_r": 0,
+            "adx": -4,
+            "cci": -2,
+            "mfi": -2,
+            "obv": 4,
+            "vwap": -4,
+            "donchian": 0,
+            "funding": 0,
+            "supertrend": -8.0,
+            "session_vwap": -4.0,
+            "anchored_vwap": -4.0,
+            "volume_profile": -3.0,
+            "confirmed_breakout": 0.0
+          },
+          "funding_rate": 5e-05,
+          "candle_ts": 1792839600000.0
+        },
+        "combined": {
+          "total": -34.0,
+          "signal": "SHORT",
+          "raw_signal": "BEKLE",
+          "trigger": "PARA_CIKISI",
+          "entry_allowed": true,
+          "entry_block_reason": "",
+          "orderflow_veto": "",
+          "regime": "TREND"
+        },
+        "orderflow": {
+          "score": -56.5,
+          "score_unclipped": -56.54570740754959,
+          "score_components": {
+            "taker_delta": -41.16570740754959,
+            "cvd_direction": -14,
+            "whale_balance": 0.0,
+            "orderbook_depth": -1.38,
+            "oi_liquidation": 0.0,
+            "volume_spike": 0.0
+          },
+          "buy_usdt": 16.9,
+          "sell_usdt": 1687.5,
+          "net_usdt": -1670.6,
+          "cvd": -1670.6,
+          "cvd_slope": -1415.5,
+          "trade_count": 13,
+          "window_coverage_sec": 44.5,
+          "book_age_sec": 0.518,
+          "whale_buy_usdt": 0,
+          "whale_sell_usdt": 0,
+          "volume_spike": false,
+          "spike_mult": 0.0,
+          "obi": -0.14,
+          "weighted_obi": 0.027,
+          "bid_ask_ratio": 0.754,
+          "bid_depth_usdt": 22439.11,
+          "ask_depth_usdt": 29765.79,
+          "bid_wall_price": 0.0684,
+          "bid_wall_usdt": 3778.97,
+          "ask_wall_price": 0.0687,
+          "ask_wall_usdt": 3179.64,
+          "book_levels": 20,
+          "wall_signal": "DENGELI",
+          "depth_score_boost": -1.38,
+          "open_interest": 76937692.0,
+          "oi_change_pct": 0.0,
+          "price_change_pct": 0.0,
+          "oi_signal": "NOTR",
+          "oi_flow_confirmation": "CVD_VERI_YOK",
+          "short_liq_usdt": 0,
+          "long_liq_usdt": 0,
+          "squeeze": "YOK",
+          "oi_liq_boost": 0.0,
+          "cvd_divergence": "YOK",
+          "absorption": "YOK",
+          "cvd_60s": -1415.5,
+          "absorption_price_change_pct": -0.1603,
+          "absorption_depth_change_pct": 0.0,
+          "absorption_buy_usdt": 16.9,
+          "absorption_sell_usdt": 1687.5,
+          "vpvr_source": "TICK_VPVR",
+          "vpvr_poc": 0.06853948,
+          "vpvr_vah": 0.06858188,
+          "vpvr_val": 0.06852,
+          "vpvr_trades": 13,
+          "vpvr_total_usdt": 1704.42,
+          "vpvr_coverage_sec": 41.4,
+          "vpvr_warm": false,
+          "verdict": "GÜÇLÜ ÇIKIŞ"
+        },
+        "news": {
+          "score": 0.0,
+          "veto": false,
+          "veto_long": false,
+          "veto_short": false,
+          "veto_approaching": false,
+          "fear_greed": 50.0,
+          "count": 45,
+          "latest": {
+            "title": "Senate's top Democratic investigator looking into Tether payments to Bo Hines' firm",
+            "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+            "score": 0.0,
+            "urgent": false,
+            "fear_greed": 50.0
+          }
+        },
+        "mtf": {
+          "trend": "BEARISH",
+          "score": -100.0,
+          "allow_long": false,
+          "allow_short": true,
+          "tf_1h": {
+            "timeframe": "1h",
+            "trend": "DOWN",
+            "score": -100.0,
+            "ema20": 0.0701,
+            "ema50": 0.0708,
+            "ema200": 0.0725,
+            "rsi": 31.1,
+            "adx": 32.9
+          },
+          "tf_4h": {
+            "timeframe": "4h",
+            "trend": "DOWN",
+            "score": -100.0,
+            "ema20": 0.0715,
+            "ema50": 0.0737,
+            "ema200": 0.0812,
+            "rsi": 39.6,
+            "adx": 28.2
+          },
+          "reason": "1h/4h Ana Trend DÜŞÜŞ (-100.0) → Küçük tepkilerde LONG engellendi"
+        },
+        "ml": {
+          "score": -32.8,
+          "prob_up": 0.3362,
+          "direction": "SHORT",
+          "confidence": 32.8,
+          "backend": "numpy_gbdt",
+          "trained_samples": 271
+        },
+        "decision_inputs": {
+          "news_score": 0.0,
+          "ml_score": -32.8,
+          "veto": false,
+          "veto_long": false,
+          "veto_short": false
+        },
+        "dynamic_leverage": {
+          "value": 10,
+          "reason": "sabit 10x"
+        },
+        "entry_reason": "skor -34.0 | tetik: PARA_CIKISI",
+        "side": "SHORT",
+        "entry_price": 0.06858,
+        "leverage": 10,
+        "margin_usdt": 50.0,
+        "exchange": "okx",
+        "attribution": {
+          "technical": {
+            "ema_trend": {
+              "contribution": -14.4,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -28.2
+            },
+            "ma_trend": {
+              "contribution": -8.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -30.8
+            },
+            "macd": {
+              "contribution": 4.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -35.6
+            },
+            "adx": {
+              "contribution": -4.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -32.4
+            },
+            "obv": {
+              "contribution": 4.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -35.6
+            },
+            "session_vwap": {
+              "contribution": -4.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -32.4
+            },
+            "supertrend": {
+              "contribution": -8.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -30.8
+            },
+            "anchored_vwap": {
+              "contribution": -4.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -32.4
+            },
+            "volume_profile": {
+              "contribution": -3.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -32.8
+            },
+            "confirmed_breakout": {
+              "contribution": 0.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -34.0
+            },
+            "funding": {
+              "contribution": 0.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -34.0
+            }
+          },
+          "orderflow": {
+            "taker_delta": {
+              "contribution": -41.165707,
+              "decisive": true,
+              "without_action": "yok",
+              "without_signal": "BEKLE",
+              "without_total": -23.7
+            },
+            "cvd_direction": {
+              "contribution": -14.0,
+              "decisive": true,
+              "without_action": "yok",
+              "without_signal": "BEKLE",
+              "without_total": -30.5
+            },
+            "whale_balance": {
+              "contribution": 0.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -34.0
+            },
+            "orderbook_depth": {
+              "contribution": -1.38,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -33.7
+            },
+            "oi_liquidation": {
+              "contribution": 0.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -34.0
+            },
+            "volume_spike": {
+              "contribution": 0.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -34.0
+            }
+          },
+          "modules": {
+            "technical_all": {
+              "contribution": -37.4,
+              "decisive": true,
+              "without_action": "yok",
+              "without_signal": "BEKLE",
+              "without_total": -19.0
+            },
+            "orderflow_all": {
+              "contribution": -56.5,
+              "decisive": true,
+              "without_action": "yok",
+              "without_signal": "BEKLE",
+              "without_total": -19.9
+            },
+            "news_score": {
+              "contribution": 0.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -34.0
+            },
+            "ml_score": {
+              "contribution": -32.8,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -29.1
+            },
+            "mtf_filter": {
+              "contribution": 0.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -34.0
+            }
+          }
+        }
+      }
+    },
+    {
+      "position_id": "7767195f71c4494c93131aa8250ed64a",
+      "symbol": "CC/USDT",
+      "side": "SHORT",
+      "exchange": "okx",
+      "entry_price": 0.102,
+      "leverage": 10,
+      "margin_usdt": 50.0,
+      "combined_score": -35.3,
+      "raw_signal": "BEKLE",
+      "trigger": "PARA_CIKISI",
+      "indicator_score": -37.4,
+      "flow_score": -57.2,
+      "regime": "TREND",
+      "buy_usdt": 20.2,
+      "sell_usdt": 639.2,
+      "cvd_slope": -577.3,
+      "trade_count": 22,
+      "window_coverage_sec": 70.1,
+      "book_levels": 20,
+      "book_age_sec": 1.873,
+      "data_ready": true,
+      "data_missing": [],
+      "technical_harmony_accepted_at_entry": false,
+      "technical_opposed_count": 2,
+      "volatility_gate_accepted_at_entry": true,
+      "bb_width_pct": 0.994486,
+      "atr_pct": 0.232958,
+      "close": {
+        "position_id": "7767195f71c4494c93131aa8250ed64a",
+        "symbol": "CC/USDT",
+        "reason": "FLASH CRASH SİGORTASI",
+        "qty": 4904.845988,
+        "gross_pnl_usdt": 0.05,
+        "fees_usdt": 0.3502,
+        "funding_usdt": 0.0,
+        "net_pnl_usdt": -0.3
+      },
+      "entry_context": {
+        "indicators": {
+          "price": 0.10198,
+          "score": -37.4,
+          "active_components": {
+            "ema_trend": -14.399999999999999,
+            "ma_trend": -8.0,
+            "macd": 4.0,
+            "adx": -4.0,
+            "obv": 4.0,
+            "session_vwap": -4.0,
+            "supertrend": -8.0,
+            "anchored_vwap": -4.0,
+            "volume_profile": -3.0,
+            "confirmed_breakout": 0.0,
+            "funding": 0.0
+          },
+          "active_score_unclipped": -37.4,
+          "ma20": 0.1021755,
+          "ma50": 0.10277359999999999,
+          "ema9": 0.1020054807262222,
+          "ema21": 0.10222193368084212,
+          "ema50": 0.1025827227951826,
+          "ema200": 0.10278863330307039,
+          "rsi": 33.95050440128908,
+          "adx": 46.22200356764653,
+          "macd": -0.0002542027079365933,
+          "macd_signal": -0.0002672821950756464,
+          "macd_hist": 1.307948713905315e-05,
+          "mfi": 39.500878187355866,
+          "cci": -24.503748328903487,
+          "vwap": 0.10272760141707145,
+          "session_vwap": 0.10272760141707145,
+          "weekly_vwap": 0.10270162490195732,
+          "cumulative_vwap": 0.10270162490195732,
+          "anchored_vwap": 0.10308390699965944,
+          "anchored_vwap_pos": 208,
+          "williams_r": -59.459459459459666,
+          "supertrend": 0.10261441264793483,
+          "supertrend_direction": -1,
+          "volume_profile_poc": 0.10356125000000001,
+          "volume_profile_vah": 0.10372250000000001,
+          "volume_profile_val": 0.10286250000000001,
+          "bollinger_bandwidth_pct": 0.9944855563343423,
+          "bb_width_pct": 0.9944855563343423,
+          "atr": 0.00023757010728351567,
+          "atr_pct": 0.23295754783635583,
+          "bb_kc_squeeze": false,
+          "squeeze_release": false,
+          "breakout_long": false,
+          "breakout_short": false,
+          "volume_zscore": 0.02132961988721617,
+          "volume_z_threshold": 1.5,
+          "regime": "TREND",
+          "setup": "PULLBACK",
+          "regime_aware": true,
+          "entry_allowed": true,
+          "entry_block_reason": "",
+          "components": {
+            "ema_trend": -12.0,
+            "ma_trend": -8.0,
+            "rsi": 5,
+            "macd": 4.0,
+            "bollinger": -2,
+            "stoch_rsi": -6,
+            "williams_r": 0,
+            "adx": -4,
+            "cci": -2,
+            "mfi": -2,
+            "obv": 4,
+            "vwap": -4,
+            "donchian": 0,
+            "funding": 0,
+            "supertrend": -8.0,
+            "session_vwap": -4.0,
+            "anchored_vwap": -4.0,
+            "volume_profile": -3.0,
+            "confirmed_breakout": 0.0
+          },
+          "funding_rate": -9.677e-05,
+          "candle_ts": 1792839600000.0
+        },
+        "combined": {
+          "total": -35.3,
+          "signal": "SHORT",
+          "raw_signal": "BEKLE",
+          "trigger": "PARA_CIKISI",
+          "entry_allowed": true,
+          "entry_block_reason": "",
+          "orderflow_veto": "",
+          "regime": "TREND"
+        },
+        "orderflow": {
+          "score": -57.2,
+          "score_unclipped": -57.216823583938606,
+          "score_components": {
+            "taker_delta": -39.42682358393861,
+            "cvd_direction": -14,
+            "whale_balance": 0.0,
+            "orderbook_depth": -3.79,
+            "oi_liquidation": 0.0,
+            "volume_spike": 0.0
+          },
+          "buy_usdt": 20.2,
+          "sell_usdt": 639.2,
+          "net_usdt": -619.0,
+          "cvd": -619.0,
+          "cvd_slope": -577.3,
+          "trade_count": 22,
+          "window_coverage_sec": 70.1,
+          "book_age_sec": 1.873,
+          "whale_buy_usdt": 0,
+          "whale_sell_usdt": 0,
+          "volume_spike": false,
+          "spike_mult": 0.0,
+          "obi": -0.041,
+          "weighted_obi": -0.235,
+          "bid_ask_ratio": 0.922,
+          "bid_depth_usdt": 13729.78,
+          "ask_depth_usdt": 14894.92,
+          "bid_wall_price": 0.1018,
+          "bid_wall_usdt": 2241.59,
+          "ask_wall_price": 0.102,
+          "ask_wall_usdt": 5252.3,
+          "book_levels": 20,
+          "wall_signal": "SATICI_DUVARI",
+          "depth_score_boost": -3.79,
+          "open_interest": 118648241.0,
+          "oi_change_pct": 0.0,
+          "price_change_pct": 0.0,
+          "oi_signal": "NOTR",
+          "oi_flow_confirmation": "CVD_VERI_YOK",
+          "short_liq_usdt": 0,
+          "long_liq_usdt": 0,
+          "squeeze": "YOK",
+          "oi_liq_boost": 0.0,
+          "cvd_divergence": "YOK",
+          "absorption": "YOK",
+          "cvd_60s": -410.4,
+          "absorption_price_change_pct": -0.0882,
+          "absorption_depth_change_pct": 0.0,
+          "absorption_buy_usdt": 9.8,
+          "absorption_sell_usdt": 438.7,
+          "vpvr_source": "TICK_VPVR",
+          "vpvr_poc": 0.10202875,
+          "vpvr_vah": 0.10203,
+          "vpvr_val": 0.1019475,
+          "vpvr_trades": 22,
+          "vpvr_total_usdt": 659.36,
+          "vpvr_coverage_sec": 67.4,
+          "vpvr_warm": false,
+          "verdict": "GÜÇLÜ ÇIKIŞ"
+        },
+        "news": {
+          "score": 0.0,
+          "veto": false,
+          "veto_long": false,
+          "veto_short": false,
+          "veto_approaching": false,
+          "fear_greed": 50.0,
+          "count": 45,
+          "latest": {
+            "title": "Senate's top Democratic investigator looking into Tether payments to Bo Hines' firm",
+            "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+            "score": 0.0,
+            "urgent": false,
+            "fear_greed": 50.0
+          }
+        },
+        "mtf": {
+          "trend": "BEARISH",
+          "score": -70.0,
+          "allow_long": false,
+          "allow_short": true,
+          "tf_1h": {
+            "timeframe": "1h",
+            "trend": "DOWN",
+            "score": -70.0,
+            "ema20": 0.1028,
+            "ema50": 0.1034,
+            "ema200": 0.1044,
+            "rsi": 42.3,
+            "adx": 17.3
+          },
+          "tf_4h": {
+            "timeframe": "4h",
+            "trend": "DOWN",
+            "score": -70.0,
+            "ema20": 0.104,
+            "ema50": 0.1061,
+            "ema200": 0.1122,
+            "rsi": 47.8,
+            "adx": 14.6
+          },
+          "reason": "1h/4h Ana Trend DÜŞÜŞ (-70.0) → Küçük tepkilerde LONG engellendi"
+        },
+        "ml": {
+          "score": -40.4,
+          "prob_up": 0.298,
+          "direction": "SHORT",
+          "confidence": 40.4,
+          "backend": "numpy_gbdt",
+          "trained_samples": 271
+        },
+        "decision_inputs": {
+          "news_score": 0.0,
+          "ml_score": -40.4,
+          "veto": false,
+          "veto_long": false,
+          "veto_short": false
+        },
+        "dynamic_leverage": {
+          "value": 10,
+          "reason": "sabit 10x"
+        },
+        "entry_reason": "skor -35.3 | tetik: PARA_CIKISI",
+        "side": "SHORT",
+        "entry_price": 0.102,
+        "leverage": 10,
+        "margin_usdt": 50.0,
+        "exchange": "okx",
+        "attribution": {
+          "technical": {
+            "ema_trend": {
+              "contribution": -14.4,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -29.6
+            },
+            "ma_trend": {
+              "contribution": -8.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -32.1
+            },
+            "macd": {
+              "contribution": 4.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -36.9
+            },
+            "adx": {
+              "contribution": -4.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -33.7
+            },
+            "obv": {
+              "contribution": 4.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -36.9
+            },
+            "session_vwap": {
+              "contribution": -4.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -33.7
+            },
+            "supertrend": {
+              "contribution": -8.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -32.1
+            },
+            "anchored_vwap": {
+              "contribution": -4.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -33.7
+            },
+            "volume_profile": {
+              "contribution": -3.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -34.1
+            },
+            "confirmed_breakout": {
+              "contribution": 0.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -35.3
+            },
+            "funding": {
+              "contribution": 0.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -35.3
+            }
+          },
+          "orderflow": {
+            "taker_delta": {
+              "contribution": -39.426824,
+              "decisive": true,
+              "without_action": "yok",
+              "without_signal": "BEKLE",
+              "without_total": -25.5
+            },
+            "cvd_direction": {
+              "contribution": -14.0,
+              "decisive": true,
+              "without_action": "yok",
+              "without_signal": "BEKLE",
+              "without_total": -31.8
+            },
+            "whale_balance": {
+              "contribution": 0.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -35.3
+            },
+            "orderbook_depth": {
+              "contribution": -3.79,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -34.4
+            },
+            "oi_liquidation": {
+              "contribution": 0.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -35.3
+            },
+            "volume_spike": {
+              "contribution": 0.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -35.3
+            }
+          },
+          "modules": {
+            "technical_all": {
+              "contribution": -37.4,
+              "decisive": true,
+              "without_action": "yok",
+              "without_signal": "BEKLE",
+              "without_total": -20.4
+            },
+            "orderflow_all": {
+              "contribution": -57.2,
+              "decisive": true,
+              "without_action": "yok",
+              "without_signal": "BEKLE",
+              "without_total": -21.0
+            },
+            "news_score": {
+              "contribution": 0.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -35.3
+            },
+            "ml_score": {
+              "contribution": -40.4,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -29.3
+            },
+            "mtf_filter": {
+              "contribution": 0.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -35.3
+            }
+          }
+        }
+      }
+    },
+    {
+      "position_id": "38a73abb0a23468faf9e1053fd842e4a",
+      "symbol": "CNPY/USDT",
+      "side": "SHORT",
+      "exchange": "okx",
+      "entry_price": 0.2047,
+      "leverage": 10,
+      "margin_usdt": 50.0,
+      "combined_score": -25.9,
+      "raw_signal": "BEKLE",
+      "trigger": "PARA_CIKISI",
+      "indicator_score": -25.8,
+      "flow_score": -55.8,
+      "regime": "TREND",
+      "buy_usdt": 0,
+      "sell_usdt": 43.0,
+      "cvd_slope": -26.6,
+      "trade_count": 2,
+      "window_coverage_sec": 66.7,
+      "book_levels": 20,
+      "book_age_sec": 6.329,
+      "data_ready": false,
+      "data_missing": [
+        "işlem sayısı 2<5"
+      ],
+      "technical_harmony_accepted_at_entry": false,
+      "technical_opposed_count": 2,
+      "volatility_gate_accepted_at_entry": true,
+      "bb_width_pct": 3.837731,
+      "atr_pct": 0.896126,
+      "close": {
+        "position_id": "38a73abb0a23468faf9e1053fd842e4a",
+        "symbol": "CNPY/USDT",
+        "reason": "FLASH CRASH SİGORTASI",
+        "qty": 2442.598925,
+        "gross_pnl_usdt": 1.95,
+        "fees_usdt": 0.349,
+        "funding_usdt": 0.0,
+        "net_pnl_usdt": 1.61
+      },
+      "entry_context": {
+        "indicators": {
+          "price": 0.2048,
+          "score": -25.8,
+          "active_components": {
+            "ema_trend": -4.8,
+            "ma_trend": -8.0,
+            "macd": 4.0,
+            "adx": -4.0,
+            "obv": 4.0,
+            "session_vwap": -4.0,
+            "supertrend": -8.0,
+            "anchored_vwap": -4.0,
+            "volume_profile": -1.0,
+            "confirmed_breakout": 0.0,
+            "funding": 0.0
+          },
+          "active_score_unclipped": -25.8,
+          "ma20": 0.20406,
+          "ma50": 0.20684000000000002,
+          "ema9": 0.20356672314633648,
+          "ema21": 0.20441720543300124,
+          "ema50": 0.20663186017168644,
+          "ema200": 0.21669986907686906,
+          "rsi": 49.45876332139926,
+          "adx": 33.07340877855652,
+          "macd": -0.0011759726973882556,
+          "macd_signal": -0.0014752198145221076,
+          "macd_hist": 0.000299247117133852,
+          "mfi": 46.56387187943373,
+          "cci": 8.647705184656123,
+          "vwap": 0.21036565024989326,
+          "session_vwap": 0.21036565024989326,
+          "weekly_vwap": 0.2171962900907613,
+          "cumulative_vwap": 0.21719629009076133,
+          "anchored_vwap": 0.21226289307705212,
+          "anchored_vwap_pos": 209,
+          "williams_r": -19.402985074626766,
+          "supertrend": 0.20597038039994114,
+          "supertrend_direction": -1,
+          "volume_profile_poc": 0.20953333333333335,
+          "volume_profile_vah": 0.21646666666666667,
+          "volume_profile_val": 0.2026,
+          "bollinger_bandwidth_pct": 3.83773073540215,
+          "bb_width_pct": 3.83773073540215,
+          "atr": 0.0018352652085534783,
+          "atr_pct": 0.8961255901140031,
+          "bb_kc_squeeze": false,
+          "squeeze_release": false,
+          "breakout_long": false,
+          "breakout_short": false,
+          "volume_zscore": -0.441498546759057,
+          "volume_z_threshold": 1.5,
+          "regime": "TREND",
+          "setup": "PULLBACK",
+          "regime_aware": true,
+          "entry_allowed": true,
+          "entry_block_reason": "",
+          "components": {
+            "ema_trend": -4.0,
+            "ma_trend": -8.0,
+            "rsi": 0,
+            "macd": 4.0,
+            "bollinger": 2,
+            "stoch_rsi": -6,
+            "williams_r": -5,
+            "adx": -4,
+            "cci": 2,
+            "mfi": 0,
+            "obv": 4,
+            "vwap": -4,
+            "donchian": 0,
+            "funding": 0,
+            "supertrend": -8.0,
+            "session_vwap": -4.0,
+            "anchored_vwap": -4.0,
+            "volume_profile": -1.0,
+            "confirmed_breakout": 0.0
+          },
+          "funding_rate": 5e-05,
+          "candle_ts": 1792839600000.0
+        },
+        "combined": {
+          "total": -25.9,
+          "signal": "SHORT",
+          "raw_signal": "BEKLE",
+          "trigger": "PARA_CIKISI",
+          "entry_allowed": true,
+          "entry_block_reason": "",
+          "orderflow_veto": "",
+          "regime": "TREND"
+        },
+        "orderflow": {
+          "score": -55.8,
+          "score_unclipped": -55.83,
+          "score_components": {
+            "taker_delta": -42.0,
+            "cvd_direction": -14,
+            "whale_balance": 0.0,
+            "orderbook_depth": 0.17,
+            "oi_liquidation": 0.0,
+            "volume_spike": 0.0
+          },
+          "buy_usdt": 0,
+          "sell_usdt": 43.0,
+          "net_usdt": -43.0,
+          "cvd": -43.0,
+          "cvd_slope": -26.6,
+          "trade_count": 2,
+          "window_coverage_sec": 66.7,
+          "book_age_sec": 6.329,
+          "whale_buy_usdt": 0,
+          "whale_sell_usdt": 0,
+          "volume_spike": false,
+          "spike_mult": 0.0,
+          "obi": -0.028,
+          "weighted_obi": 0.037,
+          "bid_ask_ratio": 0.946,
+          "bid_depth_usdt": 7068.11,
+          "ask_depth_usdt": 7469.84,
+          "bid_wall_price": 0.2028,
+          "bid_wall_usdt": 1139.74,
+          "ask_wall_price": 0.2065,
+          "ask_wall_usdt": 865.23,
+          "book_levels": 20,
+          "wall_signal": "DENGELI",
+          "depth_score_boost": 0.17,
+          "open_interest": 389720.03,
+          "oi_change_pct": 0.0,
+          "price_change_pct": 0.0,
+          "oi_signal": "NOTR",
+          "oi_flow_confirmation": "CVD_VERI_YOK",
+          "short_liq_usdt": 0,
+          "long_liq_usdt": 0,
+          "squeeze": "YOK",
+          "oi_liq_boost": 0.0,
+          "cvd_divergence": "YOK",
+          "absorption": "YOK",
+          "cvd_60s": 0.0,
+          "absorption_price_change_pct": 0.0,
+          "absorption_depth_change_pct": 0.0,
+          "absorption_buy_usdt": 0,
+          "absorption_sell_usdt": 0,
+          "vpvr_source": "TICK_VPVR",
+          "vpvr_poc": 0.20470104,
+          "vpvr_vah": 0.2048,
+          "vpvr_val": 0.2047,
+          "vpvr_trades": 2,
+          "vpvr_total_usdt": 43.0,
+          "vpvr_coverage_sec": 0.0,
+          "vpvr_warm": false,
+          "verdict": "GÜÇLÜ ÇIKIŞ"
+        },
+        "news": {
+          "score": 0.0,
+          "veto": false,
+          "veto_long": false,
+          "veto_short": false,
+          "veto_approaching": false,
+          "fear_greed": 50.0,
+          "count": 45,
+          "latest": {
+            "title": "Senate's top Democratic investigator looking into Tether payments to Bo Hines' firm",
+            "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+            "score": 0.0,
+            "urgent": false,
+            "fear_greed": 50.0
+          }
+        },
+        "mtf": {
+          "trend": "BEARISH",
+          "score": -100.0,
+          "allow_long": false,
+          "allow_short": true,
+          "tf_1h": {
+            "timeframe": "1h",
+            "trend": "DOWN",
+            "score": -100.0,
+            "ema20": 0.2179,
+            "ema50": 0.2275,
+            "ema200": 0.2349,
+            "rsi": 35.0,
+            "adx": 29.8
+          },
+          "tf_4h": {
+            "timeframe": "4h",
+            "trend": "DOWN",
+            "score": -100.0,
+            "ema20": 0.2319,
+            "ema50": 0.2389,
+            "ema200": 0.3121,
+            "rsi": 34.0,
+            "adx": 21.2
+          },
+          "reason": "1h/4h Ana Trend DÜŞÜŞ (-100.0) → Küçük tepkilerde LONG engellendi"
+        },
+        "ml": {
+          "score": -10.9,
+          "prob_up": 0.4453,
+          "direction": "NOTR",
+          "confidence": 10.9,
+          "backend": "numpy_gbdt",
+          "trained_samples": 271
+        },
+        "decision_inputs": {
+          "news_score": 0.0,
+          "ml_score": -10.9,
+          "veto": false,
+          "veto_long": false,
+          "veto_short": false
+        },
+        "dynamic_leverage": {
+          "value": 10,
+          "reason": "sabit 10x"
+        },
+        "entry_reason": "skor -25.9 | tetik: PARA_CIKISI",
+        "side": "SHORT",
+        "entry_price": 0.2047,
+        "leverage": 10,
+        "margin_usdt": 50.0,
+        "exchange": "okx",
+        "attribution": {
+          "technical": {
+            "ema_trend": {
+              "contribution": -4.8,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -24.0
+            },
+            "ma_trend": {
+              "contribution": -8.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -22.7
+            },
+            "macd": {
+              "contribution": 4.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -27.5
+            },
+            "adx": {
+              "contribution": -4.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -24.3
+            },
+            "obv": {
+              "contribution": 4.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -27.5
+            },
+            "session_vwap": {
+              "contribution": -4.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -24.3
+            },
+            "supertrend": {
+              "contribution": -8.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -22.7
+            },
+            "anchored_vwap": {
+              "contribution": -4.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -24.3
+            },
+            "volume_profile": {
+              "contribution": -1.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -25.5
+            },
+            "confirmed_breakout": {
+              "contribution": 0.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -25.9
+            },
+            "funding": {
+              "contribution": 0.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -25.9
+            }
+          },
+          "orderflow": {
+            "taker_delta": {
+              "contribution": -42.0,
+              "decisive": true,
+              "without_action": "yok",
+              "without_signal": "BEKLE",
+              "without_total": -15.4
+            },
+            "cvd_direction": {
+              "contribution": -14.0,
+              "decisive": true,
+              "without_action": "yok",
+              "without_signal": "BEKLE",
+              "without_total": -22.4
+            },
+            "whale_balance": {
+              "contribution": 0.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -25.9
+            },
+            "orderbook_depth": {
+              "contribution": 0.17,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -26.0
+            },
+            "oi_liquidation": {
+              "contribution": 0.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -25.9
+            },
+            "volume_spike": {
+              "contribution": 0.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -25.9
+            }
+          },
+          "modules": {
+            "technical_all": {
+              "contribution": -25.8,
+              "decisive": true,
+              "without_action": "yok",
+              "without_signal": "BEKLE",
+              "without_total": -15.6
+            },
+            "orderflow_all": {
+              "contribution": -55.8,
+              "decisive": true,
+              "without_action": "yok",
+              "without_signal": "BEKLE",
+              "without_total": -12.0
+            },
+            "news_score": {
+              "contribution": 0.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -25.9
+            },
+            "ml_score": {
+              "contribution": -10.9,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -24.3
+            },
+            "mtf_filter": {
+              "contribution": 0.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -25.9
+            }
+          }
+        }
+      }
+    },
+    {
+      "position_id": "0247cad6db9f4e429720caadd4c00f22",
+      "symbol": "FLNC/USDT",
+      "side": "SHORT",
+      "exchange": "okx",
+      "entry_price": 5.545,
+      "leverage": 10,
+      "margin_usdt": 50.0,
+      "combined_score": -35.7,
+      "raw_signal": "BEKLE",
+      "trigger": "PARA_CIKISI",
+      "indicator_score": -31.799999999999997,
+      "flow_score": -59.6,
+      "regime": "TREND",
+      "buy_usdt": 52.3,
+      "sell_usdt": 1134.9,
+      "cvd_slope": -1134.9,
+      "trade_count": 3,
+      "window_coverage_sec": 104.0,
+      "book_levels": 20,
+      "book_age_sec": 62.036,
+      "data_ready": false,
+      "data_missing": [
+        "işlem sayısı 3<5",
+        "defter yaşı 62.0sn>10.0sn"
+      ],
+      "technical_harmony_accepted_at_entry": false,
+      "technical_opposed_count": 2,
+      "volatility_gate_accepted_at_entry": true,
+      "bb_width_pct": 0.380002,
+      "atr_pct": 0.12362,
+      "close": {
+        "position_id": "0247cad6db9f4e429720caadd4c00f22",
+        "symbol": "FLNC/USDT",
+        "reason": "FLASH CRASH SİGORTASI",
+        "qty": 90.18759019,
+        "gross_pnl_usdt": -0.54,
+        "fees_usdt": 0.3503,
+        "funding_usdt": 0.0,
+        "net_pnl_usdt": -0.89
+      },
+      "entry_context": {
+        "indicators": {
+          "price": 5.535,
+          "score": -31.799999999999997,
+          "active_components": {
+            "ema_trend": -4.8,
+            "ma_trend": -8.0,
+            "macd": 4.0,
+            "adx": -4.0,
+            "obv": -4.0,
+            "session_vwap": -4.0,
+            "supertrend": -8.0,
+            "anchored_vwap": -4.0,
+            "volume_profile": 1.0,
+            "confirmed_breakout": 0.0,
+            "funding": 0.0
+          },
+          "active_score_unclipped": -31.799999999999997,
+          "ma20": 5.53295,
+          "ma50": 5.54832,
+          "ema9": 5.5344834895598,
+          "ema21": 5.536675652032715,
+          "ema50": 5.546385722417296,
+          "ema200": 5.583825423994342,
+          "rsi": 46.39424937280298,
+          "adx": 55.62309804264501,
+          "macd": -0.00354022985905722,
+          "macd_signal": -0.004667894870053231,
+          "macd_hist": 0.0011276650109960113,
+          "mfi": 57.07692583868529,
+          "cci": 6.993389061907381,
+          "vwap": 5.5621407467053725,
+          "session_vwap": 5.5621407467053725,
+          "weekly_vwap": 5.596598592114777,
+          "cumulative_vwap": 5.596598592114774,
+          "anchored_vwap": 5.5543146835935975,
+          "anchored_vwap_pos": 199,
+          "williams_r": -28.571428571427663,
+          "supertrend": 5.548988776927982,
+          "supertrend_direction": -1,
+          "volume_profile_poc": 5.531875,
+          "volume_profile_vah": 5.58025,
+          "volume_profile_val": 5.530083333333334,
+          "bollinger_bandwidth_pct": 0.38000159128426575,
+          "bb_width_pct": 0.38000159128426575,
+          "atr": 0.006842371607385195,
+          "atr_pct": 0.12362008324092492,
+          "bb_kc_squeeze": false,
+          "squeeze_release": false,
+          "breakout_long": false,
+          "breakout_short": false,
+          "volume_zscore": 0.2805248093766965,
+          "volume_z_threshold": 1.5,
+          "regime": "TREND",
+          "setup": "PULLBACK",
+          "regime_aware": true,
+          "entry_allowed": true,
+          "entry_block_reason": "",
+          "components": {
+            "ema_trend": -4.0,
+            "ma_trend": -8.0,
+            "rsi": 0,
+            "macd": 4.0,
+            "bollinger": 2,
+            "stoch_rsi": -2,
+            "williams_r": 0,
+            "adx": -4,
+            "cci": 2,
+            "mfi": 2,
+            "obv": -4,
+            "vwap": -4,
+            "donchian": 0,
+            "funding": 0,
+            "supertrend": -8.0,
+            "session_vwap": -4.0,
+            "anchored_vwap": -4.0,
+            "volume_profile": 1.0,
+            "confirmed_breakout": 0.0
+          },
+          "funding_rate": 0.0,
+          "candle_ts": 1792839600000.0
+        },
+        "combined": {
+          "total": -35.7,
+          "signal": "SHORT",
+          "raw_signal": "BEKLE",
+          "trigger": "PARA_CIKISI",
+          "entry_allowed": true,
+          "entry_block_reason": "",
+          "orderflow_veto": "",
+          "regime": "TREND"
+        },
+        "orderflow": {
+          "score": -59.6,
+          "score_unclipped": -59.6477932484605,
+          "score_components": {
+            "taker_delta": -38.2977932484605,
+            "cvd_direction": -14,
+            "whale_balance": 0.0,
+            "orderbook_depth": -7.35,
+            "oi_liquidation": 0.0,
+            "volume_spike": 0.0
+          },
+          "buy_usdt": 52.3,
+          "sell_usdt": 1134.9,
+          "net_usdt": -1082.6,
+          "cvd": -1082.6,
+          "cvd_slope": -1134.9,
+          "trade_count": 3,
+          "window_coverage_sec": 104.0,
+          "book_age_sec": 62.036,
+          "whale_buy_usdt": 0,
+          "whale_sell_usdt": 0,
+          "volume_spike": false,
+          "spike_mult": 0.0,
+          "obi": -0.332,
+          "weighted_obi": -0.223,
+          "bid_ask_ratio": 0.502,
+          "bid_depth_usdt": 10957.02,
+          "ask_depth_usdt": 21839.39,
+          "bid_wall_price": 5.541,
+          "bid_wall_usdt": 1727.52,
+          "ask_wall_price": 5.568,
+          "ask_wall_usdt": 3465.08,
+          "book_levels": 20,
+          "wall_signal": "SATICI_DUVARI",
+          "depth_score_boost": -7.35,
+          "open_interest": 276764.44,
+          "oi_change_pct": 0.0,
+          "price_change_pct": 0.0,
+          "oi_signal": "NOTR",
+          "oi_flow_confirmation": "CVD_VERI_YOK",
+          "short_liq_usdt": 0,
+          "long_liq_usdt": 0,
+          "squeeze": "YOK",
+          "oi_liq_boost": 0.0,
+          "cvd_divergence": "YOK",
+          "absorption": "YOK",
+          "cvd_60s": 0.0,
+          "absorption_price_change_pct": 0.0,
+          "absorption_depth_change_pct": 0.0,
+          "absorption_buy_usdt": 0,
+          "absorption_sell_usdt": 0,
+          "vpvr_source": "TICK_VPVR",
+          "vpvr_poc": 5.54603125,
+          "vpvr_vah": 5.54608333,
+          "vpvr_val": 5.54597917,
+          "vpvr_trades": 3,
+          "vpvr_total_usdt": 1187.26,
+          "vpvr_coverage_sec": 15.2,
+          "vpvr_warm": false,
+          "verdict": "GÜÇLÜ ÇIKIŞ"
+        },
+        "news": {
+          "score": 0.0,
+          "veto": false,
+          "veto_long": false,
+          "veto_short": false,
+          "veto_approaching": false,
+          "fear_greed": 50.0,
+          "count": 45,
+          "latest": {
+            "title": "Senate's top Democratic investigator looking into Tether payments to Bo Hines' firm",
+            "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+            "score": 0.0,
+            "urgent": false,
+            "fear_greed": 50.0
+          }
+        },
+        "mtf": {
+          "trend": "BEARISH",
+          "score": -86.5,
+          "allow_long": false,
+          "allow_short": true,
+          "tf_1h": {
+            "timeframe": "1h",
+            "trend": "DOWN",
+            "score": -70.0,
+            "ema20": 5.5909,
+            "ema50": 5.682,
+            "ema200": 5.8697,
+            "rsi": 31.5,
+            "adx": 23.4
+          },
+          "tf_4h": {
+            "timeframe": "4h",
+            "trend": "DOWN",
+            "score": -100.0,
+            "ema20": 5.7571,
+            "ema50": 5.991,
+            "ema200": 6.8196,
+            "rsi": 33.8,
+            "adx": 18.9
+          },
+          "reason": "1h/4h Ana Trend DÜŞÜŞ (-86.5) → Küçük tepkilerde LONG engellendi"
+        },
+        "ml": {
+          "score": -53.9,
+          "prob_up": 0.2306,
+          "direction": "SHORT",
+          "confidence": 53.9,
+          "backend": "numpy_gbdt",
+          "trained_samples": 271
+        },
+        "decision_inputs": {
+          "news_score": 0.0,
+          "ml_score": -53.9,
+          "veto": false,
+          "veto_long": false,
+          "veto_short": false
+        },
+        "dynamic_leverage": {
+          "value": 10,
+          "reason": "sabit 10x"
+        },
+        "entry_reason": "skor -35.7 | tetik: PARA_CIKISI",
+        "side": "SHORT",
+        "entry_price": 5.545,
+        "leverage": 10,
+        "margin_usdt": 50.0,
+        "exchange": "okx",
+        "attribution": {
+          "technical": {
+            "ema_trend": {
+              "contribution": -4.8,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -33.8
+            },
+            "ma_trend": {
+              "contribution": -8.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -32.5
+            },
+            "macd": {
+              "contribution": 4.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -37.3
+            },
+            "adx": {
+              "contribution": -4.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -34.1
+            },
+            "obv": {
+              "contribution": -4.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -34.1
+            },
+            "session_vwap": {
+              "contribution": -4.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -34.1
+            },
+            "supertrend": {
+              "contribution": -8.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -32.5
+            },
+            "anchored_vwap": {
+              "contribution": -4.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -34.1
+            },
+            "volume_profile": {
+              "contribution": 1.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -36.1
+            },
+            "confirmed_breakout": {
+              "contribution": 0.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -35.7
+            },
+            "funding": {
+              "contribution": 0.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -35.7
+            }
+          },
+          "orderflow": {
+            "taker_delta": {
+              "contribution": -38.297793,
+              "decisive": true,
+              "without_action": "yok",
+              "without_signal": "BEKLE",
+              "without_total": -26.2
+            },
+            "cvd_direction": {
+              "contribution": -14.0,
+              "decisive": true,
+              "without_action": "yok",
+              "without_signal": "BEKLE",
+              "without_total": -32.2
+            },
+            "whale_balance": {
+              "contribution": 0.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -35.7
+            },
+            "orderbook_depth": {
+              "contribution": -7.35,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -33.9
+            },
+            "oi_liquidation": {
+              "contribution": 0.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -35.7
+            },
+            "volume_spike": {
+              "contribution": 0.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -35.7
+            }
+          },
+          "modules": {
+            "technical_all": {
+              "contribution": -31.8,
+              "decisive": true,
+              "without_action": "yok",
+              "without_signal": "BEKLE",
+              "without_total": -23.0
+            },
+            "orderflow_all": {
+              "contribution": -59.6,
+              "decisive": true,
+              "without_action": "yok",
+              "without_signal": "BEKLE",
+              "without_total": -20.8
+            },
+            "news_score": {
+              "contribution": 0.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -35.7
+            },
+            "ml_score": {
+              "contribution": -53.9,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -27.6
+            },
+            "mtf_filter": {
+              "contribution": 0.0,
+              "decisive": false,
+              "without_action": "SHORT",
+              "without_signal": "SHORT",
+              "without_total": -35.7
+            }
+          }
+        }
+      }
+    },
+    {
+      "position_id": "7470b560c0814f84b685fa906ffac9e0",
+      "symbol": "IWM/USDT",
+      "side": "LONG",
+      "exchange": "binance",
+      "entry_price": 276.22,
+      "leverage": 10,
+      "margin_usdt": 50.0,
+      "combined_score": 24.2,
+      "raw_signal": "BEKLE",
+      "trigger": "PARA_GIRISI",
+      "indicator_score": 27.8,
+      "flow_score": 56.0,
+      "regime": "TREND",
+      "buy_usdt": 234.8,
+      "sell_usdt": 0,
+      "cvd_slope": 196.1,
+      "trade_count": 4,
+      "window_coverage_sec": 75.7,
+      "book_levels": 0,
+      "book_age_sec": null,
+      "data_ready": false,
+      "data_missing": [
+        "işlem sayısı 4<5",
+        "emir defteri yok",
+        "defter yaşı yok>10.0sn"
+      ],
+      "technical_harmony_accepted_at_entry": false,
+      "technical_opposed_count": 2,
+      "volatility_gate_accepted_at_entry": false,
+      "bb_width_pct": 0.064068,
+      "atr_pct": 0.010632,
+      "close": {
+        "position_id": "7470b560c0814f84b685fa906ffac9e0",
+        "symbol": "IWM/USDT",
+        "reason": "FLASH CRASH SİGORTASI",
+        "qty": 1.810085798,
+        "gross_pnl_usdt": 0.05,
+        "fees_usdt": 0.35,
+        "funding_usdt": 0.0,
+        "net_pnl_usdt": -0.3
+      },
+      "entry_context": {
+        "indicators": {
+          "price": 276.16,
+          "score": 27.8,
+          "active_components": {
+            "ema_trend": 4.8,
+            "ma_trend": 8.0,
+            "macd": -4.0,
+            "adx": 4.0,
+            "obv": -4.0,
+            "session_vwap": 4.0,
+            "supertrend": 8.0,
+            "anchored_vwap": 4.0,
+            "volume_profile": 3.0,
+            "confirmed_breakout": 0.0,
+            "funding": 0.0
+          },
+          "active_score_unclipped": 27.8,
+          "ma20": 276.1625,
+          "ma50": 276.0922,
+          "ema9": 276.1781759801636,
+          "ema21": 276.157122515729,
+          "ema50": 276.1233357449547,
+          "ema200": 276.1059563045565,
+          "rsi": 52.530107712791185,
+          "adx": 34.83076366374126,
+          "macd": 0.025992122556147024,
+          "macd_signal": 0.029664141587958128,
+          "macd_hist": -0.0036720190318111044,
+          "mfi": 77.9351785163783,
+          "cci": 3.1570639305411943,
+          "vwap": 276.0796726528757,
+          "session_vwap": 276.0796726528757,
+          "weekly_vwap": 275.5873250499857,
+          "cumulative_vwap": 275.58732504998625,
+          "anchored_vwap": 276.06909162717227,
+          "anchored_vwap_pos": 256,
+          "williams_r": -66.66666666665087,
+          "supertrend": 276.1072094748425,
+          "supertrend_direction": 1,
+          "volume_profile_poc": 276.0264583333334,
+          "volume_profile_vah": 276.14208333333335,
+          "volume_profile_val": 275.88,
+          "bollinger_bandwidth_pct": 0.06406841409019116,
+          "bb_width_pct": 0.06406841409019116,
+          "atr": 0.029361610169434994,
+          "atr_pct": 0.010632101017321477,
+          "bb_kc_squeeze": false,
+          "squeeze_release": false,
+          "breakout_long": false,
+          "breakout_short": false,
+          "volume_zscore": -0.07822520135084586,
+          "volume_z_threshold": 1.5,
+          "regime": "TREND",
+          "setup": "PULLBACK",
+          "regime_aware": true,
+          "entry_allowed": true,
+          "entry_block_reason": "",
+          "components": {
+            "ema_trend": 4.0,
+            "ma_trend": 8.0,
+            "rsi": 0,
+            "macd": -4.0,
+            "bollinger": -2,
+            "stoch_rsi": -2,
+            "williams_r": 0,
+            "adx": 4,
+            "cci": 2,
+            "mfi": 2,
+            "obv": -4,
+            "vwap": 4,
+            "donchian": 0,
+            "funding": 0,
+            "supertrend": 8.0,
+            "session_vwap": 4.0,
+            "anchored_vwap": 4.0,
+            "volume_profile": 3.0,
+            "confirmed_breakout": 0.0
+          },
+          "funding_rate": 0.0,
+          "candle_ts": 1792839600000.0
+        },
+        "combined": {
+          "total": 24.2,
+          "signal": "LONG",
+          "raw_signal": "BEKLE",
+          "trigger": "PARA_GIRISI",
+          "entry_allowed": true,
+          "entry_block_reason": "",
+          "orderflow_veto": "",
+          "regime": "TREND"
+        },
+        "orderflow": {
+          "score": 56.0,
+          "score_unclipped": 56.0,
+          "score_components": {
+            "taker_delta": 42.0,
+            "cvd_direction": 14,
+            "whale_balance": 0.0,
+            "orderbook_depth": 0.0,
+            "oi_liquidation": 0.0,
+            "volume_spike": 0.0
+          },
+          "buy_usdt": 234.8,
+          "sell_usdt": 0,
+          "net_usdt": 234.8,
+          "cvd": 234.8,
+          "cvd_slope": 196.1,
+          "trade_count": 4,
+          "window_coverage_sec": 75.7,
+          "book_age_sec": null,
+          "whale_buy_usdt": 0,
+          "whale_sell_usdt": 0,
+          "volume_spike": false,
+          "spike_mult": 0.0,
+          "obi": 0.0,
+          "weighted_obi": 0.0,
+          "bid_ask_ratio": 1.0,
+          "bid_depth_usdt": 0.0,
+          "ask_depth_usdt": 0.0,
+          "bid_wall_price": 0.0,
+          "bid_wall_usdt": 0.0,
+          "ask_wall_price": 0.0,
+          "ask_wall_usdt": 0.0,
+          "book_levels": 0,
+          "wall_signal": "DENGELI",
+          "depth_score_boost": 0.0,
+          "open_interest": 2710.05,
+          "oi_change_pct": 0.0,
+          "price_change_pct": 0.0,
+          "oi_signal": "NOTR",
+          "oi_flow_confirmation": "CVD_VERI_YOK",
+          "short_liq_usdt": 0,
+          "long_liq_usdt": 0,
+          "squeeze": "YOK",
+          "oi_liq_boost": 0.0,
+          "cvd_divergence": "YOK",
+          "absorption": "YOK",
+          "cvd_60s": 0.0,
+          "absorption_price_change_pct": 0.0,
+          "absorption_depth_change_pct": 0.0,
+          "absorption_buy_usdt": 0,
+          "absorption_sell_usdt": 0,
+          "vpvr_source": "TICK_VPVR",
+          "vpvr_poc": 276.2203125,
+          "vpvr_vah": 276.220625,
+          "vpvr_val": 276.209375,
+          "vpvr_trades": 4,
+          "vpvr_total_usdt": 234.78,
+          "vpvr_coverage_sec": 0.1,
+          "vpvr_warm": false,
+          "verdict": "GÜÇLÜ GİRİŞ"
+        },
+        "news": {
+          "score": 0.0,
+          "veto": false,
+          "veto_long": false,
+          "veto_short": false,
+          "veto_approaching": false,
+          "fear_greed": 50.0,
+          "count": 45,
+          "latest": {
+            "title": "Senate's top Democratic investigator looking into Tether payments to Bo Hines' firm",
+            "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+            "score": 0.0,
+            "urgent": false,
+            "fear_greed": 50.0
+          }
+        },
+        "mtf": {
+          "trend": "NEUTRAL",
+          "score": 12.5,
+          "allow_long": true,
+          "allow_short": true,
+          "tf_1h": {
+            "timeframe": "1h",
+            "trend": "UP",
+            "score": 40.0,
+            "ema20": 276.1628,
+            "ema50": 276.0941,
+            "ema200": 274.5009,
+            "rsi": 50.1,
+            "adx": 31.9
+          },
+          "tf_4h": {
+            "timeframe": "4h",
+            "trend": "NEUTRAL",
+            "score": -10.0,
+            "ema20": 275.7984,
+            "ema50": 275.1146,
+            "ema200": 278.0903,
+            "rsi": 53.3,
+            "adx": 19.5
+          },
+          "reason": "1h/4h Ana Trend NÖTR (+12.5) → Çift yön serbest"
+        },
+        "ml": {
+          "score": -6.3,
+          "prob_up": 0.4684,
+          "direction": "NOTR",
+          "confidence": 6.3,
+          "backend": "numpy_gbdt",
+          "trained_samples": 271
+        },
+        "decision_inputs": {
+          "news_score": 0.0,
+          "ml_score": -6.3,
+          "veto": false,
+          "veto_long": false,
+          "veto_short": false
+        },
+        "dynamic_leverage": {
+          "value": 10,
+          "reason": "sabit 10x"
+        },
+        "entry_reason": "skor 24.2 | tetik: PARA_GIRISI",
+        "side": "LONG",
+        "entry_price": 276.22,
+        "leverage": 10,
+        "margin_usdt": 50.0,
+        "exchange": "binance",
+        "attribution": {
+          "technical": {
+            "ema_trend": {
+              "contribution": 4.8,
+              "decisive": false,
+              "without_action": "LONG",
+              "without_signal": "LONG",
+              "without_total": 22.3
+            },
+            "ma_trend": {
+              "contribution": 8.0,
+              "decisive": false,
+              "without_action": "LONG",
+              "without_signal": "LONG",
+              "without_total": 21.0
+            },
+            "macd": {
+              "contribution": -4.0,
+              "decisive": false,
+              "without_action": "LONG",
+              "without_signal": "LONG",
+              "without_total": 25.8
+            },
+            "adx": {
+              "contribution": 4.0,
+              "decisive": false,
+              "without_action": "LONG",
+              "without_signal": "LONG",
+              "without_total": 22.6
+            },
+            "obv": {
+              "contribution": -4.0,
+              "decisive": false,
+              "without_action": "LONG",
+              "without_signal": "LONG",
+              "without_total": 25.8
+            },
+            "session_vwap": {
+              "contribution": 4.0,
+              "decisive": false,
+              "without_action": "LONG",
+              "without_signal": "LONG",
+              "without_total": 22.6
+            },
+            "supertrend": {
+              "contribution": 8.0,
+              "decisive": false,
+              "without_action": "LONG",
+              "without_signal": "LONG",
+              "without_total": 21.0
+            },
+            "anchored_vwap": {
+              "contribution": 4.0,
+              "decisive": false,
+              "without_action": "LONG",
+              "without_signal": "LONG",
+              "without_total": 22.6
+            },
+            "volume_profile": {
+              "contribution": 3.0,
+              "decisive": false,
+              "without_action": "LONG",
+              "without_signal": "LONG",
+              "without_total": 23.0
+            },
+            "confirmed_breakout": {
+              "contribution": 0.0,
+              "decisive": false,
+              "without_action": "LONG",
+              "without_signal": "LONG",
+              "without_total": 24.2
+            },
+            "funding": {
+              "contribution": 0.0,
+              "decisive": false,
+              "without_action": "LONG",
+              "without_signal": "LONG",
+              "without_total": 24.2
+            }
+          },
+          "orderflow": {
+            "taker_delta": {
+              "contribution": 42.0,
+              "decisive": true,
+              "without_action": "yok",
+              "without_signal": "BEKLE",
+              "without_total": 13.7
+            },
+            "cvd_direction": {
+              "contribution": 14.0,
+              "decisive": true,
+              "without_action": "yok",
+              "without_signal": "BEKLE",
+              "without_total": 20.7
+            },
+            "whale_balance": {
+              "contribution": 0.0,
+              "decisive": false,
+              "without_action": "LONG",
+              "without_signal": "LONG",
+              "without_total": 24.2
+            },
+            "orderbook_depth": {
+              "contribution": 0.0,
+              "decisive": false,
+              "without_action": "LONG",
+              "without_signal": "LONG",
+              "without_total": 24.2
+            },
+            "oi_liquidation": {
+              "contribution": 0.0,
+              "decisive": false,
+              "without_action": "LONG",
+              "without_signal": "LONG",
+              "without_total": 24.2
+            },
+            "volume_spike": {
+              "contribution": 0.0,
+              "decisive": false,
+              "without_action": "LONG",
+              "without_signal": "LONG",
+              "without_total": 24.2
+            }
+          },
+          "modules": {
+            "technical_all": {
+              "contribution": 27.8,
+              "decisive": true,
+              "without_action": "yok",
+              "without_signal": "BEKLE",
+              "without_total": 13.1
+            },
+            "orderflow_all": {
+              "contribution": 56.0,
+              "decisive": true,
+              "without_action": "yok",
+              "without_signal": "BEKLE",
+              "without_total": 10.2
+            },
+            "news_score": {
+              "contribution": 0.0,
+              "decisive": false,
+              "without_action": "LONG",
+              "without_signal": "LONG",
+              "without_total": 24.2
+            },
+            "ml_score": {
+              "contribution": -6.3,
+              "decisive": false,
+              "without_action": "LONG",
+              "without_signal": "LONG",
+              "without_total": 25.1
+            },
+            "mtf_filter": {
+              "contribution": 0.0,
+              "decisive": false,
+              "without_action": "LONG",
+              "without_signal": "LONG",
+              "without_total": 24.2
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+NOVA-BOT v2.0.0 (FINAL) — ÖNCE BUNU OKU
+=======================================
+
+NOVA-BOT, sıfırdan yazılmış, önceki hiçbir botla kod bağı olmayan bir kripto
+vadeli işlem (perpetual) PAPER botudur. v2, iki ACARBOT sürümüyle yapılan
+karşılaştırma sonrası EKSİK YETENEKLERİN AKTARILDIĞI final sürümdür.
+
+  • Mod          : yalnız PAPER — gerçek emir yolu YOK, gerçek emir 0
+  • Özel API     : yok (anahtar, imza, hesap erişimi yok)
+  • YZ / LLM     : yok (hiçbir model çağrılmaz)
+  • Bağımlılık   : yalnız aiohttp (ccxt / websockets / pandas / numpy yok)
+  • Test         : 58 test, tamamı çevrimdışı → `python3 -m pytest -q`
+
+KURULUM
+-------
+  cd nova-bot
+  python3 -m pip install -r requirements.txt
+  python3 nova.py doctor
+
+v2 İLE GELEN YENİ YETENEKLER (kaynak: ACARBOT Python + acarbot-system v3.4 HTML)
+--------------------------------------------------------------------------------
+  1. Confluence 10 filtre oylaması           (--strateji confluence --conf-th 4)
+     EMA dizilişi · MACD kesişimi · RSI bölgesi · ADX+EMA · Stoch kesişimi ·
+     OBV akışı · CCI · Supertrend · VWAP · Bollinger kırılımı
+  2. Yeni göstergeler: ADX(14 Wilder) serisi, Stoch(14,3,3), OBV+SMA10,
+     günlük VWAP, CCI(20), Supertrend(10,3)
+  3. Maliyet/hareket kapısı (EDGE_BELOW_COST)  (--min-edge-ratio 1.15; 0 = kapalı)
+  4. Mum sürekliliği + bütünlük denetimi     (CANDLE_GAP / BAD_CANDLE)
+  5. Sembol başına cooldown                  (--cooldown-dk 5)
+  6. Maks. tutma süresi, mum cinsinden       (--max-hold-mum 30)
+  7. DCA güvenlik emirleri, yalnız LONG      (--dca --dca-adim 2 --dca-adet 3)
+  8. Kill switch (pozisyon kapatma seçenekli)(kill_close_positions, --kill)
+  9. Piyasa genişliği filtresi               (--breadth-guard 0.35; 0 = kapalı)
+
+ÇALIŞTIRMA (final taramada kullanılan komut)
+-------------------------------------------
+  python3 nova.py live --minutes 15 --symbols 45 \
+      --strateji confluence --conf-th 5 \
+      --cooldown-dk 5 --max-hold-mum 30 \
+      --out runs/nova-v2-final
+
+  python3 nova.py backtest --symbols 60 --bars 1000 --out runs/bt
+  python3 nova.py rejim    --minutes 3  --symbols 12 --out runs/rejim   (emir açmaz)
+
+DOSYALAR
+--------
+  nova.py                     giriş noktası (CLI)
+  nova/bot.py                 çekirdek: borsalar, PAPER defteri, WS, CLI
+  nova/yetenek.py             v2 yetenek katmanı (göstergeler, confluence, DCA, kapılar)
+  nova/report.py              SONUC.json -> Markdown
+  tests/test_nova.py          35 test (v1 çekirdeği, regresyon kilidi)
+  tests/test_yetenek.py       23 test (v2 yetenekleri)
+  tools/takip.py              canlı koşu takibi (salt-okunur)
+  docs/YETENEKLER-v2.md       yetenek envanteri + kaynak eşlemesi (kim ne verdi)
+  docs/KARSILASTIRMA-ve-YETENEKLER.md  iki ACARBOT sürümüyle karşılaştırma
+  docs/MIMARI.md              mimari kararlar + ölçülerek düzeltilen hatalar
+
+DÜRÜST SINIRLAR
+---------------
+  • PAPER sonuçları kârlılık kanıtı DEĞİLDİR; KISMİdir.
+  • Dolum modeli: taker 5 bps + 2 bps kayma + ölçülen makas; defter derinliği
+    ve kısmi dolum modellenmez.
+  • Likidasyon yaklaşımdır (1/kaldıraç - bakım marjı); gerçek tasfiye motoru yok.
+  • 15 dakikalık koşu istatistiksel kanıt değildir (11 işlem).
+  • YZ konseyi (ACARBOT'taki 20 üye) BİLİNÇLİ OLARAK eklenmedi: o katman
+    anahtar olmadığı için ACARBOT'ta da çağrılmıyordu; kopyalamak sahte onay
+    üretmek olurdu. Ayrıntı: docs/KARSILASTIRMA-ve-YETENEKLER.md §4.

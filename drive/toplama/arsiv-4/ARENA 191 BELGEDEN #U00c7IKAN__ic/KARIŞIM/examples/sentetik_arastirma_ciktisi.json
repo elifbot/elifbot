@@ -1,0 +1,114 @@
+{
+  "mode": "OFFLINE_SYNTHETIC",
+  "depth_estimate": {
+    "symbol": "BTC-USDT-SWAP",
+    "side": "buy",
+    "status": "PARTIAL",
+    "requested_qty": "1",
+    "filled_qty": "0.7",
+    "remaining_qty": "0.3",
+    "notional": "71",
+    "fee_estimate": "0.071",
+    "average_price": "101.428571428571",
+    "impact_vs_best_bps": "42.432814710042",
+    "levels": [
+      {
+        "price": "101",
+        "qty": "0.4"
+      },
+      {
+        "price": "102",
+        "qty": "0.3"
+      }
+    ],
+    "observed_at": "100",
+    "warning": "Çevrimdışı tek snapshot tahmini; sıra, yenilenen likidite ve gerçek dolum değildir."
+  },
+  "simulated_order_journal": {
+    "order": {
+      "order_id": "demo-order",
+      "symbol": "BTC-USDT-SWAP",
+      "side": "buy",
+      "qty": "1",
+      "filled": "0.7",
+      "status": "CANCELED"
+    },
+    "fills": [
+      {
+        "fill_id": "demo-fill-0",
+        "qty": "0.4",
+        "price": "101",
+        "fee": "0.0404"
+      },
+      {
+        "fill_id": "demo-fill-1",
+        "qty": "0.3",
+        "price": "102",
+        "fee": "0.0306"
+      }
+    ],
+    "events": [
+      {
+        "kind": "SUBMIT",
+        "payload": {
+          "qty": "1",
+          "side": "buy",
+          "symbol": "BTC-USDT-SWAP"
+        }
+      },
+      {
+        "kind": "ACK",
+        "payload": {}
+      },
+      {
+        "kind": "FILL",
+        "payload": {
+          "fee": "0.0404",
+          "fill_id": "demo-fill-0",
+          "price": "101",
+          "qty": "0.4"
+        }
+      },
+      {
+        "kind": "FILL",
+        "payload": {
+          "fee": "0.0306",
+          "fill_id": "demo-fill-1",
+          "price": "102",
+          "qty": "0.3"
+        }
+      },
+      {
+        "kind": "CANCEL_REQUEST",
+        "payload": {}
+      },
+      {
+        "kind": "RECONCILED_FINAL",
+        "payload": {
+          "status": "CANCELED",
+          "total": "0.7"
+        }
+      }
+    ],
+    "integrity_ok": true,
+    "filled_notional": "71",
+    "fees": "0.071",
+    "warning": "Araştırma defteri; harici borsa ile doğrulanmış mutabakat değildir."
+  },
+  "separate_hypothetical_funding": {
+    "settlement": {
+      "applied": true,
+      "reason": "APPLIED",
+      "key": "[\"OKX\",\"BTC-USDT-SWAP\",200,\"independent-demo-position\"]",
+      "cash_delta": -0.06999999999999999
+    },
+    "summary": {
+      "initial_cash": 1000.0,
+      "cash": 999.93,
+      "settlement_count": 1,
+      "scope": "isolated_funding_research",
+      "notice": "Girdi verilerinin dış kaynağı veya borsa paritesi doğrulanmaz."
+    }
+  },
+  "warning": "Örnekler varsayımsaldır. İki defter bağlantılı değildir; geçici dosyalar silindi; PAPER veya borsa işlemi değildir."
+}

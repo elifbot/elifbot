@@ -1,0 +1,7 @@
+........................................................................ [ 45%]
+........................................................................ [ 91%]
+..............                                                           [100%]
+158 passed in 17.31s
+No broken requirements found.
+SOURCE OK: 100 files
+PACKAGE OK: 232 files; synthetic/live evidence scope explicit

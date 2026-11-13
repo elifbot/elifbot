@@ -1,0 +1,64 @@
+{
+ "folds": [
+  {
+   "test_aralik": [
+    "2026-10-22 03:15:00+00:00",
+    "2026-10-26 07:00:00+00:00"
+   ],
+   "secilen": {
+    "score_threshold": 3.5,
+    "stop_atr": 2.0,
+    "tp_r": 2.0
+   },
+   "oos_islem": 0,
+   "oos_ort_R": 0.0,
+   "baz_ort_R": 0.0
+  },
+  {
+   "test_aralik": [
+    "2026-10-26 07:15:00+00:00",
+    "2026-10-30 11:00:00+00:00"
+   ],
+   "secilen": {
+    "score_threshold": 3.5,
+    "stop_atr": 2.0,
+    "tp_r": 2.0
+   },
+   "oos_islem": 10,
+   "oos_ort_R": -0.143,
+   "baz_ort_R": -0.143
+  },
+  {
+   "test_aralik": [
+    "2026-10-30 11:15:00+00:00",
+    "2026-11-03 15:00:00+00:00"
+   ],
+   "secilen": {
+    "score_threshold": 3.5,
+    "stop_atr": 2.0,
+    "tp_r": 2.0
+   },
+   "oos_islem": 8,
+   "oos_ort_R": -0.469,
+   "baz_ort_R": -0.469
+  },
+  {
+   "test_aralik": [
+    "2026-11-03 15:15:00+00:00",
+    "2026-11-07 19:00:00+00:00"
+   ],
+   "secilen": {
+    "score_threshold": 3.5,
+    "stop_atr": 1.5,
+    "tp_r": 1.5
+   },
+   "oos_islem": 13,
+   "oos_ort_R": -0.446,
+   "baz_ort_R": -0.446
+  }
+ ],
+ "n_folds": 4,
+ "oos_n": 31,
+ "oos_ort_R": -0.354,
+ "baz_oos_ort_R": -0.354
+}

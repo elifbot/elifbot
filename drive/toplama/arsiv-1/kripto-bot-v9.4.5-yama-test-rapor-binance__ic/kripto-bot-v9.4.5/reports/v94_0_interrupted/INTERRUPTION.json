@@ -1,0 +1,7 @@
+{
+  "status": "INCOMPLETE_NOT_A_COMPLETED_TEST",
+  "reason": "Processes no longer registered after interrupted turn; no final validation or live summary persisted.",
+  "completed_validation_results_available": false,
+  "completed_900s_live_test_available": false,
+  "amendment": "v9.4.1 adds counterfactual measurement and reporting only; V94DecisionCore, AdaptivePolicy and portfolio trade rules unchanged."
+}

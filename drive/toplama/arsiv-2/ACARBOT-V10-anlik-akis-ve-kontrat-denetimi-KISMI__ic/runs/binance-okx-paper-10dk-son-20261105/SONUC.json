@@ -1,0 +1,101 @@
+{
+  "status": "PARTIAL",
+  "started_utc": "2026-11-05T12:12:51.704539+00:00",
+  "finished_utc": "2026-11-05T12:24:49.063979+00:00",
+  "active_sec": 613.942,
+  "total_sec": 717.359,
+  "markets": {
+    "binance_usdm": {
+      "status": "ERROR",
+      "error": "HTTP 451: {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a restricted location according to 'b. Eligibility"
+    },
+    "okx_swap": {
+      "status": "AVAILABLE",
+      "discovered": 540,
+      "selected": 540
+    },
+    "okx_futures": {
+      "status": "AVAILABLE",
+      "discovered": 287,
+      "selected": 287
+    },
+    "binance_coinm": {
+      "status": "ERROR",
+      "error": "HTTP 451: {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a restricted location according to 'b. Eligibility"
+    }
+  },
+  "symbols_selected": 827,
+  "paper_eligible": 525,
+  "paper_unsupported": 302,
+  "counts": {
+    "fresh_quotes": 79392,
+    "ticker_fetch_ok": 192,
+    "candles_ok": 4962,
+    "bars_evaluated": 1654,
+    "strategy_NO_SIGNAL": 356,
+    "strategy_VOLUME_CONFIRMATION": 320,
+    "strategy_CONFIRMATION": 37,
+    "strategy_SIGNAL": 129,
+    "signals": 129,
+    "reject_cost": 27,
+    "reject_spread": 28,
+    "opened": 2,
+    "reject_price_deviation": 18,
+    "strategy_VOLUME_UNAVAILABLE": 49,
+    "reject_contract_type_not_supported": 54,
+    "strategy_STALE_CANDLE": 763
+  },
+  "execution": {
+    "open": [],
+    "closed": [
+      {
+        "symbol": "okx:okx_swap:INIT-USDT-SWAP",
+        "side": "SHORT",
+        "qty": 884.3501680000013,
+        "entry": 0.13192361000000002,
+        "stop": 0.13588131830000003,
+        "target": 0.12400819340000002,
+        "entry_fee": 0.06416666666666668,
+        "opened_ms": 1793880982502,
+        "exit": 0.13279655399999998,
+        "exit_fee": 0.06459126016184667,
+        "closed_ms": 1793881489062,
+        "reason": "RUN_END",
+        "net": -0.9007460998830702,
+        "initial_risk_distance": 0.0039577083,
+        "breakeven": false
+      },
+      {
+        "symbol": "okx:okx_swap:WLFI-USDT-SWAP",
+        "side": "SHORT",
+        "qty": 3710.5752700336343,
+        "entry": 0.04479104,
+        "stop": 0.04573428996672774,
+        "target": 0.04290454006654452,
+        "entry_fee": 0.09141028893869801,
+        "opened_ms": 1793880982720,
+        "exit": 0.044688936,
+        "exit_fee": 0.09120191342114368,
+        "closed_ms": 1793881489062,
+        "reason": "RUN_END",
+        "net": 0.19625237501166765,
+        "initial_risk_distance": 0.0009432499667277399,
+        "breakeven": false
+      }
+    ],
+    "closed_trades": 2,
+    "realized_net": -0.7044937248714025,
+    "equity_realized": 999.2955062751286,
+    "fees_on_closed": 0.31137012918835505
+  },
+  "errors": [],
+  "real_orders": 0,
+  "real_money_approved": false,
+  "limitations": [
+    "Binance 451 olursa eksik; başka kaynakla ikame yok.",
+    "Yalnız lineer USDT sürekli sözleşmeler PAPER; inverse ve vadeli yalnız izlenir.",
+    "Tüm sözleşme listesi yalnız başlangıçta alınır.",
+    "Piyasa derinliği, funding muhasebesi ve gerçek dolum garanti edilmez.",
+    "Bağımsız YZ incelemesi tasarım içindir; canlı işlem hakemi değildir."
+  ]
+}

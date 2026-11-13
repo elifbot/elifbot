@@ -1,0 +1,683 @@
+diff --git a/configs/v9-canonical-production.json b/configs/v9-canonical-production.json
+index 0fc9508..96d3451 100644
+--- a/configs/v9-canonical-production.json
++++ b/configs/v9-canonical-production.json
+@@ -1,5 +1,5 @@
+ {
+-  "version": "9.4.3",
++  "version": "9.4.4",
+   "name": "kripto-bot-v9.4-shared-core-adaptive-risk",
+   "canonical_engine": "src.unified_engine.UnifiedTradingEngine",
+   "sert_risk_tavanlari": {
+diff --git a/pyproject.toml b/pyproject.toml
+index cea8452..26f4add 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -1,7 +1,7 @@
+ [project]
+ name = "kripto-bot"
+-version = "9.4.3"
+-description = "Kripto Bot v9.4.3 — PAPER health grace and stream-specific telemetry"
++version = "9.4.4"
++description = "Kripto Bot v9.4.4 — PAPER run status and read-only evaluation telemetry"
+ requires-python = ">=3.10"
+ 
+ [tool.ruff]
+diff --git a/reports/v944/source_freeze.json b/reports/v944/source_freeze.json
+new file mode 100644
+index 0000000..673547d
+--- /dev/null
++++ b/reports/v944/source_freeze.json
+@@ -0,0 +1,115 @@
++{
++  "version": "9.4.4",
++  "scope": "Phase1 correctness and read-only telemetry; no strategy/risk/entry/exit parameter changes",
++  "frozen_at_utc": "2026-11-03T10:28:50.360167+00:00",
++  "source_sha256": {
++    "requirements.txt": "db90fb6f8fc623c120222621bf9f7f8225b35ea004e1afec8458793cf6ec9d8e",
++    "pyproject.toml": "cf33fc1d3a8bbd68f64fdab797b46e44b86bf355736fc2274feb5c339ae4fbf9",
++    "requirements-tested.txt": "f9a22f8898a4222a1c5d78f33a868326474fd58fa7737c1a71cbc43273287fe4",
++    "scripts/report_v94.py": "e38d1a07dccc704927abef8ea755bf99d68f3a109b58b9aa483c64393c7ad379",
++    "scripts/run_oos_validation.py": "ea127918d966adbe694daff1ebae7ca89b713dff95c31782a90b2a65419a2e94",
++    "scripts/check_v943_integrity.py": "ee2d0c7a7a88c6f4e38ff4c2f4f345bc9a61ef8590eb1b8e1644752c57db95bb",
++    "scripts/seal_v94_holdout.py": "976ba08015638a619545fd77d92ceef9e37599672df032e49cc8d992bdff0795",
++    "scripts/summarize_validation.py": "cfa61b6b20aefb5ec2fc19a6fce75ea6b4fe0639b660459290a22f7af2034388",
++    "scripts/run_v941_paper.py": "0605949419cbdc67b6337261202843f213dfb46791f32e762b0483447ba6aa81",
++    "scripts/develop_v94.py": "bdf0abb7dbfd6b1a1854bab24ed51ffe3e4f734753f46f444f4de50f5d64aafa",
++    "scripts/audit_v94_gates.py": "572405e63b29fb9522efc0e8526e6c84488f09b4ad72ca5759b2dcae40c01560",
++    "scripts/validate_v94.py": "1ab6bd9e0e6b39d0b15cfe8a348411dc1d066c139b2e8dab598840d9a8e7a38a",
++    "src/exit_rules.py": "df9bb4eb42e813218c6f214b15c28ef11b59222f9b3d9d73cc20721a8ee42ad0",
++    "src/flow_exit_manager.py": "f4fbd2576f485ae2afad7c53075296fac3fa24e2f68b8739fc1b2bd07fe3c963",
++    "src/ten_agent_debate.py": "9620e80771e3790e90881195968896086bad0d0b09994e4f4af72452e4915dd0",
++    "src/state_store.py": "1e59b11fddda2970d8f8a999aff52015b9b67dfe44d8f6ffdddc30a2c164d63b",
++    "src/executor.py": "e71ed14f341b2cc916398fd7dbd3bb466e8fdbd8d4a8a535a636705726b4a3be",
++    "src/unified_engine.py": "1bfab418a1d367877f7eb77f3c2e124929a0a628d46af25af4cd671705a87fb7",
++    "src/health_reporting.py": "335a135460d653fee5c08bf9051a774d0dd753c25af4c2c047ecbc2e32a6fd0a",
++    "src/ccxt_compat.py": "165285f9943ee244c2f4b7953ab868727c3a2111249ff94fa9be7bcebf83b8c2",
++    "src/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
++    "src/v94_live_risk.py": "89b01884db0d60b9e78867f2125227c32cd145042d0bac4af0007592f02912e6",
++    "src/live_runner.py": "8d3e64fe06a6fe3058ae47914fb3be538b1bbdaec17ff28375f4a542354fc8ff",
++    "src/maker_queue_sim.py": "16dd78d2acde2d6cfc63845d9910c1fa1ce1aa28cae71ba88c91cb44487c517b",
++    "src/equity_reporting.py": "c6d01fd1ea3d4eef4f27e1415459d9fb7ba0c5e0aebc57abc17b5bc67193ec9e",
++    "src/gate_statistics.py": "c2b36fc3fc2479be3b8dda57d932bdbea20b394821e7579953973f17fa63686f",
++    "src/adaptive_policy.py": "95d1cd1709e31765cc1997c6cda98b8f214bc57edf6104837e6018eee1904099",
++    "src/feed_health.py": "993345a61d410913f3d9f9c9676d318f55dff875746d7658781c4bc4f974980e",
++    "src/futures_catalog.py": "8da5e5d483d4819ea433ea315f48e30c00cfd09c09ec49f4b5a58c397ed250d1",
++    "src/moneyflow.py": "cccc3cfeac09a1365553d89ac89ccce4d79c34482f507f6c4c745129981e2c46",
++    "src/counterfactual.py": "495d286bca475b79113631d1365338edb0a439b45ef328fdfbcb76e206697a8a",
++    "src/security.py": "b8155a3eadafe6fb26b1368094ddd49f1fd8527cdb4cc6939073a7b4fd7eb995",
++    "src/attribution.py": "22986d1549e38b3991344aa00aa8441c3566a5c1a41eaae7a4aa4d74cea2acfb",
++    "src/v94_live_router.py": "6fe5d8f0302bc91ebe6bac207d5151acf6a6087ccfaec35e3f476652977aa9b3",
++    "src/global_market_regime.py": "ec9985f562581e600cab39d2679fe7c6bba990c5ea8a3121bfc260e3a2cb6a9f",
++    "src/circuit_breaker.py": "63131b21e9c0a111f3eb65b0ef82602372a6f0d1b6f69a60017ca7e53ed98adf",
++    "src/reconcile.py": "e0521f3194cde391fbd62419391a5c8103c4975685d3d318e48da18edde3d8c8",
++    "src/pdf_core_confluence.py": "f41f3b56e2310ae816804f120fc23bd20f73288967b466bf3b916ad5cc1774b3",
++    "src/indicators.py": "7a09c41556c1997c88cd91e739782ad4018e5b5769ad4e421f133136fbba1b22",
++    "src/trade_quality.py": "c389e8234d5ac9ffbe5b605f7b5bc9774d5fb92df24c0eecb4dd4bcfed177aa7",
++    "src/quant_rule_council.py": "012c95a1f205709c7f33221eaa538566140baa71743386ffb5d3b559b66aa380",
++    "src/measurement_overlay.py": "0ad9a6d34772eed47f7b8df959aad259f7cef00f057ac11d9f506bc78f0b46a3",
++    "src/config.py": "14f35e669a4a3e3455e3a93e54b21dafb02bd6056fdfee2d4fb1a1a88ec0d144",
++    "src/main.py": "5f192658d443f49a069d541200ad73b2af95794c56e486e46a52374625cf2b74",
++    "src/edge_analytics.py": "4d088cdd5a83c41eb1ea64e71dece3631573bb6fbda52fe0505672a36597a4b5",
++    "src/llm_referee.py": "13e3ab2d16d4a25d1675b0f9f3a8ed2553e1c2ee12c7e45b92f176ae0cf51ead",
++    "src/regime_state_machine.py": "de553cbb2827513ea43bbec93f72d6184e29fc00a8019add6fa0565a2ab1966a",
++    "src/exchanges.py": "a5da627270a0b1ee865c77a220fb7ceec863c244a2af4ce7f969c17cb767b585",
++    "src/strategy.py": "220ae0921487add6f33d92b783b145d3a656cc448e474de9de641c631a5a489b",
++    "src/win_loss_analyzer.py": "034867df1afc2cdc22c27dd637a51e926b6ee2fdee9f169890edb381e001a68f",
++    "src/commission_optimizer.py": "416d889bf653e501fdd662f328bc2459a79d1e39e3be6bbc1f66e32e3ee6221d",
++    "src/v94_core.py": "d05e6e29df3a2086cd72f3fd4b7be5a81db7c75a143d73ac6ee8a562e2c75349",
++    "src/risk.py": "7dfec46ce8cdbf9e31b8a72a47b623187d96dd8466783544504806a63af47779",
++    "src/sizing.py": "8765f576e9a15fb3e9fcec7e4f04eda157abf10ae595ff861462de5ef1c54f9a",
++    "scanner/ind_aktif.py": "0847c77c3489b8e56e889dd628ab057769653022b616d2b0f27f58c0c1ba3903",
++    "scanner/ws_scanner.py": "09993d4aca72f443a91489a8c12bca06827a5cfc4f3befcb51b2351e60b86413",
++    "scanner/__init__.py": "4becd2e96b2c49e34d9a2d714f6dd1d89f0fe35b86223e304139b92ac86592fd",
++    "scanner/universe.py": "d96094e321eebf65bb91957d0130a196437e569d5a415b006bf8030f9754ae37",
++    "configs/v94_selected_policy.json": "c5b4e4cec5ec863b64fac4846e485d93a57c888d2438953ab7e7acc62aa6ed1d",
++    "configs/v9-canonical-production.json": "830af43021ed6fa862e56fc3d1203abb62ae553cb8823f6868f9593fb9a0473d",
++    "configs/v941_validation_criteria.json": "41ebf9ea4a40bd8f3e31b695bc8846eb2234873488bf33c29420502b37a270c8",
++    "tests/test_backtests.py": "a0349f582f289e91018679e2b82a61f0e0389e67e4d9783fa02c0b1c4b145f82",
++    "tests/test_v943_health_reporting.py": "e5d00c5515cb6ec469bb01158e8336694753946a67f6bdf99b117bd93caf55d7",
++    "tests/test_execution_stress.py": "86e3bde20cea78e8dc9d9f24d57dc17aee479e7cbdb6d5e5194627a182edf174",
++    "tests/test_v94_upgrades.py": "71ae5e9d86e1917e47be82d227742f56a8935a74bd2f2b50ea7536af164dfa63",
++    "tests/test_v942_feed_health.py": "28103fda1825bbca353ca1b3a80af369ec148e9d726ef285ca1cf3f8c3ae9ae3",
++    "tests/test_v9_greenfield_suite.py": "39ce891c5cea37fb26a4a9a9d10112239722cf136b0ce58329b894d08409c3f8",
++    "tests/test_v92_upgrades.py": "7a46e51bf48ea7140b0e82a8847b962246f78579443162f92eaa3d0f8e2bf32e",
++    "tests/conftest.py": "da18af220b778ee36c5ba6719b48fd13a27b0e61d8649af472ad18bd914e553b",
++    "tests/test_v93_upgrades.py": "a6ca044f6c1f6ebe4b10c91be12ed6ef7ecfa0b26cc11dc306fbe052831fc896",
++    "tests/test_v941_measurement.py": "1fccd4d897e72f6fd035b8867d5e13cfb05da009c6005b69a2541701c30a8ec8",
++    "portfolio/__init__.py": "c3c16c59dc4f6a7552fe3760d2d7fbab5d788c9b91abb13da895a79ec072cfff",
++    "portfolio/paper_futures.py": "981ebc49bc5b0b09c9085b791253d81cb50a043bb895f2d5c6e1a6823a1e537f",
++    "strategies/base.py": "ee5d1280863b10c65233454d7f44ad264f2021ae4267558cfd4043de5b90b343",
++    "strategies/trend_follower.py": "f87d37cc928a675f89055b1639cfd59ba009b204ff38d8aa0f6ae03407748600",
++    "strategies/v93_flow_strategy.py": "6196b255bd3ed134ab1c1ca1b4d5d0039a217f4a153ddf4c26c9a86b758f6fe8",
++    "strategies/__init__.py": "3bd4fb760cf49859dcfb5c7c770dfdca759e610ecaff9d266f2becd9e3a48206",
++    "strategies/v92_flow_strategy.py": "0dba330549479e803b9efa763c64f2735b02622e9232b08e40653ffd18102266",
++    "backtests/execution.py": "aeedf78a8ced3249843b6726a4cd9c5019e38072c1af18572a1de05a74509036",
++    "backtests/engine_interface.py": "1c3387295aa1f6c4dad3ad2b0df34add2264f381384c2fe356a00ebfafccde3e",
++    "backtests/__init__.py": "adb5f1b42f7bc27585e42ca37535fc0fb6c498733b20c2a8ccdbd59de6372f1a",
++    "backtests/report.py": "e352cded7d906db44e610e790d188d6a4ec5585339cfc32ec1c64a37b88edf45",
++    "backtests/stress.py": "00bd2c1aa9591b71c3924ab1cb7485cf3dc79aa173d2ee9d6bfddc0ce8db56a4",
++    "backtests/ablation.py": "6088a8d4ab2ff7e53aa5eafcbeedea06b21a2277bdf9fc2b209a5a2c6e838c7e",
++    "backtests/engine.py": "9016641fefc25f16a36dee6ce4c5efb17ad564192964d1bc9c5717f8ea419a79",
++    "backtests/walk_forward.py": "4b0625402f75105ed50f5724e6abecf8b7cffedc2d88f6760d879f4ab57c81f3",
++    "backtests/chronological_portfolio.py": "f72ddc71bd7350dc9186edf5e507a25b5c429fb5dcf146751518c35fe25593f8",
++    "Dockerfile": "85666a187e9bf301f34adf49179e6137369fdd61e1baf12d342a843636e11927",
++    "docker-compose.yml": "11aeb8f549c5b09dd02d97bfdb047f8dc9b16adceb99a481c19a6e7b7a0255db",
++    ".dockerignore": "39f90ba2293f3e6fb382d48aa55e918b89dc17657349aebfb7592a0df53a0a3f",
++    "src/evaluation_telemetry.py": "c84740529165c95025a5dba5ac58e195ea02bd6618464fa14343e46378fa7839",
++    "scripts/check_v944_integrity.py": "c1eaadf6e265c6e4eb4b843e4fcbf699886ee21f894a10f9f27a4c089a0140e4",
++    "scripts/probe_v944_pending.py": "d91d32e6cc6c2b074778ef8a81ba426caa43fb59175c061044434f174a580cfa",
++    "tests/test_v944_http_contract.py": "37f888763d3b51a4cef1a43c80256bf7829cbba18f2b529adb209bb0e18a3801",
++    "tests/test_v944_invariants.py": "4c5ecacc876746cdb5d56206335120d3bedb1a336e09aba60ec5252ad8ce642f",
++    "tests/test_v944_run_status.py": "6b2218c7e2526633c0d501f3192526e75c172b9618ab068a737714f2aea9ade9",
++    "tests/test_v944_telemetry.py": "deceab7d93216d54ba8e7312b9eecb7e395efde45f2aa514700fe41dab6e3098"
++  },
++  "test_protocol": {
++    "full_host_pytest_recorded_before_this_freeze": 140,
++    "clean_docker_build_no_cache": true,
++    "docker_full_pytest_required": true,
++    "controlled_http_required": true,
++    "natural_live_run_authorized_here": false,
++    "synthetic_events_do_not_count_as_natural_live_evidence": true,
++    "real_money_approved": false
++  },
++  "freeze_revision": 2,
++  "revision_reason": "Cross-Python AST test serializer made canonical; runtime code unchanged from r1"
++}
+\ No newline at end of file
+diff --git a/reports/v944/v943_runner_method_ast_hashes.json b/reports/v944/v943_runner_method_ast_hashes.json
+new file mode 100644
+index 0000000..bf7cff3
+--- /dev/null
++++ b/reports/v944/v943_runner_method_ast_hashes.json
+@@ -0,0 +1,21 @@
++{
++  "__init__": "d88b2f91f3d632177470f62c3d230a4c8d3bdda3a141c5c7777ac443186a6fa0",
++  "discover_full_pure_crypto_universe": "15c4fcf85d34a3b652a8d6a760f2793e4211b79a8a899c02a8190d4c3d449121",
++  "_fetch_binance_perp_candles": "4d07527037b86d79528d033e415ba53c29e3b76dc8ed8d303201446d4895e21d",
++  "_fetch_okx_candles": "576a50d8246fd43349713bbe342582ae58e65443d3f2a22054a9589537f4bdf9",
++  "_fetch_candles_best_source": "54b04a69f5b59935ef9c29fbf2d716b8a8a00a8bb4faff0d5fa42c711c5e5c05",
++  "_rows_to_df": "e4f36425c5f3777f7990be153a06c35fbc00ace0ae4e6cf517aad4d7e7196884",
++  "_ingest_1m_rows": "dce809e7445af2d7c5880f414585b785c377bd8b694bab2b85686df1851a6d6e",
++  "warmup_symbol": "6ffb65bbd4cc556073f8705a9c9a816fcc4d0e35b18092a8752e4b4199756123",
++  "warmup_all": "aebf6c465d8a0d842a256f9f655052d452248f9ac93486c7e7c401753eaadd28",
++  "full_universe_bbo_and_scanner_loop": "fb6b9b26ad594e8c975be901c9a11270fc95f0d817442c0c8937e97c7a29ca11",
++  "_binance_single_ws": "8c989558a3d1c571e98cab06d3c4a43539808a2c5aa2e70221406398b833a1e8",
++  "binance_ws_loop": "6275770cce042d6fda3d91b1bb6a14d0e8798b43b29a8cebb66d614d9ac59207",
++  "okx_ws_loop": "af890326f7f4b2d7b3b995e4cd0415090b07da9ee17357d178892ba310566fa7",
++  "candle_refresh_loop": "534ba237b1421b1e96ee98f50d1cc0e937f19e90315d37f8739ba59f6263ab2e",
++  "open_positions_fast_quote_loop": "3c643aae867bdb1455e9c052a36e81eee99946dc7de375b52a6af3a91c936321",
++  "strategy_eval_loop": "d77b381a041146b9fa0155517af6ba9a0cf50de862d6022cab1aa51d21f6959d",
++  "build_state_payload": "4a8904b756099d694762fe27ab3cd147ccb6fb6ed7a7b43f095b8385752c5069",
++  "start_web_server": "708628ba06ae76d2c382953953890fa1b32c0c959452ac4e23ce33a971dce0ec",
++  "run": "08ab8c2d207d66f68c4874263361b2b6f9ac9e4435c4d0dd9bf3eb075340777a"
++}
+\ No newline at end of file
+diff --git a/scripts/check_v944_integrity.py b/scripts/check_v944_integrity.py
+new file mode 100644
+index 0000000..2aa6c69
+--- /dev/null
++++ b/scripts/check_v944_integrity.py
+@@ -0,0 +1,25 @@
++"""Check current v9.4.4 source freeze and the delivered file manifest."""
++from pathlib import Path
++import argparse,hashlib,json
++ROOT=Path(__file__).resolve().parents[1]
++
++
++def main():
++    p=argparse.ArgumentParser();p.add_argument('--sources-only',action='store_true');a=p.parse_args()
++    frozen=json.loads((ROOT/'reports/v944/source_freeze.json').read_text())['source_sha256']
++    def mismatches(files):
++        return [n for n,h in files.items() if not (ROOT/n).is_file() or hashlib.sha256((ROOT/n).read_bytes()).hexdigest()!=h]
++    bad=mismatches(frozen)
++    if bad:raise RuntimeError('Source mismatch: '+str(bad))
++    print('SOURCE OK:',len(frozen),'files')
++    if a.sources_only:return
++    files=json.loads((ROOT/'PACKAGE_MANIFEST.json').read_text())['files'];bad=mismatches(files)
++    if bad:raise RuntimeError('Package mismatch: '+str(bad))
++    s=json.loads((ROOT/'RELEASE_STATUS.json').read_text())
++    assert s['version']=='9.4.4' and s['pending_in_flight_observed_live'] is False
++    assert s['real_money_approved'] is False and 'live_operational_checks_passed' not in s
++    assert s['controlled_pending_http_verified'] is True
++    print('PACKAGE OK:',len(files),'files; synthetic/live evidence scope explicit')
++
++
++if __name__=='__main__':main()
+diff --git a/scripts/probe_v944_pending.py b/scripts/probe_v944_pending.py
+new file mode 100644
+index 0000000..2ce3c35
+--- /dev/null
++++ b/scripts/probe_v944_pending.py
+@@ -0,0 +1,96 @@
++"""Synthetic local HTTP probe. No market subscriptions and no exchange orders.
++
++Every Runner gets its own disposable fixture DB. Ages/accounts/feed timestamps
++are intentionally injected ONLY into those fixture DBs/objects, never a live run.
++"""
++import asyncio,json,os,time,tempfile
++from pathlib import Path
++from types import SimpleNamespace
++import aiohttp
++from src.live_runner import DualVenueLiveRunner
++from src.config import load_config
++from src.risk import Position
++from src.health_reporting import TABLES
++
++
++async def run_probe(directory):
++    directory=Path(directory);directory.mkdir(parents=True,exist_ok=True)
++    samples=[]
++    for table in TABLES:
++        r=DualVenueLiveRunner(load_config(),port=0,report_prefix=str((directory/table).resolve()))
++        r.start_ts=time.time()-900
++        st=r.store
++        pos=Position('BTC/USDT','LONG',100,1,99,leverage=10,margin_usdt=10,exchange='binance')
++        st.prepare_paper_open('fixture-seed',{'symbol':pos.symbol})
++        st.commit_paper_open('fixture-seed',pos,{'balance':999.9,'start_balance':1000.,'total_fees_usdt':.1,'total_funding_usdt':0.},
++            {pos.symbol:{'position_id':'fixture-seed','entry_fee_usdt':.1,'funding_usdt':0.}}, {}, {pos.symbol:time.time()})
++        r.executor.positions[pos.symbol]=pos
++        r.engine.metrics['signals_evaluated']=4972
++        r.engine.v94_router=SimpleNamespace(rejections={'ONE_ATTEMPT_PER_CLOSED_BAR':4596,'CLOSED_HTF_DISAGREEMENT':29})
++        web=await r.start_web_server();port=web.addresses[0][1]
++        try:
++            async with aiohttp.ClientSession() as sess:
++                async def get(case,expected,*,stale=False):
++                    now=time.time();r.engine._last_feed_ts=now
++                    for z in r.venue_stats.values():z.update(last_ts=now,last_bbo_ts=now,last_trade_ts=now,ticks=1,bbo_updates=1)
++                    if stale:r.venue_stats['okx']['last_trade_ts']=now-120
++                    with st._conn() as c:before=list(c.iterdump())
++                    async with sess.get(f'http://127.0.0.1:{port}/health') as resp:
++                        code=resp.status;body=await resp.json()
++                    with st._conn() as c:after=list(c.iterdump())
++                    row={'table':table,'case':case,'http_status':code,'body':body,'durable_db_unchanged_by_health':before==after,'synthetic':True}
++                    samples.append(row)
++                    assert code==expected,row
++                    assert before==after,row
++                    return body
++                await get('committed_baseline',200)
++                stale=await get('trade_tape_stale',503,stale=True)
++                assert 'OKX_TRADE_TAPE_STALE' in stale['alarms']
++                await get('feed_recovered',200)
++                op='fixture-'+table
++                if table=='paper_intents':st.prepare_paper_open(op,{'symbol':'ETH/USDT'})
++                elif table=='paper_close_intents':st.prepare_paper_close(op,'BTC/USDT',1)
++                elif table=='paper_funding_intents':st.prepare_paper_funding(op,'BTC/USDT',{'delta':.1,'old_balance':999.9,'old_funding':0,'old_clock':1,'new_clock':2,'qty':1})
++                else:st.prepare_paper_layer(op,'BTC/USDT',{'original_qty':1,'requested_qty':1,'old_balance':999.9,'old_fee':.1})
++                body=await get('young_owned_pending',200)
++                assert body['ledger_status']=='IN_FLIGHT' and body['ledger_reconciled'] is False
++                assert any(p['operation_id']==op and p['table']==table and p['owned_by_this_process'] and p['age_sec']<15 for p in body['pending_operations'])
++                assert not st.verify_paper_ledger_integrity()['ok']
++                async with sess.get(f'http://127.0.0.1:{port}/api/state') as resp:
++                    state=await resp.json();assert resp.status==200
++                assert state['evaluation_telemetry']['evaluation_calls_total']==4972
++                assert state['evaluation_telemetry']['retry_suppressed_total']==4596
++                assert state['evaluation_telemetry']['non_retry_evaluation_calls']==376
++                st._health_pending_tokens[(table,op)]=(os.getpid(),time.monotonic()-16)
++                expired=await get('pending_timeout',503)
++                assert 'pending_timeout' in expired['ledger_reason']
++                st._health_pending_tokens.clear()
++                unowned=await get('pending_unowned',503)
++                assert 'pending_unowned' in unowned['ledger_reason']
++                st._health_pending_tokens[(table,op)]=(os.getpid(),time.monotonic())
++                with st._conn() as c:
++                    original=c.execute("SELECT value FROM bot_meta WHERE key='paper_account'").fetchone()[0]
++                    account=json.loads(original);account['balance']+=1
++                    c.execute("UPDATE bot_meta SET value=? WHERE key='paper_account'",(json.dumps(account),))
++                corrupt=await get('cash_corruption_not_hidden',503)
++                assert 'cash_conservation_mismatch' in corrupt['ledger_reason']
++                with st._conn() as c:c.execute("UPDATE bot_meta SET value=? WHERE key='paper_account'",(original,))
++                await get('pending_restored',200)
++                if table=='paper_intents':
++                    st.cancel_unfilled_paper_open(op,'ETH/USDT')
++                    after=await get('explicit_unfilled_cancel',200)
++                    assert after['ledger_status']=='RECONCILED'
++                    assert st.verify_paper_ledger_integrity()['ok']
++        finally:
++            await web.cleanup();await r.broker.close()
++            if hasattr(st,'close'):st.close()
++    report={'scope':'isolated synthetic HTTP; not natural live PENDING or exchange fills','http_samples':len(samples),'young_owned_pending_200_cases':sum(x['case']=='young_owned_pending' for x in samples),'all_health_requests_durable_db_unchanged':all(x['durable_db_unchanged_by_health'] for x in samples),'controlled_pending_http_verified':True,'pending_in_flight_observed_live':False,'natural_entry_fill_or_close_observed':False,'real_money_approved':False}
++    (directory/'http_samples.jsonl').write_text('\n'.join(json.dumps(x,ensure_ascii=False) for x in samples)+'\n')
++    (directory/'result.json').write_text(json.dumps(report,ensure_ascii=False,indent=2))
++    return report
++
++
++if __name__=='__main__':
++    import argparse
++    parser=argparse.ArgumentParser();parser.add_argument('--output',required=True);args=parser.parse_args()
++    print(json.dumps(asyncio.run(run_probe(args.output)),ensure_ascii=False,indent=2))
+diff --git a/src/evaluation_telemetry.py b/src/evaluation_telemetry.py
+new file mode 100644
+index 0000000..5518388
+--- /dev/null
++++ b/src/evaluation_telemetry.py
+@@ -0,0 +1,25 @@
++"""Read-only classification of existing counters; never participates in decisions."""
++ENTRY_RETRY_REASON = 'ONE_ATTEMPT_PER_CLOSED_BAR'
++POSITION_RETRY_REASON = 'POSITION_WAIT_NEXT_CLOSED_BAR'
++
++
++def evaluation_telemetry_snapshot(engine):
++    total = int(engine.metrics.get('signals_evaluated', 0))
++    reasons = dict(getattr(getattr(engine, 'v94_router', None), 'rejections', {}))
++    entry_retry = int(reasons.get(ENTRY_RETRY_REASON, 0))
++    position_retry = int(reasons.get(POSITION_RETRY_REASON, 0))
++    retry = entry_retry + position_retry
++    return {
++        'evaluation_calls_total': total,
++        'entry_retry_suppressed': entry_retry,
++        'position_retry_suppressed': position_retry,
++        'retry_suppressed_total': retry,
++        'non_retry_evaluation_calls': total - retry,
++        'retry_suppression_pct': 100.0 * retry / total if total else None,
++        'counter_consistent': 0 <= retry <= total,
++        'non_retry_reason_counts': {k: v for k, v in reasons.items()
++                                    if k not in (ENTRY_RETRY_REASON, POSITION_RETRY_REASON)},
++        'unique_signal_count': None,
++        'scope': 'Call counters, NOT unique opportunities, mature cohorts, or independent signals',
++        'strategy_policy_changed': False,
++    }
+diff --git a/src/live_runner.py b/src/live_runner.py
+index 5534181..ce66b65 100644
+--- a/src/live_runner.py
++++ b/src/live_runner.py
+@@ -40,6 +40,7 @@ from src.circuit_breaker import CircuitBreaker
+ from src.commission_optimizer import CommissionOptimizer
+ from src.config import BASE_DIR, CANONICAL_CONFIG_PATH, load_config
+ from src.exchanges import ExchangeManager
++from src.evaluation_telemetry import evaluation_telemetry_snapshot
+ from src.feed_health import binance_futures_ws_url, venue_feed_status
+ from src.executor import Executor
+ from src.llm_referee import LiveLLMReferee
+@@ -147,6 +148,8 @@ DASHBOARD_HTML = """<!DOCTYPE html>
+   <div class="card"><div class="label">Saf Kripto Vadeli Evren</div><div class="val" id="univCnt">0 Coin</div><div class="sub" id="univSub">BN: 0 | OKX: 0 (ABD Hisse: 0)</div></div>
+   <div class="card"><div class="label">Açık Pozisyon (Sınırsız Cross)</div><div class="val" id="openCnt">0 Açık</div><div class="sub" id="uPnl">Açık K/Z: $0.0000</div></div>
+   <div class="card"><div class="label">Eski denetim (v9.4 kapalı)</div><div class="val" id="tenAgent">0 Eski Denetim</div><div class="sub" id="tenSub">Onay: 0 | Veto: 0 (3-Tur)</div></div>
++  <div class="card"><div class="label">Toplam değerlendirme çağrısı</div><div class="val" id="evalTotal">0</div><div class="sub">Benzersiz sinyal değildir</div></div>
++  <div class="card"><div class="label">Tekrar deneme koruması</div><div class="val" id="evalRetry">0</div><div class="sub" id="evalOther">Tekrar dışı çağrı: 0</div></div>
+   <div class="card"><div class="label">Gölge 135sn vs Akım Tutuş</div><div class="val" id="cfDelta">$0.0000</div><div class="sub" id="cfSub">Engellenen Sinyal: 0</div></div>
+ </div>
+ 
+@@ -216,7 +219,11 @@ async function refresh(){
+     const r = await fetch('/api/state');
+     const s = await r.json();
+     document.getElementById('hdrTitle').textContent = `${s.product_label} — Tam Saf Kripto Vadeli Motoru`;
+-    const phaseTxt = s.phase === 'DRAIN' ? 'DOĞAL KAPANIŞ BEKLENİYOR' : (s.phase === 'COMPLETED' ? 'TAMAMLANDI' : 'AKTİF');
++    const phaseTxt = ({WARMUP:'ISINIYOR', ACTIVE:'AKTİF', DRAIN:'DOĞAL KAPANIŞ BEKLENİYOR', COMPLETED:'TAMAMLANDI', INTERRUPTED:'KESİLDİ', FAILED:'HATA'})[s.phase] || s.phase;
++    const et = s.evaluation_telemetry || {};
++    document.getElementById('evalTotal').textContent = et.evaluation_calls_total ?? 0;
++    document.getElementById('evalRetry').textContent = et.retry_suppressed_total ?? 0;
++    document.getElementById('evalOther').textContent = `Tekrar dışı çağrı: ${et.non_retry_evaluation_calls ?? 0} — benzersiz sinyal değildir`;
+     document.getElementById('clock').textContent = `${phaseTxt} | ${s.elapsed_sec.toFixed(0)}sn`;
+ 
+     const bn = s.venues.binance || {};
+@@ -1354,7 +1361,7 @@ class DualVenueLiveRunner:
+             mark = (
+                 (bbo[0] + bbo[1]) / 2.0
+                 if bbo
+-                else self.executor.last_venue_prices.get(
++                else getattr(self.executor, "last_venue_prices", {}).get(
+                     (ex_k, sym), self.executor.last_prices.get(sym, pos.entry)
+                 )
+             )
+@@ -1498,6 +1505,14 @@ class DualVenueLiveRunner:
+             "phase": self.phase,
+             "elapsed_sec": now_s - self.start_ts,
+             "drain_elapsed_sec": self.drain_elapsed_sec,
++            "run_completion": {
++                "active_duration_target_sec": self.duration_sec,
++                "active_window_completed": bool(getattr(self, "active_window_completed", False)),
++                "stop_reason": getattr(self, "run_stop_reason", None),
++                "completed": self.phase == "COMPLETED",
++                "scope": "time protocol only; not trade-cycle or profitability approval",
++            },
++            "evaluation_telemetry": evaluation_telemetry_snapshot(self.engine),
+             "balance": float(paper.balance),
+             "starting_balance": float(paper.start_balance),
+             "equity": equity,
+@@ -1528,6 +1543,7 @@ class DualVenueLiveRunner:
+                 "closed_candle_core": bool(self.cfg.get("v94", {}).get("enabled", False)),
+                 "policy": self.cfg.get("v94", {}).get("policy"),
+                 "entry_rejections": dict(getattr(getattr(self.engine,"v94_router",None),"rejections",{})),
++                "entry_rejections_includes_retry_suppression": True,
+                 "open_stop_risk_usdt": sum(max(0.0,(p.entry-p.stop) if p.side=="LONG" else (p.stop-p.entry))*p.qty for p in self.executor.positions.values()),
+                 "active_duration_target_sec": self.duration_sec,
+                 "real_money_approved": False,
+@@ -1614,6 +1630,8 @@ class DualVenueLiveRunner:
+             await asyncio.sleep(5.0)
+             self.start_ts = time.time()
+             self.phase = "ACTIVE"
++            self.active_window_completed = False
++            self.run_stop_reason = None
+             eval_task = asyncio.create_task(self.strategy_eval_loop())
+             bg_tasks = [*ws_tasks, eval_task]
+ 
+@@ -1625,14 +1643,18 @@ class DualVenueLiveRunner:
+                     while not self.stop_Flag and (time.time() - self.start_ts) < self.duration_sec:
+                         await asyncio.sleep(1.0)
+ 
++                    self.active_window_completed = (time.time() - self.start_ts) >= self.duration_sec
+                     self.allow_new_entries = False
+                     self.phase = "DRAIN"
+                     drain_t0 = time.time()
+-                    log.info(
+-                        "Aktif giriş penceresi (%.0fs) tamamlandı. Açık %d pozisyon doğal kapanışa bırakıldı.",
+-                        self.duration_sec,
+-                        len(self.executor.positions),
+-                    )
++                    if self.active_window_completed:
++                        log.info(
++                            "Aktif giriş penceresi (%.0fs) tamamlandı. Açık %d pozisyon doğal kapanışa bırakıldı.",
++                            self.duration_sec, len(self.executor.positions),
++                        )
++                    else:
++                        log.info("Aktif giriş penceresi KESİLDİ | Geçen=%.3fs | Hedef=%.0fs",
++                                 time.time() - self.start_ts, self.duration_sec)
+                     while (
+                         not self.stop_Flag
+                         and len(self.executor.positions) > 0
+@@ -1641,14 +1663,20 @@ class DualVenueLiveRunner:
+                         self.drain_elapsed_sec = time.time() - drain_t0
+                         await asyncio.sleep(1.0)
+                     self.drain_elapsed_sec = time.time() - drain_t0
+-                    self.phase = "COMPLETED"
++                    self.phase = "COMPLETED" if self.active_window_completed and not self.stop_Flag else "INTERRUPTED"
++                    self.run_stop_reason = (
++                        "stop_requested_before_active_target" if not self.active_window_completed else
++                        "stop_requested_during_or_at_end_of_active_window" if self.stop_Flag else
++                        "drain_limit_with_open_positions" if self.executor.positions else "duration_target_reached"
++                    )
+                     self.engine.sync_closed_trade_feedback()
+                     done_summary = self.build_state_payload()
+                     self.summary_path.write_text(
+                         json.dumps(done_summary, ensure_ascii=False, indent=2), encoding="utf-8"
+                     )
+                     log.info(
+-                        "CANLI_TEST_TAMAMLANDI | Kapanan=%d | Acik=%d | Brüt=$%+.4f | Net=$%+.4f | Evren=%d",
++                        "%s | Kapanan=%d | Acik=%d | Brüt=$%+.4f | Net=$%+.4f | Evren=%d",
++                        "CANLI_TEST_TAMAMLANDI" if self.phase == "COMPLETED" else "CANLI_TEST_KESILDI",
+                         done_summary["closed_count"],
+                         len(done_summary["open_positions"]),
+                         done_summary["gross_pnl"],
+@@ -1658,7 +1686,18 @@ class DualVenueLiveRunner:
+                     if self.keep_panel_alive:
+                         while not self.stop_Flag:
+                             await asyncio.sleep(2.0)
++            except asyncio.CancelledError:
++                self.phase = "INTERRUPTED"
++                self.run_stop_reason = "task_cancelled"
++                raise
++            except Exception as exc:
++                self.phase = "FAILED"
++                self.run_stop_reason = "exception:" + type(exc).__name__
++                raise
+             finally:
++                if self.phase not in ("COMPLETED", "INTERRUPTED", "FAILED"):
++                    self.phase = "INTERRUPTED"
++                    self.run_stop_reason = "stop_requested_indefinite_run" if self.duration_sec <= 0 else "shutdown_without_completion"
+                 self.stop_Flag = True
+                 for t in bg_tasks:
+                     t.cancel()
+@@ -1668,6 +1707,11 @@ class DualVenueLiveRunner:
+                 self.summary_path.write_text(
+                     json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8"
+                 )
++                telemetry = summary.get("evaluation_telemetry", {})
++                log.info("KOSU_SONUCU | Durum=%s | Neden=%s | ToplamDegerlendirme=%d | TekrarKorumasi=%d | TekrarDisiCagri=%d",
++                         self.phase, self.run_stop_reason,
++                         telemetry.get("evaluation_calls_total", 0), telemetry.get("retry_suppressed_total", 0),
++                         telemetry.get("non_retry_evaluation_calls", 0))
+                 await web_runner.cleanup()
+                 await self.broker.close()
+                 if hasattr(self.store, "close"):
+diff --git a/tests/test_v92_upgrades.py b/tests/test_v92_upgrades.py
+index d920dcc..bbbd683 100644
+--- a/tests/test_v92_upgrades.py
++++ b/tests/test_v92_upgrades.py
+@@ -68,7 +68,7 @@ def _trend_ohlcv(n: int = 200, start: float = 100.0, drift: float = 0.28) -> pd.
+ def test_canonical_v92_vault_sizing_stop_and_cross_unlimited():
+     """$1,000 kasa, $50×10x=$500 büyüklük, -$40 (%80 marj = %8.0 fiyat) stop, Cross ve sınırsız işlem."""
+     cfg = load_config(CANONICAL_CONFIG_PATH)
+-    assert cfg["version"] == "9.4.3"
++    assert cfg["version"] == "9.4.4"
+     assert float(cfg["paper"]["bakiye"]) == 1000.0
+     assert cfg["risk"]["marj_modu"] == "cross"
+     assert cfg["boyutlandirma"]["mod"] == "sabit_usdt"
+diff --git a/tests/test_v944_http_contract.py b/tests/test_v944_http_contract.py
+new file mode 100644
+index 0000000..95b2c0b
+--- /dev/null
++++ b/tests/test_v944_http_contract.py
+@@ -0,0 +1,12 @@
++import asyncio,json
++from pathlib import Path
++from scripts.probe_v944_pending import run_probe
++
++
++def test_controlled_http_contract_for_four_intent_tables(tmp_path):
++    result=asyncio.run(run_probe(tmp_path/'controlled'))
++    assert result['http_samples']==33
++    assert result['young_owned_pending_200_cases']==4
++    assert result['all_health_requests_durable_db_unchanged']
++    assert result['controlled_pending_http_verified']
++    assert result['pending_in_flight_observed_live'] is False
+diff --git a/tests/test_v944_invariants.py b/tests/test_v944_invariants.py
+new file mode 100644
+index 0000000..a8bf094
+--- /dev/null
++++ b/tests/test_v944_invariants.py
+@@ -0,0 +1,29 @@
++import ast,hashlib,json
++from pathlib import Path
++ROOT=Path(__file__).resolve().parents[1]
++
++
++def canonical_ast(node):
++    if isinstance(node, ast.AST):
++        return {'node':type(node).__name__, 'fields':{name:canonical_ast(value) for name,value in ast.iter_fields(node) if value is not None}}
++    if isinstance(node,list):return [canonical_ast(value) for value in node]
++    return node
++
++
++def ast_hash(node):
++    return hashlib.sha256(json.dumps(canonical_ast(node),sort_keys=True).encode()).hexdigest()
++
++
++
++def test_only_approved_v943_baseline_files_changed():
++    baseline=json.loads((ROOT/'reports/v943_packaging_freeze_manifest.json').read_text())['source_sha256']
++    changed={n for n,h in baseline.items() if hashlib.sha256((ROOT/n).read_bytes()).hexdigest()!=h}
++    assert changed=={'src/live_runner.py','configs/v9-canonical-production.json','pyproject.toml','tests/test_v92_upgrades.py','tests/test_v9_greenfield_suite.py'}
++
++
++def test_only_reporting_and_run_status_methods_changed():
++    old=json.loads((ROOT/'reports/v944/v943_runner_method_ast_hashes.json').read_text())
++    cls=next(x for x in ast.parse((ROOT/'src/live_runner.py').read_text()).body if isinstance(x,ast.ClassDef) and x.name=='DualVenueLiveRunner')
++    new={n.name:ast_hash(n) for n in cls.body if isinstance(n,(ast.FunctionDef,ast.AsyncFunctionDef))}
++    assert set(old)==set(new)
++    assert {n for n,h in old.items() if new[n]!=h}=={'run','build_state_payload'}
+diff --git a/tests/test_v944_run_status.py b/tests/test_v944_run_status.py
+new file mode 100644
+index 0000000..6ef3da3
+--- /dev/null
++++ b/tests/test_v944_run_status.py
+@@ -0,0 +1,71 @@
++"""Exercise the real run() loop with deterministic clock and isolated dummy IO."""
++import asyncio
++import json
++import os, signal
++from types import SimpleNamespace
++import pytest
++from src.live_runner import DualVenueLiveRunner
++
++
++async def exercise(monkeypatch, tmp_path, mode):
++    import src.live_runner as module
++    r=DualVenueLiveRunner.__new__(DualVenueLiveRunner)
++    r.duration_sec=0 if mode=='indefinite' else 4
++    r.max_drain_sec=3;r.stop_Flag=False;r.keep_panel_alive=mode=='panel_stop'
++    r.allow_new_entries=True;r.drain_elapsed_sec=0;r.phase='WARMUP'
++    r.executor=SimpleNamespace(positions={'BTC':object()} if mode in ('drain_stop','drain_limit') else {})
++    r.engine=SimpleNamespace(sync_closed_trade_feedback=lambda:None)
++    r.summary_path=tmp_path/'summary.json'
++    cleaned=[];r.store=SimpleNamespace(close=lambda:cleaned.append('store'))
++    async def close():cleaned.append('broker')
++    r.broker=SimpleNamespace(close=close)
++    async def cleanup():cleaned.append('web')
++    async def web():return SimpleNamespace(cleanup=cleanup)
++    async def discover(session):return []
++    async def warmup(session):pass
++    async def block(*args):await asyncio.Event().wait()
++    r.start_web_server=web;r.discover_full_pure_crypto_universe=discover;r.warmup_all=warmup
++    for name in ['full_universe_bbo_and_scanner_loop','open_positions_fast_quote_loop','binance_ws_loop','okx_ws_loop','candle_refresh_loop']:
++        setattr(r,name,block)
++    async def strategy():
++        await block()
++    r.strategy_eval_loop=strategy
++    clock=[1000.];real_sleep=asyncio.sleep
++    monkeypatch.setattr(module.time,'time',lambda:clock[0])
++    async def sleep(sec):
++        clock[0]+=sec
++        if r.phase=='ACTIVE' and mode in ('early_stop','indefinite') and clock[0]-r.start_ts>=2:r.stop_Flag=True
++        if r.phase=='DRAIN' and mode=='drain_stop':r.stop_Flag=True
++        if r.phase=='COMPLETED' and mode=='panel_stop':r.stop_Flag=True
++        if r.phase=='ACTIVE' and mode=='cancel':raise asyncio.CancelledError()
++        if r.phase=='ACTIVE' and mode=='loop_exception':raise RuntimeError('synthetic foreground failure')
++        if r.phase=='ACTIVE' and mode in ('sigterm','sigint') and clock[0]-r.start_ts>=2:
++            os.kill(os.getpid(),signal.SIGTERM if mode=='sigterm' else signal.SIGINT)
++            await real_sleep(.01)
++        await real_sleep(0)
++    monkeypatch.setattr(module.asyncio,'sleep',sleep)
++    r.build_state_payload=lambda:{'phase':r.phase,'elapsed_sec':clock[0]-r.start_ts,'drain_elapsed_sec':r.drain_elapsed_sec,'closed_count':0,'open_positions':list(r.executor.positions),'gross_pnl':0,'net_pnl':0,'universe_counts':{'union_pure':0},'evaluation_telemetry':{'evaluation_calls_total':0,'retry_suppressed_total':0,'non_retry_evaluation_calls':0}}
++    raised=None
++    try:
++        if mode in ('sigterm','sigint'):
++            monkeypatch.setattr(module,'DualVenueLiveRunner',lambda *args,**kwargs:r)
++            result=await module.async_main([])
++        else:result=await r.run()
++    except (asyncio.CancelledError,RuntimeError) as exc:raised=exc;result=json.loads(r.summary_path.read_text())
++    assert sorted(cleaned)==['broker','store','web']
++    assert result==json.loads(r.summary_path.read_text())
++    return result,r,raised
++
++
++@pytest.mark.parametrize('mode,expected',[('early_stop','INTERRUPTED'),('sigterm','INTERRUPTED'),('sigint','INTERRUPTED'),('indefinite','INTERRUPTED'),('normal','COMPLETED'),('drain_stop','INTERRUPTED'),('drain_limit','COMPLETED'),('panel_stop','COMPLETED'),('cancel','INTERRUPTED'),('loop_exception','FAILED')])
++def test_real_run_status(monkeypatch,tmp_path,caplog,mode,expected):
++    caplog.set_level('INFO')
++    result,r,raised=asyncio.run(exercise(monkeypatch,tmp_path,mode))
++    assert result['phase']==expected
++    if mode in ('early_stop','indefinite'):
++        assert result['elapsed_sec']<4
++        assert 'CANLI_TEST_TAMAMLANDI' not in caplog.text
++        assert 'penceresi (4s) tamamlandı' not in caplog.text
++    if mode=='drain_limit':assert len(r.executor.positions)==1 # no forced close
++    if mode=='cancel':assert isinstance(raised,asyncio.CancelledError)
++    if mode=='loop_exception':assert isinstance(raised,RuntimeError)
+diff --git a/tests/test_v944_telemetry.py b/tests/test_v944_telemetry.py
+new file mode 100644
+index 0000000..b3680ed
+--- /dev/null
++++ b/tests/test_v944_telemetry.py
+@@ -0,0 +1,29 @@
++import ast,copy,hashlib,json
++from pathlib import Path
++from types import SimpleNamespace
++import pytest
++from src.evaluation_telemetry import evaluation_telemetry_snapshot
++
++
++@pytest.mark.parametrize('total,reasons,retry,other',[(0,{},0,0),(4972,{'ONE_ATTEMPT_PER_CLOSED_BAR':4596},4596,376),(10,{'ONE_ATTEMPT_PER_CLOSED_BAR':4,'POSITION_WAIT_NEXT_CLOSED_BAR':3,'HOLD_CONFIRMED_THESIS':1},7,3),(9,{'SPREAD_TOO_WIDE':2},0,9)])
++def test_counter_classification_is_readonly(total,reasons,retry,other):
++    e=SimpleNamespace(metrics={'signals_evaluated':total},v94_router=SimpleNamespace(rejections=reasons))
++    before=copy.deepcopy(vars(e));v=evaluation_telemetry_snapshot(e)
++    assert v['evaluation_calls_total']==total and v['retry_suppressed_total']==retry
++    assert v['non_retry_evaluation_calls']==other and v['unique_signal_count'] is None
++    assert v['counter_consistent']
++    assert e.metrics==before['metrics'] and e.v94_router.rejections==before['v94_router'].rejections
++    assert 'ONE_ATTEMPT_PER_CLOSED_BAR' not in v['non_retry_reason_counts']
++    assert 'POSITION_WAIT_NEXT_CLOSED_BAR' not in v['non_retry_reason_counts']
++
++
++def test_counter_inconsistency_not_silently_clamped():
++    e=SimpleNamespace(metrics={'signals_evaluated':1},v94_router=SimpleNamespace(rejections={'ONE_ATTEMPT_PER_CLOSED_BAR':2}))
++    v=evaluation_telemetry_snapshot(e)
++    assert not v['counter_consistent'] and v['non_retry_evaluation_calls']==-1
++
++
++def test_panel_has_counter_elements_and_interrupted_label():
++    from src.live_runner import DASHBOARD_HTML as HTML
++    for name in ('evalTotal','evalRetry','evalOther'):assert f'id="{name}"' in HTML
++    assert "INTERRUPTED:'KESİLDİ'" in HTML and "FAILED:'HATA'" in HTML
+diff --git a/tests/test_v9_greenfield_suite.py b/tests/test_v9_greenfield_suite.py
+index 067cf1d..338f00d 100644
+--- a/tests/test_v9_greenfield_suite.py
++++ b/tests/test_v9_greenfield_suite.py
+@@ -26,7 +26,7 @@ def test_single_canonical_config_and_hard_risk_caps() -> None:
+     assert not (BASE_DIR / "config.yaml").exists()
+ 
+     cfg = load_config()
+-    assert cfg["version"] == "9.4.3"
++    assert cfg["version"] == "9.4.4"
+     assert cfg["genel"]["borsalar"] == ["binance", "okx"]
+     assert cfg["risk"]["gunluk_max_zarar_yuzde"] <= 25.0
+     assert cfg["risk"]["marj_zarar_orani"] <= 0.80

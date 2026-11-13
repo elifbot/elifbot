@@ -1,0 +1,2 @@
+Yeni sonuç: acarbot/ANLIK_AKIS_ORTAK_COZUM_RAPORU.md
+Anlık akış testi başarılı; 614 sözleşmede otomatik PAPER desteklenmiyor. Yalnız araştırma/PAPER, gerçek para onayı yok.

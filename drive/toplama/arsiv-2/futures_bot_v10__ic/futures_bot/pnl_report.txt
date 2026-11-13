@@ -1,0 +1,35 @@
+====================================================================
+PAPER FUTURES — KÂR/ZARAR RAPORU
+====================================================================
+Başlangıç bakiyesi : 1000.00 USDT
+Bitiş bakiyesi     : 989.44 USDT
+Toplam gerçekleşen : -10.5606 USDT
+Toplam komisyon    : 3.9639 USDT
+Kapalı işlem       : 8
+
+Kazanma oranı      : 37.50%
+Profit factor      : 0.234
+Ortalama kazanç    : +1.0759 USDT
+Ortalama kayıp     : -2.7577 USDT
+Beklenen değer/işlem: -1.3201 USDT
+Maks. düşüş (MDD)  : 10.5606 USDT
+  LONG  işlem=7    pnl=-9.2936 win=42.9%
+  SHORT işlem=1    pnl=-1.2670 win=0.0%
+Sharpe             : hesaplanamaz — yetersiz veri (kapalı işlem 8 < 30)
+
+Funding            : funding hariç / bilinmiyor
+Not                : Sonuçlar yalnızca paper simülasyonudur;
+                     gerçek performans göstergesi DEĞİLDİR.
+====================================================================
+
+Son işlemler:
+sembol    yön      giriş    çıkış    net PnL  sebep
+--------  -----  -------  -------  ---------  -----------
+SYNTH     LONG   60606.5  60283.1    -3.1479  TERS_SINYAL
+SYNTH     LONG   60995    61073       0.1377  TERS_SINYAL
+SYNTH     LONG   61111.3  61002.2    -1.3786  TERS_SINYAL
+SYNTH     LONG   60998.5  60960.4    -0.8022  TERS_SINYAL
+SYNTH     LONG   60417.2  60707.3     1.8824  TERS_SINYAL
+SYNTH     SHORT  60711.1  60804.9    -1.267   TERS_SINYAL
+SYNTH     LONG   60810.5  61018.6     1.2076  TERS_SINYAL
+SYNTH     LONG   61042.6  60215.2    -7.1925  session_end

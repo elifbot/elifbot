@@ -1,0 +1,31 @@
+{
+  "run_id": 40090692312,
+  "paper_job_result": "success",
+  "files": [
+    "preflight.json",
+    "paper-session.txt",
+    "gunluk.txt",
+    "oturum_analizi.json",
+    "islem_gecmisi.json",
+    "shadow-analysis.json",
+    "shadow-report.md",
+    "partial-gunluk.txt",
+    "partial-oturum-analizi.json",
+    "partial-islem-gecmisi.json",
+    "partial-shadow-analysis.json",
+    "partial-shadow-report.md",
+    "cohort-report.md",
+    "cohort-report.json",
+    "shadow-review.md",
+    "shadow-review.json"
+  ],
+  "partial_files": [
+    "partial-gunluk.txt",
+    "partial-oturum-analizi.json",
+    "partial-islem-gecmisi.json",
+    "partial-shadow-analysis.json",
+    "partial-shadow-report.md"
+  ],
+  "partial_only": false,
+  "note": "Maskelenmiş paper oturumu kanıtı; paper_job_result alanını birlikte okuyun."
+}

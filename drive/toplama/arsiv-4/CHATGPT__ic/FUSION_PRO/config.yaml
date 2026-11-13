@@ -1,0 +1,84 @@
+market:
+  exchange: binance
+  rest_base: https://fapi.binance.com
+  ws_base: wss://fstream.binance.com/stream
+  okx_rest_base: https://www.okx.com
+  okx_ws_base: wss://ws.okx.com:8443/ws/v5/public
+  interval: 5m
+  htf: [15m, 1h, 4h]
+  warmup: 260
+  stale_sec: 12
+  max_spread_bps: 8.0
+  depth_levels: 50
+  deep_scan_candidates: 60
+  full_universe_refresh_sec: 30
+strategy:
+  min_score: 7.0
+  min_edge_bps: 6.0
+  min_rr: 1.6
+  min_quality_score: 65
+  target_r: 2.2
+  adx_trend: 18.0
+  range_adx_max: 17.0
+  volume_z_min: 0.2
+  min_bb_width_pct: 0.15
+  funding_block_abs: 0.0015
+  funding_guard_sec: 900
+risk:
+  starting_equity: 1000.0
+  risk_per_trade_pct: 0.35
+  stop_loss_mode: all_in_budget
+  allow_structure_tighter_stop: false
+  max_daily_loss_pct: 2.0
+  max_weekly_loss_pct: 5.0
+  max_open_positions: 0
+  max_same_direction: 0
+  max_notional_pct: 0.0
+  leverage: 10
+  leverage_max: 10
+  leverage_min: 10
+  margin_per_trade_usd: 50.0
+  stop_loss_usd: 20.0
+  min_free_margin_multiple: 1.05
+  margin_mode: cross
+  position_mode: one_way
+  cooldown_min: 20
+  max_hold_min: 240
+  atr_stop_mult: 1.6
+  swing_lookback: 12
+execution:
+  fee_bps_roundtrip: 8.0
+  entry_order_type: post_only
+  maker_entry: true
+  slippage_bps_side: 2.5
+  latency_ms: 250
+  partial_fill_ratio: 0.90
+  tp1_r: 1.0
+  tp1_fraction: 0.35
+  trail_atr_mult: 2.2
+  breakeven_after_r: 0.8
+paper:
+  mode: live-paper
+  initial_cash: 1000.0
+  persist_db: data/fusion_pro.db
+ops:
+  loop_sec: 15
+  log_level: INFO
+
+exchange_credentials:
+  # Live mod için environment değişkenleri kullanılır; anahtarlar config'e yazılmaz.
+  binance_api_key_env: BINANCE_API_KEY
+  binance_api_secret_env: BINANCE_API_SECRET
+  okx_api_key_env: OKX_API_KEY
+  okx_secret_env: OKX_API_SECRET
+  okx_passphrase_env: OKX_API_PASSPHRASE
+  okx_demo_env: OKX_DEMO
+
+trading:
+  mode: live-paper
+  live_enabled: false
+  maker_entry_requote_bps: 2.0
+  maker_timeout_sec: 12
+  allow_pyramiding: true
+  dynamic_tp: true
+  dynamic_tp_min_move_bps: 5.0

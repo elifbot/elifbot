@@ -1,0 +1,157 @@
+{
+  "name": "TradingViewFuturesBot",
+  "state": {
+    "type": "json_schema",
+    "json_schema": {
+      "type": "object",
+      "required": [],
+      "properties": {
+        "exchange": {
+          "type": "string",
+          "description": "İsteğe bağlı: taranacak borsa, Binance, OKX veya boş bırak (ikisi de taranır)"
+        }
+      }
+    }
+  },
+  "schema": "crewai.flow/v1",
+  "methods": {
+    "skip_trade": {
+      "do": {
+        "call": "agent",
+        "with": {
+          "goal": "İşlem yapılmama sebebini kısaca raporlamak.",
+          "role": "İşlem Kayıt Sorumlusu",
+          "input": "Analiz sonucu (sembol ve borsa dahil): ${outputs.analyze_trade.raw}\n\nExpected output: Sembol, borsa ve işlem yapılmama sebebini içeren kısa not. Girdi boşsa 'NO DATA: analiz returned nothing' yaz.",
+          "verbose": true,
+          "backstory": "Yalnızca girdide verilenle çalışırsın, veri uydurmazsın. Girdi NO DATA içerirse kaynakların bir şey döndürmediğini kendi cümlelerinle söylersin.",
+          "inject_date": true,
+          "llm": "openai/gpt-5.6-luna"
+        }
+      },
+      "start": false,
+      "listen": "go_skip",
+      "router": false,
+      "description": "İşlem yok sebebini kaydeder"
+    },
+    "analyze_trade": {
+      "do": {
+        "call": "agent",
+        "with": {
+          "llm": {
+            "model": "openai/gpt-5.5"
+          },
+          "goal": "Verileri değerlendirip long, short veya no_trade kararı ile giriş fiyatını, indikatör ve mum verisine dayalı kâr al seviyesini ve indikatör bazlı zarar çıkış koşullarını belirlemek.",
+          "role": "Vadeli İşlem Stratejisti",
+          "input": "10x kaldıraç, 50 dolar teminat. Bu bir sanal test: mum verisi ve yön varsa işleme gir. Yön (long/short) ilk satırda verilmişse ve fiyat verisi mevcutsa o yönü kullan. Yalnızca hiç fiyat/mum verisi yoksa no_trade de. KÂR AL: yüzde ile değil, verilerden belirle (long için yakındaki son tepe/direnç, short için son dip/destek, gerekirse EMA/MACD/RSI momentumuna göre makul bir hedef fiyat). SABİT STOP-LOSS EMRİ KOYMA ve yüzdelik zarar seviyesi verme. Bunun yerine ZARAR ÇIKIŞ KOŞULLARINI indikatörlerden tanımla: long için EMA20'nin EMA50'nin altına inmesi, MACD histogramının negatife dönmesi veya RSI'ın 40'ın altına düşmesi; short için EMA20'nin EMA50'nin üstüne çıkması, MACD histogramının pozitife dönmesi veya RSI'ın 60'ın üstüne çıkması (bu koşullardan hangilerinin geçerli olduğunu ve eşik değerlerini verilere göre netleştir). Bu koşullar oluşunca pozisyon zararda ya da kârda o anki fiyattan kapatılacak; izole marj nedeniyle zarar zaten en fazla 50 dolardır. Pozisyon en fazla 1 saat tutulur. Taranan ve seçilen coin ile toplanan veriler (sembol, borsa ve olası yön ilk satırda): ${outputs.collect_market_data.raw}\n\nExpected output: İlk satır yalnızca long, short veya no_trade olsun. İkinci satır 'Sembol: ..., Borsa: ...' olsun. Sonra giriş fiyatı, kâr al seviyesi (verilere dayalı gerekçesiyle), indikatör bazlı zarar çıkış koşulları (sabit yüzde stop yok) ve gerekçe. Veriler boş veya NO DATA ise ilk satır no_trade olsun ve 'NO DATA: collect_market_data returned nothing' yaz; tahmini veya örnek değer asla kullanma.",
+          "verbose": true,
+          "backstory": "Risk bilinci yüksek bir analistsin. Yalnızca girdide verilen verilerle çalışır, asla veri uydurmaz veya tahmin etmezsin; fiyat verisi yoksa no_trade dersin.",
+          "inject_date": true
+        }
+      },
+      "start": false,
+      "listen": "collect_market_data",
+      "router": false,
+      "description": "Karar: long/short/işlem yok, giriş, kâr al, zarar durdur"
+    },
+    "open_position": {
+      "do": {
+        "call": "agent",
+        "with": {
+          "goal": "Test amaçlı, gerçek para kullanmadan 1000 dolarlık sanal kasadan 50 dolar teminat ve 10x kaldıraçla (yaklaşık 500 dolar pozisyon) sanal giriş kaydı oluşturmak.",
+          "role": "Sanal İşlem Emir Hazırlayıcı",
+          "input": "Analiz (sembol, borsa, yön ve giriş fiyatı içinde): ${outputs.analyze_trade.raw}. Borsayı, sembolü, yönü ve giriş fiyatını analizden al. SANAL İŞLEM: başlangıç sanal kasa 1000 dolar, İZOLE (isolated) marj modu, 50 dolar teminat, 10x kaldıraç, piyasa emri. İzole marjda kayıp yalnızca bu 50 dolarlık teminatla sınırlıdır, kasanın kalanı risk altında değildir; bunu kısaca belirt. Gerçek emir gönderme.\n\nExpected output: 'SANAL İŞLEM (gerçek emir gönderilmedi)' ibaresi, borsa, sembol, yön, marj modu (izole/isolated), sanal giriş fiyatı, 50 dolar teminat, 10x kaldıraç, yaklaşık 500 dolar pozisyon büyüklüğü ve kalan sanal bakiye (950 dolar). Analiz boşsa 'NO DATA: analyze_trade returned nothing' yaz; tahmini, hatırlanan veya örnek değerler asla kullanılmaz.",
+          "verbose": true,
+          "backstory": "Emir ayrıntılarını yalnızca girdideki analizden alırsın; asla fiyat veya gerçekleşme bilgisi uydurmazsın. Bu bir sanal (paper trading) testtir: gerçek borsaya emir gönderilmez, bunu açıkça belirtirsin. Analizdeki giriş fiyatını sanal giriş fiyatı olarak kullanırsın.",
+          "inject_date": true,
+          "llm": "openai/gpt-5.6-luna"
+        }
+      },
+      "start": false,
+      "listen": "go_trade",
+      "router": false,
+      "description": "Sanal 1000 dolarlık kasayla 50 dolar teminat, 10x kaldıraçlı test pozisyonu açar"
+    },
+    "route_decision": {
+      "do": {
+        "call": "expression",
+        "expr": "outputs.analyze_trade.raw.matches('(?i)^[^a-z]*(long|short)') ? 'go_trade' : 'go_skip'"
+      },
+      "emit": [
+        "go_trade",
+        "go_skip"
+      ],
+      "start": false,
+      "listen": "analyze_trade",
+      "router": true,
+      "description": "Kararı yönlendirir"
+    },
+    "set_exit_orders": {
+      "do": {
+        "call": "agent",
+        "with": {
+          "goal": "Analizin belirlediği kâr al seviyesini ve indikatör bazlı zarar çıkış koşullarını sanal olarak kaydetmek. Sabit stop emri KOYMAZ.",
+          "role": "Koruma Emri Sorumlusu",
+          "input": "Analiz (sembol ve borsa dahil): ${outputs.analyze_trade.raw}; Pozisyon durumu: ${outputs.open_position.raw}. Stop-loss emri koyma. Yalnızca kâr al seviyesini ve analizdeki indikatör bazlı zarar çıkış koşullarını (EMA, MACD, RSI eşikleri) net bir liste olarak yaz.\n\nExpected output: Kâr al seviyesi ve indikatör bazlı zarar çıkış koşulları (sabit stop yok). Girdi boşsa 'NO DATA: analiz returned nothing' yaz; tahmini değer asla kullanma.",
+          "verbose": true,
+          "backstory": "Yalnızca girdideki seviyelerle çalışırsın, seviye uydurmazsın. Girdi NO DATA içerirse bunu kendi cümlelerinle belirtirsin.",
+          "inject_date": true,
+          "llm": "openai/gpt-5.6-luna"
+        }
+      },
+      "start": false,
+      "listen": "open_position",
+      "router": false,
+      "description": "Kâr al seviyesini ve indikatör bazlı zarar çıkış koşullarını kaydeder (stop emri yok)"
+    },
+    "close_and_report": {
+      "do": {
+        "call": "agent",
+        "with": {
+          "goal": "Sanal pozisyonu en fazla 1 saat izleyip kâr al hedefinde, indikatör bazlı zarar çıkış koşulu oluştuğunda veya süre dolumunda sanal olarak kapatmak ve kâr/zarar raporu yazmak.",
+          "role": "İşlem Rapor Yazarı",
+          "input": "Analiz (sembol ve borsa dahil): ${outputs.analyze_trade.raw}; Pozisyon: ${outputs.open_position.raw}; Çıkış planı: ${outputs.set_exit_orders.raw}. İZLEME: Girdi NO DATA içermiyorsa, WaitTool ile 300 saniye bekle, sonra URL okuma aracıyla 15 dakikalık mumları al (Binance: https://fapi.binance.com/fapi/v1/klines?symbol=SEMBOL&interval=15m&limit=100 ; OKX: https://www.okx.com/api/v5/market/candles?instId=ENSTRUMAN&bar=15m&limit=100, OKX mumları yeniden eskiye sıralıdır, ters çevir). Son mumdan güncel fiyatı al ve gelen mumlarla EMA20, EMA50, MACD(12,26,9) histogramı ve RSI(14) değerlerini kendin hesapla. Bunu en fazla 12 kez tekrarla (toplam yaklaşık 1 saat). Her kontrolde: fiyat kâr al seviyesine değdiyse kâr al seviyesinden kapat; yüzdelik sabit stop YOKTUR, bunun yerine çıkış planındaki indikatör bazlı zarar çıkış koşulu oluştuysa (long için EMA20 EMA50'nin altına inmesi, MACD histogramının negatife dönmesi veya RSI eşik altı; short için tersi) o andaki güncel fiyattan kapat ve kapanış nedenini indikatör olarak yaz. 12 kontrol bitince son fiyattan kapat. Kâr/zararı hesapla: long ise (çıkış-giriş)/giriş*500, short ise (giriş-çıkış)/giriş*500 dolar; zarar en fazla 50 dolar (izole marj) ile sınırlıdır; sanal bakiye 950+50+kâr/zarar. Gerçek emir gönderme.\n\nExpected output: Türkçe rapor: sembol, borsa, yön, sanal giriş, kontrol edilen fiyatlar ve indikatör değerleri, çıkış fiyatı ve kapanış nedeni (kâr al/indikatör zarar çıkışı/1 saat doldu), sanal kâr/zarar (dolar ve % teminata göre), son sanal bakiye. Girdi boşsa 'NO DATA: önceki adımlar returned nothing' yaz; tahmini, hatırlanan veya örnek değerler asla kullanılmaz.",
+          "tools": [
+            "crewai_tools:WaitTool",
+            "crewai_tools:URLReadTool"
+          ],
+          "verbose": true,
+          "max_iter": 80,
+          "backstory": "Raporı bir insan okur. Yalnızca girdideki bilgiyi ve araçlardan gelen fiyat/mum verilerini kullanırsın; girdi NO DATA içerirse kaynak bir şey döndürmedi diye kendi cümlelerinle belirtirsin, hiç izleme yapmazsın ve asla kendi rakamlarını uydurmazsın. Gerçekleşmemiş kapanış veya kârı gerçekmiş gibi sunmazsın.",
+          "inject_date": true,
+          "max_execution_time": 4800,
+          "llm": "openai/gpt-5.6-luna"
+        }
+      },
+      "start": false,
+      "listen": "set_exit_orders",
+      "router": false,
+      "description": "Sonucu ve kâr/zarar özetini bildirir"
+    },
+    "collect_market_data": {
+      "do": {
+        "call": "agent",
+        "with": {
+          "llm": {
+            "model": "openai/gpt-5.5"
+          },
+          "goal": "Binance ve OKX vadeli işlemlerindeki tüm USDT işlem çiftlerini tarayıp mum verisinde en net long veya short sinyali veren coini seçmek ve güncel fiyat, RSI, MACD, MA/EMA, hacim, fonlama oranı ve açık pozisyon verilerini toplamak.",
+          "role": "Kripto Piyasa Tarayıcı ve Veri Toplayıcı",
+          "input": "Borsa tercihi: ${has(state.exchange) && size(state.exchange) > 0 ? state.exchange : 'Binance ve OKX (ikisi de taranır)'}. Herkese açık API'ler (URL okuma aracıyla oku, anahtar gerekmez). ADIM 1 - TÜM ÇİFTLERİ TARA: Binance 24 saatlik ticker listesi https://fapi.binance.com/fapi/v1/ticker/24hr (tüm vadeli USDT çiftleri) ; OKX tüm swap ticker listesi https://www.okx.com/api/v5/market/tickers?instType=SWAP (yalnızca -USDT-SWAP olanlar). Listeleri oku, yalnızca USDT çiftlerine bak. Hacmi çok düşük çiftleri ele (24s quote hacmi Binance'te en az 20 milyon USDT, OKX'te en az 5 milyon USDT). Kalanlar arasından 24 saatlik değişim yüzdesi mutlak değeri en büyük ve hacmi yüksek en fazla 12 aday seç (iki borsadan karışık). Liste okunamazsa şu adaylara düş: BTCUSDT, ETHUSDT, SOLUSDT, XRPUSDT, DOGEUSDT, BNBUSDT, ADAUSDT, AVAXUSDT (OKX karşılığı BTC-USDT-SWAP vb.). Bir borsa hata verirse (ör. bölge kısıtı) aynı adresi bir kez daha dene, sonra diğer borsaya geç; ikisi de hata verirse NO DATA yaz. ADIM 2 - MUMLARI OKU: her aday için Binance mumları https://fapi.binance.com/fapi/v1/klines?symbol=SEMBOL&interval=15m&limit=100 veya OKX mumları https://www.okx.com/api/v5/market/candles?instId=ENSTRUMAN&bar=15m&limit=100 (OKX mumları yeniden eskiye sıralıdır, ters çevir). Mum görebildiğin her çiftte RSI(14), MACD(12,26,9), EMA(20) ve EMA(50) değerlerini yalnızca gelen mumlarla kendin hesapla. ADIM 3 - SEÇ: Sinyal kuralları basit: EMA20 > EMA50 ve MACD histogramı pozitif ve RSI 45-75 arası ise LONG; EMA20 < EMA50 ve MACD histogramı negatif ve RSI 25-55 arası ise SHORT. Bu kurala uyan adaylar arasından sinyali en güçlü olan tek çifti seç. Hiçbiri tam uymuyorsa yine de mum verisi olan en yakın adayı (EMA yönü ve MACD histogramı yönü aynı olanı) seç; yalnızca hiç mum verisi alınamazsa NO DATA yaz. İlk satıra 'Sembol: ..., Borsa: ..., Yön: ...' yaz. ADIM 4 - Seçilen çift için son mumdan güncel fiyatı ve hacmi, ayrıca fonlama oranı ve açık pozisyonu yaz (Binance fonlama https://fapi.binance.com/fapi/v1/premiumIndex?symbol=SEMBOL ; Binance açık pozisyon https://fapi.binance.com/fapi/v1/openInterest?symbol=SEMBOL ; OKX fonlama https://www.okx.com/api/v5/public/funding-rate?instId=ENSTRUMAN ; OKX açık pozisyon https://www.okx.com/api/v5/public/open-interest?instId=ENSTRUMAN). Taranan aday sayısını ve hangi borsanın çalıştığını da yaz. Haber aramaya gerek yok; haber kalemi için 'NO DATA: haber atlandı' yaz.\n\nExpected output: İlk satır 'Sembol: ..., Borsa: ..., Yön: ...' olsun. Sonra taranan aday sayısı, çalışan borsa ve her veri kalemi için değer ve kaynak. Bir kaynak boş dönerse o kalem için 'NO DATA: <kaynak> returned nothing' yaz; tahmini, hatırlanan veya örnek değerler asla kullanılmaz.",
+          "tools": [
+            "crewai_tools:URLReadTool",
+            "crewai_tools:ScrapeWebsiteTool"
+          ],
+          "verbose": true,
+          "max_iter": 50,
+          "backstory": "Titiz bir piyasa araştırmacısısın. Yalnızca araçlardan ve girdiden gelen verilerle çalışırsın; asla veri uydurmaz, tahmin etmez veya hatırladığın değerleri kullanmazsın.",
+          "inject_date": true,
+          "max_execution_time": 1800
+        }
+      },
+      "start": true,
+      "router": false,
+      "description": "Fiyat, göstergeler, fonlama, açık pozisyon ve haber verilerini toplar"
+    }
+  },
+  "description": "TradingView alarmıyla tetiklenen Binance/OKX kaldıraçlı işlem botu: veri toplar, analiz eder, karar verir, emir planı ve rapor üretir."
+}

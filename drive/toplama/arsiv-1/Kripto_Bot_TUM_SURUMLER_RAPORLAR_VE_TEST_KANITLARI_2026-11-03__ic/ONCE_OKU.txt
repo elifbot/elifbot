@@ -1,0 +1,15 @@
+KRİPTO BOT — 3 KASIM 2026 TOPLU TESLİM
+
+SURUMLER/: v9.3 ve v9.4.1 özgün teslim ZIPleri; e-postayla alınan v9.4.2 özgün onarım ZIPi. Kaynak paketleri değiştirilmedi.
+RAPORLAR/: v9.3/v9.4.1 güncel düzeltmelerle ayrıntılı Word raporu; v9.4.2 test raporu Word ve Markdown; önceki özgün Markdown raporları.
+KANITLAR/: v9.4.2 pytest, canlı paper logları, JSON/CSV sağlık örnekleri, ayrı HTTP hata/PENDING ve WebSocket adresi deneyleri, son defter ve hash kanıtları.
+
+GÜNCEL SONUÇ:
+87 pytest geçti. Aktif paper 900.558s + 180.423s drenaj tamamlandı.
+Koşu sonu Binance ticks 84111, errors_aggTrade 0; OKX ticks 59179. İki trade-tape sağlıklı.
+/health gözlemleri: 71 kez 200, 1 kez 503. 503 sırasında her iki tape sağlıklıydı; LEDGER_RECONCILIATION_MISMATCH alarmı vardı. Ayrı PENDING deneyi aynı davranışı üretti; canlı olayın kesin düşük seviye nedeni o anda yakalanmadı. Son salt-okunur defter kontrolü başarılı.
+3 paper emir denemesi, 1 dolum, 2 dolmayan emir; 0 kapalı, 1 açık pozisyon. Son equity 999.612044 USDT, fark -0.387956 USDT.
+Akış onarımı doğrulandı; bütün operasyonel sağlık şartları eksiksiz geçmedi. GERÇEK PARA ONAYI YOK.
+v9.4.2 paketindeki eski iç manifest/status kayıtları devralınmıştır; yeni test sonuçları ayrı rapor ve kanıtlardadır. 13 dosyalık önceki grupta 12 dosya aynıdır, live_runner akış/sağlık düzeltmesi nedeniyle değişmiştir.
+
+v9.4.1 negatif tarihsel araştırma adayı olarak kalır. v9.3 ve v9.4.1 özgün testleri farklı dönem/cüzdan tasarımlarındadır; doğrudan eşdeğer getiri karşılaştırması değildir.

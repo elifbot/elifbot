@@ -1,0 +1,14 @@
+Paper/replay-only 10-minute test; no live or testnet orders.
+Timer starts only after the per-exchange >90% indicator-readiness gate.
+
+Explicit parameters:
+--sure-dk 10 --sembol-limit 0 --tp 0.8 --sl 0.5 --tut-dk 5
+--giris limit --limit-payi 0.05 --limit-bekle-sn 30
+--cascade-esik 1 --min-genislik 0
+--binance-hacim-kaynagi aggtrade --indikator-hazirlik-oran 90
+--indikator-hazirlik-zamanasimi-dk 75 --sinyal-zenginlestirme --kar-kilidi
+--no-defter-golge
+
+Unchanged fail-closed enrichment, per-exchange readiness, account/risk limits,
+Fade strategy, order-flow confirmation, funding monitoring, and SIGTERM-safe
+shutdown are retained.

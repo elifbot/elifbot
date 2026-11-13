@@ -1,0 +1,35 @@
+{
+  "baseline_files": 90,
+  "unchanged_baseline_files": 85,
+  "changed_baseline_files": {
+    "pyproject.toml": {
+      "old": "ee0fc3d29b57f7dfa1081140fddafb29dfea99fbd621c2e39c7aab9a415ee1e8",
+      "new": "cf33fc1d3a8bbd68f64fdab797b46e44b86bf355736fc2274feb5c339ae4fbf9"
+    },
+    "src/live_runner.py": {
+      "old": "95c203d73fa696fe2f5eb7f5112ebc85ca5091f6cd457563b099f06e86492a47",
+      "new": "8d3e64fe06a6fe3058ae47914fb3be538b1bbdaec17ff28375f4a542354fc8ff"
+    },
+    "configs/v9-canonical-production.json": {
+      "old": "c2a3c7e91620113fbb0e5872b178f61f7173cb165ea76bd2d0bbc529c56e67a0",
+      "new": "830af43021ed6fa862e56fc3d1203abb62ae553cb8823f6868f9593fb9a0473d"
+    },
+    "tests/test_v9_greenfield_suite.py": {
+      "old": "c9e148f1bd3edb66dcbc48acb70d155b16de16375ebe63797cfed047b78f0ca4",
+      "new": "39ce891c5cea37fb26a4a9a9d10112239722cf136b0ce58329b894d08409c3f8"
+    },
+    "tests/test_v92_upgrades.py": {
+      "old": "01cdcebdb8eed81374763fd2ed34fe2f1b7bcf389a639034c04283ddf9c7a007",
+      "new": "7a46e51bf48ea7140b0e82a8847b962246f78579443162f92eaa3d0f8e2bf32e"
+    }
+  },
+  "config_semantically_identical_except_version": true,
+  "unified_engine_byte_identical": true,
+  "state_store_byte_identical": true,
+  "runner_changed_methods_only": [
+    "run",
+    "build_state_payload"
+  ],
+  "new_module_read_only": "src/evaluation_telemetry.py",
+  "financial_and_strategy_modules_unchanged": true
+}

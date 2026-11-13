@@ -1,0 +1,27 @@
+[Unit]
+Description=KRIPTO-BOT v7.8 web paneli + /health & /metrics (8501)
+After=network-online.target kripto-bot.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=kriptobot
+Group=kriptobot
+WorkingDirectory=/opt/kripto-bot/kripto-bot-v7.8
+Environment=PYTHONUNBUFFERED=1
+Environment=PORT=8501
+Environment=DASHBOARD_HOST=0.0.0.0
+ExecStart=/opt/kripto-bot/.venv/bin/python -m src.dashboard
+Restart=always
+RestartSec=5
+LimitNOFILE=65535
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ReadWritePaths=/opt/kripto-bot/kripto-bot-v7.8
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=kripto-panel
+
+[Install]
+WantedBy=multi-user.target

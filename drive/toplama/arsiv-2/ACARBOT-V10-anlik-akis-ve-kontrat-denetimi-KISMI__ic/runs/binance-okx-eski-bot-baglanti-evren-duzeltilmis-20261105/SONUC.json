@@ -1,0 +1,55 @@
+{
+  "started_utc": "2026-11-05T12:43:49.453688+00:00",
+  "mode": "OBSERVE_NO_ORDERS",
+  "markets": {
+    "binance_usdm": {
+      "discovered": 804,
+      "quoted": 804,
+      "status": "AVAILABLE",
+      "error": ""
+    },
+    "okx_futures": {
+      "discovered": 287,
+      "quoted": 287,
+      "status": "AVAILABLE",
+      "error": ""
+    },
+    "okx_swap": {
+      "discovered": 540,
+      "quoted": 540,
+      "status": "AVAILABLE",
+      "error": ""
+    },
+    "binance_coinm": {
+      "discovered": 30,
+      "quoted": 30,
+      "status": "AVAILABLE",
+      "error": ""
+    }
+  },
+  "instruments": 1661,
+  "quotes": 1661,
+  "candles_requested": 0,
+  "candles_ok": 0,
+  "signals": 0,
+  "errors": [],
+  "real_orders": 0,
+  "real_money_approved": false,
+  "strategy_reasons": {},
+  "rate_limit": {
+    "rate_per_sec": 8.0,
+    "base_rate_per_sec": 8.0,
+    "throttles_429": 0,
+    "queued_waits": 0,
+    "queued_wait_sec": 0.0
+  },
+  "finished_utc": "2026-11-05T12:43:49.876173+00:00",
+  "status": "COMPLETE",
+  "limitations": [
+    "Bu mod gözlemdir; PAPER dahi emir açmaz.",
+    "Binance erişimi yoksa sonuç PARTIAL; hiçbir alternatif borsa Binance yerine gösterilmez.",
+    "Tüm aktif sözleşmeler keşfedilir; inverse/teslimatlı sözleşmeler için PAPER hesaplama henüz uygulanmadı.",
+    "Tek tarama sürekli izleme veya kârlılık kanıtı değildir.",
+    "COIN-M quote hacmi fiyatla yaklaşık dönüştürülür."
+  ]
+}

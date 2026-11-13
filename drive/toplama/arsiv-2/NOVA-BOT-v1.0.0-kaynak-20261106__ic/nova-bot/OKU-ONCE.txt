@@ -1,0 +1,60 @@
+NOVA-BOT v1.0.0 — ÖNCE BUNU OKU
+===============================
+
+Bu paket, isteğiniz üzerine SIFIRDAN yazılmış, önceki hiçbir botla kod
+bağı olmayan bir kripto vadeli işlem (perpetual) botudur.
+
+  • Mod         : yalnız PAPER (kâğıt) — gerçek emir yolu YOK
+  • Gerçek emir : 0
+  • Özel API anahtarı / imza / hesap erişimi: YOK
+  • Dil modeli / YZ servisi çağrısı: YOK
+  • Bağımlılık  : yalnız aiohttp (ccxt, websockets, pandas, numpy kullanılmaz)
+
+KURULUM (3 komut)
+-----------------
+  cd src/nova-bot
+  python3 -m pip install -r requirements.txt
+  python3 nova.py doctor
+
+ÇALIŞTIRMA
+----------
+  python3 nova.py live     --minutes 15 --symbols 45 --out runs/live-15dk
+  python3 nova.py rejim    --minutes 3  --symbols 12 --out runs/rejim   (emir açmaz)
+  python3 nova.py backtest --symbols 60 --bars 1000 --out runs/bt
+  python3 -m pytest -q                                     (35 test, ağ gerekmez)
+
+ÇIKTILAR
+--------
+  runs/<koşu>/SONUC.json    tüm ölçümler + ret sayaçları (makine okunur)
+  runs/<koşu>/RAPOR.md      insan okunur rapor
+  runs/<koşu>/nova.sqlite   bars / signals / trades / events / equity
+  runs/<koşu>/events.jsonl  satır satır olay kaydı
+
+PAKETTEKİ DOSYALAR
+------------------
+  src/nova-bot/nova.py              giriş noktası (CLI)
+  src/nova-bot/nova/bot.py          çekirdek: borsa uçları, göstergeler, strateji,
+                                    PAPER defteri, CLI
+  src/nova-bot/nova/report.py       SONUC.json -> Markdown rapor
+  src/nova-bot/tests/test_nova.py   35 çevrimdışı test
+  src/nova-bot/docs/MIMARI.md       mimari kararlar + ölçülerek düzeltilen 4 tasarım hatası
+  src/nova-bot/README.md            ayrıntılı kullanım + sınırlar
+  src/nova-bot/requirements.txt     aiohttp
+  src/nova-bot/pytest.ini           test yapılandırması
+
+ÖNEMLİ SINIRLAR (özet; tamamı README.md ve RAPOR.md içinde)
+-----------------------------------------------------------
+  • PAPER sonuçları kârlılık kanıtı değildir; işlem sayısı azsa istatistiksel
+    olarak anlamsızdır. Sonuçlar KISMİdir.
+  • Dolum modeli: taker 5 bps + 2 bps kayma + ölçülen makas. Emir defteri
+    derinliği ve kısmi dolum modellenmez.
+  • Likidasyon fiyatı yaklaşımdır (1/kaldıraç − bakım marjı); borsanın gerçek
+    tasfiye motoru ve kademeli marjı modellenmedi.
+  • Funding yalnız oranı alınabilen sembollerde uygulanır; funding anına 3
+    dakikadan az kaldıysa yeni giriş reddedilir.
+  • Evren kuralı: dayanak varlık hem Binance hem OKX listesinde olmalı; borsa
+    `listing_age` ≥ 7 gün; borsanın bildirdiği 24s hacim ≥ 2.000.000 USDT.
+  • Gate.io ile Binance/OKX fiyatı ayrışabilir; bot bunu arbitraj saymaz.
+
+Bu paket BOTUN KENDİSİDİR. 15 dakikalık testin sonuçları ayrı bir e-postayla
+gönderilecektir.

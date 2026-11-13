@@ -1,0 +1,10 @@
+{
+  "request": "shadow-lab-initial-validation",
+  "duration_minutes": 60,
+  "config_profile": "controlled-no-cross-rescue",
+  "runner": "ubuntu-latest",
+  "mode": "paper",
+  "real_orders": false,
+  "baseline_strategy_changes": false,
+  "note": "Bu dosyanin dala push edilmesi yalniz bu ozel 60 dakikalik hosted paper oturumunu tetikler. Workflow push calismasinda 60 dakika ve controlled-no-cross-rescue varsayilanlarini kullanir."
+}

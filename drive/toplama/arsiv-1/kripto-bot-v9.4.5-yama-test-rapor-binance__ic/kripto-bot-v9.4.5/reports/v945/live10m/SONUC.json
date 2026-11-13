@@ -1,0 +1,250 @@
+{
+  "version": "9.4.5",
+  "planned_active_sec": 600,
+  "actual_active_sec": 600.7055927429974,
+  "actual_total_sec": 720.7059200639997,
+  "drain_sec": 120.00032732100226,
+  "runner_phase": "COMPLETED",
+  "duration_met": true,
+  "container_exit_code": 0,
+  "container_running": false,
+  "health_counts": {
+    "200": 719
+  },
+  "health_response_count": 719,
+  "post_60s_health_responses": 653,
+  "post_60s_non200_count": 0,
+  "sampling_errors": [
+    {
+      "observed_at_epoch": 1793706212.0978324,
+      "observer_monotonic": 38642.525299048,
+      "type": "http",
+      "error": "URLError(ConnectionRefusedError(111, 'Connection refused'))"
+    }
+  ],
+  "max_health_sample_gap_sec": 1.5241070650008623,
+  "max_observer_poll_gap_sec": 0.7673038009961601,
+  "observed_gaps_over_5s": false,
+  "pending_in_flight_observed_live": true,
+  "pending_http_match_sample_count": 21,
+  "pending_unique_operation_count": 1,
+  "pending_terminal_proof": [
+    {
+      "key": "paper_intents:1b812b48ae904017925454a234480b95",
+      "table": "paper_intents",
+      "operation_id": "1b812b48ae904017925454a234480b95",
+      "terminal_status": "ABSENT_NOT_PROOF_OF_CANCEL",
+      "symbol": null
+    }
+  ],
+  "maker_queue": {
+    "submitted": 2,
+    "filled": 1,
+    "partial_filled": 0,
+    "expired_unfilled": 1,
+    "post_only_rejected": 0,
+    "open_resting": 0,
+    "fill_rate_pct": 50.0,
+    "avg_wait_ms": 2754.8,
+    "avg_unfilled_runaway_bps": 0.0
+  },
+  "closed_trade_records": 0,
+  "distinct_full_closed_position_cycles": 0,
+  "full_closed_position_ids": [],
+  "live_order_open_close_cycle_verified": false,
+  "open_position_count": 1,
+  "balance_usdt": 999.9000029262868,
+  "equity_usdt": 999.3879027302255,
+  "net_pnl_usdt": -0.6120972697744946,
+  "closed_net_pnl_usdt": 0.0,
+  "unrealized_pnl_usdt": -0.5121001960612428,
+  "total_fees_usdt": 0.09999707371316538,
+  "funding_usdt": 0.0,
+  "venues": {
+    "binance": {
+      "healthy": true,
+      "bbo_healthy": true,
+      "trade_tape_healthy": true,
+      "fresh_pairs": 34,
+      "ticks": 55706,
+      "bbo_updates": 1259311,
+      "last_ts": 1793706211.8553822,
+      "last_bbo_ts": 1793706211.8553822,
+      "last_trade_ts": 1793706211.8430285,
+      "errors": 0,
+      "errors_aggTrade": 0,
+      "errors_bookTicker": 0,
+      "endpoint_aggTrade": "fstream.binance.com/market",
+      "endpoint_bookTicker": "fstream.binance.com/public",
+      "endpoint": "see stream-specific endpoints"
+    },
+    "okx": {
+      "healthy": true,
+      "bbo_healthy": true,
+      "trade_tape_healthy": true,
+      "fresh_pairs": 35,
+      "ticks": 52767,
+      "bbo_updates": 312574,
+      "endpoint": "wss://ws.okx.com/ws/v5/public",
+      "last_ts": 1793706211.845438,
+      "last_bbo_ts": 1793706211.845438,
+      "last_trade_ts": 1793706211.8296757,
+      "errors": 0
+    }
+  },
+  "evaluation_telemetry": {
+    "evaluation_calls_total": 14478,
+    "entry_retry_suppressed": 11096,
+    "position_retry_suppressed": 199,
+    "retry_suppressed_total": 11295,
+    "non_retry_evaluation_calls": 3183,
+    "retry_suppression_pct": 78.01491918773311,
+    "counter_consistent": true,
+    "non_retry_reason_counts": {
+      "INSUFFICIENT_REAL_FLOW": 31,
+      "LOW_TREND_EFFICIENCY": 27,
+      "RSI_EXHAUSTION": 27,
+      "SPREAD_TOO_WIDE": 46,
+      "DO_NOT_CHASE": 7,
+      "REAL_TAKER_UNAVAILABLE": 8,
+      "LIVE_ENTRY_DRIFT": 1,
+      "CLOSED_HTF_DISAGREEMENT": 19,
+      "NO_LOCAL_TREND": 42,
+      "STALE_SIGNAL_BAR": 421,
+      "HOLD_CONFIRMED_THESIS": 2,
+      "DRAIN_NO_NEW_ENTRY": 2550
+    },
+    "unique_signal_count": null,
+    "scope": "Call counters, NOT unique opportunities, mature cohorts, or independent signals",
+    "strategy_policy_changed": false
+  },
+  "max_observed_unchanged_eval_counter_span_sec": 0,
+  "final_strict_ledger": {
+    "ok": true,
+    "empty": false,
+    "balance": 999.9000029262868,
+    "expected_balance": 999.9000029262868,
+    "total_fees_usdt": 0.09999707371316538,
+    "total_funding_usdt": 0.0,
+    "open_positions": 1,
+    "closed_trades": 0
+  },
+  "source_100_hashes_verified": true,
+  "real_money_approved": false,
+  "operational_readiness_approved": false,
+  "strategy_parameters_changed": false,
+  "notes": "Natural live public-feed PAPER, not real exchange execution. No forced entries/exits. Six main background tasks supervised; no real-money approval.",
+  "estimated_active_start_epoch": 1793705491.164803,
+  "full_cycle_proof": [],
+  "closed_cycle_entry_pending_http_observed": false,
+  "remaining_open_entry_fees_usdt": 0.09999707371316538,
+  "drain_limit_sec": 120,
+  "drain_limit_overshoot_sec": 0.0003273210022598505,
+  "strict_drain_limit_met": false,
+  "post_60s_sampling_error_count": 0,
+  "sampling_error_window": "active+drain until final summary write; excludes intentional web cleanup",
+  "summary_written_epoch": 1793706211.8628082,
+  "post_summary_cleanup_errors": [
+    {
+      "observed_at_epoch": 1793706212.0978324,
+      "observer_monotonic": 38642.525299048,
+      "type": "http",
+      "error": "URLError(ConnectionRefusedError(111, 'Connection refused'))"
+    }
+  ],
+  "all_observer_requests_successful_including_cleanup": false,
+  "pending_terminal_proof_complete": false,
+  "sampled_connectivity_checks_passed": true,
+  "time_run_status": "COMPLETED",
+  "runtime_supervision": {
+    "enabled": true,
+    "active": true,
+    "shutting_down": true,
+    "healthy": true,
+    "alarms": [],
+    "background_tasks": {
+      "universe": "cancelled",
+      "fast_quotes": "cancelled",
+      "binance_ws": "cancelled",
+      "okx_ws": "cancelled",
+      "candles": "cancelled",
+      "strategy_eval": "cancelled"
+    },
+    "task_failures": {},
+    "strategy_cycle_age_sec": 1.61852034599724,
+    "evaluation_progress_age_sec": 1.2221137820015429,
+    "evaluation_count": 14478,
+    "continuity_ok": true,
+    "gap_count": 0,
+    "max_observed_sleep_sec": 1.26268037599948,
+    "max_poll_excess_sec": 0.26268037599948,
+    "max_wall_monotonic_skew_sec": 2.127137122442946e-05,
+    "thresholds": {
+      "progress_timeout_sec": 30.0,
+      "heartbeat_timeout_sec": 15.0,
+      "gap_sec": 5.0,
+      "clock_skew_sec": 2.0
+    },
+    "timings": {
+      "analytics_snapshot_including_ledger": {
+        "last_ms": 1.4372169971466064,
+        "max_ms": 4.773396998643875,
+        "count": 905
+      },
+      "health_render": {
+        "last_ms": 3.701410001667682,
+        "max_ms": 8.055024001805577,
+        "count": 755
+      },
+      "strategy_prepare_sync": {
+        "last_ms": 18.77259100001538,
+        "max_ms": 33.60288400290301,
+        "count": 202
+      },
+      "strategy_cycle_including_awaits": {
+        "last_ms": 26.94117599457968,
+        "max_ms": 5762.040666995745,
+        "count": 202
+      }
+    },
+    "scope": "Liveness is not signal profitability; monotonic time alone does not prove continuity"
+  },
+  "exposure_and_exit_details": {
+    "positions": [
+      {
+        "symbol": "ENA/USDT",
+        "side": "LONG",
+        "exchange": "binance",
+        "qty": 2926.2868346355312,
+        "entry": 0.17086,
+        "mark": 0.170685,
+        "stop": 0.16984447244820727,
+        "margin_usdt": 50.0,
+        "leverage": 10,
+        "entry_notional_usdt": 499.9853685658269,
+        "mark_notional_usdt": 499.47326836976566,
+        "signed_mark_notional_usdt": 499.47326836976566,
+        "mark_to_stop_pct": 0.49244371315155416,
+        "mark_to_stop_usdt": 2.459624708959501,
+        "stop_pnl_from_entry_ex_fees_usdt": -2.9717249050207437,
+        "entry_loss_at_current_stop_ex_fees_usdt": 2.9717249050207437
+      }
+    ],
+    "long_count": 1,
+    "short_count": 0,
+    "gross_mark_notional_usdt": 499.47326836976566,
+    "net_signed_mark_notional_usdt": 499.47326836976566,
+    "gross_exposure_over_equity": 0.49977918184246156,
+    "total_margin_usdt": 50.0,
+    "aggregate_mark_to_stop_usdt": 2.459624708959501,
+    "aggregate_entry_loss_at_current_stops_ex_fees_usdt": 2.9717249050207437,
+    "exits": [],
+    "risk_limitations": "Quote snapshot, not guaranteed max loss; excludes gap/slippage/future fees/correlation. Stopped PAPER positions are not monitored."
+  },
+  "actual_monotonic_total_sec": 720.7059200639997,
+  "active_monotonic_duration_estimate_sec": 600.7055927429974,
+  "active_estimate_definition": "final elapsed monotonic minus recorded drain; includes final reporting/cleanup overhead, not exact active-exit timestamp",
+  "prior_v944_pending_followup_file": "reports/v945/previous_run_pending_followup.json",
+  "no_old_db_reused": true,
+  "natural_full_cycle_current_run": false
+}

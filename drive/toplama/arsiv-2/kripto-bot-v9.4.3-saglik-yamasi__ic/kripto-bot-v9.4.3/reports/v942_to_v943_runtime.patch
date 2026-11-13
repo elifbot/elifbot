@@ -1,0 +1,3663 @@
+diff --git b/src/health_reporting.py b/src/health_reporting.py
+new file mode 100644
+index 0000000..0dd7e22
+--- /dev/null
++++ b/src/health_reporting.py
+@@ -0,0 +1,104 @@
++"""Read-only health policy. Never authorizes a financial operation or recovery.
++
++Only this StateStore instance's process-local, newly prepared intents have a
++bounded 15s reporting grace. The production ledger is NEVER edited by this view.
++Strict recovery validation is run unchanged on an in-memory SQLite snapshot;
++only eligible intents are hidden in that disposable copy, to validate the
++committed account/fees/funding/positions independently of outstanding work.
++"""
++from __future__ import annotations
++from contextlib import contextmanager
++import math
++import os
++import sqlite3
++import time
++
++PENDING_HEALTH_GRACE_SEC = 15.0
++TABLES = ('paper_intents','paper_close_intents','paper_funding_intents','paper_layer_intents')
++
++
++def ledger_health_snapshot(store, *, now_s=None, now_monotonic=None):
++    now = time.time() if now_s is None else float(now_s)
++    mono = time.monotonic() if now_monotonic is None else float(now_monotonic)
++    snapshot = sqlite3.connect(':memory:')
++    snapshot.row_factory = sqlite3.Row
++    try:
++        # No production transaction, row, timestamp, status, or account is changed.
++        source = sqlite3.connect(store.db_path.resolve().as_uri()+'?mode=ro', uri=True)
++        try:
++            source.backup(snapshot)
++        finally:
++            source.close()
++        positions = sorted(row['symbol'] for row in snapshot.execute('SELECT symbol FROM open_positions'))
++        tokens = getattr(store, '_health_pending_tokens', {})
++        pending=[]; errors=[]; current=set()
++        for table in TABLES:
++            for row in snapshot.execute('SELECT operation_id,created_at FROM '+table+" WHERE status='PENDING'").fetchall():
++                key=(table,row['operation_id']);current.add(key);token=tokens.get(key)
++                created=row['created_at']
++                valid=isinstance(created,(float,int)) and math.isfinite(created) and 0<created<=now+0.5
++                wall_age=max(0.,now-created) if valid else None
++                owned=bool(token and token[0]==os.getpid())
++                local_age=mono-token[1] if owned else None
++                time_ok=valid and owned and math.isfinite(local_age) and local_age>=0
++                age=max(wall_age,local_age) if time_ok else wall_age
++                eligible=bool(time_ok and age<PENDING_HEALTH_GRACE_SEC)
++                if not valid:reason='pending_timestamp_invalid:'+table
++                elif not owned:reason='pending_unowned_or_restarted:'+table
++                elif not time_ok:reason='pending_clock_invalid:'+table
++                elif not eligible:reason=f'pending_timeout:{table}(age={age:.3f}s,limit=15s)'
++                else:reason='pending_in_flight:'+table
++                pending.append({'table':table,'operation_id':row['operation_id'],'owned_by_this_process':owned,
++                                'age_sec':age,'health_grace_eligible':eligible,'reason':reason})
++                if eligible:
++                    # This DELETE affects only :memory:, never the production database.
++                    snapshot.execute('DELETE FROM '+table+' WHERE operation_id=?',(row['operation_id'],))
++                else:errors.append(reason)
++        # Bound observation memory; never delete durable journals or recovery locks.
++        for key in list(tokens):
++            if key not in current:tokens.pop(key,None)
++        from .state_store import StateStore
++        check=StateStore.__new__(StateStore)
++        @contextmanager
++        def use_snapshot():
++            yield snapshot
++        check._conn=use_snapshot
++        committed=check.verify_paper_ledger_integrity()  # unchanged fail-closed verifier
++        ok=bool(committed.get('ok',False)) and not errors
++        reason=errors[0] if errors else (('pending_in_flight' if pending else committed.get('reason','ok')) if ok else committed.get('reason','unknown_ledger_failure'))
++        return {'ok':ok,'reconciled':ok and not pending,'status':('IN_FLIGHT' if pending else 'RECONCILED') if ok else 'DEGRADED',
++                'reason':reason,'pending_operations':pending,'db_positions':positions,'committed_ledger_check':committed,
++                'pending_health_grace_sec':PENDING_HEALTH_GRACE_SEC}
++    except Exception as exc:
++        return {'ok':False,'reconciled':False,'status':'DEGRADED','reason':'ledger_health_exception:'+type(exc).__name__,
++                'pending_operations':[],'db_positions':[]}
++    finally:
++        snapshot.close()
++
++
++def operational_health_snapshot(engine, *, max_feed_lag_sec=20.0):
++    now=time.time();lag=max(0.,now-float(engine._last_feed_ts or now))
++    mem=set(getattr(engine.executor,'positions',{}));store=getattr(engine.executor,'state_store',None)
++    ledger={'ok':True,'reconciled':True,'status':'NOT_CONFIGURED','reason':'no_store','pending_operations':[],'db_positions':sorted(mem)}
++    if store is not None and hasattr(store,'load_positions'):
++        try:
++            if hasattr(store,'paper_ledger_health_snapshot'):
++                ledger=store.paper_ledger_health_snapshot()
++            else:
++                strict=store.verify_paper_ledger_integrity() if hasattr(store,'verify_paper_ledger_integrity') else {'ok':True}
++                ledger={'ok':bool(strict.get('ok',False)),'reconciled':bool(strict.get('ok',False)),
++                        'status':'RECONCILED' if strict.get('ok') else 'DEGRADED','reason':strict.get('reason','ok'),
++                        'pending_operations':[],'db_positions':sorted((store.load_positions() or {}).keys())}
++        except Exception as exc:
++            ledger={**ledger,'ok':False,'reconciled':False,'status':'DEGRADED','reason':'ledger_health_exception:'+type(exc).__name__}
++    db=set(ledger['db_positions']);alarms=[];warnings=[]
++    if lag>max_feed_lag_sec:alarms.append(f'FEED_LATENCY_ALARM({lag:.1f}s>{max_feed_lag_sec:.1f}s)')
++    if mem!=db:alarms.append(f'POSITION_SET_MISMATCH(mem={sorted(mem)},db={sorted(db)})')
++    if not ledger['ok']:alarms.append('LEDGER_INTEGRITY_ERROR(reason='+str(ledger['reason'])+')')
++    if ledger['ok'] and ledger['status']=='IN_FLIGHT':warnings.append('PENDING_IN_FLIGHT_WITHIN_15S_HEALTH_GRACE')
++    cb=getattr(engine.executor,'circuit_breaker',None)
++    if cb is not None and getattr(cb,'tripped',False):alarms.append(f'CIRCUIT_BREAKER_TRIPPED({getattr(cb,"reason","")})')
++    return {'healthy':not alarms,'feed_lag_sec':round(lag,2),'ledger_reconciled':bool(mem==db and ledger['reconciled']),
++            'ledger_status':ledger['status'] if mem==db else 'DEGRADED','ledger_reason':ledger['reason'],
++            'committed_ledger_valid':bool(ledger['ok']),'pending_operations':ledger['pending_operations'],
++            'memory_open_count':len(mem),'sqlite_open_count':len(db),'alarms':alarms,'warnings':warnings}
+diff --git a/src/state_store.py b/src/state_store.py
+index d3d27cd..67f7993 100644
+--- a/src/state_store.py
++++ b/src/state_store.py
+@@ -48,6 +48,7 @@ class StateStore:
+         self.gc_runs: int = 0
+         self.archived_rows: int = 0
+         self.last_gc_ts: float = 0.0
++        self._health_pending_tokens = {}  # process-local observation only, never recovery authority
+         self._init_db()
+ 
+     @contextmanager
+@@ -405,6 +406,11 @@ class StateStore:
+             if cur.get("owner_id") == owner_id:
+                 conn.execute("DELETE FROM bot_meta WHERE key='bot_writer_lease'")
+ 
++    def paper_ledger_health_snapshot(self) -> dict:
++        """Read-only health view; strict recovery validator remains unchanged."""
++        from .health_reporting import ledger_health_snapshot
++        return ledger_health_snapshot(self)
++
+     def verify_paper_ledger_integrity(self) -> dict:
+         """Çift taraflı muhasebe (double-entry) denklemi + günlük + meta bütünlüğünü doğrular."""
+         with self._conn() as conn:
+@@ -707,6 +713,8 @@ class StateStore:
+             conn.execute("INSERT INTO paper_intents VALUES (?,?,?, 'PENDING',?)",
+                          (operation_id, str(request['symbol']), payload, time.time()))
+ 
++        self._health_pending_tokens[("paper_intents", operation_id)] = (os.getpid(), time.monotonic())
++
+     def commit_paper_open(self, operation_id: str, pos: Position, account: dict,
+                           position_meta: dict, trade_plans: dict, funding_clock: dict) -> None:
+         """Paper açılışında pozisyon, hesap, ek meta ve PENDING->OPEN tek COMMIT.
+@@ -788,6 +796,8 @@ class StateStore:
+             conn.execute("INSERT INTO paper_close_intents VALUES (?,?,?,'PENDING',?)",
+                          (operation_id,symbol,payload,time.time()))
+ 
++        self._health_pending_tokens[("paper_close_intents", operation_id)] = (os.getpid(), time.monotonic())
++
+     def commit_paper_close(self, operation_id: str, symbol: str, original_qty: float,
+                            remaining: Position | None, account: dict, position_meta: dict,
+                            trade_plans: dict, funding_clock: dict, trade: dict) -> None:
+@@ -867,6 +877,8 @@ class StateStore:
+             conn.execute("INSERT INTO paper_funding_intents VALUES (?,?,?,'PENDING',?)",
+                          (operation_id,symbol,payload,time.time()))
+ 
++        self._health_pending_tokens[("paper_funding_intents", operation_id)] = (os.getpid(), time.monotonic())
++
+     def commit_paper_funding(self, operation_id: str, symbol: str, account: dict,
+                              position_meta: dict, funding_clock: dict) -> None:
+         """One transaction for paper funding balance, per-position meta, clock and intent."""
+@@ -917,6 +929,8 @@ class StateStore:
+                 raise RuntimeError('layer position changed or not persisted')
+             conn.execute("INSERT INTO paper_layer_intents VALUES (?,?,?,'PENDING',?)",(operation_id,symbol,payload,time.time()))
+ 
++        self._health_pending_tokens[("paper_layer_intents", operation_id)] = (os.getpid(), time.monotonic())
++
+     def commit_paper_layer(self, operation_id: str, pos: Position, fill_qty: float, fill_fee: float,
+                            account: dict, position_meta: dict, trade_plans: dict, funding_clock: dict) -> None:
+         payloads={key:json.dumps(value,ensure_ascii=False,default=str,allow_nan=False)
+diff --git a/src/unified_engine.py b/src/unified_engine.py
+index cedf0a9..45dfb98 100644
+--- a/src/unified_engine.py
++++ b/src/unified_engine.py
+@@ -1271,42 +1271,9 @@ class UnifiedTradingEngine:
+         return updated
+ 
+     def operational_health_snapshot(self, *, max_feed_lag_sec: float = 20.0) -> dict[str, Any]:
+-        """Veri gecikmesi (feed latency) ve SQLite defter / bellek mutabakat alarmlarını denetler (Denetim 3.9)."""
+-        now_s = time.time()
+-        feed_lag_sec = max(0.0, now_s - float(self._last_feed_ts or now_s))
+-        mem_positions = set(getattr(self.executor, "positions", {}).keys())
+-        store = getattr(self.executor, "state_store", None)
+-        db_positions: set[str] = set()
+-        reconciled = True
+-        if store is not None and hasattr(store, "load_positions"):
+-            try:
+-                db_positions = set((store.load_positions() or {}).keys())
+-                ledger_ok = True
+-                if hasattr(store, "verify_paper_ledger_integrity"):
+-                    ledger_ok = bool(store.verify_paper_ledger_integrity().get("ok", True))
+-                reconciled = (mem_positions == db_positions) and ledger_ok
+-            except Exception:
+-                reconciled = False
+-
+-        alarms: list[str] = []
+-        if feed_lag_sec > max_feed_lag_sec:
+-            alarms.append(f"FEED_LATENCY_ALARM({feed_lag_sec:.1f}s>{max_feed_lag_sec:.1f}s)")
+-        if not reconciled:
+-            alarms.append(
+-                f"LEDGER_RECONCILIATION_MISMATCH(mem={sorted(mem_positions)},db={sorted(db_positions)})"
+-            )
+-        cb = getattr(self.executor, "circuit_breaker", None)
+-        if cb is not None and getattr(cb, "tripped", False):
+-            alarms.append(f"CIRCUIT_BREAKER_TRIPPED({getattr(cb, 'reason', '')})")
+-
+-        return {
+-            "healthy": len(alarms) == 0,
+-            "feed_lag_sec": round(feed_lag_sec, 2),
+-            "ledger_reconciled": reconciled,
+-            "memory_open_count": len(mem_positions),
+-            "sqlite_open_count": len(db_positions),
+-            "alarms": alarms,
+-        }
++        """Health-only view; no trading/recovery policy modification."""
++        from .health_reporting import operational_health_snapshot
++        return operational_health_snapshot(self, max_feed_lag_sec=max_feed_lag_sec)
+ 
+     def analytics_snapshot(self) -> dict[str, Any]:
+         """Brüt/Net edge ayrımı, Maker kuyruk istatistikleri, 10-Ajan diyalogları ve Karşı-Olgu özeti."""
+diff --git a/src/live_runner.py b/src/live_runner.py
+index 0d9dab5..5534181 100644
+--- a/src/live_runner.py
++++ b/src/live_runner.py
+@@ -226,7 +226,7 @@ async function refresh(){
+ 
+     const opHealth = (s.analytics && s.analytics.operational_health) || {healthy:false, alarms:['ANALYTICS_YOK']};
+     const hp = document.getElementById('healthPill');
+-    hp.textContent = opHealth.healthy ? `MUTABAKAT: TAM (Lag ${opHealth.feed_lag_sec}s)` : `ALARM: ${opHealth.alarms.join(',')}`;
++    hp.textContent = opHealth.healthy ? `${opHealth.ledger_status === "IN_FLIGHT" ? "İŞLEM BEKLİYOR" : "MUTABAKAT: TAM"} (Lag ${opHealth.feed_lag_sec}s)` : `ALARM: ${opHealth.alarms.join(',')}`;
+     hp.style.color = opHealth.healthy ? '#34d399' : '#ef4444';
+ 
+     document.getElementById('eq').textContent = '$' + s.equity.toFixed(4);
+@@ -599,7 +599,7 @@ class DualVenueLiveRunner:
+         self.binance_basis_offset: dict[str, float] = {}
+ 
+         self.venue_stats: dict[str, dict[str, Any]] = {
+-            "binance": {"ticks": 0, "bbo_updates": 0, "endpoint": "init", "last_ts": 0.0, "last_bbo_ts": 0.0, "last_trade_ts": 0.0, "errors": 0, "errors_aggTrade": 0, "errors_bookTicker": 0},
++            "binance": {"ticks": 0, "bbo_updates": 0, "last_ts": 0.0, "last_bbo_ts": 0.0, "last_trade_ts": 0.0, "errors": 0, "errors_aggTrade": 0, "errors_bookTicker": 0, "endpoint_aggTrade": "init", "endpoint_bookTicker": "init", "endpoint": "see stream-specific endpoints"},
+             "okx": {"ticks": 0, "bbo_updates": 0, "endpoint": "wss://ws.okx.com/ws/v5/public", "last_ts": 0.0, "last_bbo_ts": 0.0, "last_trade_ts": 0.0, "errors": 0},
+         }
+         self.start_ts = time.time()
+@@ -1052,7 +1052,7 @@ class DualVenueLiveRunner:
+                 async with session.ws_connect(
+                     ws_url, heartbeat=15.0, timeout=conn_timeout, receive_timeout=6.0
+                 ) as ws:
+-                    self.venue_stats["binance"]["endpoint"] = short_ep
++                    self.venue_stats["binance"][f"endpoint_{label}"] = short_ep
+                     log.info("BINANCE WebSocket (%s) bağlandı: %s", label, short_ep)
+                     async for msg in ws:
+                         if self.stop_Flag:
+@@ -1576,6 +1576,10 @@ class DualVenueLiveRunner:
+                     "binance_healthy": st["venues"]["binance"]["healthy"],
+                     "okx_healthy": st["venues"]["okx"]["healthy"],
+                     "ledger_reconciled": op["ledger_reconciled"],
++                    "ledger_status": op.get("ledger_status", "UNKNOWN"),
++                    "ledger_reason": op.get("ledger_reason"),
++                    "pending_operations": op.get("pending_operations", []),
++                    "warnings": op.get("warnings", []),
+                     "feed_lag_sec": op["feed_lag_sec"],
+                     "alarms": op["alarms"],
+                     "open_positions": len(st["open_positions"]),
+diff --git a/configs/v9-canonical-production.json b/configs/v9-canonical-production.json
+index 87948a1..0fc9508 100644
+--- a/configs/v9-canonical-production.json
++++ b/configs/v9-canonical-production.json
+@@ -1,5 +1,5 @@
+ {
+-  "version": "9.4.2",
++  "version": "9.4.3",
+   "name": "kripto-bot-v9.4-shared-core-adaptive-risk",
+   "canonical_engine": "src.unified_engine.UnifiedTradingEngine",
+   "sert_risk_tavanlari": {
+diff --git a/pyproject.toml b/pyproject.toml
+index 23c5349..cea8452 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -1,7 +1,7 @@
+ [project]
+ name = "kripto-bot"
+-version = "9.4.2"
+-description = "Kripto Bot v9.4 — Tam Saf Kripto Vadeli Evren, Pasif Maker Kuyruk, 10-Ajan Çapraz Teftiş ve OOS Doğrulama Motoru"
++version = "9.4.3"
++description = "Kripto Bot v9.4.3 — PAPER health grace and stream-specific telemetry"
+ requires-python = ">=3.10"
+ 
+ [tool.ruff]
+diff --git b/tests/test_v943_health_reporting.py b/tests/test_v943_health_reporting.py
+new file mode 100644
+index 0000000..00302b9
+--- /dev/null
++++ b/tests/test_v943_health_reporting.py
+@@ -0,0 +1,182 @@
++import json,os,time,sqlite3
++from pathlib import Path
++from types import SimpleNamespace
++import pytest
++from src.state_store import StateStore
++from src.risk import Position
++from src.health_reporting import ledger_health_snapshot,operational_health_snapshot,TABLES
++
++
++def seed(store):
++    pos=Position('BTC/USDT','LONG',100,1,99,leverage=10,margin_usdt=10,exchange='binance')
++    store.prepare_paper_open('seed',{'symbol':pos.symbol})
++    store.commit_paper_open('seed',pos,{'balance':999.9,'start_balance':1000.,'total_fees_usdt':.1,'total_funding_usdt':0.},
++        {pos.symbol:{'position_id':'seed','entry_fee_usdt':.1,'funding_usdt':0.}}, {}, {pos.symbol:time.time()})
++    assert store.verify_paper_ledger_integrity()['ok']
++    return pos
++
++
++def prepare(store,kind):
++    if kind=='paper_intents':store.prepare_paper_open('op',{'symbol':'ETH/USDT'})
++    elif kind=='paper_close_intents':store.prepare_paper_close('op','BTC/USDT',1)
++    elif kind=='paper_funding_intents':store.prepare_paper_funding('op','BTC/USDT',{'delta':.1,'old_balance':999.9,'old_funding':0,'old_clock':1,'new_clock':2,'qty':1})
++    else:store.prepare_paper_layer('op','BTC/USDT',{'original_qty':1,'requested_qty':1,'old_balance':999.9,'old_fee':.1})
++
++
++@pytest.mark.parametrize('kind',TABLES)
++def test_all_prepared_intents_registered_and_strict_recovery_unchanged(tmp_path,kind):
++    st=StateStore(tmp_path/'s.db');seed(st);prepare(st,kind)
++    assert st._health_pending_tokens[(kind,'op')][0]==os.getpid()
++    assert st.verify_paper_ledger_integrity()=={'ok':False,'reason':'pending_intent:'+kind}
++    before=None
++    with st._conn() as c:before=list(c.iterdump())
++    view=st.paper_ledger_health_snapshot()
++    assert view['ok'] and view['status']=='IN_FLIGHT' and not view['reconciled']
++    with st._conn() as c:assert list(c.iterdump())==before
++    assert not st.verify_paper_ledger_integrity()['ok']
++
++
++@pytest.mark.parametrize('kind',TABLES)
++@pytest.mark.parametrize('age,ok',[(0,True),(14.999,True),(15.,False),(16.,False)])
++def test_fifteen_second_boundary_for_all_journals(tmp_path,kind,age,ok):
++    st=StateStore(tmp_path/'s.db');seed(st);prepare(st,kind)
++    with st._conn() as c:c.execute('UPDATE '+kind+' SET created_at=1000 WHERE operation_id=\'op\'')
++    st._health_pending_tokens[(kind,'op')]=(os.getpid(),500.)
++    view=ledger_health_snapshot(st,now_s=1000+age,now_monotonic=500+age)
++    assert view['ok']==ok
++    if not ok:assert view['reason'].startswith('pending_timeout:')
++
++
++@pytest.mark.parametrize('kind',TABLES)
++def test_restart_or_foreign_store_cannot_claim_fresh_pending(tmp_path,kind):
++    st=StateStore(tmp_path/'s.db');seed(st);prepare(st,kind)
++    restarted=StateStore(tmp_path/'s.db')
++    assert not restarted.verify_paper_ledger_integrity()['ok']
++    view=restarted.paper_ledger_health_snapshot()
++    assert not view['ok'] and view['reason']=='pending_unowned_or_restarted:'+kind
++
++
++def test_first_ever_order_pending_has_valid_empty_committed_baseline(tmp_path):
++    st=StateStore(tmp_path/'s.db');st.prepare_paper_open('op',{'symbol':'BTC/USDT'})
++    assert st.paper_ledger_health_snapshot()['ok']
++    assert not st.verify_paper_ledger_integrity()['ok']
++    st.cancel_unfilled_paper_open('op','BTC/USDT')
++    assert st.paper_ledger_health_snapshot()['status']=='RECONCILED'
++    assert not st._health_pending_tokens
++
++
++@pytest.mark.parametrize('corruption,reason', [('balance','cash_conservation_mismatch'),('total_fees_usdt','fee_mismatch'),('total_funding_usdt','funding_mismatch')])
++def test_real_account_corruption_is_not_hidden_by_young_pending(tmp_path,corruption,reason):
++    st=StateStore(tmp_path/'s.db');seed(st);prepare(st,'paper_close_intents')
++    with st._conn() as c:
++        acc=json.loads(c.execute("SELECT value FROM bot_meta WHERE key='paper_account'").fetchone()[0]);acc[corruption]+=1
++        c.execute("UPDATE bot_meta SET value=? WHERE key='paper_account'",(json.dumps(acc),))
++    view=st.paper_ledger_health_snapshot()
++    assert not view['ok'] and reason in view['reason']
++    engine=SimpleNamespace(_last_feed_ts=time.time(),executor=SimpleNamespace(positions={'BTC/USDT':None},state_store=st,circuit_breaker=None))
++    op=operational_health_snapshot(engine)
++    assert not op['healthy'] and any(reason in x for x in op['alarms'])
++    assert not any('POSITION_SET_MISMATCH' in x for x in op['alarms'])
++
++
++def test_true_position_set_mismatch_is_never_tolerated(tmp_path):
++    st=StateStore(tmp_path/'s.db');seed(st);prepare(st,'paper_close_intents')
++    e=SimpleNamespace(_last_feed_ts=time.time(),executor=SimpleNamespace(positions={},state_store=st,circuit_breaker=None))
++    op=operational_health_snapshot(e)
++    assert not op['healthy'] and any(x.startswith('POSITION_SET_MISMATCH') for x in op['alarms'])
++
++
++def test_clock_rollback_or_other_pid_does_not_extend_grace(tmp_path):
++    st=StateStore(tmp_path/'s.db');st.prepare_paper_open('op',{'symbol':'BTC/USDT'})
++    st._health_pending_tokens[('paper_intents','op')]=(-1,time.monotonic())
++    assert not st.paper_ledger_health_snapshot()['ok']
++    st._health_pending_tokens[('paper_intents','op')]=(os.getpid(),time.monotonic()-16)
++    assert 'pending_timeout' in st.paper_ledger_health_snapshot()['reason']
++
++
++def test_unified_trading_and_strict_verifier_ast_unchanged():
++    import ast
++    root=Path(__file__).resolve().parents[1]
++    before=root/'reports/v943_reference_sources'
++    for name,excluded in [('src/unified_engine.py',{'operational_health_snapshot'}),('src/state_store.py',{'__init__','paper_ledger_health_snapshot','prepare_paper_open','prepare_paper_close','prepare_paper_funding','prepare_paper_layer'})]:
++        old=ast.parse((before/name).read_text());new=ast.parse((root/name).read_text())
++        olddefs={n.name:ast.dump(n,include_attributes=False) for cls in old.body if isinstance(cls,ast.ClassDef) for n in cls.body if isinstance(n,(ast.FunctionDef,ast.AsyncFunctionDef)) and n.name not in excluded}
++        newdefs={n.name:ast.dump(n,include_attributes=False) for cls in new.body if isinstance(cls,ast.ClassDef) for n in cls.body if isinstance(n,(ast.FunctionDef,ast.AsyncFunctionDef)) and n.name not in excluded}
++        assert olddefs==newdefs
++
++
++def test_binance_endpoint_fields_do_not_overwrite_each_other():
++    import asyncio
++    from src.live_runner import DualVenueLiveRunner
++    r=DualVenueLiveRunner.__new__(DualVenueLiveRunner)
++    r.symbols=['BTC/USDT'];r.binance_pure_symbols={'BTC/USDT'};r.cfg={'v94':{'enabled':True}}
++    r.venue_stats={'binance':{'endpoint':'see stream-specific endpoints'}}
++    class Ctx:
++        async def __aenter__(self):return self
++        async def __aexit__(self,*args):pass
++        def __aiter__(self):return self
++        async def __anext__(self):r.stop_Flag=True;raise StopAsyncIteration
++    class Session:
++        def ws_connect(self,url,**kwargs):return Ctx()
++    async def check():
++        for suffix in ('aggTrade','bookTicker'):
++            r.stop_Flag=False
++            await r._binance_single_ws(Session(),suffix,suffix)
++    asyncio.run(check())
++    assert r.venue_stats['binance']['endpoint_aggTrade']=='fstream.binance.com/market'
++    assert r.venue_stats['binance']['endpoint_bookTicker']=='fstream.binance.com/public'
++    assert r.venue_stats['binance']['endpoint']=='see stream-specific endpoints'
++
++
++def test_health_http_pending_grace_timeout_and_reason(tmp_path):
++    import asyncio,aiohttp
++    from src.live_runner import DualVenueLiveRunner
++    from src.config import load_config
++    async def check():
++        r=DualVenueLiveRunner(load_config(),port=0,report_prefix=str(tmp_path/'http_health'))
++        r.start_ts=time.time()-900
++        def fresh():
++            now=time.time();r.engine._last_feed_ts=now
++            for z in r.venue_stats.values():z.update(last_ts=now,last_bbo_ts=now,last_trade_ts=now,ticks=1,bbo_updates=1)
++        web=await r.start_web_server();port=web.addresses[0][1]
++        try:
++            async with aiohttp.ClientSession() as sess:
++                async def get():
++                    fresh()
++                    async with sess.get(f'http://127.0.0.1:{port}/health') as resp:return resp.status,await resp.json()
++                assert (await get())[0]==200
++                r.store.prepare_paper_open('op',{'symbol':'BTC/USDT'})
++                status,data=await get()
++                assert status==200 and data['ledger_status']=='IN_FLIGHT' and not data['ledger_reconciled']
++                assert not r.store.verify_paper_ledger_integrity()['ok']
++                r.store._health_pending_tokens[('paper_intents','op')]=(os.getpid(),time.monotonic()-16)
++                status,data=await get();assert status==503 and 'pending_timeout' in data['ledger_reason']
++                assert 'reason=pending_timeout' in data['alarms'][0]
++                r.store._health_pending_tokens.clear()
++                status,data=await get();assert status==503 and 'pending_unowned' in data['ledger_reason']
++                r.store.cancel_unfilled_paper_open('op','BTC/USDT')
++                status,data=await get();assert status==200 and data['ledger_status']=='RECONCILED'
++        finally:
++            await web.cleanup();await r.broker.close()
++    asyncio.run(check())
++
++
++def test_prepare_and_init_only_add_observation_registry_assignments():
++    import ast,copy
++    root=Path(__file__).resolve().parents[1]
++    old=ast.parse((root/'reports/v943_reference_sources/src/state_store.py').read_text())
++    new=ast.parse((root/'src/state_store.py').read_text())
++    def methods(tree):
++        cls=next(x for x in tree.body if isinstance(x,ast.ClassDef) and x.name=='StateStore')
++        return {x.name:x for x in cls.body if isinstance(x,ast.FunctionDef)}
++    before=methods(old);after=methods(new)
++    names=['__init__','prepare_paper_open','prepare_paper_close','prepare_paper_funding','prepare_paper_layer']
++    for name in names:
++        method=copy.deepcopy(after[name])
++        def observer(statement):
++            if not isinstance(statement,ast.Assign):return False
++            target=statement.targets[0]
++            if isinstance(target,ast.Subscript):target=target.value
++            return isinstance(target,ast.Attribute) and target.attr=='_health_pending_tokens'
++        method.body=[s for s in method.body if not observer(s)]
++        assert ast.dump(method,include_attributes=False)==ast.dump(before[name],include_attributes=False)
+diff --git a/tests/test_v92_upgrades.py b/tests/test_v92_upgrades.py
+index 4281d51..d920dcc 100644
+--- a/tests/test_v92_upgrades.py
++++ b/tests/test_v92_upgrades.py
+@@ -68,7 +68,7 @@ def _trend_ohlcv(n: int = 200, start: float = 100.0, drift: float = 0.28) -> pd.
+ def test_canonical_v92_vault_sizing_stop_and_cross_unlimited():
+     """$1,000 kasa, $50×10x=$500 büyüklük, -$40 (%80 marj = %8.0 fiyat) stop, Cross ve sınırsız işlem."""
+     cfg = load_config(CANONICAL_CONFIG_PATH)
+-    assert cfg["version"] == "9.4.2"
++    assert cfg["version"] == "9.4.3"
+     assert float(cfg["paper"]["bakiye"]) == 1000.0
+     assert cfg["risk"]["marj_modu"] == "cross"
+     assert cfg["boyutlandirma"]["mod"] == "sabit_usdt"
+@@ -414,7 +414,7 @@ def test_restart_open_position_recovery_and_operational_alarms(tmp_path: Path):
+         health_bad = eng2.operational_health_snapshot(max_feed_lag_sec=15.0)
+         assert health_bad["healthy"] is False
+         assert any("FEED_LATENCY_ALARM" in a for a in health_bad["alarms"])
+-        assert any("LEDGER_RECONCILIATION_MISMATCH" in a for a in health_bad["alarms"])
++        assert any("POSITION_SET_MISMATCH" in a for a in health_bad["alarms"])
+         await broker2.close()
+ 
+     asyncio.run(_run())
+diff --git a/tests/test_v9_greenfield_suite.py b/tests/test_v9_greenfield_suite.py
+index 3d305a1..067cf1d 100644
+--- a/tests/test_v9_greenfield_suite.py
++++ b/tests/test_v9_greenfield_suite.py
+@@ -26,7 +26,7 @@ def test_single_canonical_config_and_hard_risk_caps() -> None:
+     assert not (BASE_DIR / "config.yaml").exists()
+ 
+     cfg = load_config()
+-    assert cfg["version"] == "9.4.2"
++    assert cfg["version"] == "9.4.3"
+     assert cfg["genel"]["borsalar"] == ["binance", "okx"]
+     assert cfg["risk"]["gunluk_max_zarar_yuzde"] <= 25.0
+     assert cfg["risk"]["marj_zarar_orani"] <= 0.80
+diff --git b/scripts/check_v943_integrity.py b/scripts/check_v943_integrity.py
+new file mode 100644
+index 0000000..8f6dc9d
+--- /dev/null
++++ b/scripts/check_v943_integrity.py
+@@ -0,0 +1,10 @@
++"""Check this health-only release's own freeze; do not reuse v9.4.1 manifests."""
++from pathlib import Path
++import hashlib,json
++ROOT=Path(__file__).resolve().parents[1]
++def main():
++    m=json.loads((ROOT/'reports/v943_freeze_manifest.json').read_text())
++    bad=[n for n,h in m['source_sha256'].items() if not (ROOT/n).exists() or hashlib.sha256((ROOT/n).read_bytes()).hexdigest()!=h]
++    if bad:raise RuntimeError('v9.4.3 frozen source changed: '+str(bad))
++    print('v9.4.3 source integrity OK:',len(m['source_sha256']),'files')
++if __name__=='__main__':main()
+diff --git a/README.md b/README.md
+index 4893095..0b89e42 100644
+--- a/README.md
++++ b/README.md
+@@ -1,135 +1,62 @@
+-# Kripto Bot v9.4.2 — PAPER araştırma adayı (veri akışı onarımı; strateji aynı, gerçek para onayı YOK)
+-
+-> v9.4.2: Binance vadeli WS /public–/market ayrımına taşındı, sağlık bayrağı trade-tape'i ayrı denetler. Ayrıntı: `CHANGELOG_v9.4.2.md`. Canlı doğrulama henüz yapılmadı.
+-
+-**Gerçek para onayı yoktur. Araştırma kabul ölçütleri BAŞARISIZ: aday performans yükseltmesi olarak terfi ettirilmedi.**
+-
+-Tamamlanan baz tarihsel sonuç −354.98 USDT; ücret/kayma sıfır teşhisi bile −86.25 USDT.
+-15 dakikalık paper penceresi tamamlandı ama hiç dolum olmadı. Binance BBO verisi gelirken
+-aggTrade ticki 0, bağlantı hatası 133; genel `healthy=true` bu ayrımı yakalamadı.
+-Bu nedenle tam çift-venue trade-tape / emir-yürütme doğrulaması da geçilmiş sayılmaz.
+-Sorunlar donmuş dosyaları değiştirerek örtülmedi; bir sonraki ayrı sürümde onarım ve yeniden test gerekir.
+-Nihai rapor: `reports/v941_nihai_detayli_rapor.md`.
+-
+-Bu pakette iki ayrı iş vardır: v9.4'te kurulmuş ortak karar/risk altyapısı ve
+-v9.4.1'de eklenmiş ölçüm/raporlama düzeltmeleri. İyi test/muhasebe altyapısı,
+-stratejinin pozitif beklentiye sahip olduğu anlamına gelmez. Nihai karar için
+-`reports/v94_historical_validation.json` ve nihai Türkçe raporu okuyun.
++# Kripto Bot v9.4.3 — Sağlık ve telemetri yaması / PAPER
++
++**Gerçek para onayı yok. Strateji kârlılığı onaylanmış değildir.**
++
++Bu sürüm v9.4.2 üzerine yalnız sağlık/raporlama düzeltmesidir. Önceki sürümler ve
++e-postadan alınan özgün ZIP değiştirilmedi. Sabit $50 marj / 10x, strateji, risk,
++çıkış ve dolum/muhasebe kuralları korunur. Ek gözlem maliyetinin canlı zamanlamayı
++hiç etkilemediği iddia edilmez.
++
++## Değişiklikler
++
++1. Bu StateStore örneğinin başarılı prepare işleminden sonra tuttuğu süreç-içi
++   sahiplik kaydıyla eşleşen PENDING, **15 saniyeden kısa** ise HTTP sağlık
++   görünümünde `IN_FLIGHT` olur. `/health` 200 dönebilir, ama
++   `ledger_reconciled=false` kalır; defter kesinleşmiş gibi gösterilmez.
++2. **15 saniyede ve sonrasında** alarm/503. Önceki süreçten kalan, başka store veya
++   PID tarafından oluşturulmuş, saati bozuk veya sahibi bilinmeyen PENDING hemen 503.
++   Sağlık durumu gerçek bir nakit/ücret/funding/pozisyon hatasını tolere etmez.
++3. Üretim DBsi sağlık kontrolünde değiştirilmez. Tutarlı SQLite kopyası bellekte
++   doğrulanır; yalnız uygun genç niyetler geçici kopyada ayrıştırılır. Kopyadaki
++   kesinleşmiş hesap aynı sıkı doğrulayıcıdan geçmek zorundadır.
++4. `verify_paper_ledger_integrity()` ve recovery/yeniden başlatma yolu değiştirilmedi:
++   genç dahi olsa her PENDING burada hâlâ `ok=false` verir. Alım-satım kilidi açılmaz.
++5. Alarm artık `LEDGER_INTEGRITY_ERROR(reason=...)` veya gerçek pozisyon kümesi
++   farkında `POSITION_SET_MISMATCH` gösterir. PENDING uyarısı ve yaşları ayrıca görünür.
++6. Binance `endpoint_aggTrade` ve `endpoint_bookTicker` ayrı tutulur; genel `endpoint`
++   artık tek bir kanalın adresiymiş gibi sunulmaz.
+ 
+ ## Çalıştırma
+ 
+-Python 3.10+:
+-
+ ```bash
+-python -m venv .venv
+-# Linux/macOS:
+-source .venv/bin/activate
+-# Windows: .venv\Scripts\activate
+-python -m pip install -r requirements.txt
++python -m pip install -r requirements-tested.txt
+ python -m pytest -q
+-python -m scripts.run_v941_paper --duration-sec 900 --max-drain-sec 180 --port 8080 --report-prefix yeni_paper_oturumu
++python -m scripts.check_v943_integrity
++python -m src.live_runner --config configs/v9-canonical-production.json --duration-sec 900 --max-drain-sec 180 --port 8080 --report-prefix yeni_v943_paper
+ ```
+ 
+-Panel `http://localhost:8080`, durum `/api/state`, sağlık `/health`.
+-Paper testinde gerçek borsa emri gönderilmez. Piyasa verileri için internet gerekir.
+-Aynı rapor önekini kullanmak önceki oturum defterini sıfırlar; yeni testte yeni önek seçin.
+-Kapanış beklemesi yaklaşık 180 saniyedir; olay döngüsü nedeniyle birkaç saniye aşılabilir.
+-Kalan açık pozisyonlar kapanmış kâr gibi sayılmaz. Süre sonundaki açık risk, gerçek
+-para oturumunda korumasız bırakılacak bir durum gibi yorumlanmamalıdır; bu bir paper kayıt testidir.
+-
+-`python -m src.live_runner` aynı donmuş işlem çekirdeğini çalıştırır, ancak yeni yönlü
+-cohort ölçümü için yukarıdaki `scripts.run_v941_paper` sarmalayıcısı kullanılmalıdır.
+-
+-## Korunan sınırlar ve v9.4 değişiklikleri
+-
+-- Sabit $50 marj ve 10x; $1,000 kasa. Dinamik kaldıraç, kazanana ekleme ve fırsat takası kapalı.
+-- %8 fiyat / yaklaşık -$40 brüt acil tavan korunur; günlük işlem yönetimi daha yakın ATR taktik stopla başlar.
+-- Taktik stop 1.8 ATR, min %0.35, max %1.20. Aday seçimiyle dondurulan ayarlar tek üretim
+-  konfigürasyonundadır: `configs/v9-canonical-production.json`.
+-- 1.5R sonrasında 2 ATR takip; küçük her fiyat fitilinin %65–80'ini kilitleyen dolar eşiği yerine oynaklık ölçeği.
+-- Açık stop-bazlı risk toplamı özsermayenin %2, tek yönde %1.5 sınırı. Gap ve likidite riski bu sınırı aşabilir.
+-- Aynı kapalı-mum karar çekirdeği canlı ve replay tarafından kullanılır. Gerçek maker/tick dolumları aynı olmak zorunda değildir.
+-- Kapanmış mum ticker ile değiştirilmez; live mark ayrı taşınır. Yalnız eksiksiz kapanmış HTF kovaları kullanılır.
+-- Binance quote-taker hacmi gerçek veri olarak tutulur. OKX nötr taker vekili gerçek sayılmaz; veri eksikse giriş reddedilir.
+-- Spot+perpAnchor fiyatları v9.4 futures yürütme BBO'su olarak kullanılmaz; gerçek futures WS/REST gerekir.
+-- Backtest tek $1,000 cüzdan ve ortak zaman çizgisidir. t kapanışı kararı t+1 açılışında işlenir;
+-  giriş barı stopu atlanmaz. Sonradan oluşan intrabar çıkış geliri önceki açılışta harcanmaz.
+-- Önceki stop önce test edilir; yeni MFE ile aynı mumda geriye dönük stop yaratılmaz.
+-
+-## v9.4.1: yalnız ölçüm/raporlama düzeltmesi
+-
+-v9.4.0 kesintili koşusu başarılı test sayılmadı. Arşivi `reports/v94_0_interrupted/` altında.
+-`reports/v94_freeze_manifest.json` içindeki `source_equality_proof`, 13 strateji/risk/çıkış/
+-yönlendirme/replay dosyasının v9.4.0 donma kaydıyla byte-byte aynı SHA-256'ya sahip olduğunu gösterir.
+-Sürüm metadatası 9.4.1'dir; API'de işlem kodu temeli 9.4.0 olarak ayrıca belirtilir.
+-
+-Ölçüm sarmalayıcısı orijinal kararın dönüş nesnesini değiştirmez. Ayrı gözlemci ve rapor
+-hesapları çalışır; ek CPU zamanının canlı zamanlamayı hiç etkilemediği iddia edilmez.
+-
+-Yeni raporlama:
+-
+-- Ham kapı tekrar sayısı ≠ tekilleştirilmiş cohort ≠ olgunlaşmış 15m gözlem sayısı.
+-- LONG/SHORT, 5m/15m olgunlaşmış, bekleyen ve gözlem penceresi kaçırılmış sayılar ayrıdır.
+-- Venue-specific cohort yalnız aynı venue fiyatlarıyla güncellenir. İlk 30s içinde fiyat gelmezse
+-  çok geç fiyat 15m etiketiyle doldurulmaz.
+-- Brüt ileri mark getirisi, varsayımsal maliyet senaryosu ve gerçekleşen işlem neti ayrı kavramlardır.
+-- %0.035/yön komisyon = 7bps round trip. 8bps/yön kaymayla 23bps; spread/funding bunun dışındadır.
+-  Referans 1.5bps spread eklenirse 24.5bps maliyet senaryosu olur.
+-- MAE/MFE ve başlangıç taktik / %8 acil bariyer temasları kaydedilir. Gözlenmiş fiyat yolu veya
+-  OHLC bariyer teması gerçek maker dolumu/dinamik stop işleminin tam simülasyonu değildir.
+-- Kapı-yön başına en az 50 olgunlaşmış gözlem, 3 sembol, 10 UTC günü yoksa güven aralığı verilmez.
+-- İki günlük hareketli blok bootstrap, bütün sembolleri UTC gününde birlikte kümeler. Üç kapı × iki
+-  yön için altı nominal aile karşılaştırması düzeltilir. Pozitif fırsat maliyeti bayrağı için 8bps/yön
+-  maliyet sonrasında düzeltilmiş alt sınır +1bps üstünde olmalıdır. Bu otomatik kapı kaldırma kararı değildir.
+-
+-Başarı ölçütleri testten önce `configs/v941_validation_criteria.json` ve donma kaydına yazılmıştır.
+-15 dakikalık canlı test 10 UTC günü koşulunu karşılayamaz; bu testten güvenli gate etkisi sonucu çıkarılmaz.
+-
+-## Doğrulama tasarımı ve dürüst sınırlar
+-
+-Önceki v9.3 1500-bar görüntüsü artık geliştirme verisidir; eski holdout yeniden OOS diye sunulmaz.
+-Yalnız iki önceden belirlenen ATR takip adayı denendi; ikisi de negatifti. Daha az kaybeden A,
+-üretime onay değil, test edilecek araştırma adayı olarak seçildi.
+-
+-Eski veriyle örtüşmeyen 4,800 bar/sembol tarihsel blok mühürlendi; ilk 600 bar ısınma,
+-son 4,200 bar testtir. Sekiz sembol, ortak saat, tek cüzdan. Bu blok geliştirme tarihinden
+-ÖNCE olduğundan tam bağımsız prospektif/kronolojik ileri-OOS veya rolling walk-forward değildir.
+-Başarı ölçütleri v9.3/kullanıcı analizinden etkilenmiştir; bağımsız doğrulayıcı deney iddiası yoktur.
+-
+-Dondurulmuş koşu:
+-
+-```bash
+-python -m scripts.validate_v94
+-```
+-
+-Tamamlanmış rapor varsa yeniden çalıştırmayı reddeder; sonucu okuyun. Kesintili aynı donma
+-kaydı varsa tamamlanmış kollar checkpoint'ten alınabilir. Donmuş kaynak/veri değişirse durur.
+-Parametreler sonuçlara göre yeniden seçilmez. Yeni deney için yeni veri ve ayrı kayıt gerekir.
+-
+-Karşılaştırma eski v9.3 kurallarını yeni ortak saat/cüzdanda çalıştırır; eski teslimin birebir
+-tekrarı değildir. Yeni risk bütçesi ve giriş/çıkış birlikte değiştiğinden fark saf alfa katkısı sayılamaz.
+-
+-Dört operasyonel ablasyon, 8/15bps-yön kayma, ek-bar gecikmesi ve fee/slippage sıfırlama
+-teşhis kolu raporlanır. Sıfır fee/kayma kolunda funding ve karar içindeki maliyet başlığı kapısı
+-kalır. MARKET ablasyonu yeni başka bir filtre eklemez. Upstream trend/flow özellikleri ortak
+-olduğundan bu kollar tam ortogonal, bağımsız nedensel deneyler değildir.
+-
+-Funding gerçek tarihsel oranlarla, settlement anındaki 5m açılış-mark yaklaşımıyla uygulanır.
+-Paper muhasebesinin miras likidasyon varsayımı marjı aşan boşluk kayıplarını sınırlar; gerçek
+-cross-margin kuyruk kaybı daha büyük olabilir. Sabit sembol seçimi survivorship yanlılığı taşır.
+-
+-10 bağımsız LLM çalıştırıldığı iddia edilmez. On uzmanlık açısından inceleme raporu vardır;
+-eski deterministik kural konseyleri v9.4 etkin karar yolunun oylayıcıları değildir.
+-
+-## Kanıt dosyaları
+-
+-- `reports/v94_on_uzman_inceleme_ve_kararlar.md`
+-- `reports/v941_user_tables_verified.json`: altı kapının v9.3 kayıtlarıyla doğrulaması; eski olgunlaşmış n bilinmiyor.
+-- `reports/v94_development_results.json`
+-- `reports/v94_freeze_manifest.json`, `v94_sealed_data_metadata.json`, `v94_sealed_historical_holdout.json.gz`
+-- `reports/v94_historical_validation.json`, `v941_gate_cohort_audit.json`
+-- `reports/v94_canli_15dk_summary.json`, karar/sağlık günlükleri
+-- `reports/v94_pytest.txt`
+-- Nihai Türkçe rapor ve `RELEASE_STATUS.json`
+-
+-**Negatif beklenti veya önceden belirlenen ölçütlerden başarısızlık varsa gerçek para için terfi yoktur.**
++Config `genel.mod=paper` olmalıdır. Yeni önek yeni kayıt oluşturur; aynı önek eski
++kaydın üstüne yazar. Piyasa verileri için internet gerekir. Panel `/`, JSON
++`/api/state`, sağlık `/health`. Docker dosyaları mevcuttur, ancak bu yamanın test
++raporu hangi ortamın kullanıldığını ayrıca belirtir.
++
++## Kanıtlar ve sınırlar
++
++- `reports/v943_pytest.txt`: tam regresyon sonucu. İlk denemede eski alarm metnine
++  bağlı bir test başarısız oldu; beklenti yeni ve daha doğru POSITION_SET_MISMATCH
++  sözleşmesine güncellendi. İlk çıktı da arşivlendi, hata gizlenmedi.
++- `reports/v943_freeze_manifest.json`: yeni yama için test öncesi kaynak hashleri.
++- `reports/v943_reference_sources/`: önceki StateStore/UnifiedTradingEngine kaynakları;
++  finansal fonksiyonların AST ve sıkı doğrulayıcının değişmezlik testleri için.
++- `reports/v943_final_report.md`: yeni canlı test ve HTTP hata senaryolarının sonuçları.
++- `PACKAGE_MANIFEST.json`: yeni teslimin dosya hashleri.
++
++Diğer v94/v941 raporları devralınmış tarihsel arşivlerdir, yeni v9.4.3 testi değildir.
++Eski `scripts.validate_v94` bu yeni sağlık sürümünün kanonik doğrulayıcısı değildir;
++önceki açılmış blokla yeni bağımsız OOS veya kârlılık iddiası üretilmez.
++Önceki negatif tarihsel sonuçlar geçerliliğini korur.
++
++v9.4.2deki tek 503 için güncel yorum: **en olası neden geçici PENDING emir niyeti;
++deneyle yeniden üretildi, canlı olayda ayrıca yakalanmadı.** Eski sonuç sonradan
++başarılıya çevrilmez. Her canlı koşu tek ağ/zaman örneğidir; yeniden test gerekebilir.
++Az sayıda paper dolumdan güvenilir yürütme veya kârlılık sonucu çıkarılamaz.
+diff --git a/RELEASE_STATUS.json b/RELEASE_STATUS.json
+index 76225ae..e107fc0 100644
+--- a/RELEASE_STATUS.json
++++ b/RELEASE_STATUS.json
+@@ -1,29 +1,18 @@
+ {
+-  "version": "9.4.2",
+-  "trading_code_basis": "9.4.0",
+-  "release_type": "feed_health_repair_on_rejected_research_candidate",
++  "version": "9.4.3",
++  "release_type": "health_telemetry_patch_only",
+   "approved_for_real_money": false,
+-  "promoted_as_profitable_or_production_strategy": false,
+-  "development_candidates_both_negative": true,
+-  "default_execution_mode": "paper",
+-  "validation_status": "COMPLETED_RESEARCH_CRITERIA_FAILED_REAL_MONEY_REJECTED",
+-  "historical_suite_complete": true,
+-  "historical_arms": 10,
+-  "baseline_net_usdt": -354.98390167578486,
+-  "baseline_max_equity_drawdown_usdt": 359.67591759519337,
+-  "paper_duration_window_complete": true,
+-  "paper_execution_end_to_end_validated": false,
+-  "paper_live_status": "DEGRADED_BINANCE_AGGTRADE_NO_TICKS_133_ERRORS_NO_ORDERS_OR_FILLS",
+-  "general_health_flag_known_blind_spot": "fixed in code (BBO and trade tape judged separately); not yet confirmed by live run",
+-  "regression_tests_passed": 78,
+-  "pre_restart_freeze_utc": "2026-11-03T07:13:34Z",
+-  "byte_identical_original_trading_files": 13,
+-  "automatic_parameter_retuning_after_holdout": false,
+-  "fully_independent_confirmatory_validation": false,
+-  "previous_v93_preserved": true,
+-  "next_step": "run pytest + 15-min paper on a networked machine; confirm Binance ticks>0 and errors~0; only then start a NEW preregistered edge experiment",
+-  "feed_repair": "Binance USDM WS moved to /market (aggTrade) and /public (bookTicker); legacy /stream retired 2026-04-23",
+-  "feed_repair_validated_live": false,
+-  "feed_repair_unit_tests": "9 pure-function tests passed in sandbox; full 78-test suite and 15-min live paper re-run NOT executed here (no network/deps)",
+-  "trading_rules_changed": false
++  "strategy_rules_changed": false,
++  "strict_recovery_changed": false,
++  "regression_tests_passed": 121,
++  "health_grace_sec": 15,
++  "live_status": "COMPLETED",
++  "live_operational_checks_passed": true,
++  "live_http_sample_counts": {
++    "200": 59
++  },
++  "historical_profitability_revalidated": false,
++  "previous_negative_research_status_preserved": true,
++  "canonical_freeze": "reports/v943_freeze_manifest.json",
++  "canonical_report": "reports/v943_final_report.md"
+ }
+\ No newline at end of file
+diff --git b/reports/v943_reference_sources/src/state_store.py b/reports/v943_reference_sources/src/state_store.py
+new file mode 100644
+index 0000000..d3d27cd
+--- /dev/null
++++ b/reports/v943_reference_sources/src/state_store.py
+@@ -0,0 +1,1273 @@
++"""SQLite WAL Kalıcı Durum Deposu + Otomatik `.jsonl.gz` Arşiv & `VACUUM` Çöp Toplayıcı."""
++from __future__ import annotations
++
++import asyncio
++import gzip
++import json
++import math
++import os
++import sqlite3
++import time
++from contextlib import contextmanager
++from pathlib import Path
++from typing import Any
++
++from .risk import Position
++
++
++def paper_position_snapshot(pos: Position) -> dict:
++    """Persisted fields only; exact values, no rounding or hash collisions."""
++    return {'symbol':str(pos.symbol),'side':str(pos.side),'entry':float(pos.entry),
++            'qty':float(pos.qty),'stop':float(pos.stop),'peak':float(pos.peak),
++            'locked_profit':bool(pos.locked_profit),'opened_at':str(pos.opened_at or ''),
++            'leverage':int(pos.leverage),'margin_usdt':float(pos.margin_usdt),
++            'layers':int(pos.layers),'last_add_price':float(pos.last_add_price),
++            'exchange':str(pos.exchange or 'binance')}
++
++
++class StateStore:
++    """Açık pozisyonlar, işlem geçmişi, özsermaye, komut kuyruğu ve meta durum deposu."""
++
++    def __init__(
++        self,
++        db_path: str | Path = "bot_state.db",
++        *,
++        wal_mode: bool = True,
++        archive_dir: str | Path | None = None,
++        maintenance_interval_sec: float = 86400.0,
++    ):
++        self.db_path = Path(db_path).expanduser()
++        self.db_path.parent.mkdir(parents=True, exist_ok=True)
++        self.archive_dir = (
++            Path(archive_dir)
++            if archive_dir
++            else self.db_path.parent / "archive"
++        )
++        self.wal_mode = bool(wal_mode)
++        self.maintenance_interval_sec = max(60.0, float(maintenance_interval_sec))
++        self.gc_runs: int = 0
++        self.archived_rows: int = 0
++        self.last_gc_ts: float = 0.0
++        self._init_db()
++
++    @contextmanager
++    def _conn(self):
++        conn = sqlite3.connect(str(self.db_path), timeout=30.0)
++        conn.row_factory = sqlite3.Row
++        try:
++            if self.wal_mode:
++                conn.execute("PRAGMA journal_mode=WAL;")
++                conn.execute("PRAGMA synchronous=FULL;")
++            conn.execute("PRAGMA busy_timeout=5000;")
++            yield conn
++            conn.commit()
++        except Exception:
++            conn.rollback()
++            raise
++        finally:
++            conn.close()
++
++    def _init_db(self) -> None:
++        with self._conn() as conn:
++            conn.executescript(
++                """
++                CREATE TABLE IF NOT EXISTS paper_intents (
++                    operation_id TEXT PRIMARY KEY,
++                    symbol TEXT NOT NULL,
++                    request_json TEXT NOT NULL,
++                    status TEXT NOT NULL CHECK(status IN ('PENDING','OPEN')),
++                    created_at REAL NOT NULL
++                );
++
++                CREATE TABLE IF NOT EXISTS paper_close_intents (
++                    operation_id TEXT PRIMARY KEY,
++                    symbol TEXT NOT NULL,
++                    request_json TEXT NOT NULL,
++                    status TEXT NOT NULL CHECK(status IN ('PENDING','CLOSED')),
++                    created_at REAL NOT NULL
++                );
++
++                CREATE TABLE IF NOT EXISTS paper_funding_intents (
++                    operation_id TEXT PRIMARY KEY,
++                    symbol TEXT NOT NULL,
++                    request_json TEXT NOT NULL,
++                    status TEXT NOT NULL CHECK(status IN ('PENDING','APPLIED')),
++                    created_at REAL NOT NULL
++                );
++
++                CREATE TABLE IF NOT EXISTS paper_layer_intents (
++                    operation_id TEXT PRIMARY KEY,
++                    symbol TEXT NOT NULL,
++                    request_json TEXT NOT NULL,
++                    status TEXT NOT NULL CHECK(status IN ('PENDING','APPLIED')),
++                    created_at REAL NOT NULL
++                );
++
++                CREATE TABLE IF NOT EXISTS open_positions (
++                    symbol TEXT PRIMARY KEY,
++                    side TEXT NOT NULL,
++                    entry REAL NOT NULL,
++                    qty REAL NOT NULL,
++                    stop REAL NOT NULL,
++                    peak REAL NOT NULL,
++                    locked_profit INTEGER NOT NULL DEFAULT 0,
++                    opened_at TEXT NOT NULL DEFAULT '',
++                    leverage INTEGER NOT NULL DEFAULT 20,
++                    margin_usdt REAL NOT NULL DEFAULT 0.0,
++                    layers INTEGER NOT NULL DEFAULT 1,
++                    last_add_price REAL NOT NULL DEFAULT 0.0,
++                    exchange TEXT NOT NULL DEFAULT 'binance',
++                    updated_at REAL NOT NULL DEFAULT 0.0
++                );
++
++                CREATE TABLE IF NOT EXISTS trade_history (
++                    id INTEGER PRIMARY KEY AUTOINCREMENT,
++                    ts REAL NOT NULL,
++                    symbol TEXT NOT NULL,
++                    side TEXT NOT NULL,
++                    entry REAL NOT NULL,
++                    exit_price REAL NOT NULL,
++                    qty REAL NOT NULL,
++                    leverage INTEGER NOT NULL DEFAULT 20,
++                    margin_usdt REAL NOT NULL DEFAULT 0.0,
++                    pnl_pct REAL NOT NULL,
++                    roe_pct REAL NOT NULL DEFAULT 0.0,
++                    pnl_usdt REAL NOT NULL DEFAULT 0.0,
++                    reason TEXT NOT NULL,
++                    layers INTEGER NOT NULL DEFAULT 1,
++                    position_id TEXT NOT NULL DEFAULT '',
++                    entry_context TEXT NOT NULL DEFAULT '{}',
++                    exchange TEXT NOT NULL DEFAULT '',
++                    entry_fee_usdt REAL NOT NULL DEFAULT 0.0,
++                    exit_fee_usdt REAL NOT NULL DEFAULT 0.0,
++                    funding_usdt REAL NOT NULL DEFAULT 0.0,
++                    net_pnl_usdt REAL NOT NULL DEFAULT 0.0,
++                    mfe_usdt REAL NOT NULL DEFAULT 0.0,
++                    mae_usdt REAL NOT NULL DEFAULT 0.0,
++                    stop_price REAL,
++                    net_breakeven_price REAL
++                );
++
++                CREATE TABLE IF NOT EXISTS equity_history (
++                    id INTEGER PRIMARY KEY AUTOINCREMENT,
++                    ts REAL NOT NULL,
++                    balance_usdt REAL NOT NULL,
++                    equity_usdt REAL NOT NULL,
++                    open_positions INTEGER NOT NULL DEFAULT 0
++                );
++
++                CREATE TABLE IF NOT EXISTS arbitrage_history (
++                    id INTEGER PRIMARY KEY AUTOINCREMENT,
++                    ts REAL NOT NULL,
++                    symbol TEXT NOT NULL,
++                    buy_exchange TEXT NOT NULL,
++                    sell_exchange TEXT NOT NULL,
++                    buy_price REAL NOT NULL,
++                    sell_price REAL NOT NULL,
++                    qty REAL NOT NULL,
++                    net_spread_pct REAL NOT NULL,
++                    profit_usdt REAL NOT NULL,
++                    status TEXT NOT NULL DEFAULT 'FILLED'
++                );
++
++                CREATE TABLE IF NOT EXISTS bot_meta (
++                    key TEXT PRIMARY KEY,
++                    value TEXT NOT NULL,
++                    updated_at REAL NOT NULL
++                );
++
++                CREATE TABLE IF NOT EXISTS command_queue (
++                    id INTEGER PRIMARY KEY AUTOINCREMENT,
++                    ts REAL NOT NULL,
++                    cmd TEXT NOT NULL,
++                    payload TEXT NOT NULL DEFAULT '{}',
++                    processed INTEGER NOT NULL DEFAULT 0
++                );
++                """
++            )
++            columns = {
++                row["name"]
++                for row in conn.execute("PRAGMA table_info(trade_history)").fetchall()
++            }
++            if "position_id" not in columns:
++                conn.execute(
++                    "ALTER TABLE trade_history ADD COLUMN position_id TEXT NOT NULL DEFAULT ''"
++                )
++            if "entry_context" not in columns:
++                conn.execute(
++                    "ALTER TABLE trade_history ADD COLUMN entry_context TEXT NOT NULL DEFAULT '{}'"
++                )
++            migrations = {
++                "exchange": "TEXT NOT NULL DEFAULT ''",
++                "entry_fee_usdt": "REAL NOT NULL DEFAULT 0.0",
++                "exit_fee_usdt": "REAL NOT NULL DEFAULT 0.0",
++                "funding_usdt": "REAL NOT NULL DEFAULT 0.0",
++                "net_pnl_usdt": "REAL NOT NULL DEFAULT 0.0",
++                "mfe_usdt": "REAL NOT NULL DEFAULT 0.0",
++                "mae_usdt": "REAL NOT NULL DEFAULT 0.0",
++                "stop_price": "REAL",
++                "net_breakeven_price": "REAL",
++            }
++            for name, definition in migrations.items():
++                if name not in columns:
++                    conn.execute(
++                        f"ALTER TABLE trade_history ADD COLUMN {name} {definition}"
++                    )
++            conn.execute(
++                """
++                UPDATE trade_history
++                SET net_pnl_usdt = pnl_usdt - entry_fee_usdt - exit_fee_usdt + funding_usdt
++                WHERE net_pnl_usdt = 0.0 AND pnl_usdt != 0.0
++                """
++            )
++
++    def get_wal_status(self) -> dict:
++        """SQLite WAL modunu, dosya boyutunu ve bakım istatistiklerini döner."""
++        mode = "unknown"
++        try:
++            with self._conn() as conn:
++                row = conn.execute("PRAGMA journal_mode;").fetchone()
++                if row:
++                    mode = str(row[0]).lower()
++        except Exception:
++            pass
++        size = 0
++        for suffix in ("", "-wal", "-shm"):
++            p = Path(f"{self.db_path}{suffix}")
++            if p.exists():
++                try:
++                    size += p.stat().st_size
++                except OSError:
++                    pass
++        return {
++            "journal_mode": mode,
++            "wal_enabled": mode == "wal",
++            "db_size_bytes": size,
++            "gc_runs": self.gc_runs,
++            "archived_rows": self.archived_rows,
++            "last_gc_ts": self.last_gc_ts,
++        }
++
++    def run_garbage_collector(
++        self,
++        *,
++        max_trades: int = 2000,
++        max_equity: int = 2000,
++        max_arb: int = 1000,
++    ) -> dict:
++        """Eski geçmiş kayıtlarını `.jsonl.gz` arşivine taşıyıp `VACUUM` çalıştırır."""
++        archived = 0
++        self.archive_dir.mkdir(parents=True, exist_ok=True)
++        stamp = int(time.time())
++        specs = (
++            ("trade_history", max(10, int(max_trades))),
++            ("equity_history", max(10, int(max_equity))),
++            ("arbitrage_history", max(10, int(max_arb))),
++        )
++        with self._conn() as conn:
++            for table, keep in specs:
++                total = conn.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0]
++                overflow = int(total) - keep
++                if overflow <= 0:
++                    continue
++                old_rows = conn.execute(
++                    f"SELECT * FROM {table} ORDER BY id ASC LIMIT ?", (overflow,)
++                ).fetchall()
++                if not old_rows:
++                    continue
++                arch_file = self.archive_dir / f"{table}_{stamp}.jsonl.gz"
++                with gzip.open(arch_file, "at", encoding="utf-8") as gz:
++                    for r in old_rows:
++                        gz.write(json.dumps(dict(r), ensure_ascii=False) + "\n")
++                max_id = old_rows[-1]["id"]
++                conn.execute(f"DELETE FROM {table} WHERE id <= ?", (max_id,))
++                archived += len(old_rows)
++            conn.execute("DELETE FROM command_queue WHERE processed = 1")
++
++        try:
++            raw_conn = sqlite3.connect(str(self.db_path), isolation_level=None, timeout=30.0)
++            try:
++                raw_conn.execute("PRAGMA wal_checkpoint(TRUNCATE);")
++                raw_conn.execute("VACUUM;")
++            finally:
++                raw_conn.close()
++        except Exception:
++            pass
++
++        self.gc_runs += 1
++        self.archived_rows += archived
++        self.last_gc_ts = time.time()
++        return {"archived": archived, "gc_runs": self.gc_runs}
++
++    async def maintenance_loop(self) -> None:
++        while True:
++            await asyncio.sleep(self.maintenance_interval_sec)
++            try:
++                self.run_garbage_collector()
++            except Exception:
++                pass
++
++    # -- Açık Pozisyon Kalıcılığı ----------------------------------------------
++    def has_journal_intents(self) -> bool:
++        """Paper intent günlük tablolarından herhangi birinde kayıt var mı?"""
++        with self._conn() as conn:
++            return any((
++                conn.execute("SELECT 1 FROM paper_intents LIMIT 1").fetchone(),
++                conn.execute("SELECT 1 FROM paper_close_intents LIMIT 1").fetchone(),
++                conn.execute("SELECT 1 FROM paper_funding_intents LIMIT 1").fetchone(),
++                conn.execute("SELECT 1 FROM paper_layer_intents LIMIT 1").fetchone(),
++            ))
++
++    def is_uninitialized_position_only_fixture(self) -> bool:
++        """Yalnızca `save_position` ile tohumlanmış, hiçbir günlük/hesap/meta kaydı olmayan taze test DB'si mi?"""
++        with self._conn() as conn:
++            has_pos = conn.execute("SELECT 1 FROM open_positions LIMIT 1").fetchone() is not None
++            if not has_pos:
++                return False
++            has_any_other = any((
++                conn.execute("SELECT 1 FROM paper_intents LIMIT 1").fetchone(),
++                conn.execute("SELECT 1 FROM paper_close_intents LIMIT 1").fetchone(),
++                conn.execute("SELECT 1 FROM paper_funding_intents LIMIT 1").fetchone(),
++                conn.execute("SELECT 1 FROM paper_layer_intents LIMIT 1").fetchone(),
++                conn.execute("SELECT 1 FROM trade_history LIMIT 1").fetchone(),
++                conn.execute("SELECT 1 FROM bot_meta LIMIT 1").fetchone(),
++            ))
++            return not has_any_other
++
++    @staticmethod
++    def _is_pid_alive(pid: int) -> bool:
++        if pid <= 0:
++            return False
++        if pid == os.getpid():
++            return True
++        try:
++            os.kill(pid, 0)
++            return True
++        except ProcessLookupError:
++            return False
++        except PermissionError:
++            return True
++        except OSError:
++            return False
++
++    def acquire_writer_lease(self, owner_id: str, ttl_sec: float = 60.0) -> dict:
++        """Tek-yazar sahipliği kilidi (single-writer lease) alır; rakip canlı süreç varsa reddeder."""
++        if not owner_id:
++            raise ValueError("owner_id gerekli")
++        now = time.time()
++        pid = os.getpid()
++        with self._conn() as conn:
++            conn.execute("BEGIN IMMEDIATE")
++            row = conn.execute("SELECT value FROM bot_meta WHERE key='bot_writer_lease'").fetchone()
++            if row is not None:
++                try:
++                    cur = json.loads(row["value"])
++                except Exception:
++                    cur = {}
++                cur_owner = str(cur.get("owner_id") or "")
++                cur_pid = int(cur.get("pid") or 0)
++                expires_at = float(cur.get("expires_at") or 0.0)
++                if (
++                    cur_owner
++                    and cur_owner != owner_id
++                    and expires_at > now
++                    and self._is_pid_alive(cur_pid)
++                ):
++                    raise RuntimeError(
++                        f"rakip aktif yazar tespit edildi: owner={cur_owner} pid={cur_pid}"
++                    )
++            lease = {
++                "owner_id": owner_id,
++                "pid": pid,
++                "acquired_at": now,
++                "heartbeat_at": now,
++                "expires_at": now + max(5.0, float(ttl_sec)),
++            }
++            conn.execute(
++                "INSERT INTO bot_meta (key,value,updated_at) VALUES ('bot_writer_lease',?,?) "
++                "ON CONFLICT(key) DO UPDATE SET value=excluded.value, updated_at=excluded.updated_at",
++                (json.dumps(lease, ensure_ascii=False, sort_keys=True), now),
++            )
++        return lease
++
++    def release_writer_lease(self, owner_id: str) -> None:
++        if not owner_id:
++            return
++        with self._conn() as conn:
++            conn.execute("BEGIN IMMEDIATE")
++            row = conn.execute("SELECT value FROM bot_meta WHERE key='bot_writer_lease'").fetchone()
++            if row is None:
++                return
++            try:
++                cur = json.loads(row["value"])
++            except Exception:
++                cur = {}
++            if cur.get("owner_id") == owner_id:
++                conn.execute("DELETE FROM bot_meta WHERE key='bot_writer_lease'")
++
++    def verify_paper_ledger_integrity(self) -> dict:
++        """Çift taraflı muhasebe (double-entry) denklemi + günlük + meta bütünlüğünü doğrular."""
++        with self._conn() as conn:
++            qc = conn.execute("PRAGMA quick_check").fetchone()
++            if not qc or str(qc[0]).lower() != "ok":
++                return {"ok": False, "reason": "sqlite_quick_check_failed"}
++
++            for table in (
++                "paper_intents",
++                "paper_close_intents",
++                "paper_funding_intents",
++                "paper_layer_intents",
++            ):
++                if conn.execute(f"SELECT 1 FROM {table} WHERE status='PENDING' LIMIT 1").fetchone():
++                    return {"ok": False, "reason": f"pending_intent:{table}"}
++
++            open_rows = conn.execute("SELECT * FROM open_positions").fetchall()
++            trade_rows = conn.execute("SELECT * FROM trade_history").fetchall()
++            acc_row = conn.execute("SELECT value FROM bot_meta WHERE key='paper_account'").fetchone()
++            meta_row = conn.execute("SELECT value FROM bot_meta WHERE key='position_meta'").fetchone()
++            clock_row = conn.execute("SELECT value FROM bot_meta WHERE key='paper_funding_clock'").fetchone()
++
++            has_any_activity = bool(
++                open_rows
++                or trade_rows
++                or acc_row is not None
++                or conn.execute("SELECT 1 FROM paper_intents LIMIT 1").fetchone()
++                or conn.execute("SELECT 1 FROM paper_close_intents LIMIT 1").fetchone()
++                or conn.execute("SELECT 1 FROM paper_funding_intents LIMIT 1").fetchone()
++                or conn.execute("SELECT 1 FROM paper_layer_intents LIMIT 1").fetchone()
++            )
++            if not has_any_activity:
++                return {"ok": True, "empty": True, "reason": "clean_empty_db"}
++
++            if acc_row is None:
++                return {"ok": False, "reason": "missing_paper_account"}
++            try:
++                acc = json.loads(acc_row["value"])
++                pos_meta = json.loads(meta_row["value"]) if meta_row is not None else {}
++                f_clock = json.loads(clock_row["value"]) if clock_row is not None else {}
++            except Exception:
++                return {"ok": False, "reason": "corrupt_meta_json"}
++
++            if not all(isinstance(x, dict) for x in (acc, pos_meta, f_clock)):
++                return {"ok": False, "reason": "invalid_meta_types"}
++
++            for key in ("balance", "start_balance", "total_fees_usdt", "total_funding_usdt"):
++                val = acc.get(key)
++                if val is None or isinstance(val, bool) or not math.isfinite(float(val)):
++                    return {"ok": False, "reason": f"invalid_account_field:{key}"}
++            balance = float(acc["balance"])
++            start_balance = float(acc["start_balance"])
++            total_fees = float(acc["total_fees_usdt"])
++            total_funding = float(acc["total_funding_usdt"])
++            if start_balance <= 0 or total_fees < -1e-12:
++                return {"ok": False, "reason": "negative_fee_or_nonpositive_start"}
++
++            open_entry_fees = 0.0
++            open_funding = 0.0
++            open_syms = set()
++            for r in open_rows:
++                sym = str(r["symbol"])
++                open_syms.add(sym)
++                if r["side"] not in ("LONG", "SHORT"):
++                    return {"ok": False, "reason": f"invalid_side:{sym}"}
++                for fld in ("entry", "qty", "stop"):
++                    fv = float(r[fld])
++                    if not math.isfinite(fv) or fv <= 0:
++                        return {"ok": False, "reason": f"invalid_pos_{fld}:{sym}"}
++                m = pos_meta.get(sym)
++                if not isinstance(m, dict) or not m.get("position_id"):
++                    return {"ok": False, "reason": f"missing_position_meta:{sym}"}
++                ef = m.get("entry_fee_usdt")
++                fu = m.get("funding_usdt")
++                fc = f_clock.get(sym)
++                if (
++                    ef is None or isinstance(ef, bool) or not math.isfinite(float(ef)) or float(ef) < -1e-12
++                    or fu is None or isinstance(fu, bool) or not math.isfinite(float(fu))
++                    or fc is None or isinstance(fc, bool) or not math.isfinite(float(fc)) or float(fc) <= 0
++                ):
++                    return {"ok": False, "reason": f"invalid_position_cost_or_clock:{sym}"}
++                open_entry_fees += float(ef)
++                open_funding += float(fu)
++
++            if set(pos_meta.keys()) != open_syms:
++                return {"ok": False, "reason": "orphan_position_meta"}
++
++            realized_gross_pnl = 0.0
++            closed_entry_fees = 0.0
++            closed_exit_fees = 0.0
++            closed_funding = 0.0
++            for tr in trade_rows:
++                for fld in ("pnl_usdt", "entry_fee_usdt", "exit_fee_usdt", "funding_usdt"):
++                    tv = float(tr[fld])
++                    if not math.isfinite(tv):
++                        return {"ok": False, "reason": f"non_finite_trade_{fld}"}
++                realized_gross_pnl += float(tr["pnl_usdt"])
++                closed_entry_fees += float(tr["entry_fee_usdt"])
++                closed_exit_fees += float(tr["exit_fee_usdt"])
++                closed_funding += float(tr["funding_usdt"])
++
++            expected_fees = closed_entry_fees + closed_exit_fees + open_entry_fees
++            expected_funding = closed_funding + open_funding
++            expected_balance = start_balance + realized_gross_pnl - expected_fees + expected_funding
++
++            if not math.isclose(total_fees, expected_fees, rel_tol=1e-9, abs_tol=1e-6):
++                return {
++                    "ok": False,
++                    "reason": f"fee_mismatch:actual={total_fees:.8f},expected={expected_fees:.8f}",
++                }
++            if not math.isclose(total_funding, expected_funding, rel_tol=1e-9, abs_tol=1e-6):
++                return {
++                    "ok": False,
++                    "reason": f"funding_mismatch:actual={total_funding:.8f},expected={expected_funding:.8f}",
++                }
++            if not math.isclose(balance, expected_balance, rel_tol=1e-9, abs_tol=1e-5):
++                return {
++                    "ok": False,
++                    "reason": f"cash_conservation_mismatch:actual={balance:.8f},expected={expected_balance:.8f}",
++                }
++
++            return {
++                "ok": True,
++                "empty": False,
++                "balance": balance,
++                "expected_balance": expected_balance,
++                "total_fees_usdt": total_fees,
++                "total_funding_usdt": total_funding,
++                "open_positions": len(open_rows),
++                "closed_trades": len(trade_rows),
++            }
++
++    def commit_external_close(
++        self,
++        symbol: str,
++        remaining_pos: Position | None,
++        position_meta: dict,
++        trade_plans: dict,
++        trade_record: dict,
++    ) -> None:
++        """Paper defteri kullanmayan izole birim testi brokerları için atomik kapanış kaydı."""
++        now = time.time()
++        meta_json = json.dumps(position_meta, ensure_ascii=False, sort_keys=True, allow_nan=False)
++        plans_json = json.dumps(trade_plans, ensure_ascii=False, sort_keys=True, allow_nan=False)
++        entry_ctx = trade_record.get("entry_context", {})
++        if not isinstance(entry_ctx, str):
++            entry_ctx = json.dumps(entry_ctx, ensure_ascii=False, default=str)
++        with self._conn() as conn:
++            conn.execute("BEGIN IMMEDIATE")
++            if remaining_pos is None:
++                conn.execute("DELETE FROM open_positions WHERE symbol = ?", (symbol,))
++            else:
++                conn.execute(
++                    """
++                    INSERT INTO open_positions
++                    (symbol, side, entry, qty, stop, peak, locked_profit, opened_at,
++                     leverage, margin_usdt, layers, last_add_price, exchange, updated_at)
++                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
++                    ON CONFLICT(symbol) DO UPDATE SET
++                        side=excluded.side, entry=excluded.entry, qty=excluded.qty,
++                        stop=excluded.stop, peak=excluded.peak, locked_profit=excluded.locked_profit,
++                        opened_at=excluded.opened_at, leverage=excluded.leverage,
++                        margin_usdt=excluded.margin_usdt, layers=excluded.layers,
++                        last_add_price=excluded.last_add_price, exchange=excluded.exchange,
++                        updated_at=excluded.updated_at
++                    """,
++                    (
++                        remaining_pos.symbol,
++                        remaining_pos.side,
++                        float(remaining_pos.entry),
++                        float(remaining_pos.qty),
++                        float(remaining_pos.stop),
++                        float(remaining_pos.peak),
++                        1 if remaining_pos.locked_profit else 0,
++                        str(remaining_pos.opened_at or ""),
++                        int(remaining_pos.leverage),
++                        float(remaining_pos.margin_usdt),
++                        int(remaining_pos.layers),
++                        float(remaining_pos.last_add_price),
++                        str(remaining_pos.exchange or "binance"),
++                        now,
++                    ),
++                )
++            for key, payload in (("position_meta", meta_json), ("trade_plans", plans_json)):
++                conn.execute(
++                    "INSERT INTO bot_meta (key,value,updated_at) VALUES (?,?,?) "
++                    "ON CONFLICT(key) DO UPDATE SET value=excluded.value, updated_at=excluded.updated_at",
++                    (key, payload, now),
++                )
++            conn.execute(
++                """
++                INSERT INTO trade_history
++                (ts, symbol, side, entry, exit_price, qty, pnl_pct, reason,
++                 leverage, margin_usdt, pnl_usdt, layers, position_id, entry_context,
++                 exchange, entry_fee_usdt, exit_fee_usdt, funding_usdt, net_pnl_usdt,
++                 mfe_usdt, mae_usdt, stop_price, net_breakeven_price)
++                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
++                """,
++                (
++                    float(trade_record.get("ts") or now),
++                    str(trade_record["symbol"]),
++                    str(trade_record["side"]),
++                    float(trade_record["entry"]),
++                    float(trade_record["exit_price"]),
++                    float(trade_record["qty"]),
++                    float(trade_record["pnl_pct"]),
++                    str(trade_record["reason"]),
++                    int(trade_record.get("leverage", 1)),
++                    float(trade_record.get("margin_usdt", 0.0)),
++                    float(trade_record.get("pnl_usdt", 0.0)),
++                    int(trade_record.get("layers", 1)),
++                    str(trade_record.get("position_id", "")),
++                    entry_ctx,
++                    str(trade_record.get("exchange", "")),
++                    float(trade_record.get("entry_fee_usdt", 0.0)),
++                    float(trade_record.get("exit_fee_usdt", 0.0)),
++                    float(trade_record.get("funding_usdt", 0.0)),
++                    float(trade_record.get("net_pnl_usdt", 0.0)),
++                    float(trade_record.get("mfe_usdt", 0.0)),
++                    float(trade_record.get("mae_usdt", 0.0)),
++                    trade_record.get("stop_price"),
++                    trade_record.get("net_breakeven_price"),
++                ),
++            )
++
++    def paper_requires_recovery(self) -> bool:
++        """Restart güvenlik kapısı: elle doğrulama sistemi henüz geliştirilmedi.
++
++        Bu sınırlı aday, yeniden açılan finansal DB'yi otomatik kullanmaz.
++        Boş, yeni DB dışında her durumda kilitli başlatır.
++        """
++        with self._conn() as conn:
++            return any((
++                conn.execute("SELECT 1 FROM paper_intents LIMIT 1").fetchone(),
++                conn.execute("SELECT 1 FROM paper_close_intents LIMIT 1").fetchone(),
++                conn.execute("SELECT 1 FROM paper_funding_intents LIMIT 1").fetchone(),
++                conn.execute("SELECT 1 FROM paper_layer_intents LIMIT 1").fetchone(),
++                conn.execute("SELECT 1 FROM open_positions LIMIT 1").fetchone(),
++                conn.execute("SELECT 1 FROM trade_history LIMIT 1").fetchone(),
++                conn.execute("SELECT 1 FROM bot_meta WHERE key='paper_account' LIMIT 1").fetchone(),
++            ))
++
++    def prepare_paper_open(self, operation_id: str, request: dict) -> None:
++        if not operation_id or not isinstance(request, dict):
++            raise ValueError("invalid paper open intent")
++        payload = json.dumps(request, ensure_ascii=False, sort_keys=True, allow_nan=False)
++        with self._conn() as conn:
++            conn.execute("BEGIN IMMEDIATE")
++            # Optional protocol for the v9.0 Executor: reject an opening based
++            # on a stale process-local paper account BEFORE creating intent or
++            # fill. This is not a complete multi-process ownership protocol.
++            expected = request.get('_expected_paper_state')
++            if expected is not None:
++                if not isinstance(expected,dict) or not isinstance(expected.get('symbols'),list) or not isinstance(expected.get('account'),dict):
++                    raise ValueError('invalid expected paper state')
++                actual_symbols = sorted(row['symbol'] for row in conn.execute('SELECT symbol FROM open_positions'))
++                if actual_symbols != sorted(expected['symbols']):
++                    raise RuntimeError('paper state changed in another process: positions')
++                account_row = conn.execute("SELECT value FROM bot_meta WHERE key='paper_account'").fetchone()
++                if account_row is None:
++                    if actual_symbols:
++                        raise RuntimeError('persisted paper account missing')
++                else:
++                    saved=json.loads(account_row['value'])
++                    if not isinstance(saved,dict):
++                        raise RuntimeError('persisted paper account invalid')
++                    for key in ('balance','start_balance','total_fees_usdt','total_funding_usdt'):
++                        if (key not in saved or key not in expected['account']
++                                or isinstance(saved[key],bool) or isinstance(expected['account'][key],bool)
++                                or not math.isfinite(float(saved[key])) or not math.isfinite(float(expected['account'][key]))
++                                or float(saved[key]) != float(expected['account'][key])):
++                            raise RuntimeError('paper state changed in another process: account')
++                # State beyond symbols/account matters: another writer may
++                # have changed stop, plan, metadata or funding cursor without
++                # affecting either. Fields are compared exactly, not rounded.
++                if 'positions' in expected:
++                    keys=('symbol','side','entry','qty','stop','peak','locked_profit',
++                          'opened_at','leverage','margin_usdt','layers','last_add_price','exchange')
++                    actual={}
++                    for row in conn.execute('SELECT '+','.join(keys)+' FROM open_positions'):
++                        record={k:row[k] for k in keys}
++                        record['locked_profit']=bool(record['locked_profit'])
++                        actual[record['symbol']]=record
++                    if actual != expected['positions']:
++                        raise RuntimeError('paper state changed in another process: position fields')
++                for key in ('position_meta','trade_plans','paper_funding_clock'):
++                    if key in expected:
++                        row=conn.execute('SELECT value FROM bot_meta WHERE key=?',(key,)).fetchone()
++                        saved=json.loads(row['value']) if row is not None else {}
++                        if saved != expected[key]:
++                            raise RuntimeError('paper state changed in another process: '+key)
++            if conn.execute("SELECT 1 FROM paper_intents WHERE status='PENDING' LIMIT 1").fetchone():
++                raise RuntimeError("unresolved paper intent")
++            if conn.execute("SELECT 1 FROM paper_close_intents WHERE status='PENDING' LIMIT 1").fetchone():
++                raise RuntimeError("unresolved paper close intent")
++            if conn.execute("SELECT 1 FROM paper_funding_intents WHERE status='PENDING' LIMIT 1").fetchone():
++                raise RuntimeError("unresolved paper funding intent")
++            if conn.execute("SELECT 1 FROM paper_layer_intents WHERE status='PENDING' LIMIT 1").fetchone():
++                raise RuntimeError("unresolved paper layer intent")
++            conn.execute("INSERT INTO paper_intents VALUES (?,?,?, 'PENDING',?)",
++                         (operation_id, str(request['symbol']), payload, time.time()))
++
++    def commit_paper_open(self, operation_id: str, pos: Position, account: dict,
++                          position_meta: dict, trade_plans: dict, funding_clock: dict) -> None:
++        """Paper açılışında pozisyon, hesap, ek meta ve PENDING->OPEN tek COMMIT.
++
++        Bu yalnız açılış prototipidir; kapanış/funding henüz bu işlemde değildir.
++        COMMIT istisnası gerçekleşmedi demek değildir; çağıran kilitli kalır.
++        """
++        payloads={key:json.dumps(value, ensure_ascii=False, default=str, allow_nan=False)
++                  for key,value in {'paper_account':account,'position_meta':position_meta,
++                                    'trade_plans':trade_plans,'paper_funding_clock':funding_clock}.items()}
++        with self._conn() as conn:
++            conn.execute("BEGIN IMMEDIATE")
++            row=conn.execute("SELECT symbol FROM paper_intents WHERE operation_id=? AND status='PENDING'",
++                             (operation_id,)).fetchone()
++            if row is None or row['symbol'] != pos.symbol:
++                raise RuntimeError("missing or conflicting pending intent")
++            conn.execute("""INSERT INTO open_positions
++                (symbol,side,entry,qty,stop,peak,locked_profit,opened_at,leverage,
++                 margin_usdt,layers,last_add_price,exchange,updated_at)
++                 VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
++                (pos.symbol,pos.side,float(pos.entry),float(pos.qty),float(pos.stop),
++                 float(pos.peak),1 if pos.locked_profit else 0,str(pos.opened_at or ''),
++                 int(pos.leverage),float(pos.margin_usdt),int(pos.layers),
++                 float(pos.last_add_price),str(pos.exchange or 'binance'),time.time()))
++            for key, payload in payloads.items():
++                conn.execute("""INSERT INTO bot_meta (key,value,updated_at) VALUES (?,?,?)
++                  ON CONFLICT(key) DO UPDATE SET value=excluded.value,updated_at=excluded.updated_at""",
++                  (key,payload,time.time()))
++            changed=conn.execute("UPDATE paper_intents SET status='OPEN' WHERE operation_id=? AND status='PENDING'",
++                                 (operation_id,))
++            if changed.rowcount != 1:
++                raise RuntimeError('paper intent update failed')
++
++    def cancel_unfilled_paper_open(self, operation_id: str, expected_symbol: str) -> None:
++        """Pasif Maker limit emri hiç dolmadan (qty=0) iptal/süre-aşımı olduğunda
++        hiçbir kasa veya pozisyon değişmediği doğrulandıktan sonra PENDING niyetini kapatır."""
++        if not operation_id or not expected_symbol:
++            raise ValueError("invalid cancel_unfilled_paper_open arguments")
++        with self._conn() as conn:
++            conn.execute("BEGIN IMMEDIATE")
++            row = conn.execute(
++                "SELECT symbol FROM paper_intents WHERE operation_id=? AND status='PENDING'",
++                (operation_id,),
++            ).fetchone()
++            if row is None or str(row["symbol"]) != str(expected_symbol):
++                raise RuntimeError("missing or mismatched pending paper open intent")
++            pos_exists = conn.execute(
++                "SELECT 1 FROM open_positions WHERE symbol=? LIMIT 1",
++                (expected_symbol,),
++            ).fetchone()
++            if pos_exists is not None:
++                raise RuntimeError("cannot cancel unfilled intent: position already persisted")
++            changed = conn.execute(
++                "DELETE FROM paper_intents WHERE operation_id=? AND status='PENDING'",
++                (operation_id,),
++            )
++            if changed.rowcount != 1:
++                raise RuntimeError("paper unfilled intent delete failed")
++
++    def prepare_paper_close(self, operation_id: str, symbol: str, qty: float) -> None:
++        """Persist close intent before a simulated fill; never used for live orders."""
++        qty = float(qty)
++        if not operation_id or not symbol or not math.isfinite(qty) or qty <= 0:
++            raise ValueError('invalid paper close request')
++        payload = json.dumps({'symbol':symbol,'qty':qty}, allow_nan=False, sort_keys=True)
++        with self._conn() as conn:
++            conn.execute('BEGIN IMMEDIATE')
++            if conn.execute("SELECT 1 FROM paper_intents WHERE status='PENDING' LIMIT 1").fetchone():
++                raise RuntimeError('unresolved paper open intent')
++            if conn.execute("SELECT 1 FROM paper_close_intents WHERE status='PENDING' LIMIT 1").fetchone():
++                raise RuntimeError('unresolved paper close intent')
++            if conn.execute("SELECT 1 FROM paper_funding_intents WHERE status='PENDING' LIMIT 1").fetchone():
++                raise RuntimeError('unresolved paper funding intent')
++            if conn.execute("SELECT 1 FROM paper_layer_intents WHERE status='PENDING' LIMIT 1").fetchone():
++                raise RuntimeError('unresolved paper layer intent')
++            row = conn.execute('SELECT qty FROM open_positions WHERE symbol=?', (symbol,)).fetchone()
++            if row is None or qty > float(row['qty']) + max(1e-12, float(row['qty'])*1e-9):
++                raise RuntimeError('paper close does not match persisted position')
++            conn.execute("INSERT INTO paper_close_intents VALUES (?,?,?,'PENDING',?)",
++                         (operation_id,symbol,payload,time.time()))
++
++    def commit_paper_close(self, operation_id: str, symbol: str, original_qty: float,
++                           remaining: Position | None, account: dict, position_meta: dict,
++                           trade_plans: dict, funding_clock: dict, trade: dict) -> None:
++        """Atomic paper close: position, account, trade and metadata in one transaction.
++
++        Any exception, including after COMMIT, is an unknown result to the caller;
++        no automatic retries or unlocks. Restart remains fail-closed.
++        """
++        original_qty = float(original_qty)
++        if not math.isfinite(original_qty) or original_qty <= 0:
++            raise ValueError('invalid original quantity')
++        if trade.get('symbol') != symbol or float(trade['qty']) <= 0:
++            raise ValueError('trade does not match close request')
++        payloads={key:json.dumps(value, ensure_ascii=False, default=str, allow_nan=False)
++                  for key,value in {'paper_account':account,'position_meta':position_meta,
++                                    'trade_plans':trade_plans,'paper_funding_clock':funding_clock}.items()}
++        columns=('ts','symbol','side','entry','exit_price','qty','leverage','margin_usdt',
++                 'pnl_pct','roe_pct','pnl_usdt','reason','layers','position_id','entry_context',
++                 'exchange','entry_fee_usdt','exit_fee_usdt','funding_usdt','net_pnl_usdt',
++                 'mfe_usdt','mae_usdt','stop_price','net_breakeven_price')
++        row=dict(trade)
++        row['roe_pct']=float(row['pnl_pct'])*int(row['leverage'])
++        row['entry_context']=json.dumps(row.get('entry_context') or {},ensure_ascii=False,default=str,allow_nan=False,separators=(',',':'))
++        for key in ('ts','entry','exit_price','qty','margin_usdt','pnl_pct','roe_pct','pnl_usdt',
++                    'entry_fee_usdt','exit_fee_usdt','funding_usdt','net_pnl_usdt','mfe_usdt','mae_usdt'):
++            if not math.isfinite(float(row[key])):
++                raise ValueError('non-finite trade field: '+key)
++        if float(row['entry']) <= 0 or float(row['exit_price']) <= 0:
++            raise ValueError('invalid execution price')
++        with self._conn() as conn:
++            conn.execute('BEGIN IMMEDIATE')
++            intent=conn.execute("SELECT symbol,request_json FROM paper_close_intents WHERE operation_id=? AND status='PENDING'",(operation_id,)).fetchone()
++            old=conn.execute('SELECT qty FROM open_positions WHERE symbol=?',(symbol,)).fetchone()
++            if intent is None or intent['symbol'] != symbol or old is None:
++                raise RuntimeError('missing close intent or position')
++            req=json.loads(intent['request_json'])
++            if not math.isclose(float(old['qty']),original_qty,rel_tol=1e-9,abs_tol=1e-12):
++                raise RuntimeError('persisted quantity changed')
++            if float(row['qty']) > float(req['qty'])+max(1e-12,original_qty*1e-9):
++                raise RuntimeError('fill exceeds requested close')
++            left=original_qty-float(row['qty'])
++            if remaining is None:
++                if not math.isclose(left,0,rel_tol=0,abs_tol=max(1e-12,original_qty*1e-9)):
++                    raise RuntimeError('not fully closed')
++                conn.execute('DELETE FROM open_positions WHERE symbol=?',(symbol,))
++            else:
++                if remaining.symbol != symbol or not math.isclose(float(remaining.qty),left,rel_tol=1e-9,abs_tol=1e-12):
++                    raise RuntimeError('invalid remaining position')
++                conn.execute('UPDATE open_positions SET qty=?,margin_usdt=?,stop=?,peak=?,updated_at=? WHERE symbol=?',
++                             (float(remaining.qty),float(remaining.margin_usdt),float(remaining.stop),float(remaining.peak),time.time(),symbol))
++            conn.execute('INSERT INTO trade_history ('+','.join(columns)+') VALUES ('+','.join('?' for _ in columns)+')',
++                         tuple(row[k] for k in columns))
++            for key,payload in payloads.items():
++                conn.execute("INSERT INTO bot_meta (key,value,updated_at) VALUES (?,?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value,updated_at=excluded.updated_at",(key,payload,time.time()))
++            changed=conn.execute("UPDATE paper_close_intents SET status='CLOSED' WHERE operation_id=? AND status='PENDING'",(operation_id,))
++            if changed.rowcount != 1:
++                raise RuntimeError('paper close intent update failed')
++
++    def prepare_paper_funding(self, operation_id: str, symbol: str, request: dict) -> None:
++        """Journal a synthetic paper accrual before modifying in-memory account."""
++        if not operation_id or not symbol or not isinstance(request, dict):
++            raise ValueError('invalid funding intent')
++        for key in ('delta','old_balance','old_funding','old_clock','new_clock','qty'):
++            if not math.isfinite(float(request[key])):
++                raise ValueError('non-finite funding input')
++        if float(request['qty']) <= 0 or float(request['new_clock']) <= float(request['old_clock']):
++            raise ValueError('invalid funding quantity or clock')
++        payload=json.dumps(request,ensure_ascii=False,sort_keys=True,allow_nan=False)
++        with self._conn() as conn:
++            conn.execute('BEGIN IMMEDIATE')
++            for table in ('paper_intents','paper_close_intents','paper_funding_intents','paper_layer_intents'):
++                if conn.execute("SELECT 1 FROM "+table+" WHERE status='PENDING' LIMIT 1").fetchone():
++                    raise RuntimeError('another paper financial intent is pending')
++            pos=conn.execute('SELECT qty FROM open_positions WHERE symbol=?',(symbol,)).fetchone()
++            if pos is None or not math.isclose(float(pos['qty']),float(request['qty']),rel_tol=1e-9,abs_tol=1e-12):
++                raise RuntimeError('funding position changed or not persisted')
++            conn.execute("INSERT INTO paper_funding_intents VALUES (?,?,?,'PENDING',?)",
++                         (operation_id,symbol,payload,time.time()))
++
++    def commit_paper_funding(self, operation_id: str, symbol: str, account: dict,
++                             position_meta: dict, funding_clock: dict) -> None:
++        """One transaction for paper funding balance, per-position meta, clock and intent."""
++        payloads={key:json.dumps(value,ensure_ascii=False,default=str,allow_nan=False)
++                  for key,value in {'paper_account':account,'position_meta':position_meta,
++                                    'paper_funding_clock':funding_clock}.items()}
++        with self._conn() as conn:
++            conn.execute('BEGIN IMMEDIATE')
++            intent=conn.execute("SELECT symbol,request_json FROM paper_funding_intents WHERE operation_id=? AND status='PENDING'",(operation_id,)).fetchone()
++            pos=conn.execute('SELECT qty FROM open_positions WHERE symbol=?',(symbol,)).fetchone()
++            if intent is None or intent['symbol']!=symbol or pos is None:
++                raise RuntimeError('missing paper funding intent or position')
++            req=json.loads(intent['request_json'])
++            def read(key):
++                row=conn.execute('SELECT value FROM bot_meta WHERE key=?',(key,)).fetchone()
++                if row is None: raise RuntimeError('missing stored funding metadata: '+key)
++                return json.loads(row['value'])
++            old_account=read('paper_account'); old_meta=read('position_meta'); old_clock=read('paper_funding_clock')
++            eq=lambda a,b: math.isclose(float(a),float(b),rel_tol=1e-12,abs_tol=1e-9)
++            if (not eq(pos['qty'],req['qty']) or not eq(old_account['balance'],req['old_balance'])
++                or not eq(old_meta[symbol].get('funding_usdt',0),req['old_funding'])
++                or not eq(old_clock[symbol],req['old_clock'])
++                or not eq(account['balance'],req['old_balance']+req['delta'])
++                or not eq(position_meta[symbol]['funding_usdt'],req['old_funding']+req['delta'])
++                or not eq(funding_clock[symbol],req['new_clock'])):
++                raise RuntimeError('funding state changed or accounting mismatch')
++            for key,payload in payloads.items():
++                conn.execute("INSERT INTO bot_meta (key,value,updated_at) VALUES (?,?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value,updated_at=excluded.updated_at",(key,payload,time.time()))
++            changed=conn.execute("UPDATE paper_funding_intents SET status='APPLIED' WHERE operation_id=? AND status='PENDING'",(operation_id,))
++            if changed.rowcount!=1: raise RuntimeError('funding intent update failed')
++
++    def prepare_paper_layer(self, operation_id: str, symbol: str, request: dict) -> None:
++        if not operation_id or not symbol or not isinstance(request,dict):
++            raise ValueError('invalid layer intent')
++        for key in ('original_qty','requested_qty','old_balance','old_fee'):
++            if not math.isfinite(float(request[key])):
++                raise ValueError('non-finite layer input')
++        if float(request['original_qty'])<=0 or float(request['requested_qty'])<=0:
++            raise ValueError('invalid layer quantity')
++        payload=json.dumps(request,ensure_ascii=False,sort_keys=True,allow_nan=False)
++        with self._conn() as conn:
++            conn.execute('BEGIN IMMEDIATE')
++            for table in ('paper_intents','paper_close_intents','paper_funding_intents','paper_layer_intents'):
++                if conn.execute("SELECT 1 FROM "+table+" WHERE status='PENDING' LIMIT 1").fetchone():
++                    raise RuntimeError('another paper financial intent is pending')
++            pos=conn.execute('SELECT qty FROM open_positions WHERE symbol=?',(symbol,)).fetchone()
++            if pos is None or not math.isclose(float(pos['qty']),float(request['original_qty']),rel_tol=1e-9,abs_tol=1e-12):
++                raise RuntimeError('layer position changed or not persisted')
++            conn.execute("INSERT INTO paper_layer_intents VALUES (?,?,?,'PENDING',?)",(operation_id,symbol,payload,time.time()))
++
++    def commit_paper_layer(self, operation_id: str, pos: Position, fill_qty: float, fill_fee: float,
++                           account: dict, position_meta: dict, trade_plans: dict, funding_clock: dict) -> None:
++        payloads={key:json.dumps(value,ensure_ascii=False,default=str,allow_nan=False)
++                  for key,value in {'paper_account':account,'position_meta':position_meta,
++                                    'trade_plans':trade_plans,'paper_funding_clock':funding_clock}.items()}
++        if not math.isfinite(float(fill_qty)) or not math.isfinite(float(fill_fee)) or fill_qty<=0 or fill_fee<0:
++            raise ValueError('invalid layer fill')
++        with self._conn() as conn:
++            conn.execute('BEGIN IMMEDIATE')
++            intent=conn.execute("SELECT symbol,request_json FROM paper_layer_intents WHERE operation_id=? AND status='PENDING'",(operation_id,)).fetchone()
++            old=conn.execute('SELECT qty FROM open_positions WHERE symbol=?',(pos.symbol,)).fetchone()
++            if intent is None or intent['symbol']!=pos.symbol or old is None:
++                raise RuntimeError('missing layer intent or position')
++            req=json.loads(intent['request_json'])
++            def read(key):
++                row=conn.execute('SELECT value FROM bot_meta WHERE key=?',(key,)).fetchone()
++                if row is None: raise RuntimeError('missing stored metadata: '+key)
++                return json.loads(row['value'])
++            old_account=read('paper_account');old_meta=read('position_meta')
++            eq=lambda a,b:math.isclose(float(a),float(b),rel_tol=1e-12,abs_tol=1e-9)
++            if (not eq(old['qty'],req['original_qty']) or fill_qty>float(req['requested_qty'])+1e-9
++                or not eq(pos.qty,float(req['original_qty'])+fill_qty)
++                or not eq(old_account['balance'],req['old_balance'])
++                or not eq(old_meta[pos.symbol].get('entry_fee_usdt',0),req['old_fee'])
++                or not eq(account['balance'],float(req['old_balance'])-fill_fee)
++                or not eq(position_meta[pos.symbol]['entry_fee_usdt'],float(req['old_fee'])+fill_fee)):
++                raise RuntimeError('layer state changed or accounting mismatch')
++            conn.execute("""UPDATE open_positions SET side=?,entry=?,qty=?,stop=?,peak=?,locked_profit=?,opened_at=?,
++                         leverage=?,margin_usdt=?,layers=?,last_add_price=?,exchange=?,updated_at=? WHERE symbol=?""",
++                (pos.side,float(pos.entry),float(pos.qty),float(pos.stop),float(pos.peak),1 if pos.locked_profit else 0,
++                 str(pos.opened_at or ''),int(pos.leverage),float(pos.margin_usdt),int(pos.layers),
++                 float(pos.last_add_price),str(pos.exchange or 'binance'),time.time(),pos.symbol))
++            for key,payload in payloads.items():
++                conn.execute("INSERT INTO bot_meta (key,value,updated_at) VALUES (?,?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value,updated_at=excluded.updated_at",(key,payload,time.time()))
++            changed=conn.execute("UPDATE paper_layer_intents SET status='APPLIED' WHERE operation_id=? AND status='PENDING'",(operation_id,))
++            if changed.rowcount!=1:raise RuntimeError('paper layer intent update failed')
++
++    def update_paper_risk_if_unchanged(self, before: dict, pos: Position) -> None:
++        """CAS trailing stop/peak with journal exclusion; no account mutation.
++
++        A mismatch or ambiguous write is not retried. This is a narrow paper
++        risk update, not a general multi-writer ownership protocol.
++        """
++        if not isinstance(before,dict) or before.get('symbol') != pos.symbol:
++            raise ValueError('invalid old paper position')
++        after = paper_position_snapshot(pos)
++        immutable = set(before) - {'stop','peak','locked_profit'}
++        if any(before.get(key) != after.get(key) for key in immutable):
++            raise RuntimeError('unexpected financial mutation in risk update')
++        with self._conn() as conn:
++            conn.execute('BEGIN IMMEDIATE')
++            for table in ('paper_intents','paper_close_intents','paper_funding_intents','paper_layer_intents'):
++                if conn.execute('SELECT 1 FROM '+table+" WHERE status='PENDING' LIMIT 1").fetchone():
++                    raise RuntimeError('unresolved paper intent during risk update')
++            keys=('symbol','side','entry','qty','stop','peak','locked_profit',
++                  'opened_at','leverage','margin_usdt','layers','last_add_price','exchange')
++            row=conn.execute('SELECT '+','.join(keys)+' FROM open_positions WHERE symbol=?',(pos.symbol,)).fetchone()
++            if row is None:
++                raise RuntimeError('paper position missing during risk update')
++            actual={key:row[key] for key in keys}
++            actual['locked_profit']=bool(actual['locked_profit'])
++            if actual != before:
++                raise RuntimeError('paper state changed in another process: risk update')
++            conn.execute('UPDATE open_positions SET stop=?,peak=?,locked_profit=?,updated_at=? WHERE symbol=?',
++                         (float(pos.stop),float(pos.peak),int(bool(pos.locked_profit)),time.time(),pos.symbol))
++
++    def save_position(self, pos: Position, exchange: str | None = None) -> None:
++        exchange = exchange or pos.exchange or "binance"
++        pos.exchange = exchange
++        with self._conn() as conn:
++            conn.execute(
++                """
++                INSERT INTO open_positions
++                (symbol, side, entry, qty, stop, peak, locked_profit, opened_at,
++                 leverage, margin_usdt, layers, last_add_price, exchange, updated_at)
++                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
++                ON CONFLICT(symbol) DO UPDATE SET
++                    side=excluded.side,
++                    entry=excluded.entry,
++                    qty=excluded.qty,
++                    stop=excluded.stop,
++                    peak=excluded.peak,
++                    locked_profit=excluded.locked_profit,
++                    opened_at=excluded.opened_at,
++                    leverage=excluded.leverage,
++                    margin_usdt=excluded.margin_usdt,
++                    layers=excluded.layers,
++                    last_add_price=excluded.last_add_price,
++                    exchange=excluded.exchange,
++                    updated_at=excluded.updated_at
++                """,
++                (
++                    pos.symbol,
++                    pos.side,
++                    float(pos.entry),
++                    float(pos.qty),
++                    float(pos.stop),
++                    float(pos.peak),
++                    1 if pos.locked_profit else 0,
++                    str(pos.opened_at or ""),
++                    int(pos.leverage),
++                    float(pos.margin_usdt),
++                    int(pos.layers),
++                    float(pos.last_add_price),
++                    str(exchange),
++                    time.time(),
++                ),
++            )
++
++    def delete_position(self, symbol: str) -> None:
++        with self._conn() as conn:
++            conn.execute("DELETE FROM open_positions WHERE symbol = ?", (symbol,))
++
++    def load_positions(self) -> dict[str, Position]:
++        with self._conn() as conn:
++            rows = conn.execute("SELECT * FROM open_positions").fetchall()
++        positions: dict[str, Position] = {}
++        for r in rows:
++            pos = Position(
++                symbol=str(r["symbol"]),
++                side=str(r["side"]),
++                entry=float(r["entry"]),
++                qty=float(r["qty"]),
++                stop=float(r["stop"]),
++                peak=float(r["peak"]),
++                locked_profit=bool(r["locked_profit"]),
++                opened_at=str(r["opened_at"] or ""),
++                leverage=int(r["leverage"]),
++                margin_usdt=float(r["margin_usdt"]),
++                layers=int(r["layers"]),
++                last_add_price=float(r["last_add_price"]),
++                exchange=str(r["exchange"] or ""),
++            )
++            positions[pos.symbol] = pos
++        return positions
++
++    def startup_recovery_report(self) -> list[str]:
++        positions = self.load_positions()
++        if not positions:
++            return []
++        msgs = [f"♻️ SQLite'tan {len(positions)} açık pozisyon kurtarıldı:"]
++        for sym, pos in positions.items():
++            msgs.append(
++                f"  • {sym} ({pos.exchange or 'binance'}) {pos.side} "
++                f"qty={pos.qty:.6g} @ {pos.entry:,.4f} | stop={pos.stop:,.4f}"
++            )
++        return msgs
++
++    # -- İşlem, Özsermaye ve Arbitraj Geçmişi ----------------------------------
++    def record_trade(
++        self,
++        symbol: str,
++        side: str,
++        entry: float,
++        exit_price: float,
++        qty: float,
++        pnl_pct: float,
++        reason: str,
++        leverage: int = 20,
++        margin_usdt: float = 0.0,
++        pnl_usdt: float = 0.0,
++        layers: int = 1,
++        position_id: str = "",
++        entry_context: dict | None = None,
++        exchange: str = "",
++        entry_fee_usdt: float = 0.0,
++        exit_fee_usdt: float = 0.0,
++        funding_usdt: float = 0.0,
++        net_pnl_usdt: float | None = None,
++        mfe_usdt: float = 0.0,
++        mae_usdt: float = 0.0,
++        stop_price: float | None = None,
++        net_breakeven_price: float | None = None,
++        ts: float | None = None,
++    ) -> None:
++        roe_pct = pnl_pct * leverage
++        if net_pnl_usdt is None:
++            net_pnl_usdt = (
++                float(pnl_usdt)
++                - float(entry_fee_usdt)
++                - float(exit_fee_usdt)
++                + float(funding_usdt)
++            )
++        context_json = json.dumps(
++            entry_context or {}, ensure_ascii=False, default=str, separators=(",", ":")
++        )
++        with self._conn() as conn:
++            conn.execute(
++                """
++                INSERT INTO trade_history
++                (ts, symbol, side, entry, exit_price, qty, leverage, margin_usdt,
++                 pnl_pct, roe_pct, pnl_usdt, reason, layers, position_id, entry_context,
++                 exchange, entry_fee_usdt, exit_fee_usdt, funding_usdt, net_pnl_usdt,
++                 mfe_usdt, mae_usdt, stop_price, net_breakeven_price)
++                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
++                """,
++                (
++                    float(ts if ts is not None else time.time()),
++                    symbol,
++                    side,
++                    float(entry),
++                    float(exit_price),
++                    float(qty),
++                    int(leverage),
++                    float(margin_usdt),
++                    float(pnl_pct),
++                    float(roe_pct),
++                    float(pnl_usdt),
++                    reason,
++                    int(layers),
++                    str(position_id or ""),
++                    context_json,
++                    str(exchange or ""),
++                    float(entry_fee_usdt),
++                    float(exit_fee_usdt),
++                    float(funding_usdt),
++                    float(net_pnl_usdt),
++                    float(mfe_usdt),
++                    float(mae_usdt),
++                    float(stop_price) if stop_price is not None else None,
++                    float(net_breakeven_price) if net_breakeven_price is not None else None,
++                ),
++            )
++
++    def get_trades(self, limit: int = 50) -> list[dict]:
++        with self._conn() as conn:
++            rows = conn.execute(
++                "SELECT * FROM trade_history ORDER BY id DESC LIMIT ?", (int(limit),)
++            ).fetchall()
++        return [dict(r) for r in rows]
++
++    def get_trades_since(self, since_ts: float, until_ts: float | None = None) -> list[dict]:
++        """Oturum/günlük rapor için kapanışları eski→yeni döndürür."""
++        query = "SELECT * FROM trade_history WHERE ts >= ?"
++        params: list[float] = [float(since_ts)]
++        if until_ts is not None:
++            query += " AND ts <= ?"
++            params.append(float(until_ts))
++        query += " ORDER BY ts, id"
++        with self._conn() as conn:
++            rows = conn.execute(query, tuple(params)).fetchall()
++        return [dict(r) for r in rows]
++
++    def record_equity(
++        self,
++        balance_usdt: float,
++        equity_usdt: float,
++        open_positions: int = 0,
++        ts: float | None = None,
++    ) -> None:
++        with self._conn() as conn:
++            conn.execute(
++                """
++                INSERT INTO equity_history (ts, balance_usdt, equity_usdt, open_positions)
++                VALUES (?, ?, ?, ?)
++                """,
++                (
++                    float(ts if ts is not None else time.time()),
++                    float(balance_usdt),
++                    float(equity_usdt),
++                    int(open_positions),
++                ),
++            )
++
++    def get_equity_curve(self, limit: int = 200) -> list[dict]:
++        with self._conn() as conn:
++            rows = conn.execute(
++                "SELECT * FROM equity_history ORDER BY id DESC LIMIT ?", (int(limit),)
++            ).fetchall()
++        return [dict(r) for r in reversed(rows)]
++
++    def record_arbitrage(self, record: dict) -> None:
++        with self._conn() as conn:
++            conn.execute(
++                """
++                INSERT INTO arbitrage_history
++                (ts, symbol, buy_exchange, sell_exchange, buy_price, sell_price,
++                 qty, net_spread_pct, profit_usdt, status)
++                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
++                """,
++                (
++                    float(record.get("executed_at") or time.time()),
++                    str(record.get("symbol", "")),
++                    str(record.get("buy_exchange", "")),
++                    str(record.get("sell_exchange", "")),
++                    float(record.get("buy_price", 0.0)),
++                    float(record.get("sell_price", 0.0)),
++                    float(record.get("qty", 0.0)),
++                    float(record.get("net_spread_pct", 0.0)),
++                    float(record.get("profit_usdt", 0.0)),
++                    str(record.get("status", "FILLED")),
++                ),
++            )
++
++    def get_arb_history(self, limit: int = 50) -> list[dict]:
++        with self._conn() as conn:
++            rows = conn.execute(
++                "SELECT * FROM arbitrage_history ORDER BY id DESC LIMIT ?", (int(limit),)
++            ).fetchall()
++        return [dict(r) for r in rows]
++
++    # -- Anahtar-Değer Meta & Uzaktan Komut Kuyruğu ----------------------------
++    def set_meta(self, key: str, value: Any) -> None:
++        payload = json.dumps(value, ensure_ascii=False, default=str)
++        with self._conn() as conn:
++            conn.execute(
++                """
++                INSERT INTO bot_meta (key, value, updated_at)
++                VALUES (?, ?, ?)
++                ON CONFLICT(key) DO UPDATE SET
++                    value=excluded.value,
++                    updated_at=excluded.updated_at
++                """,
++                (str(key), payload, time.time()),
++            )
++
++    def get_meta(self, key: str, default: Any = None) -> Any:
++        with self._conn() as conn:
++            row = conn.execute("SELECT value FROM bot_meta WHERE key = ?", (str(key),)).fetchone()
++        if row is None:
++            return default
++        try:
++            return json.loads(row["value"])
++        except Exception:
++            return default
++
++    def push_command(self, cmd: str, payload: dict | None = None) -> None:
++        with self._conn() as conn:
++            conn.execute(
++                "INSERT INTO command_queue (ts, cmd, payload, processed) VALUES (?, ?, ?, 0)",
++                (time.time(), str(cmd), json.dumps(payload or {}, ensure_ascii=False)),
++            )
++
++    def pop_commands(self) -> list[dict]:
++        with self._conn() as conn:
++            rows = conn.execute(
++                "SELECT id, ts, cmd, payload FROM command_queue WHERE processed = 0 ORDER BY id ASC"
++            ).fetchall()
++            if not rows:
++                return []
++            ids = [r["id"] for r in rows]
++            placeholders = ",".join("?" for _ in ids)
++            conn.execute(
++                f"UPDATE command_queue SET processed = 1 WHERE id IN ({placeholders})",
++                tuple(ids),
++            )
++        result = []
++        for r in rows:
++            try:
++                pl = json.loads(r["payload"] or "{}")
++            except Exception:
++                pl = {}
++            result.append({"id": r["id"], "ts": r["ts"], "cmd": r["cmd"], "payload": pl})
++        return result
+diff --git b/reports/v943_reference_sources/src/unified_engine.py b/reports/v943_reference_sources/src/unified_engine.py
+new file mode 100644
+index 0000000..cedf0a9
+--- /dev/null
++++ b/reports/v943_reference_sources/src/unified_engine.py
+@@ -0,0 +1,1335 @@
++"""Kripto Bot v9.2 — Tekil Kanonik Strateji, 10-Ajan Çapraz Teftiş, Akım-Takip Çıkışı ve Yürütme Motoru.
++
++v9.2 Mimari Yükseltmeleri:
++  1. Tek Kanonik Hat (`UnifiedTradingEngine`): Tüm saf kripto vadeli evren taraması, rejim,
++     10-Ajan 3-turlu çapraz teftiş, pasif Maker kuyruk yürütmesi ve ACID SQLite defteri tek omurgadadır.
++  2. 10-Ajan Karşılıklı Teftiş Konseyi (`TenAgentMutualAuditCouncil`): On bağımsız müfettiş ajan
++     (`Mufettis_01`..`Mufettis_10`) aynı tam görev üzerinde 3 turda birbirlerinin tezlerini ve
++     itirazlarını denetler (dış API gerektirmez, paper modda deterministik çalışır).
++  3. Akım ve İndikatör Takipli Dinamik Çıkış (`FlowTrendExitManager`): LONG pozisyonda para girişi
++     sürdükçe pozisyonu korur, satış başladığında çıkar; SHORT pozisyonda satış baskısı bitip alım
++     başladığında çıkar. Kör 135sn zaman kesimi kaldırılmış, gölge (counterfactual) karşılaştırması eklenmiştir.
++  4. Karşı-Olgu & Asimetri Analitiği (`CounterfactualTracker`): Engellenen her LONG/SHORT sinyalin
++     5dk/15dk ileri getirisi ve gölge 135sn kesim farkı canlı ölçülür.
++  5. Fonlama Uzlaşma Yakınlığı (`check_funding_settlement_proximity`), Spot-Perp Basis Kapısı ve
++     Veri Gecikmesi / Defter Mutabakat Alarmları (`operational_health_snapshot`).
++"""
++from __future__ import annotations
++
++import math
++import statistics
++import time
++from typing import Any
++
++import pandas as pd
++
++from scanner.ind_aktif import kapali_mum_ekle, metrik
++from scanner.universe import STOCK_LIKE_DENYLIST
++from scanner.ws_scanner import SpikeDetector
++
++from .commission_optimizer import CommissionOptimizer
++from .counterfactual import CounterfactualTracker
++from .edge_analytics import compute_edge_separation_report
++from .flow_exit_manager import FlowTrendExitManager
++from .futures_catalog import NON_CRYPTO_OR_PEGGED_BASES, canonical_underlying_asset
++from .indicators import indicator_score, multi_timeframe_filter
++from .global_market_regime import GlobalMarketRegimeAnchor, causal_mtf_from_5m
++from .llm_referee import LiveLLMReferee
++from .moneyflow import MoneyFlow
++from .pdf_core_confluence import compute_pdf_core_confluence
++from .quant_rule_council import QuantRuleCouncil
++from .regime_state_machine import RegimeStateMachine
++from .strategy import Strategy
++from .ten_agent_debate import TenAgentMutualAuditCouncil
++from .win_loss_analyzer import WinLossAnalyzer
++
++
++ENGINE_VERSION = "9.4.0"
++DEFAULT_BREADTH_FADE_THRESHOLD = 0.35
++FUNDING_INTERVAL_SEC = 8 * 3600  # 00:00, 08:00, 16:00 UTC
++
++
++def check_funding_settlement_proximity(
++    side: str,
++    funding_rate: float,
++    now_ts: float | None = None,
++    *,
++    settlement_ts: float | None = None,
++    guard_window_sec: float = 720.0,
++    adverse_rate_threshold: float = 0.0002,
++) -> dict[str, Any]:
++    """8 saatlik fonlama uzlaşmasına yakınken aleyhte fonlama ödemesini önleyen kapı (Denetim 3.8).
++
++    - `funding_rate > 0`: LONG öder, SHORT alır.
++    - `funding_rate < 0`: SHORT öder, LONG alır.
++    """
++    now_s = float(now_ts if now_ts is not None else time.time())
++    if settlement_ts is not None and settlement_ts >= now_s:
++        sec_to_settle = float(settlement_ts - now_s)
++    else:
++        rem = now_s % FUNDING_INTERVAL_SEC
++        sec_to_settle = float((FUNDING_INTERVAL_SEC - rem) % FUNDING_INTERVAL_SEC)
++
++    u_side = str(side or "").upper()
++    rate = float(funding_rate or 0.0)
++    adverse_payment_bps = 0.0
++    if u_side == "LONG" and rate > 0:
++        adverse_payment_bps = rate * 10_000.0
++    elif u_side == "SHORT" and rate < 0:
++        adverse_payment_bps = abs(rate) * 10_000.0
++
++    blocked = (
++        u_side in ("LONG", "SHORT")
++        and sec_to_settle <= guard_window_sec
++        and (adverse_payment_bps / 10_000.0) >= adverse_rate_threshold
++    )
++    return {
++        "allowed": not blocked,
++        "sec_to_settlement": round(sec_to_settle, 1),
++        "funding_rate": rate,
++        "adverse_payment_bps": round(adverse_payment_bps, 3),
++        "reason": (
++            f"funding_uzlasma_yakin({sec_to_settle:.0f}s_kala_aleyhte_{adverse_payment_bps:.2f}bps)"
++            if blocked
++            else "funding_uygun"
++        ),
++    }
++
++
++class UnifiedTradingEngine:
++    """v9.2 Tekil Kanonik Sinyal, Rejim, 10-Ajan Çapraz Teftiş, Akım-Çıkış ve Yürütme Motoru."""
++
++    def __init__(
++        self,
++        executor,
++        *,
++        mode: str = "hybrid_fusion",
++        council: QuantRuleCouncil | None = None,
++        ten_agent_council: TenAgentMutualAuditCouncil | None = None,
++        flow_exit_manager: FlowTrendExitManager | None = None,
++        counterfactual: CounterfactualTracker | None = None,
++        detector: SpikeDetector | None = None,
++        commission_optimizer: CommissionOptimizer | None = None,
++        win_loss_analyzer: WinLossAnalyzer | None = None,
++        regime_machine: RegimeStateMachine | None = None,
++        llm_referee: LiveLLMReferee | None = None,
++        breadth_fade_threshold: float = DEFAULT_BREADTH_FADE_THRESHOLD,
++        require_vwap_warmup: bool = False,
++        cfg: dict[str, Any] | None = None,
++    ):
++        if mode not in {"shadow_only", "confluence_gate", "hybrid_fusion"}:
++            raise ValueError(f"Geçersiz motor modu: {mode}")
++        self.version = ENGINE_VERSION
++        self.cfg = cfg or {}
++        self.executor = executor
++        self.mode = mode
++        self.breadth_fade_threshold = float(breadth_fade_threshold)
++        self.require_vwap_warmup = bool(require_vwap_warmup)
++        self.council = council if council is not None else QuantRuleCouncil()
++
++        ten_cfg = self.cfg.get("on_ajan_konseyi", {}) if isinstance(self.cfg, dict) else {}
++        self.ten_agent_enabled: bool = (
++            ten_agent_council is not None or bool(ten_cfg.get("aktif", False))
++        )
++        self.ten_agent_council = (
++            ten_agent_council
++            if ten_agent_council is not None
++            else TenAgentMutualAuditCouncil(
++                min_consensus_votes=int(ten_cfg.get("min_onay_oyu", 7)),
++                min_expected_gross_fee_mult=float(ten_cfg.get("min_brut_maliyet_kati", 3.5)),
++            )
++        )
++
++        exit_cfg = self.cfg.get("cikis", {}) if isinstance(self.cfg, dict) else {}
++        self.flow_exit_enabled: bool = (
++            flow_exit_manager is not None or bool(exit_cfg.get("akim_takip_cikisi_aktif", False))
++        )
++        self.flow_exit_manager = (
++            flow_exit_manager
++            if flow_exit_manager is not None
++            else FlowTrendExitManager(
++                min_reversal_profit_usdt=float(exit_cfg.get("min_donus_kar_usdt", 1.10)),
++            )
++        )
++        self.counterfactual = (
++            counterfactual if counterfactual is not None else CounterfactualTracker()
++        )
++
++        self.global_anchor = GlobalMarketRegimeAnchor()
++        self.detector = detector if detector is not None else SpikeDetector(baglam_aktif=True)
++        self.detector.ind_aktif = True
++        self.commission_optimizer = (
++            commission_optimizer
++            if commission_optimizer is not None
++            else CommissionOptimizer(max_entry_spread_pct=0.08)
++        )
++        self.win_loss_analyzer = (
++            win_loss_analyzer if win_loss_analyzer is not None else WinLossAnalyzer()
++        )
++        self.regime_machine = (
++            regime_machine
++            if regime_machine is not None
++            else RegimeStateMachine(breadth_min_ratio=self.breadth_fade_threshold)
++        )
++        self.llm_referee = llm_referee if llm_referee is not None else LiveLLMReferee()
++        self._last_processed_trade_id: int = 0
++        self._last_breadth_update_ms: int = 0
++        self._last_feed_ts: float = time.time()
++        self.spot_perp_basis_bps: dict[str, float] = {}
++        self.max_spot_perp_basis_bps: float = float(
++            (self.cfg.get("cift_borsa") or {}).get("max_spot_perp_basis_bps", 25.0)
++            if isinstance(self.cfg, dict)
++            else 25.0
++        )
++        self.flows: dict[str, MoneyFlow] = {}
++        self.metrics = {
++            "ticks_processed": 0,
++            "universe_ticks_processed": 0,
++            "candles_ingested": 0,
++            "signals_evaluated": 0,
++            "regime_blocks": 0,
++            "bearish_long_blocks": 0,
++            "volume_divergence_triggers": 0,
++            "breadth_blocks": 0,
++            "warmup_blocks": 0,
++            "basis_divergence_blocks": 0,
++            "funding_proximity_blocks": 0,
++            "council_vetoes": 0,
++            "ten_agent_vetoes": 0,
++            "llm_referee_vetoes": 0,
++            "commission_blocks": 0,
++            "win_loss_trap_blocks": 0,
++            "flow_trend_exits": 0,
++            "shadow_legacy_135s_tags": 0,
++            "stagnant_cuts": 0,
++            "v4_vwap_atr_blocks": 0,
++            "maker_unfilled_skips": 0,
++            "entries_routed": 0,
++        }
++
++    @staticmethod
++    def filter_pure_crypto_symbols(symbols: list[str]) -> list[str]:
++        """STOCK_LIKE_DENYLIST + NON_CRYPTO_OR_PEGGED_BASES birleşik %100 saf kripto filtresi."""
++        blocked = STOCK_LIKE_DENYLIST | NON_CRYPTO_OR_PEGGED_BASES
++        keep: list[str] = []
++        for sym in symbols:
++            raw = str(sym or "").strip().upper()
++            if not raw:
++                continue
++            base = raw.split("/")[0].split("-")[0]
++            if base.endswith("USDT") and len(base) > 4:
++                base = base[:-4]
++            canon = canonical_underlying_asset(base)
++            if base in blocked or canon in blocked or base in {
++                "USDT",
++                "USDC",
++                "FDUSD",
++                "DAI",
++                "TUSD",
++                "USDE",
++            }:
++                continue
++            keep.append(sym)
++        return keep
++
++    def set_spot_perp_basis(self, symbol: str, perp_mid: float, spot_mid: float) -> float:
++        """Spot-Perp basis farkını (bps) kaydeder (Denetim 2.c & 3.5)."""
++        if perp_mid > 0 and spot_mid > 0:
++            bps = (float(perp_mid) - float(spot_mid)) / float(spot_mid) * 10_000.0
++            self.spot_perp_basis_bps[symbol] = round(bps, 3)
++            return bps
++        return 0.0
++
++    def flow_for(self, symbol: str) -> MoneyFlow:
++        flow = self.flows.get(symbol)
++        if flow is None:
++            flow = MoneyFlow(symbol, window_sec=300, compact_history=True)
++            self.flows[symbol] = flow
++        return flow
++
++    def ingest_universe_price(
++        self,
++        exchange: str,
++        symbol: str,
++        price: float,
++        ts_ms: int | None = None,
++    ) -> None:
++        """Tüm saf kripto evreninden (~545+ sembol) anlık fiyatları genişlik ve karşı-olgu ölçerine besler."""
++        if not (math.isfinite(price) and price > 0):
++            return
++        now_ms = int(ts_ms if ts_ms is not None else time.time() * 1000)
++        self._last_feed_ts = now_ms / 1000.0
++        d = self.detector.durum(exchange, symbol)
++        d.fiyatlar.append((now_ms, float(price)))
++        d.son_fiyat = float(price)
++        d.son_fiyat_ts = now_ms
++        self.counterfactual.on_price_update(symbol, float(price), now_ts=now_ms / 1000.0)
++        self.metrics["universe_ticks_processed"] += 1
++
++    def update_universe_breadth(self, now_ms: int | None = None) -> float:
++        """Canlı piyasa genişliğini (`genislik_oran`) günceller ve döndürür."""
++        ts = int(now_ms if now_ms is not None else time.time() * 1000)
++        if ts - self._last_breadth_update_ms >= 500 or self._last_breadth_update_ms == 0:
++            self.detector.genislik_guncelle()
++            self._last_breadth_update_ms = ts
++        return float(self.detector.genislik_oran or 0.0)
++
++    def ingest_closed_1m_candle(
++        self,
++        exchange: str,
++        symbol: str,
++        minute_id: int,
++        open_px: float,
++        high_px: float,
++        low_px: float,
++        close_px: float,
++        base_vol: float,
++        quote_vol: float | None = None,
++        *,
++        mirror_exchanges: bool = True,
++    ) -> bool:
++        """60dk VWAP60/ATR14 + 35dk bağlam/RVOL önbelleğini sıfır ölü zamanla besler."""
++        mid = int(minute_id)
++        c_px = float(close_px)
++        qv = float(quote_vol) if quote_vol is not None else c_px * float(base_vol)
++        targets = ("binance", "okx") if mirror_exchanges else (str(exchange),)
++        any_ok = False
++        for ex_key in targets:
++            d = self.detector.durum(ex_key, symbol)
++            ok = kapali_mum_ekle(
++                d, mid, float(high_px), float(low_px), c_px, float(base_vol), qv
++            )
++            if ok:
++                any_ok = True
++                if not d.dakika_hacim or d.dakika_hacim[-1][0] < mid:
++                    d.dakika_hacim.append((mid, qv))
++                    d.dakika_kapanis.append((mid, c_px))
++                elif d.dakika_hacim[-1][0] == mid:
++                    d.dakika_hacim[-1] = (mid, qv)
++                    if d.dakika_kapanis and d.dakika_kapanis[-1][0] == mid:
++                        d.dakika_kapanis[-1] = (mid, c_px)
++                d.dakika_id = max(d.dakika_id, mid)
++                if d.son_fiyat <= 0 and c_px > 0:
++                    d.son_fiyat = c_px
++        if any_ok:
++            self.metrics["candles_ingested"] += 1
++        return any_ok
++
++    def compute_v4_vwap_metrics(
++        self,
++        exchange: str,
++        symbol: str,
++        price: float,
++        now_ms: int | None = None,
++        *,
++        rollover_grace_ms: int = 25_000,
++    ) -> dict[str, Any] | None:
++        """Dakika dönüşlerinde (`XX:XX:00..25`) REST gecikmesi yüzünden `None`/`0.0` düşmesini önler."""
++        simdi_ms = int(now_ms if now_ms is not None else time.time() * 1000)
++        for ex_try in (exchange, "binance", "okx"):
++            d_try = self.detector.durum(ex_try, symbol)
++            raw = metrik(d_try, simdi_ms, price)
++            if raw is None:
++                into_min_ms = simdi_ms % 60_000
++                if into_min_ms <= rollover_grace_ms:
++                    prev_boundary_ms = (simdi_ms // 60_000 - 1) * 60_000 + 59_000
++                    raw = metrik(d_try, prev_boundary_ms, price)
++            if raw is not None:
++                vwap_val = float(raw["vwap"])
++                atr_pct_val = float(raw["atr_pct"])
++                atr14_val = float(price) * atr_pct_val / 100.0
++                vwap_z_val = ((float(price) - vwap_val) / atr14_val) if atr14_val > 0 else 0.0
++                return {
++                    **raw,
++                    "vwap60": vwap_val,
++                    "atr14": atr14_val,
++                    "atr_pct": atr_pct_val,
++                    "vwap_z": vwap_z_val,
++                    "rvol_warmed": len(d_try.dakika_hacim) >= 15,
++                }
++        return None
++
++    async def on_trade(
++        self,
++        exchange: str,
++        symbol: str,
++        price: float,
++        qty: float,
++        *,
++        is_buyer_maker: bool,
++        ts_ms: int | None = None,
++    ) -> dict[str, Any] | None:
++        """Canlı işlemi MoneyFlow, Pasif Maker Kuyruk Simülatörü, SpikeDetector ve Executor tick'ine besler."""
++        if not (math.isfinite(price) and math.isfinite(qty) and price > 0 and qty > 0):
++            return None
++        now_ms = int(ts_ms if ts_ms is not None else time.time() * 1000)
++        now_s = now_ms / 1000.0
++        self._last_feed_ts = now_s
++        self.metrics["ticks_processed"] += 1
++
++        broker = getattr(self.executor, "broker", None)
++        if broker is not None and hasattr(broker, "feed_live_trade_to_maker_queue"):
++            broker.feed_live_trade_to_maker_queue(
++                exchange, symbol, price, qty, bool(is_buyer_maker), ts=now_s
++            )
++
++        flow = self.flow_for(symbol)
++        flow.add_trade(price, qty, is_buyer_maker=bool(is_buyer_maker), ts=now_s)
++        self.counterfactual.on_price_update(symbol, price, now_ts=now_s)
++
++        d = self.detector.durum(exchange, symbol)
++        prev_cum = float(getattr(d, "_v8_cum_qv", 0.0)) + price * qty
++        d._v8_cum_qv = prev_cum
++        self.detector.besle_hacim_kumulatif(exchange, symbol, prev_cum, now_ms)
++        spike_sig = self.detector.besle_fiyat(exchange, symbol, price, 0.0, now_ms)
++        self.update_universe_breadth(now_ms)
++
++        try:
++            await self.executor.on_price_tick(symbol, price, exchange=exchange)
++        except TypeError:
++            await self.executor.on_price_tick(symbol, price)
++        return {"spike": spike_sig.etiket if spike_sig else None, "rvol": d.rvol}
++
++    def _record_block(
++        self,
++        symbol: str,
++        side: str,
++        gate: str,
++        reason: str,
++        price: float,
++        now_ms: int,
++    ) -> None:
++        if side in ("LONG", "SHORT"):
++            self.counterfactual.record_blocked_signal(
++                gate=gate,
++                symbol=symbol,
++                side=side,
++                price=price,
++                reason=reason,
++                now_ts=now_ms / 1000.0,
++            )
++
++    async def evaluate_and_route(
++        self,
++        exchange: str,
++        symbol: str,
++        ohlcv_5m: pd.DataFrame,
++        *,
++        ohlcv_15m: pd.DataFrame | None = None,
++        ohlcv_1h: pd.DataFrame | None = None,
++        news_score: float = 0.0,
++        ml_score: float = 0.0,
++        spread_pct: float = 0.02,
++        funding_rate: float = 0.0,
++        settlement_ts: float | None = None,
++        now_ms: int | None = None,
++        allow_new_entries: bool = True,
++        mark_price: float | None = None,
++    ) -> dict[str, Any]:
++        """v9.2 Tekil Kanonik Karar, 10-Ajan Çapraz Teftiş, Akım Çıkış & Yürütme Hattı."""
++        if self.cfg.get("v94", {}).get("enabled", False):
++            from .v94_live_router import V94LiveRouter
++            from .adaptive_policy import AdaptivePolicy
++            if not hasattr(self, "v94_router"):
++                self.v94_router = V94LiveRouter(self, AdaptivePolicy(**self.cfg["v94"].get("policy", {})))
++            self.metrics["signals_evaluated"] += 1
++            return await self.v94_router.evaluate(exchange, symbol, ohlcv_5m,
++                mark_price=mark_price, spread_pct=spread_pct,
++                now_ms=int(now_ms if now_ms is not None else time.time()*1000),
++                allow_new_entries=allow_new_entries)
++        self.metrics["signals_evaluated"] += 1
++        now_ms = int(now_ms if now_ms is not None else time.time() * 1000)
++        now_sec = now_ms / 1000.0
++        price = float(ohlcv_5m["close"].iloc[-1])
++        self.counterfactual.on_price_update(symbol, price, now_ts=now_sec)
++
++        ind_res = indicator_score(ohlcv_5m)
++        ind_val = float(ind_res.get("score", 0.0))
++
++        # 1) 14-mum 5m True Range ATR ve son 6 mumluk swing noktaları
++        atr_5m = float(ind_res.get("atr") or (ind_res.get("details") or {}).get("atr") or 0.0)
++        if atr_5m <= 0 and {"high", "low", "close"}.issubset(ohlcv_5m.columns) and len(ohlcv_5m) >= 15:
++            h_arr = ohlcv_5m["high"].iloc[-15:].astype(float).to_numpy()
++            l_arr = ohlcv_5m["low"].iloc[-15:].astype(float).to_numpy()
++            c_arr = ohlcv_5m["close"].iloc[-15:].astype(float).to_numpy()
++            tr_arr = [
++                max(h_arr[k] - l_arr[k], abs(h_arr[k] - c_arr[k - 1]), abs(l_arr[k] - c_arr[k - 1]))
++                for k in range(1, len(c_arr))
++            ]
++            if tr_arr:
++                atr_5m = float(sum(tr_arr) / len(tr_arr))
++        if atr_5m > 0:
++            self.executor.set_atr(symbol, atr_5m)
++        sw_low: float | None = None
++        sw_high: float | None = None
++        if "low" in ohlcv_5m.columns and "high" in ohlcv_5m.columns and len(ohlcv_5m) >= 8:
++            sw_low = float(ohlcv_5m["low"].iloc[-7:-1].min())
++            sw_high = float(ohlcv_5m["high"].iloc[-7:-1].max())
++            if hasattr(self.executor, "set_market_structure"):
++                self.executor.set_market_structure(symbol, sw_low, sw_high)
++            elif hasattr(self.executor, "_structure"):
++                self.executor._structure[symbol] = {"swing_low": sw_low, "swing_high": sw_high}
++
++        # 2) Çekirdek Uyum Metrikleri (Choppiness, BOS, VWAP20_Z)
++        pdf_core = compute_pdf_core_confluence(ohlcv_5m)
++        flow_snap = self.flow_for(symbol).snapshot(include_vpvr=False)
++        flow_val = float(flow_snap.get("score", 0.0))
++
++        # 3) 60dk VWAP60 + Wilder ATR14
++        d_v4 = self.detector.durum(exchange, symbol)
++        raw_v4 = self.compute_v4_vwap_metrics(exchange, symbol, price, now_ms)
++        v4_60m = None
++        vwap_atr_z = 0.0
++        v4_boost = 0.0
++        if raw_v4 is not None:
++            atr14 = price * float(raw_v4["atr_pct"]) / 100.0
++            v4_60m = {
++                "vwap60": float(raw_v4["vwap"]),
++                "atr14": atr14,
++                "atr_pct": float(raw_v4["atr_pct"]),
++                "kapanis_dk": int(raw_v4["kapanis_dk"]),
++            }
++            if atr14 > 0:
++                vwap_atr_z = (price - v4_60m["vwap60"]) / atr14
++                if 0.15 <= abs(vwap_atr_z) <= 2.8:
++                    v4_boost = math.copysign(min(10.0, abs(vwap_atr_z) * 4.5), vwap_atr_z)
++        else:
++            vwap_atr_z = float(pdf_core.get("vwap20_z", 0.0))
++
++        dk_hist = list(getattr(d_v4, "dakika_hacim", ()))
++        med_qv = (
++            statistics.median([q for _, q in dk_hist[-35:] if q > 0])
++            if len(dk_hist) >= 5
++            else 250_000.0
++        )
++        raw_rvol = float(d_v4.rvol or 0.0)
++        flow_1m_qv = (float(flow_snap.get("buy_usdt", 0.0)) + float(flow_snap.get("sell_usdt", 0.0))) / 5.0
++        if len(dk_hist) >= 6 and med_qv > 0:
++            recent_qv = max(statistics.mean([q for _, q in dk_hist[-2:]]), flow_1m_qv)
++            raw_rvol = max(raw_rvol, recent_qv / med_qv)
++        rvol_warmed = raw_rvol > 0.0 and len(dk_hist) >= 5
++        eff_rvol = raw_rvol if rvol_warmed else 1.0
++
++        atr_pct_val = (
++            float(v4_60m["atr_pct"])
++            if v4_60m and v4_60m.get("atr_pct", 0.0) > 0
++            else ((atr_5m / price * 100.0) if (atr_5m > 0 and price > 0) else 0.45)
++        )
++        broker = getattr(self.executor, "broker", None)
++        if broker is not None and hasattr(broker, "symbol_volatility_meta"):
++            broker.symbol_volatility_meta[symbol] = {
++                "atr_pct": atr_pct_val,
++                "minute_qv_usdt": float(med_qv),
++            }
++
++        # 4) MTF + Rejim Durum Makinesi + Makro Ortam
++        mtf_info: dict[str, Any] | None = None
++        mtf_trend_str = "NEUTRAL"
++        mtf_info = causal_mtf_from_5m(ohlcv_5m)
++        mtf_trend_str = str(mtf_info.get("trend") or "NEUTRAL").upper()
++        self.global_anchor.update_leader(symbol, ohlcv_5m, now_ms=now_ms)
++        global_ctx = self.global_anchor.snapshot()
++        regime_global = global_ctx
++
++        bar_id = int(ohlcv_5m["ts"].iloc[-1]) if "ts" in ohlcv_5m.columns else len(ohlcv_5m)
++        raw_regime = str(ind_res.get("regime") or "TREND")
++        adx_val = float(ind_res.get("adx") or (25.0 if raw_regime == "TREND" else 16.0))
++        regime_snap = self.regime_machine.update(
++            symbol,
++            raw_regime=raw_regime,
++            adx=adx_val,
++            bar_id=bar_id,
++            rvol=eff_rvol,
++        )
++        confirmed_regime = regime_snap["confirmed_regime"]
++        chop_14 = float(pdf_core.get("choppiness_14", 50.0))
++
++        macro_info = self.regime_machine.evaluate_macro_regime(
++            symbol,
++            ohlcv_5m,
++            adx=adx_val,
++            choppiness_14=chop_14,
++            vwap_atr_z=vwap_atr_z,
++            rvol=eff_rvol,
++            rvol_warmed=rvol_warmed,
++            mtf_trend=mtf_trend_str,
++        )
++        regime_snap["macro_regime"] = macro_info["macro_regime"]
++        regime_snap["volume_declining"] = macro_info["volume_declining"]
++        regime_snap["vol_ratio_5m"] = macro_info["vol_ratio_5m"]
++
++        effective_ind = ind_val + (
++            (v4_boost + float(pdf_core.get("score_delta", 0.0)))
++            if self.mode == "hybrid_fusion"
++            else 0.0
++        )
++        effective_ind = max(-100.0, min(100.0, effective_ind))
++
++        strat: Strategy = self.executor.strategy
++        combined = strat.combine(
++            effective_ind,
++            flow_val,
++            news_score,
++            ml_score,
++            market_context={
++                "regime_aware": False,
++                "cvd_divergence": flow_snap.get("cvd_divergence", "NONE"),
++                "absorption": flow_snap.get("absorption", "YOK"),
++            },
++        )
++        side = str(combined.get("signal", "BEKLE"))
++
++        # 4b) Hacim Uyumsuzluğu (`VOLUME_DIVERGENCE_SHORT`)
++        vol_div_cfg = self.cfg.get("hacim_uyumsuzlugu", {}) if isinstance(self.cfg, dict) else {}
++        vol_div = self.regime_machine.detect_bearish_volume_divergence(
++            ohlcv_5m,
++            price=price,
++            ema20=float(macro_info.get("ema20", price)),
++            rvol=eff_rvol,
++            rvol_warmed=rvol_warmed,
++            spike_ret_2s=float(getattr(d_v4, "ret_2s", 0.0) or 0.0),
++            flow_snap=flow_snap,
++            cfg_div=vol_div_cfg,
++        )
++        if vol_div.get("triggered") and not (
++            price > float(macro_info.get("ema50", price))
++            and vwap_atr_z >= 1.25
++            and float(ind_res.get("snapshot", {}).get("rsi", 50.0)) >= 58.0
++            and mtf_trend_str != "BULLISH"
++            and global_ctx["global_bias"] != "GLOBAL_BULLISH"
++        ):
++            vol_div = {"triggered": False}
++        if vol_div.get("triggered") and macro_info["macro_regime"] != "CRASH_RISK_OFF":
++            self.metrics["volume_divergence_triggers"] += 1
++            side = "SHORT"
++            div_floor = float(vol_div_cfg.get("agresif_short_skor_tabani", -26.5))
++            combined["signal"] = "SHORT"
++            combined["total"] = min(float(combined.get("total", 0.0)), div_floor)
++            div_sw_high = float(vol_div["swing_high"])
++            sw_high = div_sw_high
++            if hasattr(self.executor, "set_market_structure") and sw_low is not None:
++                self.executor.set_market_structure(symbol, sw_low, div_sw_high)
++
++        # 5) Açık pozisyon varsa: akım + indikatör takip çıkışı, gölge 135sn karşı-olgu ve 10-ajan teftişi
++        self.sync_closed_trade_feedback()
++        pos_mark_px = price
++        if symbol in self.executor.positions:
++            pos_ref = self.executor.positions[symbol]
++            pos_ex_k = str(getattr(pos_ref, "exchange", "") or "").strip().lower()
++            vpx_map = getattr(self.executor, "last_venue_prices", {})
++            if pos_ex_k and (pos_ex_k, symbol) in vpx_map:
++                pos_mark_px = float(vpx_map[(pos_ex_k, symbol)])
++
++        if symbol in self.executor.positions and self.mode != "shadow_only":
++            if getattr(broker, "paper_funding_enabled", False):
++                try:
++                    self.executor.apply_funding(
++                        symbol, funding_rate, pos_mark_px, enabled=True, settlement_ts=settlement_ts
++                    )
++                except Exception:
++                    pass
++            await self.executor.maybe_orderflow_exit(symbol, pos_mark_px, flow_snap)
++
++        if symbol in self.executor.positions:
++            pos_open = self.executor.positions[symbol]
++            raw_opened = getattr(pos_open, "opened_at", "")
++            opened_ts = 0.0
++            if isinstance(raw_opened, (int, float)):
++                opened_ts = float(raw_opened)
++            elif isinstance(raw_opened, str) and raw_opened.strip():
++                from datetime import datetime, timezone
++
++                try:
++                    dt = datetime.strptime(raw_opened.strip()[:19], "%Y-%m-%d %H:%M:%S").replace(
++                        tzinfo=timezone.utc
++                    )
++                    opened_ts = dt.timestamp()
++                except Exception:
++                    opened_ts = 0.0
++            age_sec = max(0.0, now_sec - opened_ts) if opened_ts > 0 else 0.0
++            cur_gross = float(self.executor.risk.pnl_usdt(pos_open, pos_mark_px))
++            mfe_val = float(getattr(pos_open, "mfe_usdt", 0.0))
++            flow_against = (pos_open.side == "LONG" and flow_val < -18.0) or (
++                pos_open.side == "SHORT" and flow_val > 18.0
++            )
++            stag = self.win_loss_analyzer.evaluate_stagnant_loser(
++                age_sec=age_sec,
++                mfe_usdt=mfe_val,
++                current_gross_pnl_usdt=cur_gross,
++                flow_against_position=flow_against,
++            )
++
++            if self.flow_exit_enabled:
++                pos_id = f"{symbol}:{getattr(pos_open, 'opened_at', '')}"
++                if stag["should_cut"]:
++                    self.counterfactual.record_shadow_legacy_time_cut(
++                        position_id=pos_id,
++                        symbol=symbol,
++                        side=pos_open.side,
++                        entry_price=float(pos_open.entry),
++                        shadow_cut_price=pos_mark_px,
++                        qty=float(pos_open.qty),
++                        entry_fee_usdt=float(getattr(pos_open, "entry_fee_usdt", 0.10)),
++                        age_sec=age_sec,
++                        now_ts=now_sec,
++                    )
++                    self.metrics["shadow_legacy_135s_tags"] += 1
++
++                open_audit = None
++                if self.ten_agent_enabled:
++                    open_audit = self.ten_agent_council.audit_open_position(
++                        {
++                            "symbol": symbol,
++                            "side": pos_open.side,
++                            "gross_pnl_usdt": cur_gross,
++                            "mfe_usdt": mfe_val,
++                            "flow_score": flow_val,
++                            "ind_score": effective_ind,
++                            "combined_score": float(combined.get("total", 0.0)),
++                            "buy_usdt": float(flow_snap.get("buy_usdt", 0.0)),
++                            "sell_usdt": float(flow_snap.get("sell_usdt", 0.0)),
++                            "cvd_60s": float(flow_snap.get("cvd_60s", 0.0)),
++                            "age_sec": age_sec,
++                            "st_dir": ind_res.get("snapshot", {}).get("supertrend_direction"),
++                        }
++                    )
++
++                est_rt_fee = float(getattr(pos_open, "margin_usdt", 50.0)) * float(
++                    getattr(pos_open, "leverage", 10.0)
++                ) * 0.0007
++                flow_decision = self.flow_exit_manager.evaluate_open_position(
++                    side=pos_open.side,
++                    gross_pnl_usdt=cur_gross,
++                    mfe_usdt=mfe_val,
++                    roundtrip_fee_usdt=est_rt_fee,
++                    age_sec=age_sec,
++                    ind_score=effective_ind,
++                    flow_score=flow_val,
++                    combined_score=float(combined.get("total", 0.0)),
++                    flow_snap=flow_snap,
++                    ten_agent_audit=open_audit,
++                    supertrend_dir=ind_res.get("snapshot", {}).get("supertrend_direction"),
++                    rsi=ind_res.get("snapshot", {}).get("rsi"),
++                )
++                if flow_decision["should_exit"] and self.mode != "shadow_only":
++                    closed_ok = await self.executor.close_position(
++                        symbol, pos_mark_px, str(flow_decision["reason"])
++                    )
++                    if closed_ok:
++                        self.metrics["flow_trend_exits"] += 1
++                        self.sync_closed_trade_feedback()
++            else:
++                if stag["should_cut"] and self.mode != "shadow_only":
++                    closed_ok = await self.executor.close_position(symbol, pos_mark_px, stag["reason"])
++                    if closed_ok:
++                        self.metrics["stagnant_cuts"] += 1
++                        self.sync_closed_trade_feedback()
++
++        # 6) Doğal Kapanış / Drain Modu
++        if not allow_new_entries:
++            if symbol in self.executor.positions:
++                pos_cur = self.executor.positions[symbol]
++                pos_ex_d = str(getattr(pos_cur, "exchange", "") or "").strip().lower() or None
++                try:
++                    await self.executor.on_price_tick(symbol, pos_mark_px, exchange=pos_ex_d)
++                except TypeError:
++                    await self.executor.on_price_tick(symbol, pos_mark_px)
++                if symbol in self.executor.positions and self.mode != "shadow_only":
++                    tot_sc = float(combined.get("total", 0.0))
++                    rev_long = pos_cur.side == "LONG" and side == "SHORT" and tot_sc <= -22.0
++                    rev_short = pos_cur.side == "SHORT" and side == "LONG" and tot_sc >= 22.0
++                    if rev_long or rev_short:
++                        await self.executor.close_position(
++                            symbol, pos_mark_px, f"TERS SİNYAL DOĞAL ÇIKIŞ ({tot_sc:+.1f})"
++                        )
++                        self.sync_closed_trade_feedback()
++            return {
++                "symbol": symbol,
++                "signal": "BEKLE",
++                "raw_signal": side,
++                "routed": False,
++                "reason": "yeni_giris_durduruldu_acik_pozisyon_bekleniyor",
++                "regime": regime_snap,
++                "pdf_core": pdf_core,
++                "v4_60m": v4_60m,
++                "flow": flow_snap,
++            }
++
++        # Zorunlu 60dk VWAP ısınma kilidi
++        if side in ("LONG", "SHORT") and self.require_vwap_warmup and raw_v4 is None:
++            self.metrics["warmup_blocks"] += 1
++            self._record_block(symbol, side, "vwap_warmup_gate", "v4_vwap60_isinmadi_giris_kilitli", price, now_ms)
++            return {
++                "symbol": symbol,
++                "signal": "BEKLE",
++                "raw_signal": side,
++                "routed": False,
++                "reason": "v4_vwap60_isinmadi_giris_kilitli",
++                "regime": regime_snap,
++                "pdf_core": pdf_core,
++                "v4_60m": None,
++                "flow": flow_snap,
++            }
++
++        # 6a) Spot-Perp Basis Sapma Kapısı (Denetim 2.c & 3.5)
++        basis_bps = float(self.spot_perp_basis_bps.get(symbol, 0.0))
++        if side in ("LONG", "SHORT") and abs(basis_bps) > self.max_spot_perp_basis_bps:
++            self.metrics["basis_divergence_blocks"] += 1
++            rsn = f"spot_perp_basis_sapmasi({basis_bps:+.1f}bps>{self.max_spot_perp_basis_bps:.1f}bps)"
++            self._record_block(symbol, side, "spot_perp_basis_gate", rsn, price, now_ms)
++            return {
++                "symbol": symbol,
++                "signal": "BEKLE",
++                "raw_signal": side,
++                "routed": False,
++                "reason": rsn,
++                "spot_perp_basis_bps": basis_bps,
++                "regime": regime_snap,
++                "pdf_core": pdf_core,
++                "v4_60m": v4_60m,
++                "flow": flow_snap,
++            }
++
++        # 6a-2) Fonlama Uzlaşma Yakınlığı Kapısı (Denetim 3.8)
++        if side in ("LONG", "SHORT") and abs(float(funding_rate or 0.0)) > 0.0:
++            fund_prox = check_funding_settlement_proximity(
++                side=side,
++                funding_rate=funding_rate,
++                now_ts=now_sec,
++                settlement_ts=settlement_ts,
++            )
++            if not fund_prox["allowed"]:
++                self.metrics["funding_proximity_blocks"] += 1
++                self._record_block(
++                    symbol, side, "funding_proximity_gate", fund_prox["reason"], price, now_ms
++                )
++                return {
++                    "symbol": symbol,
++                    "signal": "BEKLE",
++                    "raw_signal": side,
++                    "routed": False,
++                    "reason": fund_prox["reason"],
++                    "funding_proximity": fund_prox,
++                    "regime": regime_snap,
++                    "pdf_core": pdf_core,
++                    "v4_60m": v4_60m,
++                    "flow": flow_snap,
++                }
++
++        # 6b) Çöküş (`CRASH_RISK_OFF`) ve Testere/Yatay (`CHOPPY_RANGE`) %100 Sert Sinyal Engeli
++        if side in ("LONG", "SHORT") and macro_info["hard_blocked"] and not vol_div.get("triggered"):
++            self.metrics["regime_blocks"] += 1
++            self._record_block(symbol, side, "macro_regime_gate", macro_info["reason"], price, now_ms)
++            return {
++                "symbol": symbol,
++                "signal": "BEKLE",
++                "raw_signal": side,
++                "routed": False,
++                "reason": macro_info["reason"],
++                "regime": regime_snap,
++                "pdf_core": pdf_core,
++                "v4_60m": v4_60m,
++                "flow": flow_snap,
++            }
++
++        # 6c) Ayı Trendi / Yatay Dağıtım + Azalan Hacim Filtresi -> LONG Engeli
++        if side in ("LONG", "SHORT"):
++            bd_ok, bd_reason = self.regime_machine.check_bearish_distribution_gate(
++                side=side, macro_info=macro_info, mtf_trend=mtf_trend_str,
++                flow_score=flow_val, vwap_atr_z=vwap_atr_z
++            )
++            if not bd_ok:
++                self.metrics["bearish_long_blocks"] += 1
++                self._record_block(symbol, side, "bearish_distribution_gate", bd_reason, price, now_ms)
++                return {
++                    "symbol": symbol,
++                    "signal": "BEKLE",
++                    "raw_signal": side,
++                    "routed": False,
++                    "reason": bd_reason,
++                    "regime": regime_snap,
++                    "pdf_core": pdf_core,
++                    "v4_60m": v4_60m,
++                    "flow": flow_snap,
++                }
++
++        # 7) Canlı Piyasa Genişliği & Playbook Seçimi
++        live_breadth = self.update_universe_breadth(now_ms)
++        has_universe_window = any(len(d.fiyatlar) >= 2 for d in self.detector.durumlar.values())
++        breadth_ratio = live_breadth if has_universe_window else 0.40
++
++        if vol_div.get("triggered") and side == "SHORT":
++            playbook_info = {
++                "allowed": True,
++                "playbook": "VOLUME_DIVERGENCE_SHORT",
++                "regime": confirmed_regime,
++                "transition": regime_snap.get("transition", "NONE"),
++                "reason": vol_div["reason"],
++            }
++        else:
++            playbook_info = self.regime_machine.select_strategy_playbook(
++                symbol,
++                side=side,
++                vwap_atr_z=vwap_atr_z,
++                breadth_ratio=breadth_ratio,
++                rvol=eff_rvol,
++                flow_score=flow_val,
++                rvol_warmed=rvol_warmed,
++            )
++        if side in ("LONG", "SHORT") and not playbook_info["allowed"]:
++            self.metrics["breadth_blocks"] += 1
++            self._record_block(symbol, side, "breadth_playbook_gate", playbook_info["reason"], price, now_ms)
++            return {
++                "symbol": symbol,
++                "signal": "BEKLE",
++                "raw_signal": side,
++                "routed": False,
++                "reason": playbook_info["reason"],
++                "playbook": playbook_info["playbook"],
++                "breadth_ratio": round(breadth_ratio, 4),
++                "regime": regime_snap,
++                "pdf_core": pdf_core,
++                "v4_60m": v4_60m,
++                "flow": flow_snap,
++            }
++
++        mtf_aligned = True
++        if side in ("LONG", "SHORT") and mtf_info is not None:
++            if (side == "LONG" and mtf_trend_str == "BEARISH") or (
++                side == "SHORT" and mtf_trend_str == "BULLISH"
++            ):
++                mtf_aligned = False
++
++        global_dec = self.global_anchor.evaluate_global_alignment(
++            symbol, side, coin_ret_1h_pct=float(macro_info.get("ret_1h_pct", 0.0)),
++            rvol=eff_rvol, mtf_aligned=mtf_aligned, flow_score=flow_val,
++            vwap_atr_z=vwap_atr_z, playbook=playbook_info["playbook"],
++        )
++        regime_snap["global_market"] = global_dec
++        if side in ("LONG", "SHORT") and not global_dec["allowed"]:
++            self._record_block(symbol, side, "global_leader_breadth_gate", global_dec["reason"], price, now_ms)
++            return {"symbol": symbol, "signal": "BEKLE", "raw_signal": side,
++                    "routed": False, "reason": global_dec["reason"], "regime": regime_snap}
++
++        if (side == "LONG" and vwap_atr_z > 3.8) or (side == "SHORT" and vwap_atr_z < -3.8):
++            self.metrics["v4_vwap_atr_blocks"] += 1
++            rsn = f"v4_vwap60_asiri_uzama(z={vwap_atr_z:+.2f})"
++            self._record_block(symbol, side, "vwap_overextension_gate", rsn, price, now_ms)
++            return {
++                "symbol": symbol,
++                "signal": "BEKLE",
++                "raw_signal": side,
++                "routed": False,
++                "reason": rsn,
++                "regime": regime_snap,
++                "pdf_core": pdf_core,
++                "v4_60m": v4_60m,
++                "flow": flow_snap,
++            }
++
++        stop_dist_pct = float(self.executor.risk.effective_stop_pct(self.executor.risk.leverage))
++        whale_net = float(flow_snap.get("whale_buy_usdt", 0.0)) - float(flow_snap.get("whale_sell_usdt", 0.0))
++        same_side_cnt = sum(1 for p in self.executor.positions.values() if p.side == side)
++        cb_obj = getattr(self.executor, "circuit_breaker", None)
++
++        # 8) 10-Kural Kantitatif Jüri (`QuantRuleCouncil`)
++        council_report = self.council.evaluate_signal(
++            {
++                "symbol": symbol,
++                "side": side,
++                "price": price,
++                "ind_score": effective_ind,
++                "flow_score": flow_val,
++                "combined_total": float(combined.get("total", 0.0)),
++                "rvol": eff_rvol,
++                "rvol_warmed": rvol_warmed,
++                "whale_net_usdt": whale_net,
++                "vwap_atr_z": vwap_atr_z,
++                "atr_pct": atr_pct_val,
++                "mtf_aligned": mtf_aligned,
++                "spread_pct": spread_pct,
++                "max_allowed_spread_pct": self.commission_optimizer.max_entry_spread_pct,
++                "smart_maker_execution": bool(getattr(broker, "smart_maker_execution", True)),
++                "max_slippage_pct": float(self.executor.risk.max_slippage_pct),
++                "stop_distance_pct": stop_dist_pct,
++                "leverage": float(self.executor.risk.leverage),
++                "cvd_divergence": flow_snap.get("cvd_divergence", "NONE"),
++                "absorption": flow_snap.get("absorption", "YOK"),
++                "orderbook_imbalance": float(flow_snap.get("imbalance", 0.0)),
++                "same_side_open_count": same_side_cnt,
++                "max_same_side_positions": int(getattr(self.executor.risk, "max_same_side_positions", 1000)),
++                "breadth_ratio": breadth_ratio,
++                "breadth_min_ratio": self.breadth_fade_threshold,
++                "playbook": playbook_info["playbook"],
++                "funding_rate": funding_rate,
++                "paper_recovery_locked": bool(self.executor.paper_recovery_locked),
++                "circuit_breaker_tripped": bool(getattr(cb_obj, "tripped", False)),
++                "regime": confirmed_regime,
++            }
++        )
++
++        if side in ("LONG", "SHORT") and not council_report["approved"]:
++            self.metrics["council_vetoes"] += 1
++            self._record_block(symbol, side, "quant_rule_council", council_report["reason"], price, now_ms)
++            return {
++                "symbol": symbol,
++                "signal": "BEKLE",
++                "raw_signal": side,
++                "routed": False,
++                "reason": council_report["reason"],
++                "council": council_report,
++                "regime": regime_snap,
++                "pdf_core": pdf_core,
++                "v4_60m": v4_60m,
++                "flow": flow_snap,
++            }
++
++        # 8b) 10-Ajan Karşılıklı Çapraz Teftiş Konseyi (`TenAgentMutualAuditCouncil`)
++        ten_agent_report: dict[str, Any] | None = None
++        if side in ("LONG", "SHORT") and self.ten_agent_enabled:
++            paper_acc = getattr(broker, "paper", None)
++            vault_eq = float(getattr(paper_acc, "balance", 1000.0) if paper_acc is not None else 1000.0)
++            used_m = sum(float(getattr(p, "margin_usdt", 50.0)) for p in self.executor.positions.values())
++            ten_agent_report = self.ten_agent_council.evaluate_entry(
++                {
++                    "symbol": symbol,
++                    "side": side,
++                    "exchange": exchange,
++                    "price": price,
++                    "ind_score": effective_ind,
++                    "flow_score": flow_val,
++                    "combined_score": float(combined.get("total", 0.0)),
++                    "playbook": playbook_info["playbook"],
++                    "rvol": eff_rvol,
++                    "atr_pct": atr_pct_val,
++                    "spread_pct": spread_pct,
++                    "choppiness_14": chop_14,
++                    "adx": adx_val,
++                    "macro_regime": macro_info["macro_regime"],
++                    "volume_declining": macro_info["volume_declining"],
++                    "global_leader_score": global_ctx["leader_score"],
++                    "directional_breadth": global_ctx["breadth"]["net_score"],
++                    "mtf_aligned": mtf_aligned,
++                    "vwap_atr_z": vwap_atr_z,
++                    "cvd_divergence": flow_snap.get("cvd_divergence", "NONE"),
++                    "absorption": flow_snap.get("absorption", "YOK"),
++                    "funding_rate": funding_rate,
++                    "spot_perp_basis_bps": basis_bps,
++                    "free_margin_usdt": max(0.0, vault_eq - used_m),
++                    "required_margin_usdt": float(getattr(self.executor.sizer, "fixed_margin_usdt", 50.0)),
++                    "stop_pct": stop_dist_pct,
++                    "leverage": float(self.executor.risk.leverage),
++                }
++            )
++            if not ten_agent_report["approved"]:
++                self.metrics["ten_agent_vetoes"] += 1
++                self._record_block(
++                    symbol, side, "ten_agent_mutual_audit", ten_agent_report["reason"], price, now_ms
++                )
++                return {
++                    "symbol": symbol,
++                    "signal": "BEKLE",
++                    "raw_signal": side,
++                    "routed": False,
++                    "reason": ten_agent_report["reason"],
++                    "council": council_report,
++                    "ten_agent_audit": ten_agent_report,
++                    "regime": regime_snap,
++                    "pdf_core": pdf_core,
++                    "v4_60m": v4_60m,
++                    "flow": flow_snap,
++                }
++
++        llm_verdict: dict[str, Any] = {"mode": "RULE_ONLY", "approved": True, "status": "SKIPPED_WAIT"}
++        if side in ("LONG", "SHORT"):
++            wl_verdict = self.win_loss_analyzer.check_entry_edge(
++                symbol=symbol,
++                side=side,
++                vwap_atr_z=vwap_atr_z,
++                rvol=eff_rvol,
++                rvol_warmed=rvol_warmed,
++                playbook=playbook_info["playbook"],
++            )
++            if not wl_verdict.allowed:
++                self.metrics["win_loss_trap_blocks"] += 1
++                rsn = f"win_loss_kalkani:{wl_verdict.pattern_tag}:{wl_verdict.reason}"
++                self._record_block(symbol, side, "win_loss_shield", rsn, price, now_ms)
++                return {
++                    "symbol": symbol,
++                    "signal": "BEKLE",
++                    "raw_signal": side,
++                    "routed": False,
++                    "reason": rsn,
++                    "council": council_report,
++                    "ten_agent_audit": ten_agent_report,
++                    "regime": regime_snap,
++                    "pdf_core": pdf_core,
++                    "v4_60m": v4_60m,
++                    "flow": flow_snap,
++                }
++
++            est_notional = float(getattr(self.executor.sizer, "fixed_margin_usdt", 50.0)) * float(
++                self.executor.risk.leverage
++            )
++            fee_check = self.commission_optimizer.evaluate_fee_viability(
++                notional_usdt=est_notional,
++                atr_pct=atr_pct_val,
++                spread_pct=spread_pct,
++                rvol=eff_rvol,
++            )
++            if not fee_check.viable:
++                self.metrics["commission_blocks"] += 1
++                self._record_block(symbol, side, "commission_viability", fee_check.reason, price, now_ms)
++                return {
++                    "symbol": symbol,
++                    "signal": "BEKLE",
++                    "raw_signal": side,
++                    "routed": False,
++                    "reason": fee_check.reason,
++                    "council": council_report,
++                    "ten_agent_audit": ten_agent_report,
++                    "regime": regime_snap,
++                    "pdf_core": pdf_core,
++                    "v4_60m": v4_60m,
++                    "flow": flow_snap,
++                }
++
++            llm_verdict = await self.llm_referee.adjudicate(
++                {
++                    "symbol": symbol,
++                    "side": side,
++                    "playbook": playbook_info["playbook"],
++                    "regime": confirmed_regime,
++                    "macro_regime": macro_info["macro_regime"],
++                    "volume_declining": macro_info["volume_declining"],
++                    "choppiness_14": round(chop_14, 2),
++                    "breadth_ratio": round(breadth_ratio, 4),
++                    "vwap_atr_z": round(vwap_atr_z, 3),
++                    "rvol": round(eff_rvol, 2),
++                    "flow_score": round(flow_val, 1),
++                    "spread_pct": round(spread_pct, 4),
++                    "consensus_score": council_report["consensus_score"],
++                }
++            )
++            if not llm_verdict.get("approved", True):
++                self.metrics["llm_referee_vetoes"] += 1
++                rsn = f"llm_referee_veto:{llm_verdict.get('rationale', '')}"
++                self._record_block(symbol, side, "strict_quant_referee", rsn, price, now_ms)
++                return {
++                    "symbol": symbol,
++                    "signal": "BEKLE",
++                    "raw_signal": side,
++                    "routed": False,
++                    "reason": rsn,
++                    "council": council_report,
++                    "ten_agent_audit": ten_agent_report,
++                    "llm_referee": llm_verdict,
++                    "regime": regime_snap,
++                    "pdf_core": pdf_core,
++                    "v4_60m": v4_60m,
++                    "flow": flow_snap,
++                }
++
++        routed = False
++        chosen_venue = exchange
++        venue_book_meta: dict[str, Any] = {}
++        if self.mode != "shadow_only" and side in ("LONG", "SHORT"):
++            had_pos_before = symbol in self.executor.positions
++            broker_obj = getattr(self.executor, "broker", None)
++            if broker_obj is not None and hasattr(broker_obj, "select_best_exchange"):
++                chosen_venue, venue_book_meta = broker_obj.select_best_exchange(
++                    symbol, side, getattr(self.executor, "positions", None)
++                )
++                if chosen_venue in venue_book_meta and venue_book_meta[chosen_venue].get("mid", 0) > 0:
++                    new_px = float(venue_book_meta[chosen_venue]["mid"])
++                    px_shift = new_px - price
++                    price = new_px
++                    if sw_low is not None and sw_high is not None and abs(px_shift) > 0:
++                        if hasattr(self.executor, "set_market_structure"):
++                            self.executor.set_market_structure(symbol, sw_low + px_shift, sw_high + px_shift)
++            try:
++                await self.executor.on_price_tick(symbol, price, exchange=chosen_venue)
++            except TypeError:
++                await self.executor.on_price_tick(symbol, price)
++            await self.executor.on_signal(
++                symbol,
++                price,
++                combined,
++                flow_val,
++                False,
++                mtf_trend=mtf_info,
++                entry_context={
++                    "engine": "UnifiedTradingEngine_v9.2",
++                    "preferred_exchange": chosen_venue,
++                    "exchange": chosen_venue,
++                    "venue_books": {
++                        k: {"spread_pct": round(v["spread_pct"], 5), "mid": v["mid"]}
++                        for k, v in venue_book_meta.items()
++                    },
++                    "playbook": playbook_info["playbook"],
++                    "regime": confirmed_regime,
++                    "breadth_ratio": round(breadth_ratio, 4),
++                    "v4_vwap_atr_z": round(vwap_atr_z, 4),
++                    "v4_rvol": round(eff_rvol, 4),
++                    "pdf_choppiness": pdf_core.get("choppiness_14", 50.0),
++                    "pdf_bos": pdf_core.get("bos_dir", 0),
++                    "rule_council_mode": council_report.get("council_mode", "DETERMINISTIC_QUANT_RULES"),
++                    "ten_agent_approve_votes": (
++                        ten_agent_report["consensus_votes"] if ten_agent_report else None
++                    ),
++                    "llm_referee_mode": llm_verdict.get("mode", "RULE_ONLY"),
++                    "ai_council_score": council_report["consensus_score"],
++                    "ai_council_votes": {
++                        v["member_id"]: v["score"] for v in council_report.get("votes", [])
++                    },
++                },
++            )
++            routed = (not had_pos_before) and (symbol in self.executor.positions)
++            if routed:
++                self.metrics["entries_routed"] += 1
++            elif not had_pos_before:
++                self.metrics["maker_unfilled_skips"] += 1
++                self._record_block(
++                    symbol,
++                    side,
++                    "maker_queue_or_margin_skip",
++                    "pasif_maker_dolmadi_veya_marj_yetersiz",
++                    price,
++                    now_ms,
++                )
++
++        return {
++            "symbol": symbol,
++            "signal": side,
++            "playbook": playbook_info["playbook"],
++            "breadth_ratio": round(breadth_ratio, 4),
++            "routed": routed,
++            "reason": council_report["reason"],
++            "combined": combined,
++            "council": council_report,
++            "ten_agent_audit": ten_agent_report,
++            "llm_referee": llm_verdict,
++            "regime": regime_snap,
++            "pdf_core": pdf_core,
++            "v4_60m": v4_60m,
++            "flow": flow_snap,
++        }
++
++    def sync_closed_trade_feedback(self) -> int:
++        """Kapanmış işlemleri okuyup 10-Ajan öz-sıkılaştırmasını, gölge 135sn karşı-olgusunu
++        ve Bayesçi ağırlıkları günceller."""
++        store = getattr(self.executor, "state_store", None)
++        if store is None or not hasattr(store, "get_trades"):
++            return 0
++        updated = 0
++        try:
++            import json as _json
++
++            recent = store.get_trades(limit=200)
++            new_rows = [
++                r for r in recent if int(r.get("id") or 0) > self._last_processed_trade_id
++            ]
++            new_rows.sort(key=lambda x: int(x.get("id") or 0))
++            for r in new_rows:
++                tid = int(r["id"])
++                sym = str(r.get("symbol") or "")
++                gross_pnl = float(r.get("pnl_usdt") or 0.0)
++                net_pnl = float(r.get("net_pnl_usdt") or 0.0)
++                ectx_raw = r.get("entry_context")
++                in_fee = float(r.get("entry_fee_usdt") or 0.0)
++                out_fee = float(r.get("exit_fee_usdt") or 0.0)
++                notional = max(
++                    100.0, float(r.get("margin_usdt") or 50.0) * float(r.get("leverage") or 10.0)
++                )
++                self._last_processed_trade_id = max(self._last_processed_trade_id, tid)
++                if sym:
++                    self.win_loss_analyzer.record_trade_outcome(sym, net_pnl)
++                    for pid in [k for k in list(self.counterfactual.shadow_legacy_cuts) if k.startswith(f"{sym}:")]:
++                        self.counterfactual.resolve_shadow_cut_on_close(
++                            position_id=pid,
++                            actual_net_pnl_usdt=net_pnl,
++                            exit_reason=str(r.get("reason") or ""),
++                        )
++                self.ten_agent_council.record_closed_trade_outcome(
++                    gross_usdt=gross_pnl,
++                    fee_usdt=in_fee + out_fee,
++                    net_usdt=net_pnl,
++                )
++                self.commission_optimizer.record_fill_telemetry(
++                    is_entry=True, is_maker=(0 < in_fee <= notional * 0.0003), notional_usdt=notional
++                )
++                self.commission_optimizer.record_fill_telemetry(
++                    is_entry=False, is_maker=(0 < out_fee <= notional * 0.0003), notional_usdt=notional
++                )
++                if ectx_raw:
++                    ectx = _json.loads(ectx_raw) if isinstance(ectx_raw, str) else ectx_raw
++                    votes = ectx.get("ai_council_votes") if isinstance(ectx, dict) else None
++                    self.council.update_weights_from_closed_trade(votes, net_pnl)
++                updated += 1
++        except Exception:
++            pass
++        return updated
++
++    def operational_health_snapshot(self, *, max_feed_lag_sec: float = 20.0) -> dict[str, Any]:
++        """Veri gecikmesi (feed latency) ve SQLite defter / bellek mutabakat alarmlarını denetler (Denetim 3.9)."""
++        now_s = time.time()
++        feed_lag_sec = max(0.0, now_s - float(self._last_feed_ts or now_s))
++        mem_positions = set(getattr(self.executor, "positions", {}).keys())
++        store = getattr(self.executor, "state_store", None)
++        db_positions: set[str] = set()
++        reconciled = True
++        if store is not None and hasattr(store, "load_positions"):
++            try:
++                db_positions = set((store.load_positions() or {}).keys())
++                ledger_ok = True
++                if hasattr(store, "verify_paper_ledger_integrity"):
++                    ledger_ok = bool(store.verify_paper_ledger_integrity().get("ok", True))
++                reconciled = (mem_positions == db_positions) and ledger_ok
++            except Exception:
++                reconciled = False
++
++        alarms: list[str] = []
++        if feed_lag_sec > max_feed_lag_sec:
++            alarms.append(f"FEED_LATENCY_ALARM({feed_lag_sec:.1f}s>{max_feed_lag_sec:.1f}s)")
++        if not reconciled:
++            alarms.append(
++                f"LEDGER_RECONCILIATION_MISMATCH(mem={sorted(mem_positions)},db={sorted(db_positions)})"
++            )
++        cb = getattr(self.executor, "circuit_breaker", None)
++        if cb is not None and getattr(cb, "tripped", False):
++            alarms.append(f"CIRCUIT_BREAKER_TRIPPED({getattr(cb, 'reason', '')})")
++
++        return {
++            "healthy": len(alarms) == 0,
++            "feed_lag_sec": round(feed_lag_sec, 2),
++            "ledger_reconciled": reconciled,
++            "memory_open_count": len(mem_positions),
++            "sqlite_open_count": len(db_positions),
++            "alarms": alarms,
++        }
++
++    def analytics_snapshot(self) -> dict[str, Any]:
++        """Brüt/Net edge ayrımı, Maker kuyruk istatistikleri, 10-Ajan diyalogları ve Karşı-Olgu özeti."""
++        store = getattr(self.executor, "state_store", None)
++        trades = store.get_trades(limit=500) if (store and hasattr(store, "get_trades")) else []
++        start_eq = float((self.cfg.get("paper") or {}).get("bakiye", 1000.0))
++        one_r = float((self.cfg.get("boyutlandirma") or {}).get("sabit_marj_usdt", 50.0)) * float(
++            (self.cfg.get("risk") or {}).get("marj_zarar_orani", 0.80)
++        )
++        edge_rep = compute_edge_separation_report(
++            list(reversed(trades)), starting_balance=start_eq, one_r_usdt=max(1.0, one_r)
++        )
++        broker = getattr(self.executor, "broker", None)
++        maker_q = (
++            broker.maker_queue_stats()
++            if (broker is not None and hasattr(broker, "maker_queue_stats"))
++            else {"enabled": False}
++        )
++        return {
++            "engine_version": self.version,
++            "edge_separation": edge_rep,
++            "maker_queue": maker_q,
++            "ten_agent_council": self.ten_agent_council.snapshot(),
++            "counterfactual": self.counterfactual.summary(),
++            "operational_health": self.operational_health_snapshot(),
++        }
+diff --git b/reports/v943_freeze_manifest.json b/reports/v943_freeze_manifest.json
+new file mode 100644
+index 0000000..efbe520
+--- /dev/null
++++ b/reports/v943_freeze_manifest.json
+@@ -0,0 +1,181 @@
++{
++  "edition": "9.4.3",
++  "frozen_at_utc": "2026-11-03T09:01:26.971253+00:00",
++  "scope": "Health reporting only; not alpha validation",
++  "source_sha256": {
++    "requirements.txt": "b10f594d9982f537e80ed34d8284e5837d3d2459dcd272bb9eb49c1fdaab134a",
++    "pyproject.toml": "ee0fc3d29b57f7dfa1081140fddafb29dfea99fbd621c2e39c7aab9a415ee1e8",
++    "requirements-tested.txt": "406da93187f1cada2b3811b341a918f892d181102f206d7e7094ee3f0812b754",
++    "scripts/report_v94.py": "e38d1a07dccc704927abef8ea755bf99d68f3a109b58b9aa483c64393c7ad379",
++    "scripts/run_oos_validation.py": "ea127918d966adbe694daff1ebae7ca89b713dff95c31782a90b2a65419a2e94",
++    "scripts/check_v943_integrity.py": "119098d0659881f5f994cad9bb8b5d1ff7cc49282efbe52f2ee3150442b383b3",
++    "scripts/seal_v94_holdout.py": "976ba08015638a619545fd77d92ceef9e37599672df032e49cc8d992bdff0795",
++    "scripts/summarize_validation.py": "cfa61b6b20aefb5ec2fc19a6fce75ea6b4fe0639b660459290a22f7af2034388",
++    "scripts/run_v941_paper.py": "0605949419cbdc67b6337261202843f213dfb46791f32e762b0483447ba6aa81",
++    "scripts/develop_v94.py": "bdf0abb7dbfd6b1a1854bab24ed51ffe3e4f734753f46f444f4de50f5d64aafa",
++    "scripts/audit_v94_gates.py": "572405e63b29fb9522efc0e8526e6c84488f09b4ad72ca5759b2dcae40c01560",
++    "scripts/validate_v94.py": "1ab6bd9e0e6b39d0b15cfe8a348411dc1d066c139b2e8dab598840d9a8e7a38a",
++    "src/exit_rules.py": "df9bb4eb42e813218c6f214b15c28ef11b59222f9b3d9d73cc20721a8ee42ad0",
++    "src/flow_exit_manager.py": "f4fbd2576f485ae2afad7c53075296fac3fa24e2f68b8739fc1b2bd07fe3c963",
++    "src/ten_agent_debate.py": "9620e80771e3790e90881195968896086bad0d0b09994e4f4af72452e4915dd0",
++    "src/state_store.py": "1e59b11fddda2970d8f8a999aff52015b9b67dfe44d8f6ffdddc30a2c164d63b",
++    "src/executor.py": "e71ed14f341b2cc916398fd7dbd3bb466e8fdbd8d4a8a535a636705726b4a3be",
++    "src/unified_engine.py": "1bfab418a1d367877f7eb77f3c2e124929a0a628d46af25af4cd671705a87fb7",
++    "src/health_reporting.py": "335a135460d653fee5c08bf9051a774d0dd753c25af4c2c047ecbc2e32a6fd0a",
++    "src/ccxt_compat.py": "165285f9943ee244c2f4b7953ab868727c3a2111249ff94fa9be7bcebf83b8c2",
++    "src/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
++    "src/v94_live_risk.py": "89b01884db0d60b9e78867f2125227c32cd145042d0bac4af0007592f02912e6",
++    "src/live_runner.py": "95c203d73fa696fe2f5eb7f5112ebc85ca5091f6cd457563b099f06e86492a47",
++    "src/maker_queue_sim.py": "16dd78d2acde2d6cfc63845d9910c1fa1ce1aa28cae71ba88c91cb44487c517b",
++    "src/equity_reporting.py": "c6d01fd1ea3d4eef4f27e1415459d9fb7ba0c5e0aebc57abc17b5bc67193ec9e",
++    "src/gate_statistics.py": "c2b36fc3fc2479be3b8dda57d932bdbea20b394821e7579953973f17fa63686f",
++    "src/adaptive_policy.py": "95d1cd1709e31765cc1997c6cda98b8f214bc57edf6104837e6018eee1904099",
++    "src/feed_health.py": "993345a61d410913f3d9f9c9676d318f55dff875746d7658781c4bc4f974980e",
++    "src/futures_catalog.py": "8da5e5d483d4819ea433ea315f48e30c00cfd09c09ec49f4b5a58c397ed250d1",
++    "src/moneyflow.py": "cccc3cfeac09a1365553d89ac89ccce4d79c34482f507f6c4c745129981e2c46",
++    "src/counterfactual.py": "495d286bca475b79113631d1365338edb0a439b45ef328fdfbcb76e206697a8a",
++    "src/security.py": "b8155a3eadafe6fb26b1368094ddd49f1fd8527cdb4cc6939073a7b4fd7eb995",
++    "src/attribution.py": "22986d1549e38b3991344aa00aa8441c3566a5c1a41eaae7a4aa4d74cea2acfb",
++    "src/v94_live_router.py": "6fe5d8f0302bc91ebe6bac207d5151acf6a6087ccfaec35e3f476652977aa9b3",
++    "src/global_market_regime.py": "ec9985f562581e600cab39d2679fe7c6bba990c5ea8a3121bfc260e3a2cb6a9f",
++    "src/circuit_breaker.py": "63131b21e9c0a111f3eb65b0ef82602372a6f0d1b6f69a60017ca7e53ed98adf",
++    "src/reconcile.py": "e0521f3194cde391fbd62419391a5c8103c4975685d3d318e48da18edde3d8c8",
++    "src/pdf_core_confluence.py": "f41f3b56e2310ae816804f120fc23bd20f73288967b466bf3b916ad5cc1774b3",
++    "src/indicators.py": "7a09c41556c1997c88cd91e739782ad4018e5b5769ad4e421f133136fbba1b22",
++    "src/trade_quality.py": "c389e8234d5ac9ffbe5b605f7b5bc9774d5fb92df24c0eecb4dd4bcfed177aa7",
++    "src/quant_rule_council.py": "012c95a1f205709c7f33221eaa538566140baa71743386ffb5d3b559b66aa380",
++    "src/measurement_overlay.py": "0ad9a6d34772eed47f7b8df959aad259f7cef00f057ac11d9f506bc78f0b46a3",
++    "src/config.py": "14f35e669a4a3e3455e3a93e54b21dafb02bd6056fdfee2d4fb1a1a88ec0d144",
++    "src/main.py": "5f192658d443f49a069d541200ad73b2af95794c56e486e46a52374625cf2b74",
++    "src/edge_analytics.py": "4d088cdd5a83c41eb1ea64e71dece3631573bb6fbda52fe0505672a36597a4b5",
++    "src/llm_referee.py": "13e3ab2d16d4a25d1675b0f9f3a8ed2553e1c2ee12c7e45b92f176ae0cf51ead",
++    "src/regime_state_machine.py": "de553cbb2827513ea43bbec93f72d6184e29fc00a8019add6fa0565a2ab1966a",
++    "src/exchanges.py": "a5da627270a0b1ee865c77a220fb7ceec863c244a2af4ce7f969c17cb767b585",
++    "src/strategy.py": "220ae0921487add6f33d92b783b145d3a656cc448e474de9de641c631a5a489b",
++    "src/win_loss_analyzer.py": "034867df1afc2cdc22c27dd637a51e926b6ee2fdee9f169890edb381e001a68f",
++    "src/commission_optimizer.py": "416d889bf653e501fdd662f328bc2459a79d1e39e3be6bbc1f66e32e3ee6221d",
++    "src/v94_core.py": "d05e6e29df3a2086cd72f3fd4b7be5a81db7c75a143d73ac6ee8a562e2c75349",
++    "src/risk.py": "7dfec46ce8cdbf9e31b8a72a47b623187d96dd8466783544504806a63af47779",
++    "src/sizing.py": "8765f576e9a15fb3e9fcec7e4f04eda157abf10ae595ff861462de5ef1c54f9a",
++    "scanner/ind_aktif.py": "0847c77c3489b8e56e889dd628ab057769653022b616d2b0f27f58c0c1ba3903",
++    "scanner/ws_scanner.py": "09993d4aca72f443a91489a8c12bca06827a5cfc4f3befcb51b2351e60b86413",
++    "scanner/__init__.py": "4becd2e96b2c49e34d9a2d714f6dd1d89f0fe35b86223e304139b92ac86592fd",
++    "scanner/universe.py": "d96094e321eebf65bb91957d0130a196437e569d5a415b006bf8030f9754ae37",
++    "configs/v94_selected_policy.json": "c5b4e4cec5ec863b64fac4846e485d93a57c888d2438953ab7e7acc62aa6ed1d",
++    "configs/v9-canonical-production.json": "c2a3c7e91620113fbb0e5872b178f61f7173cb165ea76bd2d0bbc529c56e67a0",
++    "configs/v941_validation_criteria.json": "41ebf9ea4a40bd8f3e31b695bc8846eb2234873488bf33c29420502b37a270c8",
++    "tests/test_backtests.py": "a0349f582f289e91018679e2b82a61f0e0389e67e4d9783fa02c0b1c4b145f82",
++    "tests/test_v943_health_reporting.py": "e5d00c5515cb6ec469bb01158e8336694753946a67f6bdf99b117bd93caf55d7",
++    "tests/test_execution_stress.py": "86e3bde20cea78e8dc9d9f24d57dc17aee479e7cbdb6d5e5194627a182edf174",
++    "tests/test_v94_upgrades.py": "71ae5e9d86e1917e47be82d227742f56a8935a74bd2f2b50ea7536af164dfa63",
++    "tests/test_v942_feed_health.py": "28103fda1825bbca353ca1b3a80af369ec148e9d726ef285ca1cf3f8c3ae9ae3",
++    "tests/test_v9_greenfield_suite.py": "c9e148f1bd3edb66dcbc48acb70d155b16de16375ebe63797cfed047b78f0ca4",
++    "tests/test_v92_upgrades.py": "01cdcebdb8eed81374763fd2ed34fe2f1b7bcf389a639034c04283ddf9c7a007",
++    "tests/conftest.py": "da18af220b778ee36c5ba6719b48fd13a27b0e61d8649af472ad18bd914e553b",
++    "tests/test_v93_upgrades.py": "a6ca044f6c1f6ebe4b10c91be12ed6ef7ecfa0b26cc11dc306fbe052831fc896",
++    "tests/test_v941_measurement.py": "1fccd4d897e72f6fd035b8867d5e13cfb05da009c6005b69a2541701c30a8ec8",
++    "portfolio/__init__.py": "c3c16c59dc4f6a7552fe3760d2d7fbab5d788c9b91abb13da895a79ec072cfff",
++    "portfolio/paper_futures.py": "981ebc49bc5b0b09c9085b791253d81cb50a043bb895f2d5c6e1a6823a1e537f",
++    "strategies/base.py": "ee5d1280863b10c65233454d7f44ad264f2021ae4267558cfd4043de5b90b343",
++    "strategies/trend_follower.py": "f87d37cc928a675f89055b1639cfd59ba009b204ff38d8aa0f6ae03407748600",
++    "strategies/v93_flow_strategy.py": "6196b255bd3ed134ab1c1ca1b4d5d0039a217f4a153ddf4c26c9a86b758f6fe8",
++    "strategies/__init__.py": "3bd4fb760cf49859dcfb5c7c770dfdca759e610ecaff9d266f2becd9e3a48206",
++    "strategies/v92_flow_strategy.py": "0dba330549479e803b9efa763c64f2735b02622e9232b08e40653ffd18102266",
++    "backtests/execution.py": "aeedf78a8ced3249843b6726a4cd9c5019e38072c1af18572a1de05a74509036",
++    "backtests/engine_interface.py": "1c3387295aa1f6c4dad3ad2b0df34add2264f381384c2fe356a00ebfafccde3e",
++    "backtests/__init__.py": "adb5f1b42f7bc27585e42ca37535fc0fb6c498733b20c2a8ccdbd59de6372f1a",
++    "backtests/report.py": "e352cded7d906db44e610e790d188d6a4ec5585339cfc32ec1c64a37b88edf45",
++    "backtests/stress.py": "00bd2c1aa9591b71c3924ab1cb7485cf3dc79aa173d2ee9d6bfddc0ce8db56a4",
++    "backtests/ablation.py": "6088a8d4ab2ff7e53aa5eafcbeedea06b21a2277bdf9fc2b209a5a2c6e838c7e",
++    "backtests/engine.py": "9016641fefc25f16a36dee6ce4c5efb17ad564192964d1bc9c5717f8ea419a79",
++    "backtests/walk_forward.py": "4b0625402f75105ed50f5724e6abecf8b7cffedc2d88f6760d879f4ab57c81f3",
++    "backtests/chronological_portfolio.py": "f72ddc71bd7350dc9186edf5e507a25b5c429fb5dcf146751518c35fe25593f8"
++  },
++  "previous_13_file_comparison": {
++    "src/v94_core.py": {
++      "v942_sha256": "d05e6e29df3a2086cd72f3fd4b7be5a81db7c75a143d73ac6ee8a562e2c75349",
++      "v943_sha256": "d05e6e29df3a2086cd72f3fd4b7be5a81db7c75a143d73ac6ee8a562e2c75349",
++      "identical": true
++    },
++    "src/adaptive_policy.py": {
++      "v942_sha256": "95d1cd1709e31765cc1997c6cda98b8f214bc57edf6104837e6018eee1904099",
++      "v943_sha256": "95d1cd1709e31765cc1997c6cda98b8f214bc57edf6104837e6018eee1904099",
++      "identical": true
++    },
++    "src/v94_live_risk.py": {
++      "v942_sha256": "89b01884db0d60b9e78867f2125227c32cd145042d0bac4af0007592f02912e6",
++      "v943_sha256": "89b01884db0d60b9e78867f2125227c32cd145042d0bac4af0007592f02912e6",
++      "identical": true
++    },
++    "src/v94_live_router.py": {
++      "v942_sha256": "6fe5d8f0302bc91ebe6bac207d5151acf6a6087ccfaec35e3f476652977aa9b3",
++      "v943_sha256": "6fe5d8f0302bc91ebe6bac207d5151acf6a6087ccfaec35e3f476652977aa9b3",
++      "identical": true
++    },
++    "src/risk.py": {
++      "v942_sha256": "7dfec46ce8cdbf9e31b8a72a47b623187d96dd8466783544504806a63af47779",
++      "v943_sha256": "7dfec46ce8cdbf9e31b8a72a47b623187d96dd8466783544504806a63af47779",
++      "identical": true
++    },
++    "src/flow_exit_manager.py": {
++      "v942_sha256": "f4fbd2576f485ae2afad7c53075296fac3fa24e2f68b8739fc1b2bd07fe3c963",
++      "v943_sha256": "f4fbd2576f485ae2afad7c53075296fac3fa24e2f68b8739fc1b2bd07fe3c963",
++      "identical": true
++    },
++    "src/executor.py": {
++      "v942_sha256": "e71ed14f341b2cc916398fd7dbd3bb466e8fdbd8d4a8a535a636705726b4a3be",
++      "v943_sha256": "e71ed14f341b2cc916398fd7dbd3bb466e8fdbd8d4a8a535a636705726b4a3be",
++      "identical": true
++    },
++    "src/unified_engine.py": {
++      "v942_sha256": "7d55e793cec19ac0f2d9b89efc9604fd6968b514c94db73b3f2c766a33789889",
++      "v943_sha256": "1bfab418a1d367877f7eb77f3c2e124929a0a628d46af25af4cd671705a87fb7",
++      "identical": false
++    },
++    "src/live_runner.py": {
++      "v942_sha256": "438498c7be8bbb289ac1874e7da8213834e7aea03d2adfb43c69d747b3329a8a",
++      "v943_sha256": "95c203d73fa696fe2f5eb7f5112ebc85ca5091f6cd457563b099f06e86492a47",
++      "identical": false
++    },
++    "backtests/chronological_portfolio.py": {
++      "v942_sha256": "f72ddc71bd7350dc9186edf5e507a25b5c429fb5dcf146751518c35fe25593f8",
++      "v943_sha256": "f72ddc71bd7350dc9186edf5e507a25b5c429fb5dcf146751518c35fe25593f8",
++      "identical": true
++    },
++    "strategies/v93_flow_strategy.py": {
++      "v942_sha256": "6196b255bd3ed134ab1c1ca1b4d5d0039a217f4a153ddf4c26c9a86b758f6fe8",
++      "v943_sha256": "6196b255bd3ed134ab1c1ca1b4d5d0039a217f4a153ddf4c26c9a86b758f6fe8",
++      "identical": true
++    },
++    "src/strategy.py": {
++      "v942_sha256": "220ae0921487add6f33d92b783b145d3a656cc448e474de9de641c631a5a489b",
++      "v943_sha256": "220ae0921487add6f33d92b783b145d3a656cc448e474de9de641c631a5a489b",
++      "identical": true
++    },
++    "strategies/base.py": {
++      "v942_sha256": "ee5d1280863b10c65233454d7f44ad264f2021ae4267558cfd4043de5b90b343",
++      "v943_sha256": "ee5d1280863b10c65233454d7f44ad264f2021ae4267558cfd4043de5b90b343",
++      "identical": true
++    }
++  },
++  "predeclared_health_policy": {
++    "pending_grace_sec": 15.0,
++    "boundary_15s_is_alarm": true,
++    "only_this_store_current_pid_tokens": true,
++    "restart_unowned_immediate_alarm": true,
++    "strict_recovery_unchanged": true,
++    "financial_checks_not_bypassed": true,
++    "real_money_approved": false
++  },
++  "live_plan": {
++    "duration_sec": 900,
++    "max_drain_sec": 180,
++    "both_trade_tapes_fresh": true,
++    "binance_aggtrade_errors_max": 0,
++    "sample_interval_sec": 15,
++    "all_observed_post_60s_health_200": true,
++    "expected_endpoint_aggTrade": "fstream.binance.com/market",
++    "expected_endpoint_bookTicker": "fstream.binance.com/public",
++    "single_run_not_general_reliability_or_profitability": true
++  }
++}
+\ No newline at end of file
+diff --git b/reports/v943_final_report.md b/reports/v943_final_report.md
+new file mode 100644
+index 0000000..2cc01e7
+--- /dev/null
++++ b/reports/v943_final_report.md
+@@ -0,0 +1,78 @@
++# v9.4.3 — PENDING sağlık ve endpoint yaması
++
++**PAPER araştırma sürümü; gerçek para, kârlılık veya gerçek borsa yürütme onayı yok.**
++
++## Yapılan düzeltmeler
++
++- Süreç-içi sahiplik kaydıyla eşleşen, 15 saniyeden genç PENDING için yalnız sağlık görünümünde IN_FLIGHT/200. 15 saniyede ve sonrasında alarm/503.
++- Restarttan kalan, başka store/PIDden gelen, yaşı/sahibi belirsiz kayıt hemen alarm. Bu kayıtlara süre toleransı verilmez.
++- Üretim defteri değiştirilmez: salt-okunur SQLite yedeği belleğe alınır. Uygun genç niyetler yalnız geçici kopyada ayrıştırılır; kalan kesinleşmiş hesap, ücret, funding ve pozisyonlar eski sıkı doğrulayıcıdan geçer.
++- IN_FLIGHT anında ledger_reconciled=false kalır; bu tamamlanmış mutabakat değildir. Uyarı ve pending yaşları APIde görünür; panel TAM yerine İŞLEM BEKLİYOR gösterir.
++- Alarmlar gerçek nedenini gösterir: LEDGER_INTEGRITY_ERROR(reason=...), gerçek küme farkında POSITION_SET_MISMATCH.
++- endpoint_aggTrade ve endpoint_bookTicker ayrı; endpoint ortak alanı artık son yazanın adresiyle yanıltmaz.
++
++## Güvenlik ve değişmezlik
++
++- Sıkı verify_paper_ledger_integrity metodu kaynak metni olarak değişmedi. Recovery, mali işlem kilidi ve PENDINGin kalıcı kaydı değiştirilmedi.
++- Prepare yöntemlerine yalnız süreç-içi gözlem kaydı eklendi. Bu atama çıkarılınca ASTleri önceki yöntemlerle aynı; commit/iptal yöntemleri aynıdır.
++- UnifiedTradingEngine içinde yalnız operational_health_snapshot değişti; diğer yöntemlerin ASTleri eski kaynakla aynı. Strateji/risk/çıkış/replay dosyaları korundu.
++- Önceki 13 dosya grubunun 11i byte-byte aynı. live_runner ve unified_engine sağlık/telemetri değişikliği nedeniyle farklı; 13/13 aynı iddiası YOK. StateStore da ek sağlık kaydı/metodu içerir.
++- Ek sağlık hesaplarının canlı zamanlamayı hiç etkilemediği iddia edilmez.
++
++## Testler
++
++```text
++........................................................................ [ 59%]
++.................................................                        [100%]
++121 passed in 11.84s
++```
++
++Önceki 87 teste 34 yeni sağlık/endpoint/değişmezlik kontrolü eklendi. Test kapsamı: dört niyet tablosu, 0/14.999/15/16s sınırları, yeniden başlatma/yabancı sahip, gerçek nakit/ücret/funding hataları, pozisyon kümesi farkı, ilk emir, iptal, salt-okunurluk, sıkı recovery ve gerçek HTTP handlerı. Endpoint testi iki akışın birbirini ezmediğini doğrular.
++
++İlk test koşusunda eski alarm metnine bağlı bir assert başarısızdı (117 geçti, 1 başarısız). Bu testin beklentisi istenen yeni POSITION_SET_MISMATCH sözleşmesine güncellendi; güvenlik denetimi kaldırılmadı. İlk çıktı saklandı. Son tam test 121/121dir.
++
++## Yeni canlı paper koşusu
++
++- Donma UTC: 2026-11-03T09:01:26.971253+00:00. Donmuş kaynak kontrolü başarılı.
++- Aktif süre yaklaşık 900.534s; drenaj 0.000s; toplam 900.534s.
++- Doğrudan Python ile çalıştırıldı; Docker build/çalıştırması bu deneyde yapılmadı.
++| Ölçüm | Binance | OKX |
++|---|---:|---:|
++| İşlem ticki | 93336 | 88525 |
++| BBO | 2096582 | 435958 |
++| Hata | 0 | 0 |
++| aggTrade hatası | 0 | — |
++| Trade-tape sağlıklı | True | True |
++
++- Endpoint aggTrade: `fstream.binance.com/market`; bookTicker: `fstream.binance.com/public`.
++- HTTP örnekleri: `{'200': 59}`. Aktif fazda ilk 60s sonrası 56 örnek, başarısız 0. Yaklaşık 15s aralıkla alınan örneklerdir; sürekli erişilebilirlik garantisi değildir.
++- Canlı örneklerde IN_FLIGHT görülme sayısı: 0. Sıfırsa bu canlı koşu PENDING toleransını olay üzerinde sınamış sayılmaz; o davranış ayrı HTTP/regresyon testleriyle sınanmıştır.
++- Paper kuyruk: `{"submitted": 1, "filled": 0, "partial_filled": 0, "expired_unfilled": 1, "post_only_rejected": 0, "open_resting": 0, "fill_rate_pct": 0.0, "avg_wait_ms": 5500.2, "avg_unfilled_runaway_bps": 5.2}`.
++- Kapanmış 0, açık 0. Kapalı net +0.000000, açık brüt +0.000000, toplam equity farkı +0.000000 USDT.
++- Son sıkı defter kontrolü: `{"ok": true, "empty": true, "reason": "clean_empty_db"}`.
++
++### Kabul kontrolü
++
++| Kontrol | Geçti |
++|---|---|
++| completed_900s | True |
++| binance_ticks_positive | True |
++| aggTrade_errors_zero | True |
++| both_tapes_healthy | True |
++| observed_active_post_grace_health_200 | True |
++| endpoint_fields_correct | True |
++| frozen_source_unchanged | True |
++| final_strict_ledger_ok | True |
++| no_sampling_errors_before_completion | True |
++
++## Sınırlar ve önceki olayın yorumu
++
++**v9.4.2deki 503 için en olası neden geçici PENDING emir niyeti; deneyle yeniden üretildi, canlı olayda ayrıca yakalanmadı.** Yeni yama eski koşunun sonucunu geriye dönük değiştirmez.
++- Bu yalnız tek yeni ağ/zaman koşusudur. Ağ koşulları değişirse tekrar test gerekir.
++- Az sayıda deneme/dolumdan yürütme güvenilirliği çıkarılamaz. Kapanmış işlem yoksa çıkış/kapanış hattı bu canlı koşuda sınanmamıştır.
++- Paper dolumu gerçek borsa dolumu değildir. Çıkış, emir kuyruğu ve piyasa etkisi için geniş kapsamlı genel onay yoktur.
++- Önceki negatif tarihsel araştırma kanıtı değişmedi. Yeni strateji eşiği seçimi, tarihsel kârlılık doğrulaması veya bağımsız ileri-OOS iddiası yoktur.
++
++## Dosyalar
++
++v943_freeze_manifest.json, v943_pytest.txt, v943_pytest_initial_alarm_contract.txt, v943_reference_sources, v943_strict_method_hash_proof.json, v943_live_run.log, v943_health_samples.jsonl, v943_paper_15dk_summary.json, v943_test_results.json ve yeni PACKAGE_MANIFEST.json. Diğer v94/v941 dosyaları devralınan tarihsel arşivdir.

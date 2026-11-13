@@ -1,0 +1,498 @@
+{
+  "mode": "OFFLINE_SYNTHETIC",
+  "entries": [
+    {
+      "correlation": {
+        "reason": "NOT_REQUESTED"
+      },
+      "action": "OPEN",
+      "signal": {
+        "ready": true,
+        "reason": "OK",
+        "side": "long",
+        "score": 6,
+        "threshold": 4,
+        "votes": {
+          "ema": 1,
+          "macd_cross": 0,
+          "rsi": 1,
+          "adx_ema": 1,
+          "stochastic": 0,
+          "obv": 1,
+          "cci": 0,
+          "supertrend": 1,
+          "vwap": 1,
+          "bollinger": 0
+        },
+        "indicators": {
+          "rsi": 100.0,
+          "atr": 2.0,
+          "adx": 100.0,
+          "cci": 126.66666666666667,
+          "vwap": 209.66666666666669,
+          "stochastic_k": 96.66666666666667
+        },
+        "bar_close": 1704080400,
+        "notice": "Araştırma; canlı karar ve eski sürüm paritesi değildir."
+      },
+      "order": {
+        "status": "FILLED",
+        "position": {
+          "symbol": "BTC",
+          "rules": {
+            "symbol": "BTC",
+            "qty_step": "0.1",
+            "price_tick": "0.1",
+            "min_qty": "0.1",
+            "min_notional": "0"
+          },
+          "market_spec_fingerprint": null,
+          "id": "btc-entry",
+          "side": "long",
+          "qty": "0.2",
+          "entry": "319.6",
+          "execution_uncertain": false,
+          "initial_entry": "319.6",
+          "initial_stop": "316.6",
+          "initial_r": "3",
+          "entry_stop_at_r": "0",
+          "trailing_distance": "0",
+          "margin": "31.96",
+          "stop": "316.6",
+          "target": "325.6",
+          "mark": "319.5",
+          "mark_at": 1704080400,
+          "leverage": "2",
+          "next_funding": 1704081400,
+          "last_change": 1704080400
+        },
+        "symbol": "BTC",
+        "side": "long",
+        "requested": "0.2",
+        "filled": "0.2",
+        "remaining_canceled": "0",
+        "notional": "63.92",
+        "fee": "0.03196",
+        "book_id": "btc-1",
+        "signal_fingerprint": "657e18b6b28ebdd66109884caa335a2cba970fe4207efb373d8eb2e4299fdfeb"
+      }
+    },
+    {
+      "correlation": {
+        "reason": "NOT_REQUESTED"
+      },
+      "action": "OPEN",
+      "signal": {
+        "ready": true,
+        "reason": "OK",
+        "side": "long",
+        "score": 6,
+        "threshold": 4,
+        "votes": {
+          "ema": 1,
+          "macd_cross": 0,
+          "rsi": 1,
+          "adx_ema": 1,
+          "stochastic": 0,
+          "obv": 1,
+          "cci": 0,
+          "supertrend": 1,
+          "vwap": 1,
+          "bollinger": 0
+        },
+        "indicators": {
+          "rsi": 100.0,
+          "atr": 1.0,
+          "adx": 100.0,
+          "cci": 126.66666666666667,
+          "vwap": 104.83333333333334,
+          "stochastic_k": 96.66666666666667
+        },
+        "bar_close": 1704080400,
+        "notice": "Araştırma; canlı karar ve eski sürüm paritesi değildir."
+      },
+      "order": {
+        "status": "FILLED",
+        "position": {
+          "symbol": "ETH",
+          "rules": {
+            "symbol": "ETH",
+            "qty_step": "0.1",
+            "price_tick": "0.1",
+            "min_qty": "0.1",
+            "min_notional": "0"
+          },
+          "market_spec_fingerprint": null,
+          "id": "eth-entry",
+          "side": "long",
+          "qty": "0.5",
+          "entry": "159.8",
+          "execution_uncertain": false,
+          "initial_entry": "159.8",
+          "initial_stop": "158.3",
+          "initial_r": "1.5",
+          "entry_stop_at_r": "0",
+          "trailing_distance": "0",
+          "margin": "39.95",
+          "stop": "158.3",
+          "target": "162.8",
+          "mark": "159.75",
+          "mark_at": 1704080400,
+          "leverage": "2",
+          "next_funding": 1704080500,
+          "last_change": 1704080400
+        },
+        "symbol": "ETH",
+        "side": "long",
+        "requested": "0.5",
+        "filled": "0.5",
+        "remaining_canceled": "0",
+        "notional": "79.9",
+        "fee": "0.03995",
+        "book_id": "eth-1",
+        "signal_fingerprint": "d76c265aaa07ddc5c530b09a4d13a1000e6ea58b71eaed455fb7706c55f5e55f"
+      }
+    }
+  ],
+  "shared_wallet_before": "928.01809",
+  "partial_protection": {
+    "action": "CLOSE",
+    "protection": {
+      "symbol": "BTC",
+      "status": "STOP",
+      "isolated_equity": "31.06",
+      "maintenance_estimate": "0.3151",
+      "warning": "Yalnız eşik tahmini; otomatik borsa likidasyonu veya garantili stop değildir."
+    },
+    "mark": {
+      "marked": "BTC",
+      "price": "315.1"
+    },
+    "order": {
+      "status": "PARTIAL_IOC",
+      "symbol": "BTC",
+      "reason": "STOP",
+      "execution_uncertain": false,
+      "requested": "0.2",
+      "filled": "0.1",
+      "remaining_position": "0.1",
+      "released_margin": "15.98",
+      "gross_pnl": "-0.46",
+      "fee": "0.01575",
+      "book_id": "btc-2"
+    }
+  },
+  "funding": {
+    "status": "APPLIED",
+    "symbol": "ETH",
+    "settlement_ts": 1704080500,
+    "funding_delta": "-0.08"
+  },
+  "eth_target": {
+    "action": "CLOSE",
+    "protection": {
+      "symbol": "ETH",
+      "status": "TARGET",
+      "isolated_equity": "41.995",
+      "maintenance_estimate": "0.410125",
+      "warning": "Yalnız eşik tahmini; otomatik borsa likidasyonu veya garantili stop değildir."
+    },
+    "mark": {
+      "marked": "ETH",
+      "price": "164.05"
+    },
+    "order": {
+      "status": "FILLED",
+      "symbol": "ETH",
+      "reason": "TARGET",
+      "execution_uncertain": true,
+      "requested": "0.5",
+      "filled": "0.5",
+      "remaining_position": "0",
+      "released_margin": "39.87",
+      "gross_pnl": "2.1",
+      "fee": "0.041",
+      "book_id": "eth-2"
+    }
+  },
+  "btc_remaining_exit": {
+    "action": "CLOSE",
+    "protection": {
+      "symbol": "BTC",
+      "status": "STOP",
+      "isolated_equity": "15.515",
+      "maintenance_estimate": "0.157475",
+      "warning": "Yalnız eşik tahmini; otomatik borsa likidasyonu veya garantili stop değildir."
+    },
+    "mark": {
+      "marked": "BTC",
+      "price": "314.95"
+    },
+    "order": {
+      "status": "FILLED",
+      "symbol": "BTC",
+      "reason": "STOP",
+      "execution_uncertain": true,
+      "requested": "0.1",
+      "filled": "0.1",
+      "remaining_position": "0",
+      "released_margin": "15.98",
+      "gross_pnl": "-0.47",
+      "fee": "0.015745",
+      "book_id": "btc-3"
+    }
+  },
+  "operator_unlock": {
+    "locked": false,
+    "reason": "OPERATOR_CLEAR"
+  },
+  "final": {
+    "state": {
+      "cash": "1000.945595",
+      "daily_halt": false,
+      "day": "2024-01-01",
+      "day_start_equity": "1000",
+      "entry_locked": false,
+      "initial_cash": "1000",
+      "last_time": 1704080502,
+      "lock_reason": "",
+      "max_age": 30,
+      "positions": {},
+      "settings": {
+        "daily_loss_fraction": "0.02",
+        "fee_rate": "0.0005",
+        "maintenance_rate": "0.005",
+        "max_gross_notional": "500",
+        "max_leverage": "3",
+        "max_position_notional": "250",
+        "max_positions": 4,
+        "max_spread_bps": "30",
+        "per_trade_risk": "0.005",
+        "total_risk": "0.02"
+      },
+      "version": 4
+    },
+    "equity_at_last_marks": "1000.945595",
+    "ledger": [
+      {
+        "kind": "OPEN",
+        "delta": "-0.03196",
+        "detail": {
+          "book_id": "btc-1",
+          "fee": "0.03196",
+          "filled": "0.2",
+          "notional": "63.92",
+          "remaining_canceled": "0",
+          "requested": "0.2",
+          "side": "long",
+          "signal_fingerprint": "657e18b6b28ebdd66109884caa335a2cba970fe4207efb373d8eb2e4299fdfeb",
+          "symbol": "BTC"
+        }
+      },
+      {
+        "kind": "OPEN",
+        "delta": "-0.03995",
+        "detail": {
+          "book_id": "eth-1",
+          "fee": "0.03995",
+          "filled": "0.5",
+          "notional": "79.9",
+          "remaining_canceled": "0",
+          "requested": "0.5",
+          "side": "long",
+          "signal_fingerprint": "d76c265aaa07ddc5c530b09a4d13a1000e6ea58b71eaed455fb7706c55f5e55f",
+          "symbol": "ETH"
+        }
+      },
+      {
+        "kind": "CLOSE",
+        "delta": "-0.47575",
+        "detail": {
+          "book_id": "btc-2",
+          "execution_uncertain": false,
+          "fee": "0.01575",
+          "filled": "0.1",
+          "gross_pnl": "-0.46",
+          "reason": "STOP",
+          "released_margin": "15.98",
+          "remaining_position": "0.1",
+          "requested": "0.2",
+          "symbol": "BTC"
+        }
+      },
+      {
+        "kind": "MONITORING_GAP",
+        "delta": "0",
+        "detail": {
+          "detected_at": 1704080500,
+          "last_mark_at": 1704080400,
+          "symbol": "ETH"
+        }
+      },
+      {
+        "kind": "FUNDING",
+        "delta": "-0.08",
+        "detail": {
+          "funding_delta": "-0.08",
+          "settlement_ts": 1704080500,
+          "symbol": "ETH"
+        }
+      },
+      {
+        "kind": "CLOSE",
+        "delta": "2.059",
+        "detail": {
+          "book_id": "eth-2",
+          "execution_uncertain": true,
+          "fee": "0.041",
+          "filled": "0.5",
+          "gross_pnl": "2.1",
+          "reason": "TARGET",
+          "released_margin": "39.87",
+          "remaining_position": "0",
+          "requested": "0.5",
+          "symbol": "ETH"
+        }
+      },
+      {
+        "kind": "MONITORING_GAP",
+        "delta": "0",
+        "detail": {
+          "detected_at": 1704080502,
+          "last_mark_at": 1704080401,
+          "symbol": "BTC"
+        }
+      },
+      {
+        "kind": "CLOSE",
+        "delta": "-0.485745",
+        "detail": {
+          "book_id": "btc-3",
+          "execution_uncertain": true,
+          "fee": "0.015745",
+          "filled": "0.1",
+          "gross_pnl": "-0.47",
+          "reason": "STOP",
+          "released_margin": "15.98",
+          "remaining_position": "0",
+          "requested": "0.1",
+          "symbol": "BTC"
+        }
+      },
+      {
+        "kind": "ENTRY_UNLOCK",
+        "delta": "0",
+        "detail": {
+          "operator_requested": true
+        }
+      }
+    ],
+    "notifications": [
+      {
+        "kind": "OPEN",
+        "detail": {
+          "book_id": "btc-1",
+          "fee": "0.03196",
+          "filled": "0.2",
+          "notional": "63.92",
+          "remaining_canceled": "0",
+          "requested": "0.2",
+          "side": "long",
+          "signal_fingerprint": "657e18b6b28ebdd66109884caa335a2cba970fe4207efb373d8eb2e4299fdfeb",
+          "symbol": "BTC"
+        }
+      },
+      {
+        "kind": "OPEN",
+        "detail": {
+          "book_id": "eth-1",
+          "fee": "0.03995",
+          "filled": "0.5",
+          "notional": "79.9",
+          "remaining_canceled": "0",
+          "requested": "0.5",
+          "side": "long",
+          "signal_fingerprint": "d76c265aaa07ddc5c530b09a4d13a1000e6ea58b71eaed455fb7706c55f5e55f",
+          "symbol": "ETH"
+        }
+      },
+      {
+        "kind": "CLOSE",
+        "detail": {
+          "book_id": "btc-2",
+          "execution_uncertain": false,
+          "fee": "0.01575",
+          "filled": "0.1",
+          "gross_pnl": "-0.46",
+          "reason": "STOP",
+          "released_margin": "15.98",
+          "remaining_position": "0.1",
+          "requested": "0.2",
+          "symbol": "BTC"
+        }
+      },
+      {
+        "kind": "MONITORING_GAP",
+        "detail": {
+          "detected_at": 1704080500,
+          "last_mark_at": 1704080400,
+          "symbol": "ETH"
+        }
+      },
+      {
+        "kind": "FUNDING",
+        "detail": {
+          "funding_delta": "-0.08",
+          "settlement_ts": 1704080500,
+          "symbol": "ETH"
+        }
+      },
+      {
+        "kind": "CLOSE",
+        "detail": {
+          "book_id": "eth-2",
+          "execution_uncertain": true,
+          "fee": "0.041",
+          "filled": "0.5",
+          "gross_pnl": "2.1",
+          "reason": "TARGET",
+          "released_margin": "39.87",
+          "remaining_position": "0",
+          "requested": "0.5",
+          "symbol": "ETH"
+        }
+      },
+      {
+        "kind": "MONITORING_GAP",
+        "detail": {
+          "detected_at": 1704080502,
+          "last_mark_at": 1704080401,
+          "symbol": "BTC"
+        }
+      },
+      {
+        "kind": "CLOSE",
+        "detail": {
+          "book_id": "btc-3",
+          "execution_uncertain": true,
+          "fee": "0.015745",
+          "filled": "0.1",
+          "gross_pnl": "-0.47",
+          "reason": "STOP",
+          "released_margin": "15.98",
+          "remaining_position": "0",
+          "requested": "0.1",
+          "symbol": "BTC"
+        }
+      },
+      {
+        "kind": "ENTRY_UNLOCK",
+        "detail": {
+          "operator_requested": true
+        }
+      }
+    ],
+    "warning": "Çevrimdışı simülasyon: son marklar bayat olabilir, likidasyon basitleştirilmiştir."
+  },
+  "warning": "Tamamen sentetik verilerle yazılım doğrulaması; canlı PAPER/gerçek borsa/performans testi değildir."
+}

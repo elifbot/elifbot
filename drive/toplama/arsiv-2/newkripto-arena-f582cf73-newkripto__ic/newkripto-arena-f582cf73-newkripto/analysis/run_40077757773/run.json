@@ -1,0 +1,12 @@
+{
+  "run_id": 40077757773,
+  "paper_job_result": "success",
+  "files": [
+    "preflight.json",
+    "paper-session.txt",
+    "gunluk.txt",
+    "oturum_analizi.json",
+    "islem_gecmisi.json"
+  ],
+  "note": "Maskelenmiş paper oturumu kanıtı; paper_job_result alanını birlikte okuyun."
+}

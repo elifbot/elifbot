@@ -1,0 +1,604 @@
+╔══════════════════════════════════════════════════════════════╗
+║        BOT MASASI — KULLANIM KILAVUZU (Türkçe) v4.6.0        ║
+╚══════════════════════════════════════════════════════════════╝
+
+┌─ 🛡 VİRÜS UYARISI ÇIKIYORSA — NASIL AÇILIR? ──────────────────┐
+│                                                               │
+│  NEDEN? BotMasasi.exe imzasız (code-signing sertifikası       │
+│  yok, yıllık ~300$ tutuyor). Windows SmartScreen ve bazı       │
+│  tarayıcılar, imzasız + az indirilmiş her exe'yi "şüpheli"    │
+│  diye işaretler. Bu bir YANLIŞ ALARM'dır: program virüs       │
+│  taşımaz, Go diliyle derlenmiş tek dosyadır.                  │
+│                                                               │
+│  1) MAVİ SMARTSCREEN EKRANI ("Windows korumalı bilgisaya-     │
+│     rınız"): "Daha fazla bilgi" → "Yine de çalıştır".         │
+│  2) TARAYICI İNDİRMEYİ ENGELLEDİSE (Edge/Chrome): İndirme-    │
+│     ler listesinde dosyanın yanındaki ⋯ / ok işaretine        │
+│     bas → "Tut" dendiye "Yine de indir" / "Kötü amaçlı        │
+│     yazılım olmadığını onayla" seç.                           │
+│  3) DEFENDER KARANTİNALARA ALDIYSA: Windows Güvenliği →       │
+│     Virüs ve tehdit koruması → Koruma geçmişi →               │
+│     BotMasasi.exe → Eylemler → "Geri yükle" + "İzin ver".     │
+│     Sonra kalıcı istisna ekle: Virüs ve tehdit koruması       │
+│     ayarları → Dışlamalar → Klasör ekle → BotMasasi klasörü.  │
+│  4) DOSYAYI DOĞRULAMA (isteğe bağlı): PowerShell'de           │
+│     Get-FileHash BotMasasi.exe -Algorithm SHA256              │
+│     komutunun çıktısı şu değerle AYNI olmalı:                 │
+│     2e71464f57f892e1e77194cdfdc4a090607cec7550cf1a7730515ec4cf5611d6 │
+│     (yukarısı v4.6.0 exe'sinin değeridir)                     │
+│     Aynıysa dosya bozulmamış ve değiştirilmemiştir.           │
+└───────────────────────────────────────────────────────────────┘
+
+┌─ YENİ v4.6.0 (11 Kasım 2026) — 🔑 HESAP HAVUZU: KESİN ÇÖZÜM ──┐
+│                                                               │
+│  NEDEN GEREKLİYDİ? (canlı testlerle doğrulandı)               │
+│  • puter, GEÇİCİ hesapları KAPATTI: artık girişsiz kullanım   │
+│    sunucu tarafında engelli ("Temporary accounts are          │
+│    disabled").                                                │
+│  • Şifreyle giriş ucu, TARAYICI DİŞINDAN gelen çağrıyı        │
+│    reddediyor ("This endpoint cannot be called                │
+│    cross-origin") — yani sayfa kendi kendine giriş             │
+│    YAPAMIYOR, popup şart görünüyordu.                         │
+│  • Ücretsiz hak hesap başına AYLIK: tek hesapta kota çabuk    │
+│    yanıyor.                                                   │
+│                                                               │
+│  ÇÖZÜM — 🔑 HESAPLAR düğmesi (🌟 sayfasının üst şeridi):      │
+│  1) Ücretsiz puter hesaplarını KULLANICI + ŞİFREyle bir kez   │
+│     havuza ekle. Giriş isteğini artık Bot Masası SUNUCUSU     │
+│     yapar (sunucudan sunucuya → puter kabul eder); token      │
+│     ayarlar.json'da saklanır, sayfa POPUP'SIZ konuşur.        │
+│     OTURUM PENCERESİ BİR DAHA AÇILMAZ.                        │
+│  2) KOTA DOLUNCA OTOMATİK GEÇİŞ: kart "⛔ kota" görünce       │
+│     uygulama SİSSİZCE havuzdaki öteki hesaba geçer, aynı      │
+│     soruyu ona yeniden sorar — sen hiçbir şey yapmazsın.      │
+│     N hesap = N KAT aylık ücretsiz hak.                       │
+│  3) Token bayatlarsa sayfa sunucuda sessizce yeniden giriş    │
+│     yapar (↻ Oturumu tazele düğmesi de var).                  │
+│  • Güvenlik: şifreler yalnızca BU BİLGİSAYARDA                │
+│     (ayarlar.json, 0600) saklanır; havuz listelemelerinde     │
+│     şifre ASLA sayfaya dönmez; sunucu yalnız 127.0.0.1'de     │
+│     dinler. Hesap ekleme anında gerçekten giriş yapılarak     │
+│     DOĞRULANIR (yanlış şifre eklenmez).                       │
+│  • Havuz boşsa: eski akış aynen çalışır (ilk gönderimde       │
+│     puter oturum penceresi — pop-up izni gerekir).            │
+│                                                               │
+│  KULLANIM: 🌟 sayfa → 🔑 Hesaplar → "＋ Ekle ve giriş yap".    │
+│  Ücretsiz hesabın yoksa paneldeki puter.com bağlantısından    │
+│  Create Free Account ile aç (e-posta doğrulaması ister).      │
+└───────────────────────────────────────────────────────────────┘
+
+┌─ YENİ v4.5.6 (11 Kasım 2026) — ⭐ DÜĞMEYİ BULMAK KOLAYLAŞTI ───┐
+│                                                               │
+│  ⭐ Fable 5.2 ve ⭐ Gemini 4 Argon, ANA MASADA değil;          │
+│  🌟 sayfasında yaşar (ücretsiz kanal puter'dır, ana masanın   │
+│  botları API anahtarıyla çalışır — bu ikisinin bedava API'si  │
+│  yok). Ana masada o yüzden göremezsin.                        │
+│  Artık üst şeritteki düğmenin adı:                            │
+│     🌟 Fable 5.2 & Argon (ücretsiz)                           │
+│  BAS → sayfa açılır → ikisi BAŞTAN İŞARETLİ → sorunu yaz,     │
+│  yan yana cevaplasınlar. Görüyorsan:                          │
+│  Bu yazıyı göremiyorsan ESKİ exe'yi çalıştırıyorsundur —      │
+│  ZIP'ten çıkarttığın YENİ BotMasasi.exe'yi kullan.            │
+└───────────────────────────────────────────────────────────────┘
+
+┌─ YENİ v4.5.5 (11 Kasım 2026) — ⭐ FABLE 5.2 + GEMINI 4 ARGON ──┐
+│                                                               │
+│  İstedğiniz iki amiral gemisi bulundu ve ÜCRETSİZ kanaldan    │
+│  masaya eklendi (🌟 Gerçek ChatGPT & Claude sayfası):         │
+│                                                               │
+│  ⭐ Claude Fable 5.2 (Anthropic) — en güçlü Claude; kodlama,  │
+│     akıl yürütme ve görme yetisi Fable 5.1'den güçlü.         │
+│     1.000.000 token bağlam.                                   │
+│  ⭐ Gemini 4 Argon (Google) — amiral gemisi akıl modeli;      │
+│     karmaşık yazılım, matematik ve çok adımlı ajan işleri.    │
+│     1.048.576 token bağlam.                                   │
+│                                                               │
+│  • İkisi de 🌟 sayfasında BAŞTAN İŞARETLİ; eski beşli         │
+│    (gpt-4o, gpt-4o-mini, gpt-5-nano, Sonnet 4.6, DeepSeek)    │
+│    çubuktan tek tıkla geri gelir — puter aylık kotası         │
+│    hızlı yanmasın diye varsayılan yalnız ikili.               │
+│  • Fable takılırsa otomatik Sonnet 4.6'ya, Argon takılırsa    │
+│    Gemini 3.8 Flash'e yedeklenir (⏱ zaman aşımı koruması).    │
+│  • ÜCRETSİZLIK NOTU: OpenRouter'da bu ikisi ÜCRETLİDİR        │
+│    (Fable $8/$40, Argon $2/$10 — milyon token). Bedava        │
+│    kanal puter'dır: kota hesap başına AYLIK yenilenir,        │
+│    dolunca 🆘 Kota Köprüsü devreye girer. Bir alternatif      │
+│    olarak arena.ai'de (LMArena) de ikisi var: orada API       │
+│    yok, tarayıcıdan elle sorarsın (günlük sınırlı).           │
+└───────────────────────────────────────────────────────────────┘
+
+┌─ YENİ v4.5.4 (11 Kasım 2026) — 📋 HER AN TOPLU KOPYA ─────────┐
+│                                                               │
+│  Üst şeritte artık 📋 TÜMÜNÜ KOPYALA düğmesi SÜREKLİ           │
+│  GÖRÜNÜR (ana masada da, 🌟 Gerçek ChatGPT & Claude           │
+│  sayfasında da). Alttaki 📊 panel yalnız turun SONUNDA        │
+│  çıktığı için, bir bot takılıp "⏳ düşünüyor…" da kalsa       │
+│  toplu kopyaya ulaşamazdın. Artık:                            │
+│     • Tur SÜRERKEN de basabilirsin — o ana kadar              │
+│       yazılmış olanların HEPSİ tek seferde panoya gider       │
+│       (══ bot adı ══ başlıklarıyla ayrılmış).                 │
+│     • Henüz hiç yazı yoksa "⏳ henüz yazı yok" der,           │
+│       boş metin kopyalamaz.                                   │
+│     • Hâlâ "⏳ düşünüyor…" olan botun yazmadığı için          │
+│       kopyaya DAHİL EDİLMEZ — yarım kalanların hepsi gelir.   │
+│  Ayrıntılı sürüm notları aşağıda (v4.5.3, v4.5.2 …).          │
+└───────────────────────────────────────────────────────────────┘
+
+┌─ YENİ v4.5.3 (10 Kasım 2026) — 📋 KART BAŞINA KOPYA + ⏱ ZAMAN AŞIMI ┐
+│                                                               │
+│  1) 📋 HER KARTIN SAĞ ÜST KÖŞESİNDE KOPYA DÜĞMESİ:            │
+│     Artık turun bitmesini BEKLEMEDEN, her zekanın yazdığı     │
+│     metni KENDİ KARTINDAN kopyalayabilirsin — ister yarım     │
+│     kalsın ister bitsin. ANA MASADA da, 🌟 Gerçek ChatGPT &   │
+│     Claude sayfasında da var. (Boş/"düşünüyor" karta          │
+│     basılırsa "⏳ boş" der, boş metin kopyalamaz.)             │
+│     Alttaki 📊 HEPSİNİN YORUMU paneli aynen duruyor.          │
+│                                                               │
+│  2) ⏱ "HEP DÜŞÜNÜYOR" SORUNUNA ZAMAN AŞIMI (puter sayfası):   │
+│     Bir model 90 sn içinde TEK HARF bile yazmazsa artık       │
+│     sonsuza kadar "⏳ düşünüyor…" da kalmaz: otomatik olarak  │
+│     yedek modele geçer (gpt-4o → gpt-4o-mini vb.), o da       │
+│     yazmazsa karta net hata yazar. Takılan bot ARTIK TURU     │
+│     KİLİTLEMEZ — diğer botlar normal devam eder, 📊 panel     │
+│     yine çıkar, Gönder düğmesi kilitli kalmaz.                │
+└───────────────────────────────────────────────────────────────┘
+
+┌─ YENİ v4.5.2 (10 Kasım 2026) — 🆘 KOTA KÖPRÜSÜ ────────────────┐
+│                                                               │
+│  🌟 Puter sayfasında ücretsiz kota dolunca artık sessizlik    │
+│  yok: kota hatası yakalayan model EKRANA 🆘 PANO AÇAR.        │
+│  İstediğin zaman sağ üstteki 🆘 Kota düğmesiyle de açılır.    │
+│  PANO 4 GEÇİCİ ÇÖZÜM verir:                                   │
+│   1) 👤 Hesap değiştir / yeniden giriş — puter hakkı hesap    │
+│      başına AYLIK verilir; yeni ücretsiz hesap = taze hak.    │
+│   2) 🖥 ANA MASAYI AÇ — NVIDIA anahtarı gömülü: GLM (Z.ai),   │
+│      Nemotron Ultra/Bolt, MiniMax, Mistral, GPT-OSS ve        │
+│      anahtarsız bot puter kotasına hiç takılmaz.              │
+│   3) 🔑 2 dakikada ücretsiz anahtar bağla: BigModel           │
+│      glm-4.7-flash (tamamen ücretsiz) · Groq · OpenRouter     │
+│      ':free' modeller (kredisiz 50 istek/gün, 10$ krediyle    │
+│      1000/gün) — Ana Masa → ⚙ Anahtarlar sekmesine yapıştır.  │
+│   4) 🌐 Arena.ai — anahtarsız, tarayıcıda tüm büyük           │
+│      modeller ücretsiz. AMA sınırsız DEĞİL: model başı ve     │
+│      günlük limitleri var, resmî API'si YOK.                  │
+│  Not: arena.ai (= LMArena) yalnız tarayıcıda manuel           │
+│  kullanım içindir; Bot Masası'na bağlanamaz.                  │
+│  Ayrıca kota hata mesajları düzeltildi: hak "günlük" değil,   │
+│  hesap başına AYLIK yenilenir.                                │
+└───────────────────────────────────────────────────────────────┘
+
+┌─ DÜZELTME v4.5.1 (10 Kasım 2026) — ⭐ 5'Lİ EKİP: GLM GELDİ ───┐
+│                                                               │
+│  Ana masada ⭐ 5'li Ekip artık DeepSeek'i SEÇMİYOR            │
+│  (yavaştı — hep düşünüyor gibiydi). Yerine 🧠 GLM (Z.ai)      │
+│  beşlinin 2. sırasına alındı: NVIDIA anahtarın varsa GLM      │
+│  beşlide GARANTİ — ekstra kurulum yok, aynı anahtar çalışır.  │
+│  DeepSeek'i yine elle seçebilirsin (çipler duruyor).          │
+│  Not: 📊 HEPSİNİN YORUMU paneli ana masada da VAR (v4.5.0'dan │
+│  beri): çoklu bot turu bitince ekranın en altında çıkar.      │
+└───────────────────────────────────────────────────────────────┘
+
+┌─ YENİ v4.5.0 (10 Kasım 2026) — 🛠 KOD AJANLARI + 📊 TEK PANEL ─┐
+│                                                               │
+│  🌟 Gerçek ChatGPT & Claude sayfasına YENİ ÇUBUK:             │
+│  🛠 KOD AJANLARI — kodlama işi için uzmanlaşmış 7 ajan:       │
+│    🤖 Claude Code (varsayılan işaretli)  💻 Codex             │
+│    🖱 Cursor   🧩 Cline   🌐 Jules   🛠 Aider   🚀 Devin      │
+│  Her ajan, altındaki modeli kendi uzmanlık talimatıyla        │
+│  kullanır; işaretledikleriniz 5 modelle BİRLİKTE aynı         │
+│  soruya AYNI ANDA yanıt verir.                                │
+│                                                               │
+│  📊 HEPSİNİN YORUMU — TEK EKRAN: tur bitince ekranın EN       │
+│  ALTINDA tüm botların/ajanların yorumu tek panelde toplanır.  │
+│  Üstünde 📋 TÜMÜNÜ KOPYALA düğmesi var: tek tuşla tüm         │
+│  yorumlar (bot adları başlıklı) panoya kopyalanır. Her        │
+│  yorumun yanında ayrıca tek-tek kopyalama düğmesi de var.     │
+│  Bu panel ANA MASADA da (çoklu bot turunda) eklendi.          │
+└───────────────────────────────────────────────────────────────┘
+
+┌─ DÜZELTME v4.4.2 (10 Kasım 2026) — 🌟 PUTER SAYFASI EKLEME TAMİR┐
+│                                                               │
+│  🌟 Gerçek ChatGPT & Claude (Puter) sayfasında dosya          │
+│  seçilince sohbete EKLENMİYORDU: sayfa açılırken gizli bir    │
+│  kod hatası patlıyor, dosya seçme dinleyicisi hiç bağlan-     │
+│  mıyordu (pencere açılıyor, dosya seçince sessiz kalıyordu).  │
+│  Hata bulundu, düzeltildi ve GERÇEK TARAYICIYLA kanıtlandı:   │
+│  zip ve Word dosyası artık çip olarak sohbete düşüyor.        │
+│  NOT: Bu düzeltme için yeni exe ŞART — eski exe'de aynı       │
+│  sayfa aynı hatayı verir.                                     │
+└───────────────────────────────────────────────────────────────┘
+
+┌─ YENİ v4.4.1 (10 Kasım 2026) — 📎 ANA MASA DOSYA TAMİRİ ──────┐
+│                                                               │
+│  Dosya ekleme baştan sona GERÇEK TARAYICIYLA test edildi:     │
+│  zip (23 dosya) yüklendi ve 5 bota AYNI ANDA gitti. Artık     │
+│  Word (.docx), Excel (.xlsx), PowerPoint (.pptx) ve PDF       │
+│  dosyalarının İÇİNDEKİ metin otomatik çıkarılıp botlara       │
+│  okutulur; zip içindekiler de aynı şekilde işlenir.           │
+│  Görsel/desteklenmeyen türlere net Türkçe uyarı verilir.      │
+│  Kritik: açılışta bir aksaklık olsa bile 📎 ve Gönder         │
+│  asla devre dışı kalmaz — dinleyiciler en başta bağlanır.     │
+└───────────────────────────────────────────────────────────────┘
+
+┌─ YENİ v4.4.0 (10 Kasım 2026) — BEŞLİ ARTIK AYNI ANDA YAZIYOR ─┐
+│                                                               │
+│  Ana masada sırayla başlama BİTTİ: ⭐ 5'li Ekip'in beş botu   │
+│  gönder tuşuna basınca AYNI SANİYEDE yazmaya başlıyor.        │
+│  Eskiden aynı anahtarı paylaşan botlar sunucuda 1.2'şer sn    │
+│  arayla sıraya giriyordu; o kapı tamamen kaldırıldı.          │
+│  Limit (429) gelirse her kart kendi içinde 3-6 sn bekleyip    │
+│  kendiliğinden yeniden dener — diğer botları bekletmez.       │
+└───────────────────────────────────────────────────────────────┘
+
+┌─ YENİ v4.3.0 (10 Kasım 2026) — 🌟 PUTER SAYFASI 5'Lİ OLDU ────┐
+│                                                              │
+│  "🌟 Gerçek ChatGPT & Claude" sayfasında artık model seçmeye  │
+│  gerek yok: gpt-4o, gpt-4o-mini, gpt-5-nano, Claude Sonnet   │
+│  4.6 ve DeepSeek — BEŞİ BİRDEN aynı soruya AYNI ANDA yanıt   │
+│  verir, cevaplar yan yana kartlarda canlı akar.              │
+│  İstersen ⚖ MODELLER çubuğundan bazı modellerin işaretini     │
+│  kaldırırsın (hepsi varsayılan işaretli gelir).              │
+│  Ayrıca: güncel sorunun modele ulaşmaması hatası düzeltildi; │
+│  her modelin kendi sohbet hafızası var.                      │
+└──────────────────────────────────────────────────────────────┘
+
+┌─ YENİ v4.2.0 (10 Kasım 2026) — ⭐ 5'Lİ EKİP: SEÇME DERDİ BİTTİ┐
+│                                                              │
+│  Artık botları tek tek işaretlemek yok: Masa açılınca EN İYİ │
+│  5 bot kendiliğinden SEÇİLİ gelir ve gönderdiğin soruya      │
+│  AYNI SAYFADA yan yana kartlarda yorum yapar.                │
+│                                                              │
+│  ⚖ BOTLAR çubuğundaki yeni ⭐ 5'li Ekip düğmesi:              │
+│   • TEK TUŞ: en iyi 5 botu seçer, diğerlerini bırakır        │
+│   • Her zaman çalışan anahtarsız bot + NVIDIA'nın güçlüleri  │
+│     (Ultra 550B, Bolt, Lightning, GLM) önceliklidir          │
+│   • Kilitli/anahtarsız kalan botlar otomatik ATLANIR         │
+│  İstersen "Tümü" ile yine hepsini seçersin (eskisi gibi).    │
+└──────────────────────────────────────────────────────────────┘
+
+┌─ YENİ v4.1.0 (10 Kasım 2026) — 🌟 CHATGPT CODEX MODU ────────┐
+│                                                              │
+│  ChatGPT'nin kod ustası CODEX artık masada! İki yol:         │
+│                                                              │
+│  A) 🌟 ChatGPT Codex (ChatGPT girişi — ÖNERİLEN)             │
+│     API anahtarı GEREKMEZ; ChatGPT hesabınla çalışır.        │
+│     Ücretsiz plan dâhil (günlük kotalı), Plus/Pro'da geniş.  │
+│     Kurulum (bir kez, ~2 dk) — aşağıda 8. bölümde.           │
+│                                                              │
+│  B) ChatGPT Codex — OpenAI API (ücretli)                     │
+│     OpenAI API anahtarı olanlar için: gpt-5.1-codex-max /    │
+│     gpt-5.1-codex-mini. ChatGPT botuyla AYNI anahtarı paylaşır.
+│     (Responses API'sini masa kendisi konuşur.)               │
+│                                                              │
+│  Codex botu dosya/ZIP incelemesine de katılır: kod paketi    │
+│  metin olarak Codex'e gider, read-only korumalı çalışır      │
+│  (dosyalarına DOKUNMAZ, komut çalıştıramaz).                 │
+└──────────────────────────────────────────────────────────────┘
+
+┌─ v4.0.2 (10 Kasım 2026) — "TEK SEFERDE HEPSİ PATLADI" ──────┐
+│                                                              │
+│  Ekran görüntüsündeki tablo: bazı kartlar "Bağlantı hatası /  │
+│  Failed to fetch", biri "429 free limit reached" — hepsi     │
+│  AYNI anda. İki ayrı nedeni vardı, ikisi de giderildi:       │
+│                                                              │
+│  1) TARAYICI BAĞLANTI SINIRI: Chrome/Edge aynı adrese        │
+│     (127.0.0.1) HTTP/1.1'de en fazla ~6 bağlantı açar.       │
+│     9 bot seçiliyken 9 SSE akışı aynı anda ateşleniyordu;    │
+│     7.+ istekler kuyrukta kalıp düşüyordu.                   │
+│     → Artık EN FAZLA 5 akış aynı anda çalışır; kalan kartlar │
+│       "⏳ sırada…" yazar, biri bitince 0.8 sn sonra başlar.  │
+│  2) TEK ANAHTAR FIRTINASI: 8 NVIDIA botu aynı saniyede aynı  │
+│     anahtara vurunca sağlayıcı 429 veriyordu.                │
+│     → Sunucu artık aynı anahtar grubuna giden istekler       │
+│       arasında en az 1.2 sn boşluk tutar + 429/5xx'te        │
+│       artan beklemelerle (3/8/15 sn, Retry-After'a saygı)    │
+│       3 kez daha dener.                                      │
+│  3) GEÇİCİ HATA MİRAZI: kart, bağlantı/limit hatasında       │
+│     4 sn bekleyip KENDİ bir kez daha dener; hâlâ olmadıysa   │
+│     karta "↻ Tekrar dene" düğmesi gelir.                    │
+│  4) pollinations "free limit reached" artık net Türkçe       │
+│     açıklama verir (anahtarsız kotanın dolduğunu söyler).    │
+│                                                              │
+│  İPUCU: "Anahtarsız GPT-OSS 20B" botu herkese açık ücretsiz  │
+│  havuzu kullanır; gün içinde kotayı doldurabilir. NVIDIA    │
+│  grubundaki 8 bot kendi anahtarınızla çalışır — onlar        │
+│  daha stabil.                                                │
+└──────────────────────────────────────────────────────────────┘
+
+┌─ v4.0.1 (10 Kasım 2026) ─────────────────────────────────────┐
+│                                                              │
+│  🔧 "Bağlantı hatası: Failed to fetch" SORUNU KÖKTEN ÇÖZÜLDÜ │
+│  Botlara aynı anda soru gönderince kartların rastgele        │
+│  düşmesinin nedeni bulundu: sunucu, tarayıcıdan 150 saniye   │
+│  "yaşıyor" pingi gelmezse kendini KAPATIYORDU. Oysa 9 bot    │
+│  paralel çalışırken tarayıcı aynı adrese en fazla 6 bağlantı │
+│  açabildiğinden ping KUYRUKTA bekliyor, sunucu "kullanıcı    │
+│  gitti" sanıp kapanıyordu → süren tüm istekler anında        │
+│  "Failed to fetch" ile düşüyordu (özellikle uzun ZIP         │
+│  incelemelerinde).                                           │
+│                                                              │
+│  Yeni sürümde:                                               │
+│   • İstekler sürerken sunucu KENDİNİ ASLA KAPATMAZ           │
+│   • Her kart anında bağlanır, ilk token'a kadar bağlantı     │
+│     20 saniyede bir "canlı" sinyaliyle tazelenir             │
+│   • Sunucu gerçekten kapanırsa üstte net uyarı görünür:      │
+│     "Sunucu yanıt vermiyor — BotMasasi.exe'yi yeniden açın"  │
+│   • 10 eşzamanlı akış testi: 10/10 başarılı (eski: rastgele) │
+│                                                              │
+│  🧠 SAÇMALAMA KARŞISI TALİMAT: sistem talimatı güçlendirildi  │
+│  (verilmeyen dosya/fonksiyon uydurma, emin değilsen de,      │
+│  düzgün cümle kur). Küçük modellere dev ZIP dökümü gitmesi   │
+│  engellendi — küçük botlara daha küçük, öncelikli paket.     │
+│  Not: ücretsiz küçük modellerin kalitesi modele bağlıdır;    │
+│  en tutarlısı: Nemotron Ultra 550B, GPT-OSS 20B (OpenAI).    │
+└──────────────────────────────────────────────────────────────┘
+
+Pakette ne var?
+  • BotMasasi.exe      → ⭐ ASIL UYGULAMA. Çift tıkla, bitti. Kurulum YOK,
+                         Python YOK, komut YOK. Tarayıcınızda açılır.
+                         AYDINLIK (BEYAZ) arayüzlü sürüm.
+  • OKU_BENI.txt       → Bu kılavuz
+  • alternatif_python/ → Ekstra kopya: Python/Tkinter sürümü + bat dosyaları
+                         (exe çalışmazsa yedek olarak oradalar)
+
+──────────────────────────────────────────────────────────────
+1) BAŞLAMA (30 saniye)
+──────────────────────────────────────────────────────────────
+  1. BotMasasi.exe'ye ÇİFT TIKLAYIN.
+  2. Tarayıcıda Bot Masası açılır (beyaz, aydınlık arayüz).
+     "Anahtarsız GPT-OSS 20B" botu HEMEN çalışır — kayıt yok, anahtar yok.
+  3. Kapatırken sağ üstteki ✖ Kapat düğmesini kullanın.
+
+  NOT: Windows SmartScreen / antivirüs "bilinmeyen uygulama" diyebilir
+  (imzasız dosya olduğu için). "Daha fazla bilgi → Yine de çalıştır"
+  deyin. Dosya zararsızdır.
+
+──────────────────────────────────────────────────────────────
+2) ⚖ HEPSİ BERABER — ANA EKRANDA
+──────────────────────────────────────────────────────────────
+  • Giriş kutusunun üstündeki ⚖ BOTLAR çubuğunda her bot bir cip'tir.
+  • İstediğiniz kadar botu işaretleyin ("Tümü" düğmesi hepsini seçer).
+  • Sorunuzu yazın → Gönder.
+  • Aynı soru SEÇİLİ TÜM botlara AYNI ANDA gider; cevaplar yan yana
+    kartlarda canlı canlı akar. Karşılaştırın, en iyisini alın!
+  • Her bot kendi sohbet hafızasını tutar; devamında ona özgü konuşursunuz.
+  • Tek bot işaretlerseniz klasik tek sohbet gibi çalışır.
+
+──────────────────────────────────────────────────────────────
+3) 📎 DOSYA & ZIP İNCELEME — AKILLI PAKETLEYİCİ (v3.3)
+──────────────────────────────────────────────────────────────
+  Giriş kutusunun yanındaki 📎 düğmesi:
+    • Tek dosya (.py .js .html .css .json .md .go .java .c .cs .php .sh
+      .bat .yml .sql .csv .txt …) yükleyebilirsiniz.
+    • Ya da bir .ZIP arşivi: exe ZIP'İN İÇİNİ AÇAR, içindeki tüm
+      metin/kod dosyalarını çıkarır (ikili ve 300 KB üstü dosyaları
+      atlar, .git klasörünü yok sayar) ve SEÇİLİ TÜM BOTLARA gönderir.
+    • Botlar kodu satır satır inceler: hataları, güvenlik sorunlarını,
+      mantık hatalarını ve iyileştirme önerilerini madde madde yazar.
+
+  v3.3 AKILLI PAKETLEYİCİ:
+    • Dosyalar ÖNCELİĞE göre dizilir: çekirdek kod (engine, strategy,
+      main, config…) önce, test/docs dosyaları sona bırakılır.
+    • Her modele kendi BAĞLAM BÜTÇESİNE göre paket gider —
+      "context length exceeded" hatası kökünden çözüldü.
+    • Modelin bütçesine sığmazsa asla reddetmez: en önemli dosyalar
+      incelenir, kalanların listesi (DOSYA HARİTASI) modele verilir.
+      Kart başlığında kapsam görünür: "✔ 42/61 dosya".
+
+──────────────────────────────────────────────────────────────
+4) 🔑 NVIDIA ANAHTARI — GÖMÜLÜ GELİYOR, HİÇBİR ŞEY YAPMAYA GEREK YOK
+──────────────────────────────────────────────────────────────
+  v3.3.1: NVIDIA ücretsiz anahtarınız UYGULAMANIN İÇİNE GÖMÜLDÜ —
+  BotMasasi.exe'yi açar açmaz 8 NVIDIA botu ANINDA seçili ve hazır
+  gelir. ⚙ Anahtarlar'a girmenize, anahtar bulup yapıştırmanıza
+  gerek yok.
+
+  İsterseniz kendi anahtarınızı değiştirmek/yapıştırmak için:
+  1. https://build.nvidia.com → "Get API Key" → kopyalayın.
+  2. ⚙ Anahtarlar → "NVIDIA · Nemotron Bolt" satırına yapıştırın →
+     Kaydet. (Kutu boş bırakılırsa gömülü anahtar geçerli kalır.)
+
+  Tek gömülü anahtarla şu 8 bot açılır (hesabınızda tek tek test
+  edilerek seçildiler):
+       • NVIDIA · Nemotron Bolt          (hızlı — test edildi ✔)
+       • NVIDIA · Nemotron Ultra 550B    (en güçlüsü — test edildi ✔)
+       • NVIDIA · Nemotron Lightning     (şimşek hızlı — test edildi ✔)
+       • NVIDIA · DeepSeek V4.1 Flash    (listede; NVIDIA servis sorunu
+                                          bitince çalışır)
+       • NVIDIA · GPT-OSS 20B            (OpenAI açık modeli; listede)
+       • NVIDIA · GLM Flash              (Z.ai — test edildi ✔)
+       • NVIDIA · MiniMax M3.1           (test edildi ✔)
+       • NVIDIA · Mistral Large          (test edildi ✔)
+     ⚖ çubuğundan istediklerinizi işaretleyin — aynı soru hepsine gider.
+
+  NOT: Eski sürümdeki "Kimi K2.6" botu hesabınızda KAPALI olduğu için
+  (NVIDIA hesap izni gerekir, 404 veriyordu) yerine test edilmiş
+  Nemotron Lightning geldi. Kimi ileride hesabınızda açılırsa
+  ⚙ Anahtarlar → 🔍 Liste'den seçebilirsiniz.
+
+  v3.3 KENDİNİ ONARAN MODEL HARİTASI: Açılışta masa, model kimliklerini
+  HESABINIZIN gerçek model listesiyle doğrular; bayat isimleri otomatik
+  düzeltir → 404 hatası tarih olur.
+
+  Ayrıca "Özel API (OpenAI uyumlu)" satırı: OpenAI uyumlu HERHANGİ bir
+  API adresini (https://…/v1 biçiminde), anahtarını ve model adını
+  girince kendi API servisiniz de masaya gelir. Adresi ".../chat/
+  completions" ile bitirip yapıştırsanız da uygulama kendisi düzeltir.
+  (NVIDIA, Groq, Together, LM Studio, vLLM… hepsi çalışır.)
+
+──────────────────────────────────────────────────────────────
+5) DİĞER ÜCRETSİZ ANAHTAR KAYNAKLARI
+──────────────────────────────────────────────────────────────
+  ANAHTARSIZ (hiçbir şey yapmadan):
+    • Anahtarsız GPT-OSS 20B — hemen çalışır (Pollinations)
+    • Ollama (bilgisayarınıza kurarsanız — yerel, sınırsız, ollama.com)
+
+  ÜCRETSİZ ANAHTARLA:
+    • NVIDIA          → anahtar GÖMÜLÜ — hazır! (yenisini isterseniz
+                       build.nvidia.com)
+    • Google Gemini   → aistudio.google.com       (ücretsiz günlük kota)
+    • OpenRouter      → openrouter.ai/keys        (tek anahtarla 400+ model;
+                       ':free' ile bitenler ücretsizdir — 🔍 Liste'de
+                       ücretsizleri görün. Varsayılan: 550B Nemotron free)
+    • GLM (Z.ai)      → open.bigmodel.cn          (glm-4.7-flash ücretsiz)
+    • Groq            → console.groq.com          (ücretsiz katman, çok hızlı)
+    • Mistral         → console.mistral.ai        (ücretsiz deneme planı)
+    • Qwen (Alibaba)  → console.alibabacloud.com  (başlangıç kotası)
+    • Kimi (Moonshot) → platform.moonshot.ai      (küçük ücretsiz kredi)
+
+  ÜCRETLİ: ChatGPT (platform.openai.com), Claude (console.anthropic.com),
+  DeepSeek (platform.deepseek.com — çok ucuz).
+
+  DÜRÜST NOT: Gerçek "ChatGPT-4o / Claude Sonnet"i anahtarsız-sınırsız
+  veren güvenilir bir servis YOK (Puter bile günlük kotalı ve bazen
+  oturum kopar). Ücretsiz en yakın eşdeğerler: NVIDIA anahtarıyla
+  GPT-OSS 20B (OpenAI'ın açık modeli) + Nemotron Ultra 550B + Kimi K2
+  üçlüsü. Gerçek Claude için: 🌟 düğmesi (Puter ücretsiz kotası) ya da
+  OpenRouter/Anthropic anahtarı.
+
+──────────────────────────────────────────────────────────────
+6) 🧩 BÜYÜK DOSYA SETLERİ — DERİN İNCELEME HATTI (v3.3)
+──────────────────────────────────────────────────────────────
+  Eski sürümün "88 parça çıktı (sınır 12)" reddi ve "165007 > 131072
+  token" taşması TAMAMEN KALDIRILDI. Yeni hat:
+    1. Model bütçesine sığan set → TEK istek (hızlı yol).
+    2. Sığmayan set → DERİN İNCELEME:
+       • ZIP önce DOSYA HARİTASI'na dönüşür (tüm yollar + satır sayısı).
+       • Dosyalar öncelik sırasıyla bölümlere bölünür; her bölüm
+         modele tek istekte gider, bot KISA NOT alır.
+       • Kritik yenilik: ham içerik hafızada BİRİKMaz — her istek
+         yalnızca (önceki notlar + 1 bölüm) taşıdığı için bağlam
+         taşması MATEMATİKSEL olarak imkânsızdır.
+       • En sonda tüm notlar tek BÜTÜNCÜL RAPORA dönüşür.
+    3. Bağlam hatası gelirse masa içeriği KENDİLİĞİNİ küçültüp bir kez
+       daha dener; 429 hız sınırında 3 saniye bekleyip yeniler.
+    4. Sohbet hafızası KOMPAKT: ZIP'in tam içeriği hafızada tutulmaz,
+       yalnız raporun özeti kalır → 2., 3., 10. sorular hafif gider.
+  Kart başlığı her aşamayı yazar: "bölüm 3/8", "✍ rapor
+  birleştiriliyor", "✔ 55/61 dosya (kalan: haritadan)".
+
+──────────────────────────────────────────────────────────────
+7) 🌟 GERÇEK CHATGPT & CLAUDE (Puter — v4.3.0: 5'Lİ AYNI ANDA)
+──────────────────────────────────────────────────────────────
+  "🌟 Gerçek ChatGPT & Claude" düğmesi ayrı sekme açar:
+    • gpt-4o, gpt-4o-mini, gpt-5-nano, Claude Sonnet 4.6, DeepSeek
+    • BEŞİ BİRDEN işaretlidir; Gönder deyince aynı soruya HEPSİ
+      AYNI ANDA yanıt verir, cevaplar yan yana kartlarda akar.
+    • ⚖ MODELLER çubuğundan istemediğini işaretten çıkarırsın.
+    • Gönder'e basınca Puter oturum penceresi çıkar → ÜCRETSİZ
+      hesap açıp girin (e-posta yeterli). Pop-up izni verin.
+  v4.3.0 GÜVENİLİRLİK:
+    • Güncel sorunun modele ulaşmaması hatası DÜZELTİLDİ (eski
+      sürüm son mesajı hafızadan düşürüp göndermiyordu).
+    • Her modelin KENDİ sohbet hafızası tutulur; hafıza kompakt
+      (dosya blokları taşınmaz) → "2. mesajda patlama" yok.
+    • Model kota verirse yedek modele otomatik geçilir; olmazsa
+      o kartta 🔁 Tekrar dene düğmesi çıkar — diğer modeller
+      etkilenmez, devam eder.
+  Dikkat: Puter ücretsiz kotası büyük modellerde (gpt-4o, claude) çabuk
+  dolar; küçük modeller daha uzun dayanır. Sürekli kullanım için masadaki
+  NVIDIA anahtarı sakin ve ücretsiz yoldur.
+
+──────────────────────────────────────────────────────────────
+8) 🌟 CHATGPT CODEX — GERÇEK CODEX MODU (KURULUM)
+──────────────────────────────────────────────────────────────
+  Codex, OpenAI'nin kod için özel eğitilmiş ajan modelidir
+  (gpt-5.1-codex ailesi). ChatGPT hesabınla giriş yapılır;
+  API anahtarı gerekmez. ÜCRETSİZ plan dâhil her ChatGPT
+  planında çalışır (günlük kullanım limiti vardır).
+
+  BİR KEZLİK KURULUM (~2 dakika):
+    1. nodejs.org → Node.js LTS indir-kur (kuruluysa geç).
+    2. Başlat → "cmd" yaz → Komut İstemi'ni aç.
+    3. Şunu yaz, Enter:   npm install -g @openai/codex
+    4. Şunu yaz, Enter:   codex login
+       → Tarayıcıda ChatGPT giriş sayfası açılır →
+         hesabınla giriş yap → izin ver.
+    5. Bot Masası'nı kapat (✖) → yeniden aç.
+       ⚖ çubuğunda "🌟 ChatGPT Codex" çipi artık AKTİF.
+
+  NOTLAR:
+   • "codex: command not found / tanınmıyor" → cmd'yi YENİ
+     açtıktan sonra tekrar dene (PATH tazelenir).
+   • Limit doldu mesajı → ChatGPT hesabının günlük Codex
+     kotası; yarın devam ya da Plus/Pro daha geniş kota.
+   • Codex'e soru + dosya/ZIP gönderebilirsin — masa kodu
+     metin olarak ekler; Codex read-only modda çalışır,
+     dosyalarına dokunmaz.
+   • Model kutusu boş kalsın = Codex varsayılan modeli.
+   • İstersen model adını ⚙ Anahtarlar → Codex satırından
+     değiştirebilirsin (örn. gpt-5.1-codex-mini = hızlı).
+
+  B) API YOLU: OpenAI API anahtarın varsa ⚙ Anahtarlar →
+     "ChatGPT Codex — OpenAI API" satırına anahtar (ChatGPT
+     botuyla aynı kutu) → gpt-5.1-codex-max hazır.
+
+──────────────────────────────────────────────────────────────
+9) SORUN GİDERME
+──────────────────────────────────────────────────────────────
+  • Exe açılmıyor / SmartScreen uyarısı → "Daha fazla bilgi" →
+    "Yine de çalıştır".
+  • ESKİ EXE HALA ÇALIŞIYORSA kapatın (✖ Kapat), yeni exe ile değiştirin.
+    Not: eski exe'nin kayıtlı anahtarı geçerli olur; gömülü anahtara
+    dönmek isterseniz ⚙ Anahtarlar'da NVIDIA kutusunu boşaltıp Kaydet deyin.
+  • Arayüz açılmadıysa → tarayıcıda elle açın: http://127.0.0.1:PORT
+    (PORT kayıtta yazar: %APPDATA%\BotMasasi\masa.log)
+  • Hata günlüğü → %APPDATA%\BotMasasi\masa.log
+  • "Model bulunamadı (404)" → v3.3'te çoğu durumda gerek kalmadı:
+    masa model adlarını hesabınıza göre otomatik düzeltir. Hâlâ sorun
+    varsa ⚙ Anahtarlar → 🔍 Liste ile güncel adı seçin.
+  • "Anahtar hatalı (401)" → anahtarı yanlış satıra mı yapıştırdınız?
+    NVIDIA botlarında anahtar yalnızca "Nemotron Bolt" satırına girilir;
+    diğerleri otomatik alır.
+  • "Limit doldu (429)" → masa 3-6 sn bekleyip otomatik yeniler; sürerse
+    ücretsiz katmanın günlük sınırıdır. Sınırsız isterseniz: Ollama.
+  • Ollama çipi kilitliyse → Ollama bilgisayarınızda kapalı demektir;
+    ollama.com'dan kurup açın ya da o botu kullanmayın.
+  • Puter penceresi çıkmıyor → pop-up izni verin.
+  • Exe çalışmazsa → alternatif_python\CALISTIR.bat (Python gerekir).
+
+──────────────────────────────────────────────────────────────
+Sürüm 4.4.1 — 📎 DOSYA EKLEME TAMİRİ: Word/Excel/PowerPoint/PDF
+içinden metin çıkarımı (zip içindekiler dâhil) · 📎 ve Gönder
+dinleyicileri açılışın en başına alındı — sunucu/ayar gecikmesi
+olsa bile asla devre dışı kalmaz · 16 MB sınırı tashih edildi ·
+gerçek zip ile uçtan uca tarayıcı testi: 23 dosya → 5 bota aynı anda.
+Sürüm 4.4.0 — ⚡ BEŞLİ AYNI ANDA: ana masada sıralı başlatma
+kaldırıldı · ⭐ 5'li Ekip'in beş botu aynı saniyede yazmaya başlar
+(sunucudaki 1.2 sn grup kapısı + 0.8 sn kuyruk arası silindi) ·
+geçici hata tekrarı 3-6 sn rastgele beklemeyle (senkron dalga yok).
+Sürüm 4.3.0 — 🌟 Puter sayfası 5'Lİ: model seçmek yok; gpt-4o,
+gpt-4o-mini, gpt-5-nano, Claude Sonnet 4.6, DeepSeek BEŞİ BİRDEN
+aynı soruya aynı anda yanıt verir (yan yana kartlar) · güncel
+sorunun düşmesi hatası düzeltildi · model başına ayrı hafıza.
+Sürüm 4.2.0 — ⭐ 5'Lİ EKİP: masa açılışında en iyi 5 bot kendiliğinden
+seçili gelir, hiçbir şey işaretlemeye gerek yok · ⚖ çubuğuna tek tuşluk
+⭐ 5'li Ekip düğmesi (kilitli botları atlar) · "Tümü" aynen duruyor.
+Sürüm 4.1.0 — 🌟 CHATGPT CODEX MODU: (A) Codex CLI köprüsü — ChatGPT
+hesabınla giriş, ücretsiz plan dâhil, API anahtarsız; (B) OpenAI API
+üzerinden gpt-5.1-codex-max/mini (Responses API) · Codex CLI sağlık
+denetimi ve kurulumsuzsa adım adım Türkçe kurulum rehberi · eski CLI
+sürümleri için otomatik yedek mod · kurulum adımları 9. bölümde.
+Sürüm 4.0.2 — eşzamanlılık sınırı (5 akış) + sıralı başlatma · aynı
+anahtar grubuna 1.2 sn boşluk · 429/5xx'te artan bekleme-tekrar ·
+kart başına "↻ Tekrar dene" · pollinations 429 net mesaj.
+Sürüm 4.0.1 — sunucu kendini kapatma hatası kökten çözüldü; akış
+sürerken asla çıkmaz · 20 sn canlı sinyali · saçmalama karşısı talimat.
+Sürüm 3.3.1 — NVIDIA anahtarı EXE'NİN İÇİNE GÖMÜLDÜ: açılışta 8 NVIDIA
+botu seçili ve hazır gelir, anahtar girmeye gerek yok · 8 model kimliği
+hesapta tek tek test edilerek kesinleştirildi (Kimi K2.6 hesapta kapalı
+olduğundan yerine Nemotron Lightning geldi; MiniMax M3.1'e dönüldü) ·
+açılışta otomatik model doğrulama.
+Sürüm 3.3 — AKILLI PAKETLEYİCİ + DERİN İNCELEME HATTI: bağlam taşması
+(165007>131072) ve "88 parça (sınır 12)" reddi kökünden çözüldü ·
+KENDİNİ ONARAN MODEL HARİTASI: 404 veren model kimlikleri hesabın gerçek
+listesine göre otomatik düzeltilir (kimi-k2.6 gibi) · dosyalar önceliğe
+göre paketlenir, kapsam kart başlığında görünür · 429'da otomatik bekle-
+tekrar · Ollama kapanınca çipi kilitlenir · Puter oturum yenileme.
+Sürüm 3.2 — NVIDIA tek anahtarla 8 bot · Özel API satırı · Puter kompakt
+hafıza + canlı akış + 🔁 tekrar · OpenRouter ücretsiz 550B varsayılanı.
+Sürüm 3.1 — Akıllı parçalama: büyük dosya setleri bölerek incelenir.
+Sürüm 3.0 — Beyaz arayüz · botlar ana ekranda yan yana · dosya/ZIP
+inceleme · Türkçe yanıtlama zorlaması.
+Anahtarlar ve sohbetler bilgisayarınızdan çıkmaz.
+──────────────────────────────────────────────────────────────

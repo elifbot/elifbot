@@ -1,0 +1,286 @@
+[
+    {
+        "Id": "d55a683197b9c99cbe389b0762309ea35d91833cd37a5c21f32c8797875458a6",
+        "Created": "2026-11-03T09:51:31.31719225Z",
+        "Path": "python",
+        "Args": [
+            "-u",
+            "-m",
+            "src.live_runner",
+            "--config",
+            "configs/v9-canonical-production.json",
+            "--duration-sec",
+            "86400",
+            "--max-drain-sec",
+            "600",
+            "--port",
+            "8080",
+            "--report-prefix",
+            "/evidence/paper24h"
+        ],
+        "State": {
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 295551,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2026-11-03T09:51:31.424232461Z",
+            "FinishedAt": "0001-01-01T00:00:00Z",
+            "Health": {
+                "Status": "healthy",
+                "FailingStreak": 0,
+                "Log": [
+                    {
+                        "Start": "2026-11-03T09:51:51.427516472Z",
+                        "End": "2026-11-03T09:51:51.555683244Z",
+                        "ExitCode": 0,
+                        "Output": ""
+                    },
+                    {
+                        "Start": "2026-11-03T09:52:11.556500308Z",
+                        "End": "2026-11-03T09:52:11.678915399Z",
+                        "ExitCode": 0,
+                        "Output": ""
+                    },
+                    {
+                        "Start": "2026-11-03T09:52:31.679333353Z",
+                        "End": "2026-11-03T09:52:31.787698424Z",
+                        "ExitCode": 0,
+                        "Output": ""
+                    },
+                    {
+                        "Start": "2026-11-03T09:52:51.795355928Z",
+                        "End": "2026-11-03T09:52:51.90926871Z",
+                        "ExitCode": 0,
+                        "Output": ""
+                    }
+                ]
+            }
+        },
+        "Image": "sha256:2d00ac1d88982dccfdf938e18c10a9f6ae702000b1909892dfaef79abfe0da9a",
+        "ResolvConfPath": "/var/lib/docker/containers/d55a683197b9c99cbe389b0762309ea35d91833cd37a5c21f32c8797875458a6/resolv.conf",
+        "HostnamePath": "/var/lib/docker/containers/d55a683197b9c99cbe389b0762309ea35d91833cd37a5c21f32c8797875458a6/hostname",
+        "HostsPath": "/var/lib/docker/containers/d55a683197b9c99cbe389b0762309ea35d91833cd37a5c21f32c8797875458a6/hosts",
+        "LogPath": "/var/lib/docker/containers/d55a683197b9c99cbe389b0762309ea35d91833cd37a5c21f32c8797875458a6/d55a683197b9c99cbe389b0762309ea35d91833cd37a5c21f32c8797875458a6-json.log",
+        "Name": "/kripto-v943-paper24h-20261103",
+        "RestartCount": 0,
+        "Driver": "overlay2",
+        "Platform": "linux",
+        "MountLabel": "",
+        "ProcessLabel": "",
+        "AppArmorProfile": "",
+        "ExecIDs": null,
+        "HostConfig": {
+            "Binds": [
+                "/home/user/v943-long-paper-evidence:/evidence"
+            ],
+            "ContainerIDFile": "",
+            "LogConfig": {
+                "Type": "json-file",
+                "Config": {
+                    "max-file": "3",
+                    "max-size": "10m"
+                }
+            },
+            "NetworkMode": "host",
+            "PortBindings": {},
+            "RestartPolicy": {
+                "Name": "no",
+                "MaximumRetryCount": 0
+            },
+            "AutoRemove": false,
+            "VolumeDriver": "",
+            "VolumesFrom": null,
+            "ConsoleSize": [
+                0,
+                0
+            ],
+            "CapAdd": null,
+            "CapDrop": null,
+            "CgroupnsMode": "private",
+            "Dns": [],
+            "DnsOptions": [],
+            "DnsSearch": [],
+            "ExtraHosts": null,
+            "GroupAdd": null,
+            "IpcMode": "private",
+            "Cgroup": "",
+            "Links": null,
+            "OomScoreAdj": 0,
+            "PidMode": "",
+            "Privileged": false,
+            "PublishAllPorts": false,
+            "ReadonlyRootfs": false,
+            "SecurityOpt": null,
+            "UTSMode": "",
+            "UsernsMode": "",
+            "ShmSize": 67108864,
+            "Runtime": "runc",
+            "Isolation": "",
+            "CpuShares": 0,
+            "Memory": 0,
+            "NanoCpus": 0,
+            "CgroupParent": "",
+            "BlkioWeight": 0,
+            "BlkioWeightDevice": [],
+            "BlkioDeviceReadBps": [],
+            "BlkioDeviceWriteBps": [],
+            "BlkioDeviceReadIOps": [],
+            "BlkioDeviceWriteIOps": [],
+            "CpuPeriod": 0,
+            "CpuQuota": 0,
+            "CpuRealtimePeriod": 0,
+            "CpuRealtimeRuntime": 0,
+            "CpusetCpus": "",
+            "CpusetMems": "",
+            "Devices": [],
+            "DeviceCgroupRules": null,
+            "DeviceRequests": null,
+            "MemoryReservation": 0,
+            "MemorySwap": 0,
+            "MemorySwappiness": null,
+            "OomKillDisable": null,
+            "PidsLimit": null,
+            "Ulimits": [],
+            "CpuCount": 0,
+            "CpuPercent": 0,
+            "IOMaximumIOps": 0,
+            "IOMaximumBandwidth": 0,
+            "MaskedPaths": [
+                "/proc/asound",
+                "/proc/acpi",
+                "/proc/kcore",
+                "/proc/keys",
+                "/proc/latency_stats",
+                "/proc/timer_list",
+                "/proc/timer_stats",
+                "/proc/sched_debug",
+                "/proc/scsi",
+                "/sys/firmware",
+                "/sys/devices/virtual/powercap"
+            ],
+            "ReadonlyPaths": [
+                "/proc/bus",
+                "/proc/fs",
+                "/proc/irq",
+                "/proc/sys",
+                "/proc/sysrq-trigger"
+            ]
+        },
+        "GraphDriver": {
+            "Data": {
+                "LowerDir": "/var/lib/docker/overlay2/2e1babb00784561445c5f82621a5d4e130dcf3b9c199e0d151272de32e8a387a-init/diff:/var/lib/docker/overlay2/0847cc6187213b72a2ab73703266f55cfca1d33fa33325b0b4985e129e637d28/diff:/var/lib/docker/overlay2/c3ef23514f69b4da9b78fbd372982688494a6551ca6c822c9b3d05046ddf0617/diff:/var/lib/docker/overlay2/049164a5492781ff5edcf10788172d2a816ba48c6a53dc7e77dfdc200f48a534/diff:/var/lib/docker/overlay2/ad378774bf3ef4463fd0acb51a01db810d10d8f2aa88357064bc8a01092eeddb/diff:/var/lib/docker/overlay2/bea7a0afdc5fed4f903a262907e379b53d0ee8ec757bfa6cdf481fe91d12bd91/diff:/var/lib/docker/overlay2/55e9f0789f58ce87e0c07ac778c84e6a26da9dbcce341bfb9aeba1dcceb7463e/diff:/var/lib/docker/overlay2/99aa71828a74e5ed4ca6ce74efeb6bf50af0596b5ef71fd8eabfbc416475a68c/diff:/var/lib/docker/overlay2/bbd069c290406c5e4be8aacbff8daf05fc2e90ed1138d2d1e03c81cf86dfc63b/diff",
+                "MergedDir": "/var/lib/docker/overlay2/2e1babb00784561445c5f82621a5d4e130dcf3b9c199e0d151272de32e8a387a/merged",
+                "UpperDir": "/var/lib/docker/overlay2/2e1babb00784561445c5f82621a5d4e130dcf3b9c199e0d151272de32e8a387a/diff",
+                "WorkDir": "/var/lib/docker/overlay2/2e1babb00784561445c5f82621a5d4e130dcf3b9c199e0d151272de32e8a387a/work"
+            },
+            "Name": "overlay2"
+        },
+        "Mounts": [
+            {
+                "Type": "bind",
+                "Source": "/home/user/v943-long-paper-evidence",
+                "Destination": "/evidence",
+                "Mode": "",
+                "RW": true,
+                "Propagation": "rprivate"
+            }
+        ],
+        "Config": {
+            "Hostname": "e2b.local",
+            "Domainname": "",
+            "User": "",
+            "AttachStdin": false,
+            "AttachStdout": true,
+            "AttachStderr": true,
+            "ExposedPorts": {
+                "8080/tcp": {}
+            },
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "PYTHONUNBUFFERED=1",
+                "PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "LANG=C.UTF-8",
+                "GPG_KEY=7169605F62C751356D054A26A821E680E5FA6305",
+                "PYTHON_VERSION=3.12.16",
+                "PYTHON_SHA256=b5796915dc45ff745cfb4e990a7e7c93d6f546328a102ce31448d69ebc37575c"
+            ],
+            "Cmd": [
+                "python",
+                "-u",
+                "-m",
+                "src.live_runner",
+                "--config",
+                "configs/v9-canonical-production.json",
+                "--duration-sec",
+                "86400",
+                "--max-drain-sec",
+                "600",
+                "--port",
+                "8080",
+                "--report-prefix",
+                "/evidence/paper24h"
+            ],
+            "Healthcheck": {
+                "Test": [
+                    "CMD-SHELL",
+                    "python -c \"import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/health', timeout=4).read()\" || exit 1"
+                ],
+                "Interval": 20000000000,
+                "Timeout": 5000000000,
+                "StartPeriod": 25000000000,
+                "Retries": 3
+            },
+            "Image": "sha256:2d00ac1d88982dccfdf938e18c10a9f6ae702000b1909892dfaef79abfe0da9a",
+            "Volumes": null,
+            "WorkingDir": "/app",
+            "Entrypoint": null,
+            "OnBuild": null,
+            "Labels": {},
+            "StopTimeout": 30
+        },
+        "NetworkSettings": {
+            "Bridge": "",
+            "SandboxID": "15b488562b87f35e63707abe135d8d663c40e4e15390e69497842df96838fbc0",
+            "SandboxKey": "/var/run/docker/netns/default",
+            "Ports": {},
+            "HairpinMode": false,
+            "LinkLocalIPv6Address": "",
+            "LinkLocalIPv6PrefixLen": 0,
+            "SecondaryIPAddresses": null,
+            "SecondaryIPv6Addresses": null,
+            "EndpointID": "",
+            "Gateway": "",
+            "GlobalIPv6Address": "",
+            "GlobalIPv6PrefixLen": 0,
+            "IPAddress": "",
+            "IPPrefixLen": 0,
+            "IPv6Gateway": "",
+            "MacAddress": "",
+            "Networks": {
+                "host": {
+                    "IPAMConfig": null,
+                    "Links": null,
+                    "Aliases": null,
+                    "MacAddress": "",
+                    "NetworkID": "227a8b140e8065a47178ec8bad918346c0b7e0d5c602806635aa94a54c355a71",
+                    "EndpointID": "e840f75596b50ef5addfedd2a1d9fcfdd5340b61ff8e98fadeee08d77cc74204",
+                    "Gateway": "",
+                    "IPAddress": "",
+                    "IPPrefixLen": 0,
+                    "IPv6Gateway": "",
+                    "GlobalIPv6Address": "",
+                    "GlobalIPv6PrefixLen": 0,
+                    "DriverOpts": null,
+                    "DNSNames": null
+                }
+            }
+        }
+    }
+]

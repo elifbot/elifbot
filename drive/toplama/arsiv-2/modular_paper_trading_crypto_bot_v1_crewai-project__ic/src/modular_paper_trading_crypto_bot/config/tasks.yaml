@@ -1,0 +1,132 @@
+---
+develop_crypto_bot_source_code:
+  description: |2
+
+    Write the complete, fully-runnable Python source code for a modular paper-trading crypto bot. Output EVERY file with FULL code — no placeholders, no "# TODO", no ellipsis.
+
+    ## Project structure:
+    ```
+    crypto_bot/
+    ├── main.py                  # Entry point, CLI args, run loop
+    ├── config.py                # All constants: symbols, timeframe, indicator params, stop-loss %, commission %, starting balance
+    ├── data/
+    │   ├── __init__.py
+    │   ├── binance_feed.py      # Fetch OHLCV from Binance public REST (no auth)
+    │   └── okx_feed.py          # Fetch OHLCV from OKX public REST (no auth)
+    ├── indicators/
+    │   ├── __init__.py
+    │   ├── ema_ribbon.py        # EMA Ribbon: periods 8,13,21,34,55,89
+    │   ├── bollinger.py         # Bollinger Bands: 20 period, 2 std dev
+    │   ├── rsi.py               # RSI: 14 period
+    │   └── macd.py              # MACD: 12,26,9
+    ├── strategy/
+    │   ├── __init__.py
+    │   └── signal_engine.py     # Combines all 4 indicators → BUY/SELL/HOLD
+    ├── portfolio/
+    │   ├── __init__.py
+    │   └── paper_trader.py      # 1000 USDT virtual balance, commission deduction, stop-loss enforcement
+    ├── logger/
+    │   ├── __init__.py
+    │   └── trade_logger.py      # CSV trade log: timestamp, symbol, side, price, qty, commission, pnl
+    ├── reports/
+    │   ├── __init__.py
+    │   └── pnl_report.py        # P&L summary: total return %, win rate, max drawdown, Sharpe ratio
+    ├── requirements.txt         # requests, pandas, numpy, tabulate — NO ccxt, NO exchange SDK
+    ├── setup.py
+    └── README.md                # Install, usage, config, paper-mode disclaimer
+    ```
+
+    ## Strict rules:
+    - **PAPER MODE ONLY**: No real orders. No authenticated API calls. Public endpoints only.
+    - **No API keys**: Never use, reference, or prompt for any key/secret.
+    - Binance endpoint: `https://api.binance.com/api/v3/klines`
+    - OKX endpoint: `https://www.okx.com/api/v5/market/candles`
+    - Starting virtual balance: 1,000 USDT
+    - Commission: configurable %, default 0.1% per trade (deducted from USDT on buy, from proceeds on sell)
+    - Stop-loss: configurable %, default 2%
+    - Trade log: saved to `trades.csv`
+    - P&L report: printed to console as a formatted table
+    - All indicator functions accept a pandas DataFrame and return it with new columns added
+    - Signal engine must use ALL four indicators for a composite signal
+    - Python 3.10+ compatible
+
+    Output each file as: `# === FILE: crypto_bot/path/to/file ===`
+  expected_output: |2
+
+    Complete Python source code for all files in the project structure, each preceded by its file path label. Every file contains full, runnable code — no pseudocode, no placeholders, no TODOs. Includes requirements.txt, setup.py, and README.md.
+  agent: senior_python_crypto_bot_developer
+write_pytest_test_suite:
+  description: |2
+
+    Based on the crypto bot source code provided in the context, write a complete pytest test suite.
+
+    ## Test files to produce:
+    ```
+    tests/
+    ├── __init__.py
+    ├── conftest.py              # Shared fixtures: sample OHLCV DataFrame, mock API responses
+    ├── test_binance_feed.py     # Binance fetcher with mocked HTTP requests
+    ├── test_okx_feed.py         # OKX fetcher with mocked HTTP requests
+    ├── test_ema_ribbon.py       # EMA Ribbon: column names, values, edge cases
+    ├── test_bollinger.py        # Bollinger Bands: upper/middle/lower correctness
+    ├── test_rsi.py              # RSI: range 0-100, boundary values
+    ├── test_macd.py             # MACD: line, signal, histogram
+    ├── test_signal_engine.py    # BUY/SELL/HOLD composite signal logic
+    ├── test_paper_trader.py     # Virtual balance, commission deduction, position open/close, stop-loss trigger
+    ├── test_trade_logger.py     # CSV log creation, row format, commission column, append behavior
+    └── test_pnl_report.py       # Total return %, win rate, max drawdown metrics
+    ```
+
+    ## Rules:
+    - Use `pytest` and `unittest.mock` only — no extra test frameworks
+    - Mock ALL HTTP calls with `unittest.mock.patch`; never make real network requests
+    - Assert numerical results with `pytest.approx` for float tolerance
+    - Test commission deduction explicitly in `test_paper_trader.py`
+    - Every test function has a descriptive name and a one-line docstring
+    - No placeholder tests — every test must make a real assertion
+
+    ## Execution transparency:
+    **IMPORTANT**: You do NOT have access to a safe, isolated Python execution environment. You cannot actually run `pytest` or execute any Python code. State this fact explicitly at the top of your output before the file listings. Write the tests to the best of your ability based on the source code in context, but do not claim the tests have been run or produce fake test output.
+
+    Output each file as: `# === FILE: tests/filename.py ===`
+  expected_output: |2
+
+    A clear statement that no isolated Python execution environment is available (tests were not run). Followed by the complete pytest test suite with all test files fully implemented — real assertions, mocked HTTP calls, commission coverage, no placeholders. Runnable with `pytest tests/` from project root.
+  agent: qa_test_engineer
+  context:
+  - develop_crypto_bot_source_code
+security_audit_and_final_deliverable:
+  description: |2
+
+    You have received the complete crypto bot source code and pytest test suite from context. Perform a focused security audit, then assemble the final deliverable.
+
+    ## Part 1 — Security Audit
+
+    Audit the codebase for EXACTLY these categories. For each, state ✅ PASS or ⚠️ ISSUE and if an issue exists, provide the corrected code inline:
+
+    1. **Real order prevention**: Verify no POST/PUT/DELETE calls to any exchange endpoint exist anywhere in the code
+    2. **Secret key / credential leakage**: Confirm no API key, secret, token, passphrase, or password is present or prompted for
+    3. **Network surface**: List every external URL used; confirm all are public GET-only endpoints
+    4. **Risk management completeness**: Verify stop-loss is actually enforced on every open position check cycle; verify commission is deducted on both buy and sell sides; verify balance cannot go negative
+    5. **Error handling**: Check that HTTP timeouts, non-200 responses, malformed JSON, and empty datasets are all handled explicitly — not silently swallowed or cause unhandled exceptions
+    6. **Input validation**: Verify API response data is validated (correct types, required fields present) before being passed to indicator functions
+    7. **Log / CSV safety**: Confirm trades.csv contains no credentials, private keys, or internal system paths
+    8. **Dependency audit**: Review requirements.txt packages for known critical CVEs (use your training knowledge); flag any and suggest alternatives
+
+    ## Part 2 — Final Consolidated Deliverable
+
+    Produce ONE complete, copy-paste-ready output in this exact order:
+
+    1. **Security Audit Report** (markdown, with ✅/⚠️ per category and any inline fixes)
+    2. **All source files** with security fixes applied, labeled `# === FILE: crypto_bot/path/to/file ===`
+    3. **All test files** labeled `# === FILE: tests/filename.py ===`
+    4. **Quick-start** (exactly 3 shell commands: clone/create dir, install deps, run bot)
+
+    The output must be 100% self-contained. A user must be able to create these files, run `pip install -r requirements.txt`, then `python crypto_bot/main.py` and have a working paper-trading bot with no modifications.
+  expected_output: |2
+
+    A security audit report with ✅ PASS or ⚠️ ISSUE for each of the 8 categories (with inline fixes where needed), followed by all source files and test files with security fixes applied, and a 3-command quick-start. Everything labeled with file path headers and ready to copy-paste.
+  agent: security_auditor
+  context:
+  - develop_crypto_bot_source_code
+  - write_pytest_test_suite

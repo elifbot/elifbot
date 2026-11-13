@@ -1,0 +1,813 @@
+{
+  "run_id": "dogal-10dk-final",
+  "version": "1.0.0",
+  "mode": "PAPER",
+  "run_status": "COMPLETED",
+  "profile": "natural",
+  "filters_relaxed": false,
+  "evidence_class": "NATURAL_PAPER",
+  "forced_reason": "",
+  "real_money_approved": false,
+  "real_orders_sent": 0,
+  "timing": {
+    "total_monotonic_sec": 780.017,
+    "active_sec_estimated": 600.462,
+    "drain_sec": 120,
+    "active_window_completed": true,
+    "note": "Monotonic ölçüm. Süreksizlik varsa COMPLETED yazılmaz. Bütün VM durduğunda gözlemci de durur; uptime garantisi yok."
+  },
+  "acceptance_criteria": {
+    "declared_before_run": true,
+    "duration_sec": 600,
+    "drain_sec": 120,
+    "success": {
+      "time_protocol": "active_window_completed",
+      "no_task_failures": true,
+      "no_continuity_gap": true,
+      "http_error_rate_max_pct": 5.0
+    },
+    "not_claimed": [
+      "Kârlılık kanıtı",
+      "Yürütme güvenilirliği onayı",
+      "Gerçek para uygunluğu",
+      "Kesintisiz uptime garantisi"
+    ],
+    "forced_trades": false,
+    "profile": "natural",
+    "filters_loosened": false,
+    "old_db_inherited": false,
+    "evidence_class": "NATURAL_PAPER"
+  },
+  "counters": {
+    "ticks": 105089,
+    "signals": 0,
+    "decisions": 0,
+    "accepted": 0,
+    "rejected": 0,
+    "council_vetoes": 0,
+    "risk_blocks": 0,
+    "quote_ok": 5170,
+    "quote_fail": 270
+  },
+  "detector": {
+    "symbols": 300,
+    "ticks_seen": 105089,
+    "evaluation_calls": 105089,
+    "signals_emitted": 0,
+    "breadth_moving": 12,
+    "breadth_total": 261,
+    "breadth_ratio": 0.046,
+    "gates": {
+      "ret_threshold": 98126,
+      "rvol_threshold": 5105,
+      "volume_threshold": 1627,
+      "breadth": 173,
+      "stale_volume": 21,
+      "context_vratio3": 20,
+      "context_ret_low": 12,
+      "volume_rate_not_ready": 3,
+      "volume24h_threshold": 2
+    },
+    "index_stats": {
+      "invalid_indexes": 0,
+      "total_rebuilds": 0
+    }
+  },
+  "policy": {
+    "attempted_bars": 0,
+    "unique_signal_count": 0,
+    "evaluation_repeats": 0,
+    "gate_counts": {}
+  },
+  "execution": {
+    "mode": "PAPER",
+    "real_orders_sent_to_exchange": 0,
+    "stats": {
+      "intents": 0,
+      "submitted": 0,
+      "filled": 0,
+      "partial": 0,
+      "expired": 0,
+      "cancelled": 0,
+      "rejected": 0,
+      "maker_fills": 0,
+      "taker_fills": 0,
+      "positions_opened": 0,
+      "positions_closed": 0
+    },
+    "closed_trades": 0,
+    "closed_net_total": 0,
+    "exit_reasons": {},
+    "mean_hold_sec": 0.0,
+    "open_positions": [],
+    "risk": {
+      "equity": 10000,
+      "realized_net": 0.0,
+      "fees_paid": 0.0,
+      "funding_paid": 0.0,
+      "closed_trades": 0,
+      "wins": 0,
+      "losses": 0,
+      "win_rate_pct": 0.0,
+      "consecutive_losses": 0,
+      "max_drawdown": 0.0,
+      "breaker_tripped": false,
+      "breaker_reason": ""
+    },
+    "equity": {
+      "realized_equity": 10000,
+      "unrealized": 0,
+      "total_equity": 10000,
+      "open_positions": 0,
+      "note": "total_equity açık unrealized içerir; GERÇEKLEŞMİŞ kâr değildir. Çıkış ücretleri düşülmemiştir."
+    }
+  },
+  "ai_council": {
+    "mode": "RULE_BASED_QUANT",
+    "members": 20,
+    "live_members": 0,
+    "veto_enabled": true,
+    "stats": {
+      "live_calls": 0,
+      "rule_calls": 0,
+      "approved": 0,
+      "vetoed": 0,
+      "quorum_failures": 0,
+      "provider_errors": 0
+    },
+    "adapters": {
+      "openai": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "anthropic": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "google": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "xai": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "deepseek": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "mistral": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "groq": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "together": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "fireworks": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "perplexity": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "cohere": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "openrouter": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "cerebras": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "sambanova": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "hyperbolic": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "deepinfra": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "novita": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "qwen": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "moonshot": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      },
+      "zhipu": {
+        "calls": 0,
+        "ok": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "skipped_unconfigured": 0,
+        "skipped_circuit": 0,
+        "mean_latency_ms": 0.0,
+        "max_latency_ms": 0.0
+      }
+    },
+    "honesty_note": "RULE_BASED_QUANT modunda hiçbir YZ çağrısı yapılmaz; çıktı deterministik kural denetimidir."
+  },
+  "ai_registry": {
+    "total": 20,
+    "configured": 0,
+    "unconfigured": 20,
+    "mode": "RULE_BASED_QUANT",
+    "honesty_note": "Anahtarsız sağlayıcılar çağrılmaz. Konsey çıktısı kural tabanlı kantitatif denetimdir; YZ cevabı olarak sunulmaz.",
+    "providers": [
+      {
+        "provider_id": "openai",
+        "label": "OpenAI",
+        "protocol": "openai",
+        "model": "gpt-4o",
+        "role": "arbiter",
+        "tier": 1,
+        "configured": false,
+        "env_key": "OPENAI_API_KEY",
+        "base_url": "https://api.openai.com/v1",
+        "notes": "Genel amaçlı hakem; JSON mode destekli."
+      },
+      {
+        "provider_id": "anthropic",
+        "label": "Anthropic Claude",
+        "protocol": "anthropic",
+        "model": "claude-sonnet-4-5",
+        "role": "arbiter",
+        "tier": 1,
+        "configured": false,
+        "env_key": "ANTHROPIC_API_KEY",
+        "base_url": "https://api.anthropic.com/v1",
+        "notes": "Uzun bağlam, muhakeme ağırlıklı hakem."
+      },
+      {
+        "provider_id": "google",
+        "label": "Google Gemini",
+        "protocol": "gemini",
+        "model": "gemini-2.5-pro",
+        "role": "arbiter",
+        "tier": 1,
+        "configured": false,
+        "env_key": "GEMINI_API_KEY",
+        "base_url": "https://generativelanguage.googleapis.com/v1beta",
+        "notes": "Çok modlu; responseSchema ile katı JSON."
+      },
+      {
+        "provider_id": "xai",
+        "label": "xAI Grok",
+        "protocol": "openai",
+        "model": "grok-4",
+        "role": "auditor",
+        "tier": 2,
+        "configured": false,
+        "env_key": "XAI_API_KEY",
+        "base_url": "https://api.x.ai/v1",
+        "notes": "OpenAI uyumlu uç."
+      },
+      {
+        "provider_id": "deepseek",
+        "label": "DeepSeek",
+        "protocol": "openai",
+        "model": "deepseek-chat",
+        "role": "auditor",
+        "tier": 2,
+        "configured": false,
+        "env_key": "DEEPSEEK_API_KEY",
+        "base_url": "https://api.deepseek.com/v1",
+        "notes": "Düşük maliyetli muhakeme; v9 hattının varsayılan hakem modeliydi."
+      },
+      {
+        "provider_id": "mistral",
+        "label": "Mistral AI",
+        "protocol": "openai",
+        "model": "mistral-large-latest",
+        "role": "auditor",
+        "tier": 2,
+        "configured": false,
+        "env_key": "MISTRAL_API_KEY",
+        "base_url": "https://api.mistral.ai/v1",
+        "notes": ""
+      },
+      {
+        "provider_id": "groq",
+        "label": "Groq",
+        "protocol": "openai",
+        "model": "llama-3.3-70b-versatile",
+        "role": "screener",
+        "tier": 3,
+        "configured": false,
+        "env_key": "GROQ_API_KEY",
+        "base_url": "https://api.groq.com/openai/v1",
+        "notes": "Çok düşük gecikme; hızlı ön eleme için ideal."
+      },
+      {
+        "provider_id": "together",
+        "label": "Together AI",
+        "protocol": "openai",
+        "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+        "role": "auditor",
+        "tier": 2,
+        "configured": false,
+        "env_key": "TOGETHER_API_KEY",
+        "base_url": "https://api.together.xyz/v1",
+        "notes": ""
+      },
+      {
+        "provider_id": "fireworks",
+        "label": "Fireworks AI",
+        "protocol": "openai",
+        "model": "accounts/fireworks/models/llama-v3p3-70b-instruct",
+        "role": "screener",
+        "tier": 3,
+        "configured": false,
+        "env_key": "FIREWORKS_API_KEY",
+        "base_url": "https://api.fireworks.ai/inference/v1",
+        "notes": ""
+      },
+      {
+        "provider_id": "perplexity",
+        "label": "Perplexity",
+        "protocol": "openai",
+        "model": "sonar-pro",
+        "role": "auditor",
+        "tier": 2,
+        "configured": false,
+        "env_key": "PERPLEXITY_API_KEY",
+        "base_url": "https://api.perplexity.ai",
+        "notes": "Web bağlantılı; haber/olgu doğrulamada güçlü."
+      },
+      {
+        "provider_id": "cohere",
+        "label": "Cohere",
+        "protocol": "cohere",
+        "model": "command-r-plus",
+        "role": "auditor",
+        "tier": 2,
+        "configured": false,
+        "env_key": "COHERE_API_KEY",
+        "base_url": "https://api.cohere.com/v2",
+        "notes": ""
+      },
+      {
+        "provider_id": "openrouter",
+        "label": "OpenRouter (çoklu model)",
+        "protocol": "openai",
+        "model": "deepseek/deepseek-chat",
+        "role": "auditor",
+        "tier": 2,
+        "configured": false,
+        "env_key": "OPENROUTER_API_KEY",
+        "base_url": "https://openrouter.ai/api/v1",
+        "notes": "Tek anahtarla çok sağlayıcı. Anahtar varsa diğerlerinin çoğu buna yönlendirilebilir."
+      },
+      {
+        "provider_id": "cerebras",
+        "label": "Cerebras",
+        "protocol": "openai",
+        "model": "llama-3.3-70b",
+        "role": "screener",
+        "tier": 3,
+        "configured": false,
+        "env_key": "CEREBRAS_API_KEY",
+        "base_url": "https://api.cerebras.ai/v1",
+        "notes": "Yüksek token/sn; hızlı eleme."
+      },
+      {
+        "provider_id": "sambanova",
+        "label": "SambaNova",
+        "protocol": "openai",
+        "model": "Meta-Llama-3.3-70B-Instruct",
+        "role": "screener",
+        "tier": 3,
+        "configured": false,
+        "env_key": "SAMBANOVA_API_KEY",
+        "base_url": "https://api.sambanova.ai/v1",
+        "notes": ""
+      },
+      {
+        "provider_id": "hyperbolic",
+        "label": "Hyperbolic",
+        "protocol": "openai",
+        "model": "meta-llama/Llama-3.3-70B-Instruct",
+        "role": "auditor",
+        "tier": 2,
+        "configured": false,
+        "env_key": "HYPERBOLIC_API_KEY",
+        "base_url": "https://api.hyperbolic.xyz/v1",
+        "notes": ""
+      },
+      {
+        "provider_id": "deepinfra",
+        "label": "DeepInfra",
+        "protocol": "openai",
+        "model": "meta-llama/Llama-3.3-70B-Instruct",
+        "role": "auditor",
+        "tier": 2,
+        "configured": false,
+        "env_key": "DEEPINFRA_API_KEY",
+        "base_url": "https://api.deepinfra.com/v1/openai",
+        "notes": ""
+      },
+      {
+        "provider_id": "novita",
+        "label": "Novita AI",
+        "protocol": "openai",
+        "model": "meta-llama/llama-3.3-70b-instruct",
+        "role": "auditor",
+        "tier": 2,
+        "configured": false,
+        "env_key": "NOVITA_API_KEY",
+        "base_url": "https://api.novita.ai/v3/openai",
+        "notes": ""
+      },
+      {
+        "provider_id": "qwen",
+        "label": "Alibaba Qwen (DashScope)",
+        "protocol": "openai",
+        "model": "qwen-plus",
+        "role": "auditor",
+        "tier": 2,
+        "configured": false,
+        "env_key": "DASHSCOPE_API_KEY",
+        "base_url": "https://dashscope-intl.aliyuncs.com/compatible-mode/v1",
+        "notes": ""
+      },
+      {
+        "provider_id": "moonshot",
+        "label": "Moonshot Kimi",
+        "protocol": "openai",
+        "model": "kimi-latest",
+        "role": "auditor",
+        "tier": 2,
+        "configured": false,
+        "env_key": "MOONSHOT_API_KEY",
+        "base_url": "https://api.moonshot.ai/v1",
+        "notes": ""
+      },
+      {
+        "provider_id": "zhipu",
+        "label": "Zhipu GLM",
+        "protocol": "openai",
+        "model": "glm-4-plus",
+        "role": "auditor",
+        "tier": 2,
+        "configured": false,
+        "env_key": "ZHIPU_API_KEY",
+        "base_url": "https://open.bigmodel.cn/api/paas/v4",
+        "notes": ""
+      }
+    ]
+  },
+  "market_data": {
+    "reachable": [
+      "binance_vision",
+      "gateio"
+    ],
+    "unreachable": [],
+    "venues": {
+      "binance_vision": {
+        "venue": "binance_vision",
+        "reachable": true,
+        "http_status": 200,
+        "error": "",
+        "probe_latency_ms": 381.81,
+        "rest_ok": 4222,
+        "rest_fail": 0,
+        "ws_messages": 41604,
+        "ws_reconnects": 0,
+        "last_message_ms": 1793737711622
+      },
+      "gateio": {
+        "venue": "gateio",
+        "reachable": true,
+        "http_status": 200,
+        "error": "",
+        "probe_latency_ms": 394.05,
+        "rest_ok": 4252,
+        "rest_fail": 0,
+        "ws_messages": 63494,
+        "ws_reconnects": 0,
+        "last_message_ms": 1793737711720
+      }
+    },
+    "data_authenticity": "REAL_MARKET_DATA",
+    "note": "Erişilemeyen uçlar açıkça işaretlenir; sentetik veriye sessizce düşülmez."
+  },
+  "continuity": {
+    "gap_count": 0,
+    "continuous": true,
+    "max_poll_delay_sec": 0.047971,
+    "max_clock_skew_sec": 0.000171,
+    "events": []
+  },
+  "supervision": {
+    "entries_halted": true,
+    "fatal_reason": "",
+    "task_failures": {},
+    "tasks": {
+      "universe_warmup": {
+        "name": "universe_warmup",
+        "started_ms": 1793736932116,
+        "finished_ms": 1793737711737,
+        "outcome": "cancelled_planned",
+        "failure": "",
+        "done": true
+      },
+      "market_poll": {
+        "name": "market_poll",
+        "started_ms": 1793736932116,
+        "finished_ms": 1793737711737,
+        "outcome": "cancelled_planned",
+        "failure": "",
+        "done": true
+      },
+      "strategy_cycle": {
+        "name": "strategy_cycle",
+        "started_ms": 1793736932116,
+        "finished_ms": 1793737711737,
+        "outcome": "cancelled_planned",
+        "failure": "",
+        "done": true
+      },
+      "supervision": {
+        "name": "supervision",
+        "started_ms": 1793736932116,
+        "finished_ms": 1793737711737,
+        "outcome": "cancelled_planned",
+        "failure": "",
+        "done": true
+      },
+      "ws_binance_vision": {
+        "name": "ws_binance_vision",
+        "started_ms": 1793736932116,
+        "finished_ms": 1793737718661,
+        "outcome": "cancelled_planned",
+        "failure": "",
+        "done": true
+      },
+      "ws_gateio": {
+        "name": "ws_gateio",
+        "started_ms": 1793736932116,
+        "finished_ms": 1793737711833,
+        "outcome": "cancelled_planned",
+        "failure": "",
+        "done": true
+      }
+    },
+    "heartbeats": {
+      "strategy_cycle": {
+        "beats": 779,
+        "age_sec": 6.925,
+        "stale": false
+      },
+      "data_progress": {
+        "beats": 9,
+        "age_sec": 32.564,
+        "stale": false
+      }
+    },
+    "alarm_count": 0,
+    "alarms": []
+  },
+  "state_store": {
+    "path": "runs/dogal-10dk-final/state.db",
+    "writer_lease_ok": true,
+    "counts": {
+      "decisions": 0,
+      "orders": 0,
+      "positions": 0,
+      "events": 0,
+      "equity": 719,
+      "lease_renewals": 779
+    },
+    "reject_histogram": {},
+    "note": "Bu DB yalnız bu koşuya aittir; sonraki koşuya devredilmez."
+  },
+  "timers": {
+    "tick_total": {
+      "name": "tick_total",
+      "calls": 105089,
+      "total_sec": 4.150843,
+      "max_ms": 2.223,
+      "mean_ms": 0.039,
+      "note": "inclusive_wall_time_not_cpu"
+    },
+    "detector_eval": {
+      "name": "detector_eval",
+      "calls": 105089,
+      "total_sec": 3.844753,
+      "max_ms": 2.219,
+      "mean_ms": 0.037,
+      "note": "inclusive_wall_time_not_cpu"
+    },
+    "policy_eval": {
+      "name": "policy_eval",
+      "calls": 0,
+      "total_sec": 0.0,
+      "max_ms": 0.0,
+      "mean_ms": 0.0,
+      "note": "inclusive_wall_time_not_cpu"
+    },
+    "council_eval": {
+      "name": "council_eval",
+      "calls": 0,
+      "total_sec": 0.0,
+      "max_ms": 0.0,
+      "mean_ms": 0.0,
+      "note": "inclusive_wall_time_not_cpu"
+    },
+    "execution": {
+      "name": "execution",
+      "calls": 719,
+      "total_sec": 0.008782,
+      "max_ms": 0.621,
+      "mean_ms": 0.012,
+      "note": "inclusive_wall_time_not_cpu"
+    },
+    "state_write": {
+      "name": "state_write",
+      "calls": 0,
+      "total_sec": 0.0,
+      "max_ms": 0.0,
+      "mean_ms": 0.0,
+      "note": "inclusive_wall_time_not_cpu"
+    },
+    "candle_refresh": {
+      "name": "candle_refresh",
+      "calls": 9,
+      "total_sec": 392.69114,
+      "max_ms": 81195.489,
+      "mean_ms": 43632.349,
+      "note": "inclusive_wall_time_not_cpu"
+    },
+    "quote_refresh": {
+      "name": "quote_refresh",
+      "calls": 69,
+      "total_sec": 505.29439,
+      "max_ms": 20699.023,
+      "mean_ms": 7323.107,
+      "note": "inclusive_wall_time_not_cpu"
+    },
+    "breadth_update": {
+      "name": "breadth_update",
+      "calls": 719,
+      "total_sec": 0.802496,
+      "max_ms": 2.896,
+      "mean_ms": 1.116,
+      "note": "inclusive_wall_time_not_cpu"
+    }
+  },
+  "ws": [
+    {
+      "venue": "binance_vision",
+      "messages": 41604,
+      "reconnects": 0,
+      "json_parse_calls": 41604,
+      "json_parse_sec": 0.4509
+    },
+    {
+      "venue": "gateio",
+      "messages": 63494,
+      "reconnects": 0,
+      "json_parse_calls": 63494,
+      "json_parse_sec": 0.7736
+    }
+  ],
+  "honesty": {
+    "data": "REAL_MARKET_DATA",
+    "orders": "PAPER_ONLY_NO_EXCHANGE_ORDERS",
+    "ai_mode": "RULE_BASED_QUANT",
+    "profitability_claim": false,
+    "note": "Küçük PAPER örneklemi kârlılık veya yürütme güvenilirliği kanıtı değildir. Açık unrealized gerçekleşmiş kâr değildir. Stop mesafesi maksimum zarar garantisi değildir."
+  }
+}

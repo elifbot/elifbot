@@ -1,0 +1,19 @@
+ACARBOT × OmniStudio — 5 Kasım 2026 entegrasyon paketi
+
+İlk okunacak:  ENTEGRASYON.md
+Sonra:         docs/OMNISTUDIO_TARTISMA.md  (20 denetçi profiliyle eksik tamamlama + öneriler)
+Kaynak:        acarbot/ (contracts, marketdata, flow, paperbook, engine, backtest, strategy, report)
+               omnistudio/ (değişiklik: ai/council.py → quant_only() eklendi)
+Test:          tests/test_integration.py (27) + tests/test_omnistudio.py (111) = 138, hepsi geçiyor
+Kanıt:         kanit/kapsam-tam-evren/        → 2.880 sözleşme, 2.112 PAPER uygun
+               kanit/final-ws-paper-15dk/     → 15 dk canlı WS PAPER
+               kanit/backtest-2/              → 240 sembol, 5 katman geriye dönük test
+
+Çalıştırma:
+  pip install -r acarbot-omnistudio/requirements.txt -r acarbot-omnistudio/requirements-dev.txt
+  cd acarbot-omnistudio && python3 -m pytest -q
+  python3 -m acarbot.engine --mode observe --out runs/olcum-1
+  python3 -m acarbot.engine --mode ws --duration 900 --symbols 40 --out runs/paper-ws-1
+  python3 -m acarbot.backtest --out runs/geriye-donuk-1 --symbols 240
+
+GERÇEK EMİR YOK (real_orders = 0). PAPER. Kârlılık iddiası yok.

@@ -1,0 +1,187 @@
+{
+  "council_mode": "RULE_BASED_QUANT",
+  "evaluated": 4,
+  "measured_approved": 0,
+  "assumed_approved": 0,
+  "decisions_differ": 0,
+  "note": "Adaylar `signal_at_close` ile üretildi: strateji kararı mumun kapanış anındaki veriyle verilmiş gibi hesaplandı (geçmiş karar), akış/funding/makas bağlamı ise ölçüm anındaki gerçek değerlerdir. Konsey anahtarsız RULE_BASED_QUANT modunda çalıştı; bu bir YZ onayı değildir. Karşılaştırma yalnız, maildeki botun ÖLÇMEDİĞİ üç boyutun kararı değiştirip değiştirmediğini gösterir.",
+  "results": [
+    {
+      "market": "gateio_usdt",
+      "symbol": "AAOI_USDT",
+      "side": "SHORT",
+      "mode": "ÖLÇÜLMÜŞ",
+      "approved": false,
+      "score": 50.29,
+      "reject_code": "COUNCIL_QUANT_REJECT",
+      "reason": "20 kantitatif denetçi 3 tur; ağırlıklı skor 50.3, 3/20 onay — YZ çağrısı YAPILMADI (anahtar yok)",
+      "flaws": [
+        "Teknik yapı / hacim teyidi zayıf"
+      ],
+      "metrics": {
+        "mtf_aligned": true,
+        "breadth_ratio": 0.10256410256410256,
+        "flow_score": 0.17544367411089573,
+        "roundtrip_cost_bps": 20.217,
+        "expected_move_bps": 38.961,
+        "spread_bps": 6.217,
+        "choppiness": 52.05
+      }
+    },
+    {
+      "market": "gateio_usdt",
+      "symbol": "AAOI_USDT",
+      "side": "SHORT",
+      "mode": "MAİLDEKİ-VARSAYIM",
+      "approved": false,
+      "score": 43.99,
+      "reject_code": "COUNCIL_QUANT_REJECT",
+      "reason": "20 kantitatif denetçi 3 tur; ağırlıklı skor 44.0, 0/20 onay — YZ çağrısı YAPILMADI (anahtar yok)",
+      "flaws": [
+        "Teknik yapı / hacim teyidi zayıf",
+        "Çoklu zaman dilimi uyumsuz"
+      ],
+      "metrics": {
+        "mtf_aligned": false,
+        "breadth_ratio": 0.0,
+        "flow_score": 0.0,
+        "roundtrip_cost_bps": 20.217,
+        "expected_move_bps": 38.961,
+        "spread_bps": 6.217,
+        "choppiness": 52.05
+      }
+    },
+    {
+      "market": "okx_swap",
+      "symbol": "0G-USDT-SWAP",
+      "side": "SHORT",
+      "mode": "ÖLÇÜLMÜŞ",
+      "approved": false,
+      "score": 0.0,
+      "reject_code": "COUNCIL_EDGE_BELOW_COST",
+      "reason": "Beklenen hareket 16.07bps < maliyet 20.97bps",
+      "flaws": [
+        "Ücret öncesi kenar yok"
+      ],
+      "metrics": {
+        "mtf_aligned": true,
+        "breadth_ratio": 0.10256410256410256,
+        "flow_score": -0.2268694910265268,
+        "roundtrip_cost_bps": 20.967624999999998,
+        "expected_move_bps": 16.066,
+        "spread_bps": 6.952,
+        "choppiness": 42.52
+      }
+    },
+    {
+      "market": "okx_swap",
+      "symbol": "0G-USDT-SWAP",
+      "side": "SHORT",
+      "mode": "MAİLDEKİ-VARSAYIM",
+      "approved": false,
+      "score": 0.0,
+      "reject_code": "COUNCIL_EDGE_BELOW_COST",
+      "reason": "Beklenen hareket 16.07bps < maliyet 20.97bps",
+      "flaws": [
+        "Ücret öncesi kenar yok"
+      ],
+      "metrics": {
+        "mtf_aligned": false,
+        "breadth_ratio": 0.0,
+        "flow_score": 0.0,
+        "roundtrip_cost_bps": 20.967624999999998,
+        "expected_move_bps": 16.066,
+        "spread_bps": 6.952,
+        "choppiness": 42.52
+      }
+    },
+    {
+      "market": "okx_swap",
+      "symbol": "ETH-USDT-SWAP",
+      "side": "SHORT",
+      "mode": "ÖLÇÜLMÜŞ",
+      "approved": false,
+      "score": 0.0,
+      "reject_code": "COUNCIL_EDGE_BELOW_COST",
+      "reason": "Beklenen hareket 11.19bps < maliyet 14.07bps",
+      "flaws": [
+        "Ücret öncesi kenar yok"
+      ],
+      "metrics": {
+        "mtf_aligned": true,
+        "breadth_ratio": 0.10256410256410256,
+        "flow_score": -0.8272596513542104,
+        "roundtrip_cost_bps": 14.068065974548375,
+        "expected_move_bps": 11.186,
+        "spread_bps": 0.044,
+        "choppiness": 52.66
+      }
+    },
+    {
+      "market": "okx_swap",
+      "symbol": "ETH-USDT-SWAP",
+      "side": "SHORT",
+      "mode": "MAİLDEKİ-VARSAYIM",
+      "approved": false,
+      "score": 0.0,
+      "reject_code": "COUNCIL_EDGE_BELOW_COST",
+      "reason": "Beklenen hareket 11.19bps < maliyet 14.07bps",
+      "flaws": [
+        "Ücret öncesi kenar yok"
+      ],
+      "metrics": {
+        "mtf_aligned": false,
+        "breadth_ratio": 0.0,
+        "flow_score": 0.0,
+        "roundtrip_cost_bps": 14.068065974548375,
+        "expected_move_bps": 11.186,
+        "spread_bps": 0.044,
+        "choppiness": 52.66
+      }
+    },
+    {
+      "market": "gateio_usdt",
+      "symbol": "ADBE_USDT",
+      "side": "SHORT",
+      "mode": "ÖLÇÜLMÜŞ",
+      "approved": false,
+      "score": 0.0,
+      "reject_code": "COUNCIL_EDGE_BELOW_COST",
+      "reason": "Beklenen hareket 9.51bps < maliyet 16.86bps",
+      "flaws": [
+        "Ücret öncesi kenar yok"
+      ],
+      "metrics": {
+        "mtf_aligned": true,
+        "breadth_ratio": 0.10256410256410256,
+        "flow_score": 0.26432990161389724,
+        "roundtrip_cost_bps": 16.863,
+        "expected_move_bps": 9.506,
+        "spread_bps": 2.863,
+        "choppiness": 49.7
+      }
+    },
+    {
+      "market": "gateio_usdt",
+      "symbol": "ADBE_USDT",
+      "side": "SHORT",
+      "mode": "MAİLDEKİ-VARSAYIM",
+      "approved": false,
+      "score": 0.0,
+      "reject_code": "COUNCIL_EDGE_BELOW_COST",
+      "reason": "Beklenen hareket 9.51bps < maliyet 16.86bps",
+      "flaws": [
+        "Ücret öncesi kenar yok"
+      ],
+      "metrics": {
+        "mtf_aligned": false,
+        "breadth_ratio": 0.0,
+        "flow_score": 0.0,
+        "roundtrip_cost_bps": 16.863,
+        "expected_move_bps": 9.506,
+        "spread_bps": 2.863,
+        "choppiness": 49.7
+      }
+    }
+  ]
+}

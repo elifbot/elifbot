@@ -1,0 +1,29 @@
+{
+  "poll_seconds": 10,
+  "instruments": [
+    {
+      "symbol": "ETH-USDT-SWAP",
+      "quantity": "0.023",
+      "leverage": "1",
+      "min_notional": "5"
+    },
+    {
+      "symbol": "BTC-USDT-SWAP",
+      "quantity": "0.0006",
+      "leverage": "1",
+      "min_notional": "5"
+    },
+    {
+      "symbol": "ZEC-USDT-SWAP",
+      "quantity": "0.04",
+      "leverage": "1",
+      "min_notional": "5"
+    },
+    {
+      "symbol": "SOL-USDT-SWAP",
+      "quantity": "0.57",
+      "leverage": "1",
+      "min_notional": "5"
+    }
+  ]
+}

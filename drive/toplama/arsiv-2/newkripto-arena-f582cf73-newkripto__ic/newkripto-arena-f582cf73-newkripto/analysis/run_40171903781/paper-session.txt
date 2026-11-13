@@ -1,0 +1,19 @@
+🔎 Binance/OKX aktif USDT perpetual Futures katalogu yükleniyor...
+✅ Futures evreni: 808 parite | BINANCE=741, OKX=507
+ℹ️ 1 parite 10x desteklemediği için yalnız analiz edilecek; işlem açılmayacak.
+==========================================================================
+🤖 KRIPTO-BOT v7.2 başlatılıyor | MOD: PAPER | 808 USDT perpetual
+   Borsalar: binance, okx (Multi-Exchange Failover AÇIK) | Boyut: $50 marj × sabit 10x | Stop: $40 (marjın %80) | Max Kayma: %0.3
+   Altyapı: SQLite WAL + 24s VACUUM GC AÇIK | /health & /metrics AÇIK | Sır Maskeleme + .env İzolasyonu + İki Yönlü Telegram AÇIK
+==========================================================================
+💰 Paper kasa: $1,000.00 | Başlangıç: $1,000.00
+⏱️ Süreli paper oturumu: 1 saat | Başlangıç özsermayesi: $1,000.00 | Bitiş: 2026-10-25 08:12:48
+🧪 Shadow Lab aktif: 7 izole varyant | ana strateji sabit | gerçek emir yok
+🩺 Sağlık & Prometheus sunucusu aktif: http://0.0.0.0:8502/health & /metrics
+⚠️ ABBV/USDT yenileme hatası: RequestTimeout: okx GET https://www.okx.com/api/v5/market/candles?instId=ABBV-USDT-SWAP&bar=5m&limit=300
+⛔ AGPU/USDT emir hatası: TypeError: ExchangeManager.execute_entry() got an unexpected keyword argument 'order_type'
+⛔ AIA/USDT emir hatası: TypeError: ExchangeManager.execute_entry() got an unexpected keyword argument 'order_type'
+⛔ ALGO/USDT emir hatası: TypeError: ExchangeManager.execute_entry() got an unexpected keyword argument 'order_type'
+🚨 SİGORTA ATTI: ARD ARDA 3 EMİR HATASI (son hata: TypeError: ExchangeManager.execute_entry() got an unexpected keyword argument 'o)
+🛑 [ARD ARDA 3 EMİR HATASI (son hata: TypeError: ExchangeManager.execute_entry() got an unexpected keyword argument 'o)] Açık pozisyon yok, bot kilitlendi.
+💓 1dk | tick=37490 | borsa=BINANCE | gecikme=84ms | BINANCE t=29531/b=42374 OKX t=7959/b=71521 | haber=+0 FG=50 | mod=%0(sabit_$50_10x) | sigorta=SİGORTA ATIK | açık=[] | Futures=808 parite, fiyat akışı=790 | istatistik={'trades': 0, 'wins': 0, 'losses': 0, 'pnl_pct_sum': 0.0, 'pnl_usdt_sum': 0.0, 'pyramids': 0, 'pair_rescues': 0, 'chase_orders': 0, 'mtf_filtered': 0, 'regime_filtered': 0, 'supertrend_trail_updates': 0, 'funding_usdt': 0.0, 'tp1_partial_closes': 0, 'tp2_closes': 0, 'atr_plan_rejects': 0, 'orderflow_filtered': 1, 'runner_orderflow_exits': 0}

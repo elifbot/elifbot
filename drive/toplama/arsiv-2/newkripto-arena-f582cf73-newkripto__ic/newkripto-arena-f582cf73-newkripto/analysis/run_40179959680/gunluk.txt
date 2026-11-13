@@ -1,0 +1,124 @@
+📅 1 SAATLİK PAPER SONUÇ RAPORU
+🕒 25.10.2026 10:17:15 UTC | Oturum: 1.00 saat
+• Başlangıç kasası: $1,000.00
+• Başlangıç özsermayesi: $1,000.00
+• Bitiş/anlık kasa: $964.94
+• Bitiş/anlık özsermaye: $964.94
+• NET OTURUM K/Z: $-35.06
+• Gerçekleşen fiyat K/Z (brüt): $-29.56 | Açık K/Z: $+0.00
+• Kapalı işlemlerin NET K/Z'si (ücret/funding dahil): $-35.06
+• Komisyon: $5.51 | Funding (ödeme - / alacak +): $+0.01
+• Gerçekleşen fiyat K/Z satırı brüt fiyat K/Z'sidir; kapalı işlem NET K/Z'si ve NET OTURUM K/Z ücret/funding içerir.
+• Açılan işlem: 11 | Kapanan işlem: 11 | 0 kâr / 11 zarar / 0 başa baş
+• Kazanma oranı: %0.0 (net) | Açık pozisyon: 0
+• Kullanılan marj: $0.00 | Serbest kasa: $964.94
+
+🏦 BORSA BAZINDA KAPANAN SONUÇLAR (brüt | net)
+  binance: 7 işlem | $-16.66 | net $-20.17
+  okx: 4 işlem | $-12.90 | net $-14.89
+
+🏷️ SEMBOL BAZINDA KAPANAN SONUÇLAR
+  CFX/USDT: 1 işlem | $-5.15 | net $-5.65
+  BICO/USDT: 1 işlem | $-4.70 | net $-5.20
+  ALLO/USDT: 1 işlem | $-4.54 | net $-5.04
+  APE/USDT: 1 işlem | $-3.19 | net $-3.70
+  CETUS/USDT: 1 işlem | $-2.84 | net $-3.34
+  ACH/USDT: 1 işlem | $-2.58 | net $-3.08
+  AVAX/USDT: 1 işlem | $-2.46 | net $-2.96
+  BTC/USDT: 1 işlem | $-1.71 | net $-2.20
+
+🚪 ÇIKIŞ NEDENLERİ
+  SÜRELİ PAPER ÖLÇÜMÜ SONU: 11 işlem | $-29.56 | net $-35.06
+
+📌 Açık pozisyon bulunmuyor.
+
+🧪 OTURUM BİLEŞEN / MALİYET ANALİZİ
+Kapanan=11 | Net kazanma=%0.0 | Brüt=$-29.56 | Ücret=$+5.51 | Funding=$+0.01 | Net=$-35.06 | PF=0.00
+Leave-one-out kapsama: 11/11
+
+🛰️ BORSA VERİ / PAPER FILL KANITI
+• BINANCE | katalog=536 | OHLCV +9576/-0 | WS trade/book=1372436/366117 | paper fill=28
+• OKX | katalog=464 | OHLCV +3462/-0 | WS trade/book=176318/1132633 | paper fill=16
+
+🏦 BORSA BAZINDA GERÇEKLEŞEN SONUÇ
+• binance | n=7 | kazanma=%0.0 | brüt=$-16.66 | ücret=$+3.51 | funding=$-0.00 | net=$-20.17 | PF=0.00 | OLUMSUZ İLİŞKİ
+• okx | n=4 | kazanma=%0.0 | brüt=$-12.90 | ücret=$+2.01 | funding=$+0.01 | net=$-14.89 | PF=0.00 | YETERSİZ VERİ
+
+🚪 ÇIKIŞ MODÜLLERİ (giriş bileşenlerinden ayrı)
+• SÜRELİ PAPER ÖLÇÜMÜ SONU | n=11 | kazanma=%0.0 | brüt=$-29.56 | ücret=$+5.51 | funding=$+0.01 | net=$-35.06 | PF=0.00 | OLUMSUZ İLİŞKİ
+
+📈 YÖNLE UYUMLU AKTİF GİRİŞ BİLEŞENLERİ
+• ema_trend | n=11 | kazanma=%0.0 | brüt=$-29.56 | ücret=$+5.51 | funding=$+0.01 | net=$-35.06 | PF=0.00 | OLUMSUZ İLİŞKİ
+• ma_trend | n=11 | kazanma=%0.0 | brüt=$-29.56 | ücret=$+5.51 | funding=$+0.01 | net=$-35.06 | PF=0.00 | OLUMSUZ İLİŞKİ
+• rsi: veri yok
+• macd | n=11 | kazanma=%0.0 | brüt=$-29.56 | ücret=$+5.51 | funding=$+0.01 | net=$-35.06 | PF=0.00 | OLUMSUZ İLİŞKİ
+• bollinger: veri yok
+• stoch_rsi: veri yok
+• williams_r: veri yok
+• adx | n=11 | kazanma=%0.0 | brüt=$-29.56 | ücret=$+5.51 | funding=$+0.01 | net=$-35.06 | PF=0.00 | OLUMSUZ İLİŞKİ
+• cci: veri yok
+• mfi: veri yok
+• obv | n=9 | kazanma=%0.0 | brüt=$-25.44 | ücret=$+4.51 | funding=$+0.01 | net=$-29.94 | PF=0.00 | OLUMSUZ İLİŞKİ
+• vwap: veri yok
+• donchian: veri yok
+• funding: veri yok
+• supertrend | n=11 | kazanma=%0.0 | brüt=$-29.56 | ücret=$+5.51 | funding=$+0.01 | net=$-35.06 | PF=0.00 | OLUMSUZ İLİŞKİ
+• session_vwap | n=11 | kazanma=%0.0 | brüt=$-29.56 | ücret=$+5.51 | funding=$+0.01 | net=$-35.06 | PF=0.00 | OLUMSUZ İLİŞKİ
+• anchored_vwap | n=11 | kazanma=%0.0 | brüt=$-29.56 | ücret=$+5.51 | funding=$+0.01 | net=$-35.06 | PF=0.00 | OLUMSUZ İLİŞKİ
+• volume_profile | n=11 | kazanma=%0.0 | brüt=$-29.56 | ücret=$+5.51 | funding=$+0.01 | net=$-35.06 | PF=0.00 | OLUMSUZ İLİŞKİ
+• confirmed_breakout | n=4 | kazanma=%0.0 | brüt=$-9.78 | ücret=$+2.00 | funding=$+0.01 | net=$-11.78 | PF=0.00 | YETERSİZ VERİ
+• taker_delta | n=11 | kazanma=%0.0 | brüt=$-29.56 | ücret=$+5.51 | funding=$+0.01 | net=$-35.06 | PF=0.00 | OLUMSUZ İLİŞKİ
+• cvd_direction | n=11 | kazanma=%0.0 | brüt=$-29.56 | ücret=$+5.51 | funding=$+0.01 | net=$-35.06 | PF=0.00 | OLUMSUZ İLİŞKİ
+• whale_balance | n=3 | kazanma=%0.0 | brüt=$-5.24 | ücret=$+1.50 | funding=$+0.00 | net=$-6.74 | PF=0.00 | YETERSİZ VERİ
+• orderbook_depth | n=6 | kazanma=%0.0 | brüt=$-15.17 | ücret=$+3.01 | funding=$+0.01 | net=$-18.17 | PF=0.00 | OLUMSUZ İLİŞKİ
+• oi_liquidation: veri yok
+• volume_spike: veri yok
+• technical_all | n=11 | kazanma=%0.0 | brüt=$-29.56 | ücret=$+5.51 | funding=$+0.01 | net=$-35.06 | PF=0.00 | OLUMSUZ İLİŞKİ
+• orderflow_all | n=11 | kazanma=%0.0 | brüt=$-29.56 | ücret=$+5.51 | funding=$+0.01 | net=$-35.06 | PF=0.00 | OLUMSUZ İLİŞKİ
+• news_score: veri yok
+• ml_score | n=8 | kazanma=%0.0 | brüt=$-20.86 | ücret=$+4.01 | funding=$+0.00 | net=$-24.86 | PF=0.00 | OLUMSUZ İLİŞKİ
+• mtf_filter | n=11 | kazanma=%0.0 | brüt=$-29.56 | ücret=$+5.51 | funding=$+0.01 | net=$-35.06 | PF=0.00 | OLUMSUZ İLİŞKİ
+
+🎯 BELİRLEYİCİ BİLEŞENLER — LEAVE-ONE-OUT
+• ema_trend: veri yok
+• ma_trend: veri yok
+• rsi: veri yok
+• macd: veri yok
+• bollinger: veri yok
+• stoch_rsi: veri yok
+• williams_r: veri yok
+• adx: veri yok
+• cci: veri yok
+• mfi: veri yok
+• obv: veri yok
+• vwap: veri yok
+• donchian: veri yok
+• funding: veri yok
+• supertrend: veri yok
+• session_vwap: veri yok
+• anchored_vwap: veri yok
+• volume_profile: veri yok
+• confirmed_breakout: veri yok
+• taker_delta | n=11 | kazanma=%0.0 | brüt=$-29.56 | ücret=$+5.51 | funding=$+0.01 | net=$-35.06 | PF=0.00 | OLUMSUZ İLİŞKİ
+• cvd_direction | n=10 | kazanma=%0.0 | brüt=$-29.52 | ücret=$+5.01 | funding=$+0.01 | net=$-34.52 | PF=0.00 | OLUMSUZ İLİŞKİ
+• whale_balance | n=3 | kazanma=%0.0 | brüt=$-5.24 | ücret=$+1.50 | funding=$+0.00 | net=$-6.74 | PF=0.00 | YETERSİZ VERİ
+• orderbook_depth | n=3 | kazanma=%0.0 | brüt=$-8.13 | ücret=$+1.50 | funding=$+0.00 | net=$-9.63 | PF=0.00 | YETERSİZ VERİ
+• oi_liquidation: veri yok
+• volume_spike: veri yok
+• technical_all | n=11 | kazanma=%0.0 | brüt=$-29.56 | ücret=$+5.51 | funding=$+0.01 | net=$-35.06 | PF=0.00 | OLUMSUZ İLİŞKİ
+• orderflow_all | n=11 | kazanma=%0.0 | brüt=$-29.56 | ücret=$+5.51 | funding=$+0.01 | net=$-35.06 | PF=0.00 | OLUMSUZ İLİŞKİ
+• news_score: veri yok
+• ml_score: veri yok
+• mtf_filter: veri yok
+
+⚠️ Bileşen kohortları örtüşür; satırlar birbirine eklenmez. Bunlar tek oturumluk gözlemsel ilişkilerdir; nedensellik kanıtı veya otomatik parametre değişikliği gerekçesi değildir.
+
+🧪 SHADOW LAB (ana strateji sabit)
+net-exit: 11 işlem | net -35.06 USDT | ret 0
+flow-confidence: 0 işlem | net +0.00 USDT | ret 11
+volatility-gate: 11 işlem | net -35.06 USDT | ret 0
+range-confirmation: 11 işlem | net -35.06 USDT | ret 0
+technical-harmony: 11 işlem | net -35.06 USDT | ret 0
+portfolio-guard: 11 işlem | net -35.06 USDT | ret 0
+pdf-confluence: 11 işlem | net -35.06 USDT | ret 0
+pdf-v3-confluence: 11 işlem | net -35.06 USDT | ret 0

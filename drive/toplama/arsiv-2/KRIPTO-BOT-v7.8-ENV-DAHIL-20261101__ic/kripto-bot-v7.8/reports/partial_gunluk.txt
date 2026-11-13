@@ -1,0 +1,82 @@
+⚠️ ARA CHECKPOINT — ERKEN DURDURMA İHTİMALİ; NİHAİ RAPOR DEĞİL
+
+🧪 OTURUM BİLEŞEN / MALİYET ANALİZİ
+Kapanan=2 | Net kazanma=%50.0 | Brüt=$+1.09 | Ücret=$+1.00 | Funding=$+0.00 | Net=$+0.09 | PF=32.63
+Leave-one-out kapsama: 2/2
+
+🛰️ BORSA VERİ / PAPER FILL KANITI
+• BINANCE | katalog=506 | OHLCV +1696/-0 | WS trade/book=302021/312149 | paper fill=44
+• OKX | katalog=267 | OHLCV +48/-0 | WS trade/book=48587/475225 | paper fill=12
+
+🏦 BORSA BAZINDA GERÇEKLEŞEN SONUÇ
+• binance | n=2 | kazanma=%50.0 | brüt=$+1.09 | ücret=$+1.00 | funding=$+0.00 | net=$+0.09 | PF=32.63 | YETERSİZ VERİ
+
+🚪 ÇIKIŞ MODÜLLERİ (giriş bileşenlerinden ayrı)
+• KÂR KİLİDİ STOPU | n=1 | kazanma=%100.0 | brüt=$+0.59 | ücret=$+0.50 | funding=$+0.00 | net=$+0.09 | PF=— | YETERSİZ VERİ
+• SÜRELİ PAPER ÖLÇÜMÜ SONU | n=1 | kazanma=%0.0 | brüt=$+0.50 | ücret=$+0.50 | funding=$+0.00 | net=$-0.00 | PF=0.00 | YETERSİZ VERİ
+
+📈 YÖNLE UYUMLU AKTİF GİRİŞ BİLEŞENLERİ
+• ema_trend | n=2 | kazanma=%50.0 | brüt=$+1.09 | ücret=$+1.00 | funding=$+0.00 | net=$+0.09 | PF=32.63 | YETERSİZ VERİ
+• ma_trend | n=2 | kazanma=%50.0 | brüt=$+1.09 | ücret=$+1.00 | funding=$+0.00 | net=$+0.09 | PF=32.63 | YETERSİZ VERİ
+• rsi: veri yok
+• macd | n=2 | kazanma=%50.0 | brüt=$+1.09 | ücret=$+1.00 | funding=$+0.00 | net=$+0.09 | PF=32.63 | YETERSİZ VERİ
+• bollinger: veri yok
+• stoch_rsi: veri yok
+• williams_r: veri yok
+• adx | n=2 | kazanma=%50.0 | brüt=$+1.09 | ücret=$+1.00 | funding=$+0.00 | net=$+0.09 | PF=32.63 | YETERSİZ VERİ
+• cci: veri yok
+• mfi: veri yok
+• obv | n=1 | kazanma=%100.0 | brüt=$+0.59 | ücret=$+0.50 | funding=$+0.00 | net=$+0.09 | PF=— | YETERSİZ VERİ
+• vwap: veri yok
+• donchian: veri yok
+• funding: veri yok
+• supertrend | n=2 | kazanma=%50.0 | brüt=$+1.09 | ücret=$+1.00 | funding=$+0.00 | net=$+0.09 | PF=32.63 | YETERSİZ VERİ
+• session_vwap | n=2 | kazanma=%50.0 | brüt=$+1.09 | ücret=$+1.00 | funding=$+0.00 | net=$+0.09 | PF=32.63 | YETERSİZ VERİ
+• anchored_vwap | n=2 | kazanma=%50.0 | brüt=$+1.09 | ücret=$+1.00 | funding=$+0.00 | net=$+0.09 | PF=32.63 | YETERSİZ VERİ
+• volume_profile | n=2 | kazanma=%50.0 | brüt=$+1.09 | ücret=$+1.00 | funding=$+0.00 | net=$+0.09 | PF=32.63 | YETERSİZ VERİ
+• confirmed_breakout: veri yok
+• taker_delta | n=2 | kazanma=%50.0 | brüt=$+1.09 | ücret=$+1.00 | funding=$+0.00 | net=$+0.09 | PF=32.63 | YETERSİZ VERİ
+• cvd_direction | n=2 | kazanma=%50.0 | brüt=$+1.09 | ücret=$+1.00 | funding=$+0.00 | net=$+0.09 | PF=32.63 | YETERSİZ VERİ
+• whale_balance: veri yok
+• orderbook_depth | n=1 | kazanma=%100.0 | brüt=$+0.59 | ücret=$+0.50 | funding=$+0.00 | net=$+0.09 | PF=— | YETERSİZ VERİ
+• oi_liquidation: veri yok
+• volume_spike: veri yok
+• technical_all | n=2 | kazanma=%50.0 | brüt=$+1.09 | ücret=$+1.00 | funding=$+0.00 | net=$+0.09 | PF=32.63 | YETERSİZ VERİ
+• orderflow_all | n=2 | kazanma=%50.0 | brüt=$+1.09 | ücret=$+1.00 | funding=$+0.00 | net=$+0.09 | PF=32.63 | YETERSİZ VERİ
+• news_score: veri yok
+• ml_score | n=1 | kazanma=%0.0 | brüt=$+0.50 | ücret=$+0.50 | funding=$+0.00 | net=$-0.00 | PF=0.00 | YETERSİZ VERİ
+• mtf_filter | n=2 | kazanma=%50.0 | brüt=$+1.09 | ücret=$+1.00 | funding=$+0.00 | net=$+0.09 | PF=32.63 | YETERSİZ VERİ
+
+🎯 BELİRLEYİCİ BİLEŞENLER — LEAVE-ONE-OUT
+• ema_trend: veri yok
+• ma_trend: veri yok
+• rsi: veri yok
+• macd: veri yok
+• bollinger: veri yok
+• stoch_rsi: veri yok
+• williams_r: veri yok
+• adx: veri yok
+• cci: veri yok
+• mfi: veri yok
+• obv: veri yok
+• vwap: veri yok
+• donchian: veri yok
+• funding: veri yok
+• supertrend: veri yok
+• session_vwap: veri yok
+• anchored_vwap: veri yok
+• volume_profile: veri yok
+• confirmed_breakout: veri yok
+• taker_delta | n=2 | kazanma=%50.0 | brüt=$+1.09 | ücret=$+1.00 | funding=$+0.00 | net=$+0.09 | PF=32.63 | YETERSİZ VERİ
+• cvd_direction | n=2 | kazanma=%50.0 | brüt=$+1.09 | ücret=$+1.00 | funding=$+0.00 | net=$+0.09 | PF=32.63 | YETERSİZ VERİ
+• whale_balance: veri yok
+• orderbook_depth: veri yok
+• oi_liquidation: veri yok
+• volume_spike: veri yok
+• technical_all | n=2 | kazanma=%50.0 | brüt=$+1.09 | ücret=$+1.00 | funding=$+0.00 | net=$+0.09 | PF=32.63 | YETERSİZ VERİ
+• orderflow_all | n=2 | kazanma=%50.0 | brüt=$+1.09 | ücret=$+1.00 | funding=$+0.00 | net=$+0.09 | PF=32.63 | YETERSİZ VERİ
+• news_score: veri yok
+• ml_score: veri yok
+• mtf_filter: veri yok
+
+⚠️ Bileşen kohortları örtüşür; satırlar birbirine eklenmez. Bunlar tek oturumluk gözlemsel ilişkilerdir; nedensellik kanıtı veya otomatik parametre değişikliği gerekçesi değildir.

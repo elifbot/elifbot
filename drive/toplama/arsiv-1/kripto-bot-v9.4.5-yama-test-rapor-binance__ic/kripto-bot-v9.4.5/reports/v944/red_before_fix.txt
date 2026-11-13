@@ -1,0 +1,94 @@
+FF.F..FF                                                                 [100%]
+=================================== FAILURES ===================================
+_________________ test_real_run_status[early_stop-INTERRUPTED] _________________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fbb15303ce0>
+tmp_path = PosixPath('/tmp/pytest-of-user/pytest-75/test_real_run_status_early_sto0')
+caplog = <_pytest.logging.LogCaptureFixture object at 0x7fbb155c70e0>
+mode = 'early_stop', expected = 'INTERRUPTED'
+
+    @pytest.mark.parametrize('mode,expected',[('early_stop','INTERRUPTED'),('indefinite','INTERRUPTED'),('normal','COMPLETED'),('drain_stop','INTERRUPTED'),('drain_limit','COMPLETED'),('panel_stop','COMPLETED'),('cancel','INTERRUPTED'),('loop_exception','FAILED')])
+    def test_real_run_status(monkeypatch,tmp_path,caplog,mode,expected):
+        result,r,raised=asyncio.run(exercise(monkeypatch,tmp_path,mode))
+>       assert result['phase']==expected
+E       AssertionError: assert 'COMPLETED' == 'INTERRUPTED'
+E         
+E         - INTERRUPTED
+E         + COMPLETED
+
+tests/test_v944_run_status.py:56: AssertionError
+_________________ test_real_run_status[indefinite-INTERRUPTED] _________________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fbb152e43e0>
+tmp_path = PosixPath('/tmp/pytest-of-user/pytest-75/test_real_run_status_indefinit0')
+caplog = <_pytest.logging.LogCaptureFixture object at 0x7fbb154511d0>
+mode = 'indefinite', expected = 'INTERRUPTED'
+
+    @pytest.mark.parametrize('mode,expected',[('early_stop','INTERRUPTED'),('indefinite','INTERRUPTED'),('normal','COMPLETED'),('drain_stop','INTERRUPTED'),('drain_limit','COMPLETED'),('panel_stop','COMPLETED'),('cancel','INTERRUPTED'),('loop_exception','FAILED')])
+    def test_real_run_status(monkeypatch,tmp_path,caplog,mode,expected):
+        result,r,raised=asyncio.run(exercise(monkeypatch,tmp_path,mode))
+>       assert result['phase']==expected
+E       AssertionError: assert 'ACTIVE' == 'INTERRUPTED'
+E         
+E         - INTERRUPTED
+E         + ACTIVE
+
+tests/test_v944_run_status.py:56: AssertionError
+_________________ test_real_run_status[drain_stop-INTERRUPTED] _________________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fbb15313bd0>
+tmp_path = PosixPath('/tmp/pytest-of-user/pytest-75/test_real_run_status_drain_sto0')
+caplog = <_pytest.logging.LogCaptureFixture object at 0x7fbb152e48a0>
+mode = 'drain_stop', expected = 'INTERRUPTED'
+
+    @pytest.mark.parametrize('mode,expected',[('early_stop','INTERRUPTED'),('indefinite','INTERRUPTED'),('normal','COMPLETED'),('drain_stop','INTERRUPTED'),('drain_limit','COMPLETED'),('panel_stop','COMPLETED'),('cancel','INTERRUPTED'),('loop_exception','FAILED')])
+    def test_real_run_status(monkeypatch,tmp_path,caplog,mode,expected):
+        result,r,raised=asyncio.run(exercise(monkeypatch,tmp_path,mode))
+>       assert result['phase']==expected
+E       AssertionError: assert 'COMPLETED' == 'INTERRUPTED'
+E         
+E         - INTERRUPTED
+E         + COMPLETED
+
+tests/test_v944_run_status.py:56: AssertionError
+___________________ test_real_run_status[cancel-INTERRUPTED] ___________________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fbb152f5750>
+tmp_path = PosixPath('/tmp/pytest-of-user/pytest-75/test_real_run_status_cancel_IN0')
+caplog = <_pytest.logging.LogCaptureFixture object at 0x7fbb15384160>
+mode = 'cancel', expected = 'INTERRUPTED'
+
+    @pytest.mark.parametrize('mode,expected',[('early_stop','INTERRUPTED'),('indefinite','INTERRUPTED'),('normal','COMPLETED'),('drain_stop','INTERRUPTED'),('drain_limit','COMPLETED'),('panel_stop','COMPLETED'),('cancel','INTERRUPTED'),('loop_exception','FAILED')])
+    def test_real_run_status(monkeypatch,tmp_path,caplog,mode,expected):
+        result,r,raised=asyncio.run(exercise(monkeypatch,tmp_path,mode))
+>       assert result['phase']==expected
+E       AssertionError: assert 'ACTIVE' == 'INTERRUPTED'
+E         
+E         - INTERRUPTED
+E         + ACTIVE
+
+tests/test_v944_run_status.py:56: AssertionError
+_________________ test_real_run_status[loop_exception-FAILED] __________________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fbb154a9e50>
+tmp_path = PosixPath('/tmp/pytest-of-user/pytest-75/test_real_run_status_loop_exce0')
+caplog = <_pytest.logging.LogCaptureFixture object at 0x7fbb153138a0>
+mode = 'loop_exception', expected = 'FAILED'
+
+    @pytest.mark.parametrize('mode,expected',[('early_stop','INTERRUPTED'),('indefinite','INTERRUPTED'),('normal','COMPLETED'),('drain_stop','INTERRUPTED'),('drain_limit','COMPLETED'),('panel_stop','COMPLETED'),('cancel','INTERRUPTED'),('loop_exception','FAILED')])
+    def test_real_run_status(monkeypatch,tmp_path,caplog,mode,expected):
+        result,r,raised=asyncio.run(exercise(monkeypatch,tmp_path,mode))
+>       assert result['phase']==expected
+E       AssertionError: assert 'ACTIVE' == 'FAILED'
+E         
+E         - FAILED
+E         + ACTIVE
+
+tests/test_v944_run_status.py:56: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_v944_run_status.py::test_real_run_status[early_stop-INTERRUPTED]
+FAILED tests/test_v944_run_status.py::test_real_run_status[indefinite-INTERRUPTED]
+FAILED tests/test_v944_run_status.py::test_real_run_status[drain_stop-INTERRUPTED]
+FAILED tests/test_v944_run_status.py::test_real_run_status[cancel-INTERRUPTED]
+FAILED tests/test_v944_run_status.py::test_real_run_status[loop_exception-FAILED]
+5 failed, 3 passed in 0.61s

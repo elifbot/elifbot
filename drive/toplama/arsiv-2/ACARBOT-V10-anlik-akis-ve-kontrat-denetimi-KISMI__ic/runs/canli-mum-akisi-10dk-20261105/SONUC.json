@@ -1,0 +1,67 @@
+{
+  "status": "OBSERVATION_ONLY",
+  "started_utc": "2026-11-05T13:28:08.076563+00:00",
+  "finished_utc": "2026-11-05T13:38:08.472451+00:00",
+  "duration_target": 600.0,
+  "total_sec": 600.396,
+  "markets": {
+    "okx_futures": {
+      "discovered": 287,
+      "selected": 287,
+      "status": "AVAILABLE",
+      "ack_symbols": 287,
+      "data_symbols": 287,
+      "closed_symbols": 287
+    },
+    "okx_swap": {
+      "discovered": 540,
+      "selected": 540,
+      "status": "AVAILABLE",
+      "ack_symbols": 540,
+      "data_symbols": 540,
+      "closed_symbols": 540
+    },
+    "binance_coinm": {
+      "discovered": 30,
+      "selected": 30,
+      "status": "AVAILABLE",
+      "ack_symbols": 30,
+      "data_symbols": 30,
+      "closed_symbols": 30
+    },
+    "binance_usdm": {
+      "discovered": 804,
+      "selected": 804,
+      "status": "AVAILABLE",
+      "ack_symbols": 804,
+      "data_symbols": 804,
+      "closed_symbols": 804
+    }
+  },
+  "counts": {
+    "connections": 24,
+    "updates": 237517,
+    "inserted": 3322,
+    "closed_fresh_90s": 3322,
+    "latency_ms_sum": 4581864,
+    "latency_ms_max": 3072,
+    "closed_5s": 3322
+  },
+  "database_candles": {
+    "binance_coinm": 60,
+    "binance_usdm": 1608,
+    "okx_futures": 574,
+    "okx_swap": 1080
+  },
+  "database_gap_incidents": 0,
+  "errors": [],
+  "real_orders": 0,
+  "paper_orders": 0,
+  "limits": [
+    "No execution or PAPER strategy in this collector",
+    "Reconnection and gaps are flagged; no REST backfill implemented",
+    "No health proof for symbols without updates",
+    "Only confirmed exchange close flags are recorded",
+    "Universe refresh requires restart"
+  ]
+}

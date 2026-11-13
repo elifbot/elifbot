@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI OmniStudio — Kontrol Panosu</title>
+<style>
+  :root{
+    --bg:#0a0e17; --panel:#111827; --panel2:#0f1522; --line:#1f2937;
+    --txt:#e5e7eb; --dim:#9ca3af; --accent:#38bdf8; --ok:#34d399;
+    --warn:#fbbf24; --bad:#f87171; --purple:#a78bfa;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);
+    font:14px/1.5 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  header{padding:18px 22px;border-bottom:1px solid var(--line);
+    display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+    background:linear-gradient(180deg,#0d1420,#0a0e17)}
+  .logo{width:34px;height:34px;border-radius:9px;flex:0 0 auto;
+    background:linear-gradient(135deg,var(--accent),var(--purple));
+    display:grid;place-items:center;font-weight:800;color:#04121c}
+  h1{font-size:17px;margin:0;font-weight:650;letter-spacing:.2px}
+  .sub{color:var(--dim);font-size:12px}
+  .spacer{flex:1}
+  .pill{padding:5px 11px;border-radius:999px;font-size:12px;font-weight:600;
+    border:1px solid var(--line);background:var(--panel)}
+  .pill.paper{color:var(--ok);border-color:#065f46;background:#052e26}
+  .pill.warn{color:var(--warn);border-color:#78350f;background:#2a1e05}
+  .pill.bad{color:var(--bad);border-color:#7f1d1d;background:#2a0d0d}
+  main{padding:18px 22px;max-width:1500px;margin:0 auto}
+  .banner{border:1px solid #065f46;background:#052e26;color:#a7f3d0;
+    padding:11px 14px;border-radius:10px;margin-bottom:16px;font-size:13px}
+  .grid{display:grid;gap:14px}
+  .g4{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+  .g2{grid-template-columns:repeat(auto-fit,minmax(420px,1fr))}
+  .card{background:var(--panel);border:1px solid var(--line);
+    border-radius:12px;padding:15px}
+  .card h2{font-size:13px;margin:0 0 12px;color:var(--dim);
+    text-transform:uppercase;letter-spacing:.7px;font-weight:650}
+  .kpi{font-size:26px;font-weight:700;letter-spacing:-.5px}
+  .kpi.ok{color:var(--ok)} .kpi.bad{color:var(--bad)} .kpi.acc{color:var(--accent)}
+  .klabel{color:var(--dim);font-size:12px;margin-top:3px}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line)}
+  th{color:var(--dim);font-weight:600;font-size:11px;text-transform:uppercase}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+  tr:last-child td{border-bottom:none}
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px}
+  .tag{padding:2px 7px;border-radius:5px;font-size:11px;font-weight:600}
+  .tag.ok{background:#052e26;color:var(--ok)}
+  .tag.no{background:#2a0d0d;color:var(--bad)}
+  .tag.dim{background:#1f2937;color:var(--dim)}
+  .aiGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:9px}
+  .ai{border:1px solid var(--line);border-radius:9px;padding:10px;background:var(--panel2)}
+  .ai .n{font-weight:600;font-size:13px;margin-bottom:3px}
+  .ai .m{color:var(--dim);font-size:11px;word-break:break-all}
+  .dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px}
+  .dot.on{background:var(--ok)} .dot.off{background:#4b5563}
+  .note{color:var(--dim);font-size:12px;margin-top:10px;line-height:1.6}
+  .scroll{max-height:330px;overflow:auto}
+  .bar{height:6px;background:#1f2937;border-radius:3px;overflow:hidden;margin-top:5px}
+  .bar>i{display:block;height:100%;background:var(--accent)}
+  footer{color:var(--dim);font-size:12px;text-align:center;padding:22px}
+  .empty{color:var(--dim);padding:24px;text-align:center}
+  code{background:#1f2937;padding:1px 5px;border-radius:4px;font-size:12px}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">O</div>
+  <div>
+    <h1>AI OmniStudio</h1>
+    <div class="sub">20 YZ konseyli birleşik işlem araştırma platformu · v1.0.0</div>
+  </div>
+  <div class="spacer"></div>
+  <span class="pill paper" id="modePill">PAPER</span>
+  <span class="pill" id="statusPill">bağlanıyor…</span>
+  <span class="pill" id="aiPill">YZ</span>
+</header>
+
+<main>
+  <div class="banner">
+    <strong>Güvenlik:</strong> Gerçek piyasa verisi okunur, işlemler <strong>sanal deftere</strong> yazılır.
+    Borsaya emir gönderilmez; LIVE kod yolu kilitlidir. Bu pano salt okunurdur.
+  </div>
+
+  <div class="grid g4" style="margin-bottom:14px">
+    <div class="card"><div class="kpi acc" id="kTicks">—</div><div class="klabel">Gerçek tick</div></div>
+    <div class="card"><div class="kpi" id="kSignals">—</div><div class="klabel">Sinyal</div></div>
+    <div class="card"><div class="kpi ok" id="kAccepted">—</div><div class="klabel">Kabul edilen</div></div>
+    <div class="card"><div class="kpi" id="kTrades">—</div><div class="klabel">Kapanan işlem</div></div>
+    <div class="card"><div class="kpi" id="kEquity">—</div><div class="klabel">Toplam equity (USDT)</div></div>
+  </div>
+
+  <div class="grid g2">
+    <div class="card">
+      <h2>Koşu durumu</h2>
+      <table id="runTable"><tbody><tr><td class="empty">Veri bekleniyor…</td></tr></tbody></table>
+      <div class="note" id="runNote"></div>
+    </div>
+
+    <div class="card">
+      <h2>Gerçek veri kaynakları</h2>
+      <table id="venueTable"><tbody><tr><td class="empty">Veri bekleniyor…</td></tr></tbody></table>
+      <div class="note">Erişilemeyen uçlar açıkça işaretlenir; sentetik veriye sessizce düşülmez.</div>
+    </div>
+
+    <div class="card">
+      <h2>Kapı ret dağılımı</h2>
+      <div class="scroll"><table id="gateTable"><tbody><tr><td class="empty">Veri bekleniyor…</td></tr></tbody></table></div>
+      <div class="note">Filtreler gevşetilmedi. Her ret makine okunur kodla kaydedilir.</div>
+    </div>
+
+    <div class="card">
+      <h2>Finansal fotoğraf</h2>
+      <table id="finTable"><tbody><tr><td class="empty">Veri bekleniyor…</td></tr></tbody></table>
+      <div class="note">Açık unrealized <strong>gerçekleşmiş kâr değildir</strong>. Stop mesafesi maksimum zarar garantisi değildir.</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <h2>20 Yapay Zeka Sağlayıcısı</h2>
+    <div class="aiGrid" id="aiGrid"><div class="empty">Yükleniyor…</div></div>
+    <div class="note" id="aiNote"></div>
+  </div>
+
+  <div class="grid g2" style="margin-top:14px">
+    <div class="card">
+      <h2>Son kararlar</h2>
+      <div class="scroll"><table id="decTable"><tbody><tr><td class="empty">Veri bekleniyor…</td></tr></tbody></table></div>
+    </div>
+    <div class="card">
+      <h2>Süreklilik ve görev denetimi</h2>
+      <table id="contTable"><tbody><tr><td class="empty">Veri bekleniyor…</td></tr></tbody></table>
+      <div class="note">Bütün süreç durduğunda gözlemci de durur; kesintisiz çalışma garantisi verilmez.</div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  AI OmniStudio · v8 → v9.4.5 arşivinden temiz inşa · Kârlılık iddiası yok · Gerçek para onayı yok
+</footer>
+
+<script>
+const $=id=>document.getElementById(id);
+const fmt=(n,d=2)=>n==null?'—':Number(n).toLocaleString('tr-TR',{minimumFractionDigits:d,maximumFractionDigits:d});
+const int=n=>n==null?'—':Number(n).toLocaleString('tr-TR');
+function rows(t,arr){t.querySelector('tbody').innerHTML=arr.length?arr.join(''):'<tr><td class="empty">Kayıt yok</td></tr>';}
+function kv(k,v,cls=''){return `<tr><td>${k}</td><td class="num ${cls}">${v}</td></tr>`;}
+
+async function tick(){
+  try{
+    const r=await fetch('api/state',{cache:'no-store'});
+    const s=await r.json();
+    if(!s.available){$('statusPill').textContent='koşu yok';return;}
+    const res=s.result||{}, h=s.health||{};
+    const cnt=res.counters||h.counters||{};
+    const ex=res.execution||{}, eq=ex.equity||h.equity||{}, risk=ex.risk||{};
+    const md=res.market_data||h.market||{};
+    const co=res.ai_council||{};
+    const st=res.run_status||h.state||'RUNNING';
+
+    $('statusPill').textContent=st;
+    $('statusPill').className='pill '+(st==='COMPLETED'?'paper':(st==='FAILED'||st==='DISCONTINUOUS')?'bad':'warn');
+    $('modePill').textContent=res.mode||h.mode||'PAPER';
+    const aim=co.mode||h.council_mode||'—';
+    $('aiPill').textContent=aim==='LIVE_LLM'?'YZ: CANLI':'YZ: KURAL TABANLI';
+    $('aiPill').className='pill '+(aim==='LIVE_LLM'?'paper':'warn');
+
+    $('kTicks').textContent=int(cnt.ticks);
+    $('kSignals').textContent=int(cnt.signals);
+    $('kAccepted').textContent=int(cnt.accepted);
+    $('kTrades').textContent=int(ex.closed_trades);
+    $('kEquity').textContent=fmt(eq.total_equity);
+    $('kEquity').className='kpi '+(eq.total_equity>=10000?'ok':'bad');
+
+    const ti=res.timing||{};
+    rows($('runTable'),[
+      kv('Koşu kimliği',`<span class="mono">${s.run_id}</span>`),
+      kv('Durum',`<span class="tag ${st==='COMPLETED'?'ok':'dim'}">${st}</span>`),
+      kv('Toplam süre (s)',fmt(ti.total_monotonic_sec??h.elapsed_mono_sec,1)),
+      kv('Aktif pencere (s)',fmt(ti.active_sec_estimated,1)),
+      kv('Aktif tamamlandı',ti.active_window_completed==null?'—':(ti.active_window_completed?'evet':'hayır')),
+      kv('Borsaya gönderilen emir','0','ok'),
+    ]);
+    $('runNote').textContent=s.finished?'Koşu tamamlandı; rapor diskte.':'Koşu sürüyor — 3 saniyede bir yenilenir.';
+
+    const vs=Object.entries(md.venues||{});
+    rows($('venueTable'),vs.map(([k,v])=>`<tr>
+      <td><span class="dot ${v.reachable?'on':'off'}"></span>${k}</td>
+      <td class="num">${v.http_status||'—'}</td>
+      <td class="num">${int(v.ws_messages)}</td>
+      <td class="num">${int(v.rest_ok)}/${int(v.rest_fail)}</td></tr>`));
+
+    const gates=(res.policy&&res.policy.gate_counts)||(h.detector&&h.detector.gates)||{};
+    const ge=Object.entries(gates).sort((a,b)=>b[1]-a[1]).slice(0,18);
+    const mx=ge.length?ge[0][1]:1;
+    rows($('gateTable'),ge.map(([k,v])=>`<tr><td class="mono">${k}</td>
+      <td class="num">${int(v)}<div class="bar"><i style="width:${(v/mx*100).toFixed(1)}%"></i></div></td></tr>`));
+
+    rows($('finTable'),[
+      kv('Kapanmış net (USDT)',fmt(ex.closed_net_total,6)),
+      kv('Gerçekleşen net',fmt(risk.realized_net,6)),
+      kv('Ödenen ücret',fmt(risk.fees_paid,6)),
+      kv('Açık unrealized',fmt(eq.unrealized,6)),
+      kv('Kazanma oranı (%)',fmt(risk.win_rate_pct)),
+      kv('Maks drawdown',fmt(risk.max_drawdown,6)),
+      kv('Ortalama tutma (s)',fmt(ex.mean_hold_sec,1)),
+    ]);
+
+    const cn=res.continuity||h.continuity||{}, sup=res.supervision||{};
+    rows($('contTable'),[
+      kv('Süreklilik boşluğu',int(cn.gap_count),cn.gap_count?'bad':'ok'),
+      kv('Maks poll gecikmesi (s)',fmt(cn.max_poll_delay_sec,3)),
+      kv('Maks saat sapması (s)',fmt(cn.max_clock_skew_sec,6)),
+      kv('Görev hatası',Object.keys(sup.task_failures||{}).length||'0'),
+      kv('Alarm sayısı',int(sup.alarm_count)),
+      kv('Konsey üyesi',int(co.members)),
+    ]);
+
+    const ds=(s.decisions||[]).slice(-14).reverse();
+    rows($('decTable'),ds.map(d=>`<tr>
+      <td class="mono">${d.symbol||'—'}</td>
+      <td><span class="tag ${d.accepted?'ok':'no'}">${d.accepted?'KABUL':'RET'}</span></td>
+      <td class="mono" style="font-size:11px">${d.reject_code||(d.accepted?'—':'')}</td>
+      <td class="num">${fmt(d.latency_ms,1)}ms</td></tr>`));
+
+    const reg=s.ai_registry;
+    if(reg){
+      $('aiGrid').innerHTML=reg.providers.map(p=>`<div class="ai">
+        <div class="n"><span class="dot ${p.configured?'on':'off'}"></span>${p.label}</div>
+        <div class="m">${p.model}</div>
+        <div class="m" style="margin-top:4px">
+          <span class="tag ${p.configured?'ok':'dim'}">${p.configured?'anahtar var':'anahtar yok'}</span>
+          <span class="tag dim">${p.role}</span></div></div>`).join('');
+      $('aiNote').textContent=`${reg.configured}/${reg.total} sağlayıcı anahtarlı. ${reg.honesty_note}`;
+    }
+  }catch(e){$('statusPill').textContent='bağlantı yok';}
+}
+tick();setInterval(tick,3000);
+</script>
+</body>
+</html>

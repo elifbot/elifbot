@@ -1,0 +1,8 @@
+{
+  "run": {
+    "mode": "PAPER", "duration_sec": 120, "drain_sec": 20, "warmup_sec": 25,
+    "venues": ["binance_vision", "gateio"], "symbols_per_venue": 12,
+    "out_dir": "runs", "use_websocket": true
+  },
+  "council": {"enabled": true, "max_members": 20}
+}

@@ -1,0 +1,28 @@
+====================================================================
+PAPER FUTURES — KÂR/ZARAR RAPORU
+====================================================================
+Başlangıç bakiyesi : 1000.00 USDT
+Bitiş bakiyesi     : 1000.14 USDT
+Toplam gerçekleşen : +0.1351 USDT
+Toplam komisyon    : 0.4991 USDT
+Kapalı işlem       : 1
+
+Kazanma oranı      : 100.00%
+Profit factor      : inf (zarar yok)
+Ortalama kazanç    : +0.1351 USDT
+Ortalama kayıp     : +0.0000 USDT
+Beklenen değer/işlem: +0.1351 USDT
+Maks. düşüş (MDD)  : 0.0000 USDT
+  LONG  işlem=1    pnl=+0.1351 win=100.0%
+  SHORT işlem=0    pnl=+0.0000 win=0.0%
+Sharpe             : hesaplanamaz — yetersiz veri (kapalı işlem 1 < 30)
+
+Funding            : funding hariç / bilinmiyor
+Not                : Sonuçlar yalnızca paper simülasyonudur;
+                     gerçek performans göstergesi DEĞİLDİR.
+====================================================================
+
+Son işlemler:
+sembol         yön      giriş    çıkış    net PnL  sebep
+-------------  -----  -------  -------  ---------  -----------
+BTC-USDT-SWAP  LONG   80454.4  80556.7     0.1351  session_end

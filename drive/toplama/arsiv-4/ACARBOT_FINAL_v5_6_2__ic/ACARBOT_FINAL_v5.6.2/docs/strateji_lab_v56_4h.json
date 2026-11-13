@@ -1,0 +1,146 @@
+{
+  "olcum_zamani": "2026-11-08T13:13:43.151431+00:00",
+  "arac": "strategy_lab (ELEME taraması, üretim motoru DEĞİL)",
+  "sinirlar": [
+    "Kısmi kâr alma / trailing / portföy limiti / DD kilidi YOK",
+    "Giriş sinyal sonrası mumun açılışı (look-ahead yok)",
+    "Aynı mumda stop+hedef varsa ÖNCE stop (kötümser)",
+    "Taker komisyonu + 2 bps kayma, her iki bacak",
+    "Sonuç üretim performans tahmini DEĞİLDİR"
+  ],
+  "komisyon_orani": 0.0005,
+  "kayma_bps": 2.0,
+  "zaman_dilimi": "5m",
+  "yeniden_ornekleme_kati": 48,
+  "mtf_ust_tf_kati": 12,
+  "semboller": [
+    "ADAUSDTSWAP",
+    "BTCUSDTSWAP",
+    "DOGEUSDTSWAP",
+    "ETHUSDTSWAP",
+    "SOLUSDTSWAP",
+    "XRPUSDTSWAP"
+  ],
+  "stratejiler": {
+    "liquidity_sweep_mss": {
+      "islem": 15,
+      "brüt_beklenti_R": 0.2473988450790302,
+      "net_beklenti_R": 0.20519044343057685,
+      "net_ga95": [
+        -0.28664662641825595,
+        0.6970275132794097
+      ],
+      "profit_factor": 1.5539143470578352,
+      "kazanma_orani": 0.6,
+      "max_dd_R": 1.1686163205820987,
+      "maliyet_R": 0.04220840164845335,
+      "ort_stop_yuzde": 3.883786246785818,
+      "ort_tutma_mum": 14.666666666666666,
+      "cikis_nedenleri": {
+        "stop": 5,
+        "target": 9,
+        "timeout": 1
+      },
+      "yaklasikliklar": [],
+      "hukum": "YETERSIZ_ORNEKLEM"
+    },
+    "breakout_retest_volume": {
+      "islem": 57,
+      "brüt_beklenti_R": -0.29824561403508765,
+      "net_beklenti_R": -0.36333622531676013,
+      "net_ga95": [
+        -0.6146354149310425,
+        -0.11203703570247775
+      ],
+      "profit_factor": 0.47589501279284424,
+      "kazanma_orani": 0.3508771929824561,
+      "max_dd_R": 23.539527517726018,
+      "maliyet_R": 0.06509061128167248,
+      "ort_stop_yuzde": 3.2940223078365674,
+      "ort_tutma_mum": 10.701754385964913,
+      "cikis_nedenleri": {
+        "stop": 37,
+        "target": 20,
+        "timeout": 0
+      },
+      "yaklasikliklar": [],
+      "hukum": "NEGATIF_NET_BEKLENTI"
+    },
+    "vwap_cvd_momentum": {
+      "islem": 111,
+      "brüt_beklenti_R": -0.10700845320949205,
+      "net_beklenti_R": -0.16981434339320944,
+      "net_ga95": [
+        -0.3536141674521116,
+        0.013985480665692718
+      ],
+      "profit_factor": 0.7054995675882313,
+      "kazanma_orani": 0.45045045045045046,
+      "max_dd_R": 25.612174101865495,
+      "maliyet_R": 0.06280589018371739,
+      "ort_stop_yuzde": 3.1906540627006548,
+      "ort_tutma_mum": 10.36936936936937,
+      "cikis_nedenleri": {
+        "stop": 60,
+        "target": 48,
+        "timeout": 3
+      },
+      "yaklasikliklar": [
+        "CVD: OHLCV gövde-ağırlıklı hacim (gerçek order-flow DEĞİL)"
+      ],
+      "hukum": "ANLAMSIZ"
+    },
+    "order_block_fvg_structure": {
+      "islem": 259,
+      "brüt_beklenti_R": -0.03361915508829006,
+      "net_beklenti_R": -0.12174803264392324,
+      "net_ga95": [
+        -0.24372504113012483,
+        0.00022897584227833667
+      ],
+      "profit_factor": 0.7828647798531618,
+      "kazanma_orani": 0.4864864864864865,
+      "max_dd_R": 41.46109762730404,
+      "maliyet_R": 0.08812887755563317,
+      "ort_stop_yuzde": 2.2714162799936504,
+      "ort_tutma_mum": 5.401544401544402,
+      "cikis_nedenleri": {
+        "stop": 133,
+        "target": 123,
+        "timeout": 3
+      },
+      "yaklasikliklar": [],
+      "hukum": "ANLAMSIZ"
+    },
+    "oi_volume_price_divergence": {
+      "islem": 167,
+      "brüt_beklenti_R": -0.008107164758530863,
+      "net_beklenti_R": -0.11112725173733792,
+      "net_ga95": [
+        -0.2613472411688539,
+        0.03909273769417801
+      ],
+      "profit_factor": 0.7963502362711249,
+      "kazanma_orani": 0.48502994011976047,
+      "max_dd_R": 24.070048265280295,
+      "maliyet_R": 0.10302008697880706,
+      "ort_stop_yuzde": 1.7128616663924752,
+      "ort_tutma_mum": 4.149700598802395,
+      "cikis_nedenleri": {
+        "stop": 81,
+        "target": 81,
+        "timeout": 5
+      },
+      "yaklasikliklar": [
+        "OI verisi YOK; hacim vekil olarak kullanıldı"
+      ],
+      "hukum": "ANLAMSIZ"
+    },
+    "trend_continuation_mtf": {
+      "islem": 0,
+      "hukum": "SINYAL_YOK"
+    }
+  },
+  "canliya_aday": [],
+  "sonuc": "HİÇBİR strateji pozitif net beklenti göstermedi. Canlıya aday YOK."
+}

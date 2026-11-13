@@ -1,0 +1,4 @@
+# ACARBOT FINAL v1.0 — yalnızca paper trading
+aiohttp>=3.9
+websockets>=12.0   # OKX/Binance WS istemcisi (v1.0-super'de eksikti, FINAL'de eklendi)
+pytest>=8.0

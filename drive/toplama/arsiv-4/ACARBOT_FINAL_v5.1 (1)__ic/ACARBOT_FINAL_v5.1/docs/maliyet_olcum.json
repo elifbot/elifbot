@@ -1,0 +1,108 @@
+{
+  "source": "measured",
+  "enabled": true,
+  "measured_at": "2026-11-07T18:47:18+00:00",
+  "measured_symbols": 6,
+  "optimistic_warning": false,
+  "by_exchange": {
+    "binance": {
+      "spread_bps": 1.5,
+      "slippage_bps": 2.0,
+      "latency_ms": 250,
+      "exit_slippage_bps": 3.0,
+      "maker_fee": 0.0002,
+      "taker_fee": 0.0005
+    },
+    "okx": {
+      "spread_bps": 0.988,
+      "slippage_bps": 3.0,
+      "latency_ms": 350,
+      "exit_slippage_bps": 4.0,
+      "maker_fee": 0.0002,
+      "taker_fee": 0.0005
+    }
+  },
+  "measured_spread_bps": {
+    "okx:BTC-USDT-SWAP": 0.0132,
+    "okx:ETH-USDT-SWAP": 0.0447,
+    "okx:SOL-USDT-SWAP": 1.1153,
+    "okx:XRP-USDT-SWAP": 0.8607,
+    "okx:DOGE-USDT-SWAP": 1.3909,
+    "okx:ADA-USDT-SWAP": 5.496
+  },
+  "measured_slippage_bps": {
+    "okx:BTC-USDT-SWAP": 0.0066,
+    "okx:ETH-USDT-SWAP": 0.0224,
+    "okx:SOL-USDT-SWAP": 0.5576,
+    "okx:XRP-USDT-SWAP": 2.7908,
+    "okx:DOGE-USDT-SWAP": 21.8745,
+    "okx:ADA-USDT-SWAP": 14.2751
+  },
+  "measured_exit_slippage_bps": {
+    "okx:BTC-USDT-SWAP": 0.0066,
+    "okx:ETH-USDT-SWAP": 0.0224,
+    "okx:SOL-USDT-SWAP": 0.5576,
+    "okx:XRP-USDT-SWAP": 1.9976,
+    "okx:DOGE-USDT-SWAP": 23.9115,
+    "okx:ADA-USDT-SWAP": 14.4538
+  },
+  "measured_latency_ms": {
+    "okx:BTC-USDT-SWAP": 200,
+    "okx:ETH-USDT-SWAP": 191,
+    "okx:SOL-USDT-SWAP": 150,
+    "okx:XRP-USDT-SWAP": 148,
+    "okx:DOGE-USDT-SWAP": 150,
+    "okx:ADA-USDT-SWAP": 148
+  },
+  "measurement_details": {
+    "okx:BTC-USDT-SWAP": {
+      "spread_bps": 0.0132,
+      "slippage_bps": 0.0066,
+      "exit_slippage_bps": 0.0066,
+      "latency_ms": 200,
+      "samples": 4,
+      "shallow_book_samples": 0
+    },
+    "okx:ETH-USDT-SWAP": {
+      "spread_bps": 0.0447,
+      "slippage_bps": 0.0224,
+      "exit_slippage_bps": 0.0224,
+      "latency_ms": 191,
+      "samples": 4,
+      "shallow_book_samples": 0
+    },
+    "okx:SOL-USDT-SWAP": {
+      "spread_bps": 1.1153,
+      "slippage_bps": 0.5576,
+      "exit_slippage_bps": 0.5576,
+      "latency_ms": 150,
+      "samples": 4,
+      "shallow_book_samples": 0
+    },
+    "okx:XRP-USDT-SWAP": {
+      "spread_bps": 0.8607,
+      "slippage_bps": 2.7908,
+      "exit_slippage_bps": 1.9976,
+      "latency_ms": 148,
+      "samples": 4,
+      "shallow_book_samples": 0
+    },
+    "okx:DOGE-USDT-SWAP": {
+      "spread_bps": 1.3909,
+      "slippage_bps": 21.8745,
+      "exit_slippage_bps": 23.9115,
+      "latency_ms": 150,
+      "samples": 4,
+      "shallow_book_samples": 0
+    },
+    "okx:ADA-USDT-SWAP": {
+      "spread_bps": 5.496,
+      "slippage_bps": 14.2751,
+      "exit_slippage_bps": 14.4538,
+      "latency_ms": 148,
+      "samples": 4,
+      "shallow_book_samples": 0
+    }
+  },
+  "target_notional": 3000.0
+}

@@ -1,0 +1,1565 @@
+{
+  "method": {
+    "manual_close_markers": [
+      "SÜRELİ PAPER ÖLÇÜMÜ SONU",
+      "TELEGRAM /KILL",
+      "WEB PANELİ ACİL KILL-SWITCH",
+      "WEB PANELİ MANUEL KAPAMA"
+    ],
+    "manual": "Manuel/erken kapanışlar performans kohortundan çıkarılır; yalnız giriş kanıtı raporlanır.",
+    "bot": "Botun kendi kapattığı işlemlerde maliyet, net K/Z, çıkış ve giriş bileşenleri ayrıntılıdır.",
+    "reconciliation": "Genel kasa mutabakatı tüm paper kapanışlarını kapsar; bot performans kohortu değildir."
+  },
+  "coverage": {
+    "total_closed": 13,
+    "bot_closed": 5,
+    "manual_closed": 8
+  },
+  "reconciliation": {
+    "gross_pnl_usdt": -2.4023324554566314,
+    "entry_fee_usdt": 3.100126659807218,
+    "exit_fee_usdt": 3.263280864466452,
+    "funding_usdt": -0.007252405813563957,
+    "net_pnl_usdt": -8.772992385543866
+  },
+  "bot_closed_analysis": {
+    "method": {
+      "aligned": "Açılan yönle aynı işaretli aktif skor katkısı bulunan işlemler; kohortlar örtüşür ve satırlar toplanmaz; ilişki, nedensellik değil.",
+      "decisive": "Bileşen çıkarılınca aynı yönde giriş kararı oluşmayan işlemler (leave-one-out).",
+      "net": "Brüt fiyat K/Z - gerçekleşen giriş ücreti - gerçekleşen çıkış ücreti + funding (alacak + / ödeme -).",
+      "minimum_sample": 5
+    },
+    "coverage": {
+      "closed_trades": 5,
+      "with_attribution": 5,
+      "with_exchange": 5
+    },
+    "overall": {
+      "count": 5,
+      "wins": 1,
+      "losses": 4,
+      "flats": 0,
+      "win_rate_pct": 20.0,
+      "gross_pnl_usdt": -9.022246666327874,
+      "entry_fee_usdt": 1.1001311696517835,
+      "exit_fee_usdt": 1.2666627404816244,
+      "funding_usdt": 0.003311884528156115,
+      "net_pnl_usdt": -11.385728691933124,
+      "profit_factor": 0.4961920035793969
+    },
+    "exchanges": {
+      "binance": {
+        "count": 3,
+        "wins": 0,
+        "losses": 3,
+        "flats": 0,
+        "win_rate_pct": 0.0,
+        "gross_pnl_usdt": -9.518987571934861,
+        "entry_fee_usdt": 0.7497425799990549,
+        "exit_fee_usdt": 0.7545020737850223,
+        "funding_usdt": 0.001989198881537327,
+        "net_pnl_usdt": -11.0212430268374,
+        "profit_factor": 0.0
+      },
+      "okx": {
+        "count": 2,
+        "wins": 1,
+        "losses": 1,
+        "flats": 0,
+        "win_rate_pct": 50.0,
+        "gross_pnl_usdt": 0.4967409056069876,
+        "entry_fee_usdt": 0.35038858965272857,
+        "exit_fee_usdt": 0.5121606666966021,
+        "funding_usdt": 0.0013226856466187881,
+        "net_pnl_usdt": -0.36448566509572444,
+        "profit_factor": 0.9685193831450769
+      }
+    },
+    "exit_modules": {
+      "ERKEN TREND BOZULMA ÇIKIŞI (21dk, %-1.08): birleşik skor ters yöne döndü (+17.3)": {
+        "count": 1,
+        "wins": 0,
+        "losses": 1,
+        "flats": 0,
+        "win_rate_pct": 0.0,
+        "gross_pnl_usdt": -5.348326933625911,
+        "entry_fee_usdt": 0.24972572682391664,
+        "exit_fee_usdt": 0.25239989029072957,
+        "funding_usdt": 0.0011143870391443207,
+        "net_pnl_usdt": -5.849338163701413,
+        "profit_factor": 0.0
+      },
+      "ERKEN TREND BOZULMA ÇIKIŞI (28dk, %-1.86): Supertrend ters kırıldı + karşı akış (+41)": {
+        "count": 1,
+        "wins": 0,
+        "losses": 1,
+        "flats": 0,
+        "win_rate_pct": 0.0,
+        "gross_pnl_usdt": -11.073706591070112,
+        "entry_fee_usdt": 0.2500885896527286,
+        "exit_fee_usdt": 0.25562544294826367,
+        "funding_usdt": 0.0013226856466187881,
+        "net_pnl_usdt": -11.578097938024484,
+        "profit_factor": 0.0
+      },
+      "ERKEN TREND BOZULMA ÇIKIŞI (29dk, %-0.46): rehin marj kurtarma — karşı ALIŞ baskısı ($570)": {
+        "count": 1,
+        "wins": 0,
+        "losses": 1,
+        "flats": 0,
+        "win_rate_pct": 0.0,
+        "gross_pnl_usdt": -2.2831050228310703,
+        "entry_fee_usdt": 0.25,
+        "exit_fee_usdt": 0.25114155251141557,
+        "funding_usdt": 2.8012344590676206e-05,
+        "net_pnl_usdt": -2.7842185629978955,
+        "profit_factor": 0.0
+      },
+      "ERKEN TREND BOZULMA ÇIKIŞI (36dk, %-0.40): rehin marj kurtarma — karşı ALIŞ baskısı ($555)": {
+        "count": 1,
+        "wins": 0,
+        "losses": 1,
+        "flats": 0,
+        "win_rate_pct": 0.0,
+        "gross_pnl_usdt": -1.8875556154778792,
+        "entry_fee_usdt": 0.2500168531751382,
+        "exit_fee_usdt": 0.25096063098287713,
+        "funding_usdt": 0.00084679949780233,
+        "net_pnl_usdt": -2.387686300138092,
+        "profit_factor": 0.0
+      },
+      "KÂR KOŞUSU — ORDER-FLOW DÖNÜŞÜ": {
+        "count": 1,
+        "wins": 1,
+        "losses": 0,
+        "flats": 0,
+        "win_rate_pct": 100.0,
+        "gross_pnl_usdt": 11.5704474966771,
+        "entry_fee_usdt": 0.10029999999999997,
+        "exit_fee_usdt": 0.2565352237483385,
+        "funding_usdt": 0.0,
+        "net_pnl_usdt": 11.21361227292876,
+        "profit_factor": null
+      }
+    },
+    "aligned_components": {
+      "ema_trend": {
+        "count": 4,
+        "wins": 1,
+        "losses": 3,
+        "flats": 0,
+        "win_rate_pct": 25.0,
+        "gross_pnl_usdt": 2.0514599247422387,
+        "entry_fee_usdt": 0.8500425799990549,
+        "exit_fee_usdt": 1.0110372975333608,
+        "funding_usdt": 0.001989198881537327,
+        "net_pnl_usdt": 0.19236924609135952,
+        "profit_factor": 1.0174544056076913
+      },
+      "ma_trend": {
+        "count": 4,
+        "wins": 1,
+        "losses": 3,
+        "flats": 0,
+        "win_rate_pct": 25.0,
+        "gross_pnl_usdt": 2.0514599247422387,
+        "entry_fee_usdt": 0.8500425799990549,
+        "exit_fee_usdt": 1.0110372975333608,
+        "funding_usdt": 0.001989198881537327,
+        "net_pnl_usdt": 0.19236924609135952,
+        "profit_factor": 1.0174544056076913
+      },
+      "rsi": {
+        "count": 1,
+        "wins": 0,
+        "losses": 1,
+        "flats": 0,
+        "win_rate_pct": 0.0,
+        "gross_pnl_usdt": -11.073706591070112,
+        "entry_fee_usdt": 0.2500885896527286,
+        "exit_fee_usdt": 0.25562544294826367,
+        "funding_usdt": 0.0013226856466187881,
+        "net_pnl_usdt": -11.578097938024484,
+        "profit_factor": 0.0
+      },
+      "macd": {
+        "count": 1,
+        "wins": 1,
+        "losses": 0,
+        "flats": 0,
+        "win_rate_pct": 100.0,
+        "gross_pnl_usdt": 11.5704474966771,
+        "entry_fee_usdt": 0.10029999999999997,
+        "exit_fee_usdt": 0.2565352237483385,
+        "funding_usdt": 0.0,
+        "net_pnl_usdt": 11.21361227292876,
+        "profit_factor": null
+      },
+      "bollinger": {
+        "count": 1,
+        "wins": 0,
+        "losses": 1,
+        "flats": 0,
+        "win_rate_pct": 0.0,
+        "gross_pnl_usdt": -11.073706591070112,
+        "entry_fee_usdt": 0.2500885896527286,
+        "exit_fee_usdt": 0.25562544294826367,
+        "funding_usdt": 0.0013226856466187881,
+        "net_pnl_usdt": -11.578097938024484,
+        "profit_factor": 0.0
+      },
+      "stoch_rsi": {
+        "count": 1,
+        "wins": 0,
+        "losses": 1,
+        "flats": 0,
+        "win_rate_pct": 0.0,
+        "gross_pnl_usdt": -11.073706591070112,
+        "entry_fee_usdt": 0.2500885896527286,
+        "exit_fee_usdt": 0.25562544294826367,
+        "funding_usdt": 0.0013226856466187881,
+        "net_pnl_usdt": -11.578097938024484,
+        "profit_factor": 0.0
+      },
+      "williams_r": {
+        "count": 1,
+        "wins": 0,
+        "losses": 1,
+        "flats": 0,
+        "win_rate_pct": 0.0,
+        "gross_pnl_usdt": -11.073706591070112,
+        "entry_fee_usdt": 0.2500885896527286,
+        "exit_fee_usdt": 0.25562544294826367,
+        "funding_usdt": 0.0013226856466187881,
+        "net_pnl_usdt": -11.578097938024484,
+        "profit_factor": 0.0
+      },
+      "adx": {
+        "count": 4,
+        "wins": 1,
+        "losses": 3,
+        "flats": 0,
+        "win_rate_pct": 25.0,
+        "gross_pnl_usdt": 2.0514599247422387,
+        "entry_fee_usdt": 0.8500425799990549,
+        "exit_fee_usdt": 1.0110372975333608,
+        "funding_usdt": 0.001989198881537327,
+        "net_pnl_usdt": 0.19236924609135952,
+        "profit_factor": 1.0174544056076913
+      },
+      "cci": {
+        "count": 1,
+        "wins": 0,
+        "losses": 1,
+        "flats": 0,
+        "win_rate_pct": 0.0,
+        "gross_pnl_usdt": -11.073706591070112,
+        "entry_fee_usdt": 0.2500885896527286,
+        "exit_fee_usdt": 0.25562544294826367,
+        "funding_usdt": 0.0013226856466187881,
+        "net_pnl_usdt": -11.578097938024484,
+        "profit_factor": 0.0
+      },
+      "mfi": {
+        "count": 0,
+        "wins": 0,
+        "losses": 0,
+        "flats": 0,
+        "win_rate_pct": 0.0,
+        "gross_pnl_usdt": 0,
+        "entry_fee_usdt": 0,
+        "exit_fee_usdt": 0,
+        "funding_usdt": 0,
+        "net_pnl_usdt": 0,
+        "profit_factor": null
+      },
+      "obv": {
+        "count": 1,
+        "wins": 1,
+        "losses": 0,
+        "flats": 0,
+        "win_rate_pct": 100.0,
+        "gross_pnl_usdt": 11.5704474966771,
+        "entry_fee_usdt": 0.10029999999999997,
+        "exit_fee_usdt": 0.2565352237483385,
+        "funding_usdt": 0.0,
+        "net_pnl_usdt": 11.21361227292876,
+        "profit_factor": null
+      },
+      "vwap": {
+        "count": 0,
+        "wins": 0,
+        "losses": 0,
+        "flats": 0,
+        "win_rate_pct": 0.0,
+        "gross_pnl_usdt": 0,
+        "entry_fee_usdt": 0,
+        "exit_fee_usdt": 0,
+        "funding_usdt": 0,
+        "net_pnl_usdt": 0,
+        "profit_factor": null
+      },
+      "donchian": {
+        "count": 0,
+        "wins": 0,
+        "losses": 0,
+        "flats": 0,
+        "win_rate_pct": 0.0,
+        "gross_pnl_usdt": 0,
+        "entry_fee_usdt": 0,
+        "exit_fee_usdt": 0,
+        "funding_usdt": 0,
+        "net_pnl_usdt": 0,
+        "profit_factor": null
+      },
+      "funding": {
+        "count": 0,
+        "wins": 0,
+        "losses": 0,
+        "flats": 0,
+        "win_rate_pct": 0.0,
+        "gross_pnl_usdt": 0,
+        "entry_fee_usdt": 0,
+        "exit_fee_usdt": 0,
+        "funding_usdt": 0,
+        "net_pnl_usdt": 0,
+        "profit_factor": null
+      },
+      "supertrend": {
+        "count": 4,
+        "wins": 1,
+        "losses": 3,
+        "flats": 0,
+        "win_rate_pct": 25.0,
+        "gross_pnl_usdt": 2.0514599247422387,
+        "entry_fee_usdt": 0.8500425799990549,
+        "exit_fee_usdt": 1.0110372975333608,
+        "funding_usdt": 0.001989198881537327,
+        "net_pnl_usdt": 0.19236924609135952,
+        "profit_factor": 1.0174544056076913
+      },
+      "session_vwap": {
+        "count": 4,
+        "wins": 1,
+        "losses": 3,
+        "flats": 0,
+        "win_rate_pct": 25.0,
+        "gross_pnl_usdt": 2.0514599247422387,
+        "entry_fee_usdt": 0.8500425799990549,
+        "exit_fee_usdt": 1.0110372975333608,
+        "funding_usdt": 0.001989198881537327,
+        "net_pnl_usdt": 0.19236924609135952,
+        "profit_factor": 1.0174544056076913
+      },
+      "anchored_vwap": {
+        "count": 4,
+        "wins": 1,
+        "losses": 3,
+        "flats": 0,
+        "win_rate_pct": 25.0,
+        "gross_pnl_usdt": 2.0514599247422387,
+        "entry_fee_usdt": 0.8500425799990549,
+        "exit_fee_usdt": 1.0110372975333608,
+        "funding_usdt": 0.001989198881537327,
+        "net_pnl_usdt": 0.19236924609135952,
+        "profit_factor": 1.0174544056076913
+      },
+      "volume_profile": {
+        "count": 4,
+        "wins": 1,
+        "losses": 3,
+        "flats": 0,
+        "win_rate_pct": 25.0,
+        "gross_pnl_usdt": -6.739141643496803,
+        "entry_fee_usdt": 0.8501311696517835,
+        "exit_fee_usdt": 1.0155211879702088,
+        "funding_usdt": 0.003283872183565439,
+        "net_pnl_usdt": -8.60151012893523,
+        "profit_factor": 0.565911834684095
+      },
+      "confirmed_breakout": {
+        "count": 0,
+        "wins": 0,
+        "losses": 0,
+        "flats": 0,
+        "win_rate_pct": 0.0,
+        "gross_pnl_usdt": 0,
+        "entry_fee_usdt": 0,
+        "exit_fee_usdt": 0,
+        "funding_usdt": 0,
+        "net_pnl_usdt": 0,
+        "profit_factor": null
+      },
+      "taker_delta": {
+        "count": 5,
+        "wins": 1,
+        "losses": 4,
+        "flats": 0,
+        "win_rate_pct": 20.0,
+        "gross_pnl_usdt": -9.022246666327874,
+        "entry_fee_usdt": 1.1001311696517835,
+        "exit_fee_usdt": 1.2666627404816244,
+        "funding_usdt": 0.003311884528156115,
+        "net_pnl_usdt": -11.385728691933124,
+        "profit_factor": 0.4961920035793969
+      },
+      "cvd_direction": {
+        "count": 5,
+        "wins": 1,
+        "losses": 4,
+        "flats": 0,
+        "win_rate_pct": 20.0,
+        "gross_pnl_usdt": -9.022246666327874,
+        "entry_fee_usdt": 1.1001311696517835,
+        "exit_fee_usdt": 1.2666627404816244,
+        "funding_usdt": 0.003311884528156115,
+        "net_pnl_usdt": -11.385728691933124,
+        "profit_factor": 0.4961920035793969
+      },
+      "whale_balance": {
+        "count": 0,
+        "wins": 0,
+        "losses": 0,
+        "flats": 0,
+        "win_rate_pct": 0.0,
+        "gross_pnl_usdt": 0,
+        "entry_fee_usdt": 0,
+        "exit_fee_usdt": 0,
+        "funding_usdt": 0,
+        "net_pnl_usdt": 0,
+        "profit_factor": null
+      },
+      "orderbook_depth": {
+        "count": 4,
+        "wins": 0,
+        "losses": 4,
+        "flats": 0,
+        "win_rate_pct": 0.0,
+        "gross_pnl_usdt": -20.59269416300497,
+        "entry_fee_usdt": 0.9998311696517834,
+        "exit_fee_usdt": 1.010127516733286,
+        "funding_usdt": 0.003311884528156115,
+        "net_pnl_usdt": -22.599340964861884,
+        "profit_factor": 0.0
+      },
+      "oi_liquidation": {
+        "count": 1,
+        "wins": 1,
+        "losses": 0,
+        "flats": 0,
+        "win_rate_pct": 100.0,
+        "gross_pnl_usdt": 11.5704474966771,
+        "entry_fee_usdt": 0.10029999999999997,
+        "exit_fee_usdt": 0.2565352237483385,
+        "funding_usdt": 0.0,
+        "net_pnl_usdt": 11.21361227292876,
+        "profit_factor": null
+      },
+      "volume_spike": {
+        "count": 1,
+        "wins": 1,
+        "losses": 0,
+        "flats": 0,
+        "win_rate_pct": 100.0,
+        "gross_pnl_usdt": 11.5704474966771,
+        "entry_fee_usdt": 0.10029999999999997,
+        "exit_fee_usdt": 0.2565352237483385,
+        "funding_usdt": 0.0,
+        "net_pnl_usdt": 11.21361227292876,
+        "profit_factor": null
+      },
+      "technical_all": {
+        "count": 5,
+        "wins": 1,
+        "losses": 4,
+        "flats": 0,
+        "win_rate_pct": 20.0,
+        "gross_pnl_usdt": -9.022246666327874,
+        "entry_fee_usdt": 1.1001311696517835,
+        "exit_fee_usdt": 1.2666627404816244,
+        "funding_usdt": 0.003311884528156115,
+        "net_pnl_usdt": -11.385728691933124,
+        "profit_factor": 0.4961920035793969
+      },
+      "orderflow_all": {
+        "count": 5,
+        "wins": 1,
+        "losses": 4,
+        "flats": 0,
+        "win_rate_pct": 20.0,
+        "gross_pnl_usdt": -9.022246666327874,
+        "entry_fee_usdt": 1.1001311696517835,
+        "exit_fee_usdt": 1.2666627404816244,
+        "funding_usdt": 0.003311884528156115,
+        "net_pnl_usdt": -11.385728691933124,
+        "profit_factor": 0.4961920035793969
+      },
+      "news_score": {
+        "count": 0,
+        "wins": 0,
+        "losses": 0,
+        "flats": 0,
+        "win_rate_pct": 0.0,
+        "gross_pnl_usdt": 0,
+        "entry_fee_usdt": 0,
+        "exit_fee_usdt": 0,
+        "funding_usdt": 0,
+        "net_pnl_usdt": 0,
+        "profit_factor": null
+      },
+      "ml_score": {
+        "count": 5,
+        "wins": 1,
+        "losses": 4,
+        "flats": 0,
+        "win_rate_pct": 20.0,
+        "gross_pnl_usdt": -9.022246666327874,
+        "entry_fee_usdt": 1.1001311696517835,
+        "exit_fee_usdt": 1.2666627404816244,
+        "funding_usdt": 0.003311884528156115,
+        "net_pnl_usdt": -11.385728691933124,
+        "profit_factor": 0.4961920035793969
+      },
+      "mtf_filter": {
+        "count": 5,
+        "wins": 1,
+        "losses": 4,
+        "flats": 0,
+        "win_rate_pct": 20.0,
+        "gross_pnl_usdt": -9.022246666327874,
+        "entry_fee_usdt": 1.1001311696517835,
+        "exit_fee_usdt": 1.2666627404816244,
+        "funding_usdt": 0.003311884528156115,
+        "net_pnl_usdt": -11.385728691933124,
+        "profit_factor": 0.4961920035793969
+      }
+    },
+    "decisive_components": {
+      "ema_trend": {
+        "count": 0,
+        "wins": 0,
+        "losses": 0,
+        "flats": 0,
+        "win_rate_pct": 0.0,
+        "gross_pnl_usdt": 0,
+        "entry_fee_usdt": 0,
+        "exit_fee_usdt": 0,
+        "funding_usdt": 0,
+        "net_pnl_usdt": 0,
+        "profit_factor": null
+      },
+      "ma_trend": {
+        "count": 0,
+        "wins": 0,
+        "losses": 0,
+        "flats": 0,
+        "win_rate_pct": 0.0,
+        "gross_pnl_usdt": 0,
+        "entry_fee_usdt": 0,
+        "exit_fee_usdt": 0,
+        "funding_usdt": 0,
+        "net_pnl_usdt": 0,
+        "profit_factor": null
+      },
+      "rsi": {
+        "count": 0,
+        "wins": 0,
+        "losses": 0,
+        "flats": 0,
+        "win_rate_pct": 0.0,
+        "gross_pnl_usdt": 0,
+        "entry_fee_usdt": 0,
+        "exit_fee_usdt": 0,
+        "funding_usdt": 0,
+        "net_pnl_usdt": 0,
+        "profit_factor": null
+      },
+      "macd": {
+        "count": 0,
+        "wins": 0,
+        "losses": 0,
+        "flats": 0,
+        "win_rate_pct": 0.0,
+        "gross_pnl_usdt": 0,
+        "entry_fee_usdt": 0,
+        "exit_fee_usdt": 0,
+        "funding_usdt": 0,
+        "net_pnl_usdt": 0,
+        "profit_factor": null
+      },
+      "bollinger": {
+        "count": 0,
+        "wins": 0,
+        "losses": 0,
+        "flats": 0,
+        "win_rate_pct": 0.0,
+        "gross_pnl_usdt": 0,
+        "entry_fee_usdt": 0,
+        "exit_fee_usdt": 0,
+        "funding_usdt": 0,
+        "net_pnl_usdt": 0,
+        "profit_factor": null
+      },
+      "stoch_rsi": {
+        "count": 0,
+        "wins": 0,
+        "losses": 0,
+        "flats": 0,
+        "win_rate_pct": 0.0,
+        "gross_pnl_usdt": 0,
+        "entry_fee_usdt": 0,
+        "exit_fee_usdt": 0,
+        "funding_usdt": 0,
+        "net_pnl_usdt": 0,
+        "profit_factor": null
+      },
+      "williams_r": {
+        "count": 0,
+        "wins": 0,
+        "losses": 0,
+        "flats": 0,
+        "win_rate_pct": 0.0,
+        "gross_pnl_usdt": 0,
+        "entry_fee_usdt": 0,
+        "exit_fee_usdt": 0,
+        "funding_usdt": 0,
+        "net_pnl_usdt": 0,
+        "profit_factor": null
+      },
+      "adx": {
+        "count": 0,
+        "wins": 0,
+        "losses": 0,
+        "flats": 0,
+        "win_rate_pct": 0.0,
+        "gross_pnl_usdt": 0,
+        "entry_fee_usdt": 0,
+        "exit_fee_usdt": 0,
+        "funding_usdt": 0,
+        "net_pnl_usdt": 0,
+        "profit_factor": null
+      },
+      "cci": {
+        "count": 0,
+        "wins": 0,
+        "losses": 0,
+        "flats": 0,
+        "win_rate_pct": 0.0,
+        "gross_pnl_usdt": 0,
+        "entry_fee_usdt": 0,
+        "exit_fee_usdt": 0,
+        "funding_usdt": 0,
+        "net_pnl_usdt": 0,
+        "profit_factor": null
+      },
+      "mfi": {
+        "count": 0,
+        "wins": 0,
+        "losses": 0,
+        "flats": 0,
+        "win_rate_pct": 0.0,
+        "gross_pnl_usdt": 0,
+        "entry_fee_usdt": 0,
+        "exit_fee_usdt": 0,
+        "funding_usdt": 0,
+        "net_pnl_usdt": 0,
+        "profit_factor": null
+      },
+      "obv": {
+        "count": 0,
+        "wins": 0,
+        "losses": 0,
+        "flats": 0,
+        "win_rate_pct": 0.0,
+        "gross_pnl_usdt": 0,
+        "entry_fee_usdt": 0,
+        "exit_fee_usdt": 0,
+        "funding_usdt": 0,
+        "net_pnl_usdt": 0,
+        "profit_factor": null
+      },
+      "vwap": {
+        "count": 0,
+        "wins": 0,
+        "losses": 0,
+        "flats": 0,
+        "win_rate_pct": 0.0,
+        "gross_pnl_usdt": 0,
+        "entry_fee_usdt": 0,
+        "exit_fee_usdt": 0,
+        "funding_usdt": 0,
+        "net_pnl_usdt": 0,
+        "profit_factor": null
+      },
+      "donchian": {
+        "count": 0,
+        "wins": 0,
+        "losses": 0,
+        "flats": 0,
+        "win_rate_pct": 0.0,
+        "gross_pnl_usdt": 0,
+        "entry_fee_usdt": 0,
+        "exit_fee_usdt": 0,
+        "funding_usdt": 0,
+        "net_pnl_usdt": 0,
+        "profit_factor": null
+      },
+      "funding": {
+        "count": 0,
+        "wins": 0,
+        "losses": 0,
+        "flats": 0,
+        "win_rate_pct": 0.0,
+        "gross_pnl_usdt": 0,
+        "entry_fee_usdt": 0,
+        "exit_fee_usdt": 0,
+        "funding_usdt": 0,
+        "net_pnl_usdt": 0,
+        "profit_factor": null
+      },
+      "supertrend": {
+        "count": 0,
+        "wins": 0,
+        "losses": 0,
+        "flats": 0,
+        "win_rate_pct": 0.0,
+        "gross_pnl_usdt": 0,
+        "entry_fee_usdt": 0,
+        "exit_fee_usdt": 0,
+        "funding_usdt": 0,
+        "net_pnl_usdt": 0,
+        "profit_factor": null
+      },
+      "session_vwap": {
+        "count": 0,
+        "wins": 0,
+        "losses": 0,
+        "flats": 0,
+        "win_rate_pct": 0.0,
+        "gross_pnl_usdt": 0,
+        "entry_fee_usdt": 0,
+        "exit_fee_usdt": 0,
+        "funding_usdt": 0,
+        "net_pnl_usdt": 0,
+        "profit_factor": null
+      },
+      "anchored_vwap": {
+        "count": 0,
+        "wins": 0,
+        "losses": 0,
+        "flats": 0,
+        "win_rate_pct": 0.0,
+        "gross_pnl_usdt": 0,
+        "entry_fee_usdt": 0,
+        "exit_fee_usdt": 0,
+        "funding_usdt": 0,
+        "net_pnl_usdt": 0,
+        "profit_factor": null
+      },
+      "volume_profile": {
+        "count": 0,
+        "wins": 0,
+        "losses": 0,
+        "flats": 0,
+        "win_rate_pct": 0.0,
+        "gross_pnl_usdt": 0,
+        "entry_fee_usdt": 0,
+        "exit_fee_usdt": 0,
+        "funding_usdt": 0,
+        "net_pnl_usdt": 0,
+        "profit_factor": null
+      },
+      "confirmed_breakout": {
+        "count": 0,
+        "wins": 0,
+        "losses": 0,
+        "flats": 0,
+        "win_rate_pct": 0.0,
+        "gross_pnl_usdt": 0,
+        "entry_fee_usdt": 0,
+        "exit_fee_usdt": 0,
+        "funding_usdt": 0,
+        "net_pnl_usdt": 0,
+        "profit_factor": null
+      },
+      "taker_delta": {
+        "count": 5,
+        "wins": 1,
+        "losses": 4,
+        "flats": 0,
+        "win_rate_pct": 20.0,
+        "gross_pnl_usdt": -9.022246666327874,
+        "entry_fee_usdt": 1.1001311696517835,
+        "exit_fee_usdt": 1.2666627404816244,
+        "funding_usdt": 0.003311884528156115,
+        "net_pnl_usdt": -11.385728691933124,
+        "profit_factor": 0.4961920035793969
+      },
+      "cvd_direction": {
+        "count": 5,
+        "wins": 1,
+        "losses": 4,
+        "flats": 0,
+        "win_rate_pct": 20.0,
+        "gross_pnl_usdt": -9.022246666327874,
+        "entry_fee_usdt": 1.1001311696517835,
+        "exit_fee_usdt": 1.2666627404816244,
+        "funding_usdt": 0.003311884528156115,
+        "net_pnl_usdt": -11.385728691933124,
+        "profit_factor": 0.4961920035793969
+      },
+      "whale_balance": {
+        "count": 0,
+        "wins": 0,
+        "losses": 0,
+        "flats": 0,
+        "win_rate_pct": 0.0,
+        "gross_pnl_usdt": 0,
+        "entry_fee_usdt": 0,
+        "exit_fee_usdt": 0,
+        "funding_usdt": 0,
+        "net_pnl_usdt": 0,
+        "profit_factor": null
+      },
+      "orderbook_depth": {
+        "count": 3,
+        "wins": 0,
+        "losses": 3,
+        "flats": 0,
+        "win_rate_pct": 0.0,
+        "gross_pnl_usdt": -18.3095891401739,
+        "entry_fee_usdt": 0.7498311696517834,
+        "exit_fee_usdt": 0.7589859642218704,
+        "funding_usdt": 0.003283872183565439,
+        "net_pnl_usdt": -19.815122401863988,
+        "profit_factor": 0.0
+      },
+      "oi_liquidation": {
+        "count": 1,
+        "wins": 1,
+        "losses": 0,
+        "flats": 0,
+        "win_rate_pct": 100.0,
+        "gross_pnl_usdt": 11.5704474966771,
+        "entry_fee_usdt": 0.10029999999999997,
+        "exit_fee_usdt": 0.2565352237483385,
+        "funding_usdt": 0.0,
+        "net_pnl_usdt": 11.21361227292876,
+        "profit_factor": null
+      },
+      "volume_spike": {
+        "count": 1,
+        "wins": 1,
+        "losses": 0,
+        "flats": 0,
+        "win_rate_pct": 100.0,
+        "gross_pnl_usdt": 11.5704474966771,
+        "entry_fee_usdt": 0.10029999999999997,
+        "exit_fee_usdt": 0.2565352237483385,
+        "funding_usdt": 0.0,
+        "net_pnl_usdt": 11.21361227292876,
+        "profit_factor": null
+      },
+      "technical_all": {
+        "count": 5,
+        "wins": 1,
+        "losses": 4,
+        "flats": 0,
+        "win_rate_pct": 20.0,
+        "gross_pnl_usdt": -9.022246666327874,
+        "entry_fee_usdt": 1.1001311696517835,
+        "exit_fee_usdt": 1.2666627404816244,
+        "funding_usdt": 0.003311884528156115,
+        "net_pnl_usdt": -11.385728691933124,
+        "profit_factor": 0.4961920035793969
+      },
+      "orderflow_all": {
+        "count": 5,
+        "wins": 1,
+        "losses": 4,
+        "flats": 0,
+        "win_rate_pct": 20.0,
+        "gross_pnl_usdt": -9.022246666327874,
+        "entry_fee_usdt": 1.1001311696517835,
+        "exit_fee_usdt": 1.2666627404816244,
+        "funding_usdt": 0.003311884528156115,
+        "net_pnl_usdt": -11.385728691933124,
+        "profit_factor": 0.4961920035793969
+      },
+      "news_score": {
+        "count": 0,
+        "wins": 0,
+        "losses": 0,
+        "flats": 0,
+        "win_rate_pct": 0.0,
+        "gross_pnl_usdt": 0,
+        "entry_fee_usdt": 0,
+        "exit_fee_usdt": 0,
+        "funding_usdt": 0,
+        "net_pnl_usdt": 0,
+        "profit_factor": null
+      },
+      "ml_score": {
+        "count": 0,
+        "wins": 0,
+        "losses": 0,
+        "flats": 0,
+        "win_rate_pct": 0.0,
+        "gross_pnl_usdt": 0,
+        "entry_fee_usdt": 0,
+        "exit_fee_usdt": 0,
+        "funding_usdt": 0,
+        "net_pnl_usdt": 0,
+        "profit_factor": null
+      },
+      "mtf_filter": {
+        "count": 0,
+        "wins": 0,
+        "losses": 0,
+        "flats": 0,
+        "win_rate_pct": 0.0,
+        "gross_pnl_usdt": 0,
+        "entry_fee_usdt": 0,
+        "exit_fee_usdt": 0,
+        "funding_usdt": 0,
+        "net_pnl_usdt": 0,
+        "profit_factor": null
+      }
+    },
+    "exchange_evidence": {
+      "catalog": {
+        "binance": 507,
+        "okx": 376
+      },
+      "errors": {},
+      "rest": {
+        "binance": {
+          "ohlcv_success": 16529,
+          "ohlcv_errors": 0,
+          "ticker_success": 73,
+          "ticker_errors": 0,
+          "paper_fills": 32
+        },
+        "okx": {
+          "ohlcv_success": 3826,
+          "ohlcv_errors": 0,
+          "ticker_success": 32,
+          "ticker_errors": 0,
+          "paper_fills": 20
+        }
+      },
+      "websocket": {
+        "binance": {
+          "trade_messages": 1470676,
+          "price_messages": 2270820,
+          "book_messages": 410300,
+          "liquidation_messages": 947,
+          "last_data_ts": 1792930557.4393978
+        },
+        "okx": {
+          "trade_messages": 172262,
+          "price_messages": 1123816,
+          "book_messages": 1028822,
+          "liquidation_messages": 0,
+          "last_data_ts": 1792930557.4344122
+        }
+      }
+    }
+  },
+  "bot_closed_trades": [
+    {
+      "position_id": "b4c49cb2ba9046ed8a7073cdac613fb6",
+      "symbol": "ALCH/USDT",
+      "side": "SHORT",
+      "exchange": "binance",
+      "entry_price": 0.03642,
+      "leverage": 10,
+      "margin_usdt": 50.0,
+      "signal": "SHORT",
+      "total_score": -24.5,
+      "regime": "TREND",
+      "technical_support": {
+        "ma_trend": 8.0,
+        "supertrend": 8.0,
+        "ema_trend": 4.8,
+        "adx": 4.0,
+        "session_vwap": 4.0,
+        "anchored_vwap": 4.0,
+        "volume_profile": 1.0
+      },
+      "orderflow_support": {
+        "taker_delta": 33.6447,
+        "cvd_direction": 14.0,
+        "orderbook_depth": 5.29
+      },
+      "module_support": {
+        "technical_all": 19.8,
+        "orderflow_all": 52.9,
+        "ml_score": 4.7,
+        "mtf_filter": "BEARISH"
+      },
+      "decisive_leave_one_out": [
+        "cvd_direction",
+        "orderbook_depth",
+        "orderflow_all",
+        "taker_delta",
+        "technical_all"
+      ],
+      "close_reason": "ERKEN TREND BOZULMA ÇIKIŞI (21dk, %-1.08): birleşik skor ters yöne döndü (+17.3)",
+      "closed_ts": 1792928614.6818001,
+      "exit_price": 0.03681,
+      "quantity": 13713.658804168952,
+      "price_pnl_pct": -1.0708401976935789,
+      "roe_pct": -10.70840197693579,
+      "gross_pnl_usdt": -5.348326933625911,
+      "entry_fee_usdt": 0.24972572682391664,
+      "exit_fee_usdt": 0.25239989029072957,
+      "funding_usdt": 0.0011143870391443207,
+      "net_pnl_usdt": -5.849338163701413
+    },
+    {
+      "position_id": "01fa93a1df024cba8c3c7c43d34674e3",
+      "symbol": "RLS/USDT",
+      "side": "LONG",
+      "exchange": "okx",
+      "entry_price": 0.0022637709999999995,
+      "leverage": 10,
+      "margin_usdt": 50.0,
+      "signal": "LONG",
+      "total_score": 37.9,
+      "regime": "TREND",
+      "technical_support": {
+        "ema_trend": 14.4,
+        "ma_trend": 8.0,
+        "supertrend": 8.0,
+        "macd": 4.0,
+        "adx": 4.0,
+        "obv": 4.0,
+        "session_vwap": 4.0,
+        "anchored_vwap": 4.0,
+        "volume_profile": 3.0
+      },
+      "orderflow_support": {
+        "taker_delta": 23.854889,
+        "cvd_direction": 14.0,
+        "oi_liquidation": 10.0,
+        "volume_spike": 8.0
+      },
+      "module_support": {
+        "technical_all": 53.4,
+        "orderflow_all": 54.7,
+        "ml_score": 1.0,
+        "mtf_filter": "BULLISH"
+      },
+      "decisive_leave_one_out": [
+        "cvd_direction",
+        "oi_liquidation",
+        "orderflow_all",
+        "taker_delta",
+        "technical_all",
+        "volume_spike"
+      ],
+      "close_reason": "KÂR KOŞUSU: LONG SATIŞ BASKISI + CVD dönüşü ($2,420, zirve/dip %0.26)",
+      "closed_ts": 1792929206.3491778,
+      "exit_price": 0.002316,
+      "quantity": 221533.00841825432,
+      "price_pnl_pct": 2.3071679953493724,
+      "roe_pct": 23.071679953493724,
+      "gross_pnl_usdt": 11.5704474966771,
+      "entry_fee_usdt": 0.10029999999999997,
+      "exit_fee_usdt": 0.2565352237483385,
+      "funding_usdt": 0.0,
+      "net_pnl_usdt": 11.21361227292876
+    },
+    {
+      "position_id": "3e3fd7f3002044879a2089b8b0692d38",
+      "symbol": "AVNT/USDT",
+      "side": "SHORT",
+      "exchange": "okx",
+      "entry_price": 0.11292,
+      "leverage": 10,
+      "margin_usdt": 50.0,
+      "signal": "SHORT",
+      "total_score": -26.9,
+      "regime": "RANGE",
+      "technical_support": {
+        "bollinger": 6.0,
+        "stoch_rsi": 6.0,
+        "cci": 6.0,
+        "rsi": 5.0,
+        "williams_r": 5.0,
+        "volume_profile": 1.0
+      },
+      "orderflow_support": {
+        "taker_delta": 34.549251,
+        "cvd_direction": 14.0,
+        "orderbook_depth": 4.83
+      },
+      "module_support": {
+        "technical_all": 23.0,
+        "orderflow_all": 53.4,
+        "ml_score": 10.9,
+        "mtf_filter": "BEARISH"
+      },
+      "decisive_leave_one_out": [
+        "cvd_direction",
+        "orderbook_depth",
+        "orderflow_all",
+        "taker_delta",
+        "technical_all"
+      ],
+      "close_reason": "ERKEN TREND BOZULMA ÇIKIŞI (28dk, %-1.86): Supertrend ters kırıldı + karşı akış (+41)",
+      "closed_ts": 1792929487.1622434,
+      "exit_price": 0.11542,
+      "quantity": 4429.482636428065,
+      "price_pnl_pct": -2.2139567835635745,
+      "roe_pct": -22.139567835635745,
+      "gross_pnl_usdt": -11.073706591070112,
+      "entry_fee_usdt": 0.2500885896527286,
+      "exit_fee_usdt": 0.25562544294826367,
+      "funding_usdt": 0.0013226856466187881,
+      "net_pnl_usdt": -11.578097938024484
+    },
+    {
+      "position_id": "e775ad3fbd4348e7a4dc1dc063e74a49",
+      "symbol": "ID/USDT",
+      "side": "SHORT",
+      "exchange": "binance",
+      "entry_price": 0.03066,
+      "leverage": 10,
+      "margin_usdt": 50.0,
+      "signal": "SHORT",
+      "total_score": -25.3,
+      "regime": "TREND",
+      "technical_support": {
+        "ma_trend": 8.0,
+        "supertrend": 8.0,
+        "ema_trend": 4.8,
+        "adx": 4.0,
+        "session_vwap": 4.0,
+        "anchored_vwap": 4.0
+      },
+      "orderflow_support": {
+        "taker_delta": 36.777638,
+        "cvd_direction": 14.0,
+        "orderbook_depth": 0.36
+      },
+      "module_support": {
+        "technical_all": 23.8,
+        "orderflow_all": 51.1,
+        "ml_score": 3.1,
+        "mtf_filter": "BEARISH"
+      },
+      "decisive_leave_one_out": [
+        "cvd_direction",
+        "orderflow_all",
+        "taker_delta",
+        "technical_all"
+      ],
+      "close_reason": "ERKEN TREND BOZULMA ÇIKIŞI (29dk, %-0.46): rehin marj kurtarma — karşı ALIŞ baskısı ($570)",
+      "closed_ts": 1792929540.098378,
+      "exit_price": 0.0308,
+      "quantity": 16307.893020221787,
+      "price_pnl_pct": -0.4566210045662141,
+      "roe_pct": -4.566210045662141,
+      "gross_pnl_usdt": -2.2831050228310703,
+      "entry_fee_usdt": 0.25,
+      "exit_fee_usdt": 0.25114155251141557,
+      "funding_usdt": 2.8012344590676206e-05,
+      "net_pnl_usdt": -2.7842185629978955
+    },
+    {
+      "position_id": "7bbb82eb22e5485b9e0200e0a5f59b79",
+      "symbol": "SYN/USDT",
+      "side": "SHORT",
+      "exchange": "binance",
+      "entry_price": 0.14835,
+      "leverage": 10,
+      "margin_usdt": 50.0,
+      "signal": "SHORT",
+      "total_score": -27.0,
+      "regime": "TREND",
+      "technical_support": {
+        "ma_trend": 8.0,
+        "supertrend": 8.0,
+        "ema_trend": 4.8,
+        "adx": 4.0,
+        "session_vwap": 4.0,
+        "anchored_vwap": 4.0,
+        "volume_profile": 1.0
+      },
+      "orderflow_support": {
+        "taker_delta": 35.912812,
+        "cvd_direction": 14.0,
+        "orderbook_depth": 7.32
+      },
+      "module_support": {
+        "technical_all": 19.8,
+        "orderflow_all": 57.2,
+        "ml_score": 12.8,
+        "mtf_filter": "BEARISH"
+      },
+      "decisive_leave_one_out": [
+        "cvd_direction",
+        "orderbook_depth",
+        "orderflow_all",
+        "taker_delta",
+        "technical_all"
+      ],
+      "close_reason": "ERKEN TREND BOZULMA ÇIKIŞI (36dk, %-0.40): rehin marj kurtarma — karşı ALIŞ baskısı ($555)",
+      "closed_ts": 1792930029.8454704,
+      "exit_price": 0.14891,
+      "quantity": 3370.6350276392072,
+      "price_pnl_pct": -0.3774856757667524,
+      "roe_pct": -3.774856757667524,
+      "gross_pnl_usdt": -1.8875556154778792,
+      "entry_fee_usdt": 0.2500168531751382,
+      "exit_fee_usdt": 0.25096063098287713,
+      "funding_usdt": 0.00084679949780233,
+      "net_pnl_usdt": -2.387686300138092
+    }
+  ],
+  "manual_entries": [
+    {
+      "position_id": "df1fc194d46b4c99925da1e9efdd986e",
+      "symbol": "GMT/USDT",
+      "side": "SHORT",
+      "exchange": "okx",
+      "entry_price": 0.00687,
+      "leverage": 10,
+      "margin_usdt": 50.0,
+      "signal": "SHORT",
+      "total_score": -26.2,
+      "regime": "TREND",
+      "technical_support": {
+        "ma_trend": 8.0,
+        "supertrend": 8.0,
+        "ema_trend": 4.8,
+        "adx": 4.0,
+        "session_vwap": 4.0,
+        "anchored_vwap": 4.0,
+        "volume_profile": 1.0
+      },
+      "orderflow_support": {
+        "taker_delta": 34.872004,
+        "cvd_direction": 14.0,
+        "orderbook_depth": 6.77
+      },
+      "module_support": {
+        "technical_all": 25.8,
+        "orderflow_all": 55.6,
+        "mtf_filter": "BEARISH"
+      },
+      "decisive_leave_one_out": [
+        "cvd_direction",
+        "orderbook_depth",
+        "orderflow_all",
+        "taker_delta",
+        "technical_all"
+      ],
+      "close_reason": "SÜRELİ PAPER ÖLÇÜMÜ SONU"
+    },
+    {
+      "position_id": "546c4d1d6e8e49228763fd9d79124050",
+      "symbol": "HEI/USDT",
+      "side": "SHORT",
+      "exchange": "binance",
+      "entry_price": 0.10389,
+      "leverage": 10,
+      "margin_usdt": 50.0,
+      "signal": "SHORT",
+      "total_score": -36.9,
+      "regime": "TREND",
+      "technical_support": {
+        "ema_trend": 14.4,
+        "ma_trend": 8.0,
+        "supertrend": 8.0,
+        "macd": 4.0,
+        "adx": 4.0,
+        "obv": 4.0,
+        "session_vwap": 4.0,
+        "anchored_vwap": 4.0,
+        "volume_profile": 3.0
+      },
+      "orderflow_support": {
+        "taker_delta": 35.341894,
+        "cvd_direction": 14.0,
+        "orderbook_depth": 5.65
+      },
+      "module_support": {
+        "technical_all": 53.4,
+        "orderflow_all": 55.0,
+        "mtf_filter": "BEARISH"
+      },
+      "decisive_leave_one_out": [
+        "cvd_direction",
+        "orderbook_depth",
+        "orderflow_all",
+        "taker_delta",
+        "technical_all"
+      ],
+      "close_reason": "SÜRELİ PAPER ÖLÇÜMÜ SONU"
+    },
+    {
+      "position_id": "519126374e17422eb682bddf60fc3780",
+      "symbol": "BNB/USDT",
+      "side": "LONG",
+      "exchange": "binance",
+      "entry_price": 741.89,
+      "leverage": 10,
+      "margin_usdt": 50.0,
+      "signal": "LONG",
+      "total_score": 37.0,
+      "regime": "TREND",
+      "technical_support": {
+        "ema_trend": 14.4,
+        "supertrend": 8.0,
+        "macd": 4.0,
+        "adx": 4.0,
+        "obv": 4.0,
+        "anchored_vwap": 4.0
+      },
+      "orderflow_support": {
+        "taker_delta": 24.807041,
+        "whale_balance": 24.0,
+        "cvd_direction": 14.0,
+        "orderbook_depth": 5.56
+      },
+      "module_support": {
+        "technical_all": 33.4,
+        "orderflow_all": 68.4,
+        "ml_score": 20.6
+      },
+      "decisive_leave_one_out": [
+        "orderflow_all",
+        "taker_delta",
+        "technical_all",
+        "whale_balance"
+      ],
+      "close_reason": "SÜRELİ PAPER ÖLÇÜMÜ SONU"
+    },
+    {
+      "position_id": "20185bbeea604ddbaaa17e036a78a09c",
+      "symbol": "AVAAI/USDT",
+      "side": "SHORT",
+      "exchange": "binance",
+      "entry_price": 0.00721,
+      "leverage": 10,
+      "margin_usdt": 50.0,
+      "signal": "SHORT",
+      "total_score": -28.8,
+      "regime": "TREND",
+      "technical_support": {
+        "ma_trend": 8.0,
+        "supertrend": 8.0,
+        "ema_trend": 4.8,
+        "adx": 4.0,
+        "session_vwap": 4.0,
+        "anchored_vwap": 4.0,
+        "volume_profile": 1.0
+      },
+      "orderflow_support": {
+        "taker_delta": 26.710522,
+        "cvd_direction": 14.0,
+        "volume_spike": 8.0,
+        "orderbook_depth": 4.83
+      },
+      "module_support": {
+        "technical_all": 25.8,
+        "orderflow_all": 53.5,
+        "ml_score": 16.0,
+        "mtf_filter": "BEARISH"
+      },
+      "decisive_leave_one_out": [
+        "cvd_direction",
+        "orderbook_depth",
+        "orderflow_all",
+        "taker_delta",
+        "technical_all",
+        "volume_spike"
+      ],
+      "close_reason": "SÜRELİ PAPER ÖLÇÜMÜ SONU"
+    },
+    {
+      "position_id": "fe8444a0d5bf452c8cf327b3607992f8",
+      "symbol": "GUN/USDT",
+      "side": "SHORT",
+      "exchange": "binance",
+      "entry_price": 0.002084,
+      "leverage": 10,
+      "margin_usdt": 50.0,
+      "signal": "SHORT",
+      "total_score": -24.3,
+      "regime": "RANGE",
+      "technical_support": {
+        "bollinger": 6.0,
+        "cci": 6.0,
+        "williams_r": 5.0,
+        "volume_profile": 1.0
+      },
+      "orderflow_support": {
+        "taker_delta": 32.133308,
+        "cvd_direction": 14.0,
+        "volume_spike": 8.0
+      },
+      "module_support": {
+        "technical_all": 10.0,
+        "orderflow_all": 53.9,
+        "ml_score": 27.4,
+        "mtf_filter": "BEARISH"
+      },
+      "decisive_leave_one_out": [
+        "bollinger",
+        "cci",
+        "cvd_direction",
+        "orderflow_all",
+        "taker_delta",
+        "technical_all",
+        "volume_profile",
+        "volume_spike",
+        "williams_r"
+      ],
+      "close_reason": "SÜRELİ PAPER ÖLÇÜMÜ SONU"
+    },
+    {
+      "position_id": "a08f57ceeb644631a7a0490cc0747151",
+      "symbol": "AAOI/USDT",
+      "side": "SHORT",
+      "exchange": "okx",
+      "entry_price": 66.97,
+      "leverage": 10,
+      "margin_usdt": 50.0,
+      "signal": "SHORT",
+      "total_score": -26.2,
+      "regime": "RANGE",
+      "technical_support": {
+        "cci": 6.0,
+        "williams_r": 5.0,
+        "session_vwap": 4.0,
+        "mfi": 2.0,
+        "volume_profile": 1.0
+      },
+      "orderflow_support": {
+        "taker_delta": 41.544583,
+        "cvd_direction": 14.0,
+        "volume_spike": 8.0,
+        "orderbook_depth": 5.83
+      },
+      "module_support": {
+        "technical_all": 12.0,
+        "orderflow_all": 69.4,
+        "ml_score": 4.2,
+        "mtf_filter": "BEARISH"
+      },
+      "decisive_leave_one_out": [
+        "cci",
+        "orderflow_all",
+        "session_vwap",
+        "taker_delta",
+        "technical_all",
+        "williams_r"
+      ],
+      "close_reason": "SÜRELİ PAPER ÖLÇÜMÜ SONU"
+    },
+    {
+      "position_id": "1bad4c7bdc9b428e83b6bcf12f72fbc6",
+      "symbol": "XPIN/USDT",
+      "side": "SHORT",
+      "exchange": "binance",
+      "entry_price": 0.0007011,
+      "leverage": 10,
+      "margin_usdt": 50.0,
+      "signal": "SHORT",
+      "total_score": -28.9,
+      "regime": "TREND",
+      "technical_support": {
+        "ema_trend": 14.4,
+        "ma_trend": 8.0,
+        "supertrend": 8.0,
+        "adx": 4.0,
+        "obv": 4.0,
+        "session_vwap": 4.0,
+        "anchored_vwap": 4.0,
+        "volume_profile": 3.0
+      },
+      "orderflow_support": {
+        "taker_delta": 26.722306,
+        "cvd_direction": 14.0,
+        "volume_spike": 8.0,
+        "orderbook_depth": 3.86
+      },
+      "module_support": {
+        "technical_all": 45.4,
+        "orderflow_all": 52.6,
+        "mtf_filter": "BEARISH"
+      },
+      "decisive_leave_one_out": [
+        "cvd_direction",
+        "orderbook_depth",
+        "orderflow_all",
+        "taker_delta",
+        "technical_all",
+        "volume_spike"
+      ],
+      "close_reason": "SÜRELİ PAPER ÖLÇÜMÜ SONU"
+    },
+    {
+      "position_id": "9ea8486d736c4d3c8ee3850d1358327a",
+      "symbol": "A/USDT",
+      "side": "SHORT",
+      "exchange": "okx",
+      "entry_price": 0.08947,
+      "leverage": 10,
+      "margin_usdt": 50.0,
+      "signal": "SHORT",
+      "total_score": -26.3,
+      "regime": "RANGE",
+      "technical_support": {
+        "stoch_rsi": 6.0,
+        "cci": 6.0,
+        "williams_r": 5.0,
+        "mfi": 2.0,
+        "volume_profile": 1.0
+      },
+      "orderflow_support": {
+        "taker_delta": 32.71494,
+        "cvd_direction": 14.0,
+        "orderbook_depth": 8.17
+      },
+      "module_support": {
+        "technical_all": 12.0,
+        "orderflow_all": 54.9,
+        "ml_score": 33.6,
+        "mtf_filter": "BEARISH"
+      },
+      "decisive_leave_one_out": [
+        "cci",
+        "cvd_direction",
+        "orderbook_depth",
+        "orderflow_all",
+        "stoch_rsi",
+        "taker_delta",
+        "technical_all",
+        "williams_r"
+      ],
+      "close_reason": "SÜRELİ PAPER ÖLÇÜMÜ SONU"
+    }
+  ],
+  "session": {
+    "start_ts": 1792926947.5219808,
+    "end_ts": 1792930547.5219808,
+    "hours": 1.0,
+    "start_balance": 1000.0,
+    "start_equity": 1000.0,
+    "start_fees": 0.0,
+    "start_funding": 0.0,
+    "symbol_count": 625,
+    "all_futures": true,
+    "entries": 13,
+    "report_sent": false,
+    "shadow_closeout_completed": true,
+    "closeout_open_positions": 0,
+    "closeout_completed": true,
+    "closed_at": 1792930557.4645267
+  }
+}

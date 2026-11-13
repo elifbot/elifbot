@@ -1,0 +1,63 @@
+FFFF                                                                     [100%]
+=================================== FAILURES ===================================
+_________________ test_daily_loss_limit_resets_on_next_utc_day _________________
+
+    def test_daily_loss_limit_resets_on_next_utc_day():
+        pf=PaperPortfolio(1_000.0,daily_loss_limit_pct=0.05,max_utilisation=1.0)
+        day1=int(datetime(2023,11,14,23,59,30,tzinfo=timezone.utc).timestamp()*1000)
+        day2=int(datetime(2023,11,15,0,0,15,tzinfo=timezone.utc).timestamp()*1000)
+        assert pf.open_position('b','X',LONG,100.,200.,leverage=5.,step_size=.001,now_ms=day1).ok
+        pf.close_position('b','X',90.,now_ms=day1+1)
+        assert pf.daily_loss_limit_hit()
+>       assert pf.open_position('b','Y',LONG,100.,100.,leverage=5.,step_size=.001,now_ms=day2).ok
+E       AssertionError: assert False
+E        +  where False = OpenResult(ok=False, reason='günlük zarar limiti', position=None, checks={}).ok
+E        +    where OpenResult(ok=False, reason='günlük zarar limiti', position=None, checks={}) = open_position('b', 'Y', 'LONG', 100.0, 100.0, leverage=5.0, step_size=0.001, now_ms=1700006415000)
+E        +      where open_position = <portfolio.paper_futures.PaperPortfolio object at 0x7f6cf36c8d70>.open_position
+
+karsilastirma/test_kullanici_utc.py:11: AssertionError
+____________ test_open_position_rolls_daily_risk_with_live_position ____________
+
+    def test_open_position_rolls_daily_risk_with_live_position():
+        pf=PaperPortfolio(1000.,daily_loss_limit_pct=.05,max_utilisation=1.)
+        before=int(datetime(2023,11,14,23,59,30,tzinfo=timezone.utc).timestamp()*1000)
+        after=int(datetime(2023,11,15,0,0,10,tzinfo=timezone.utc).timestamp()*1000)
+        assert pf.open_position('b','X',LONG,100.,200.,leverage=5.,step_size=.001,now_ms=before).ok
+        pf.mark_price('b','X',90.,before+20000)
+        assert pf.daily_loss_limit_hit()
+        pf.mark_price('b','X',90.,after)
+>       assert not pf.daily_period_unknown
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'PaperPortfolio' object has no attribute 'daily_period_unknown'
+
+karsilastirma/test_kullanici_utc.py:21: AttributeError
+_______________ test_missed_midnight_equity_blocks_new_positions _______________
+
+    def test_missed_midnight_equity_blocks_new_positions():
+        pf=PaperPortfolio(1000.,daily_loss_limit_pct=.05,max_utilisation=1.)
+        before=int(datetime(2023,11,14,12,0,tzinfo=timezone.utc).timestamp()*1000)
+        after=int(datetime(2023,11,15,12,0,tzinfo=timezone.utc).timestamp()*1000)
+>       pf.roll_daily_period(before)
+        ^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'PaperPortfolio' object has no attribute 'roll_daily_period'
+
+karsilastirma/test_kullanici_utc.py:30: AttributeError
+____________ test_stale_open_position_makes_midnight_equity_unknown ____________
+
+    def test_stale_open_position_makes_midnight_equity_unknown():
+        pf=PaperPortfolio(1000.,daily_loss_limit_pct=.05,max_utilisation=1.)
+        opened=int(datetime(2023,11,14,23,57,30,tzinfo=timezone.utc).timestamp()*1000)
+        before=int(datetime(2023,11,14,23,59,50,tzinfo=timezone.utc).timestamp()*1000)
+        after=int(datetime(2023,11,15,0,0,10,tzinfo=timezone.utc).timestamp()*1000)
+        assert pf.open_position('b','X',LONG,100.,200.,leverage=5.,step_size=.001,now_ms=opened).ok
+>       pf.roll_daily_period(before)
+        ^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'PaperPortfolio' object has no attribute 'roll_daily_period'
+
+karsilastirma/test_kullanici_utc.py:42: AttributeError
+=========================== short test summary info ============================
+FAILED karsilastirma/test_kullanici_utc.py::test_daily_loss_limit_resets_on_next_utc_day
+FAILED karsilastirma/test_kullanici_utc.py::test_open_position_rolls_daily_risk_with_live_position
+FAILED karsilastirma/test_kullanici_utc.py::test_missed_midnight_equity_blocks_new_positions
+FAILED karsilastirma/test_kullanici_utc.py::test_stale_open_position_makes_midnight_equity_unknown
+4 failed in 0.03s

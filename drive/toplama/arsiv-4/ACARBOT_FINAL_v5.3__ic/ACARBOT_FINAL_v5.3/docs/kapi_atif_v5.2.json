@@ -1,0 +1,328 @@
+{
+  "surum": "5.2-final",
+  "veri": {
+    "borsa": "okx",
+    "sembol": 6,
+    "gun": 90,
+    "bar": 155520
+  },
+  "yontem": "Sinyali oluşmuş her aday, portföyden bağımsız olarak gerçek çıkış kuralları ve ölçülmüş maliyetlerle simüle edildi. Giriş anında dolduruldu (kapı sorusu dolum sorusundan ayrıldı). Sabit net risk 25.0 USDT.",
+  "temel_kosu": {
+    "net_pnl": -80.6453,
+    "islem": 14,
+    "redler": {
+      "dusuk_hacim": 126455,
+      "fade_kosulu_yok": 12703,
+      "guclu_trend_fade_kapali": 5696,
+      "fake_breakout_or_suspect": 3624,
+      "rejim_uyumsuz": 2476,
+      "yukselen_bicak": 1323,
+      "dusen_bicak": 1207,
+      "PORTFOLIO_DRAWDOWN_PROTECTION": 1012,
+      "dusuk_puan": 459,
+      "MALIYET_BUTCESI_ASIMI": 90,
+      "yeniden_giris_beklemesi": 34,
+      "limit_bekliyor": 19,
+      "emir_dolmadi": 5,
+      "kismi_dolum": 4
+    }
+  },
+  "kapi_atfi": {
+    "LIMIT_BEKLIYOR": {
+      "aday": 19,
+      "simule_edilen": 19,
+      "dolmayan": 0,
+      "hipotetik_net_usdt": -201.7407,
+      "kazanan": 7,
+      "kaybeden": 12,
+      "kazanma_orani": 0.3684,
+      "ort_kazanc": 14.8992,
+      "ort_kayip": -25.5029,
+      "en_iyi": 48.2977,
+      "en_kotu": -33.2939,
+      "hukum": "KAPI BIZI ZARARDAN KURTARDI"
+    },
+    "MALIYET_BUTCESI_ASIMI": {
+      "aday": 90,
+      "simule_edilen": 90,
+      "dolmayan": 0,
+      "hipotetik_net_usdt": -1485.7411,
+      "kazanan": 17,
+      "kaybeden": 73,
+      "kazanma_orani": 0.1889,
+      "ort_kazanc": 14.8834,
+      "ort_kayip": -23.8186,
+      "en_iyi": 50.7104,
+      "en_kotu": -39.0645,
+      "hukum": "KAPI BIZI ZARARDAN KURTARDI"
+    },
+    "PORTFOLIO_DRAWDOWN_PROTECTION": {
+      "aday": 1012,
+      "simule_edilen": 1012,
+      "dolmayan": 0,
+      "hipotetik_net_usdt": -5539.8283,
+      "kazanan": 497,
+      "kaybeden": 515,
+      "kazanma_orani": 0.4911,
+      "ort_kazanc": 16.2183,
+      "ort_kayip": -26.4084,
+      "en_iyi": 147.0717,
+      "en_kotu": -75.4156,
+      "hukum": "KAPI BIZI ZARARDAN KURTARDI"
+    }
+  },
+  "ornekler": {
+    "LIMIT_BEKLIYOR": [
+      {
+        "symbol": "okx:BTC-USDT-SWAP",
+        "ts_ms": 1786322400000,
+        "side": "SHORT",
+        "entry_ref": 64819.9,
+        "stop_fraction": 0.003,
+        "motor": "trend",
+        "reason": "LIMIT_BEKLIYOR",
+        "limit_price": null,
+        "sim": {
+          "outcome": "stop_loss",
+          "net_pnl": -20.1204,
+          "r_multiple": -0.8048,
+          "hold_ms": 2400000,
+          "target_net_risk": 25.0
+        }
+      },
+      {
+        "symbol": "okx:ETH-USDT-SWAP",
+        "ts_ms": 1786322400000,
+        "side": "SHORT",
+        "entry_ref": 1906.52,
+        "stop_fraction": 0.003377863230166764,
+        "motor": "trend",
+        "reason": "LIMIT_BEKLIYOR",
+        "limit_price": null,
+        "sim": {
+          "outcome": "position_loss_stop",
+          "net_pnl": -29.6217,
+          "r_multiple": -1.1849,
+          "hold_ms": 900000,
+          "target_net_risk": 25.0
+        }
+      },
+      {
+        "symbol": "okx:BTC-USDT-SWAP",
+        "ts_ms": 1786326600000,
+        "side": "SHORT",
+        "entry_ref": 65188.5,
+        "stop_fraction": 0.003,
+        "motor": "fade",
+        "reason": "LIMIT_BEKLIYOR",
+        "limit_price": null,
+        "sim": {
+          "outcome": "time_stop",
+          "net_pnl": 12.847,
+          "r_multiple": 0.5139,
+          "hold_ms": 5400000,
+          "target_net_risk": 25.0
+        }
+      },
+      {
+        "symbol": "okx:DOGE-USDT-SWAP",
+        "ts_ms": 1786326600000,
+        "side": "SHORT",
+        "entry_ref": 0.07001,
+        "stop_fraction": 0.003767278281286851,
+        "motor": "fade",
+        "reason": "LIMIT_BEKLIYOR",
+        "limit_price": null,
+        "sim": {
+          "outcome": "trailing_stop",
+          "net_pnl": 5.5823,
+          "r_multiple": 0.2233,
+          "hold_ms": 3300000,
+          "target_net_risk": 25.0
+        }
+      },
+      {
+        "symbol": "okx:ADA-USDT-SWAP",
+        "ts_ms": 1786346100000,
+        "side": "LONG",
+        "entry_ref": 0.1992,
+        "stop_fraction": 0.004420280437590032,
+        "motor": "trend",
+        "reason": "LIMIT_BEKLIYOR",
+        "limit_price": null,
+        "sim": {
+          "outcome": "position_loss_stop",
+          "net_pnl": -28.6724,
+          "r_multiple": -1.1469,
+          "hold_ms": 900000,
+          "target_net_risk": 25.0
+        }
+      }
+    ],
+    "MALIYET_BUTCESI_ASIMI": [
+      {
+        "symbol": "okx:DOGE-USDT-SWAP",
+        "ts_ms": 1786453500000,
+        "side": "LONG",
+        "entry_ref": 0.07078,
+        "stop_fraction": 0.003,
+        "motor": "trend",
+        "reason": "MALIYET_BUTCESI_ASIMI",
+        "sim": {
+          "outcome": "position_loss_stop",
+          "net_pnl": -26.6905,
+          "r_multiple": -1.0676,
+          "hold_ms": 1200000,
+          "target_net_risk": 25.0
+        }
+      },
+      {
+        "symbol": "okx:DOGE-USDT-SWAP",
+        "ts_ms": 1786453800000,
+        "side": "LONG",
+        "entry_ref": 0.07076,
+        "stop_fraction": 0.003,
+        "motor": "trend",
+        "reason": "MALIYET_BUTCESI_ASIMI",
+        "sim": {
+          "outcome": "position_loss_stop",
+          "net_pnl": -25.1617,
+          "r_multiple": -1.0065,
+          "hold_ms": 900000,
+          "target_net_risk": 25.0
+        }
+      },
+      {
+        "symbol": "okx:DOGE-USDT-SWAP",
+        "ts_ms": 1786455600000,
+        "side": "LONG",
+        "entry_ref": 0.07071,
+        "stop_fraction": 0.003,
+        "motor": "trend",
+        "reason": "MALIYET_BUTCESI_ASIMI",
+        "sim": {
+          "outcome": "trailing_stop",
+          "net_pnl": 1.0319,
+          "r_multiple": 0.0413,
+          "hold_ms": 3300000,
+          "target_net_risk": 25.0
+        }
+      },
+      {
+        "symbol": "okx:DOGE-USDT-SWAP",
+        "ts_ms": 1786538100000,
+        "side": "LONG",
+        "entry_ref": 0.07171,
+        "stop_fraction": 0.0032327022271822626,
+        "motor": "fade",
+        "reason": "MALIYET_BUTCESI_ASIMI",
+        "sim": {
+          "outcome": "position_loss_stop",
+          "net_pnl": -34.6335,
+          "r_multiple": -1.3853,
+          "hold_ms": 600000,
+          "target_net_risk": 25.0
+        }
+      },
+      {
+        "symbol": "okx:DOGE-USDT-SWAP",
+        "ts_ms": 1786538700000,
+        "side": "SHORT",
+        "entry_ref": 0.07148,
+        "stop_fraction": 0.0035736473998863234,
+        "motor": "trend",
+        "reason": "MALIYET_BUTCESI_ASIMI",
+        "sim": {
+          "outcome": "position_loss_stop",
+          "net_pnl": -26.4139,
+          "r_multiple": -1.0566,
+          "hold_ms": 600000,
+          "target_net_risk": 25.0
+        }
+      }
+    ],
+    "PORTFOLIO_DRAWDOWN_PROTECTION": [
+      {
+        "symbol": "okx:XRP-USDT-SWAP",
+        "ts_ms": 1786538100000,
+        "side": "LONG",
+        "entry_ref": 1.0201,
+        "stop_fraction": 0.003,
+        "motor": "fade",
+        "reason": "PORTFOLIO_DRAWDOWN_PROTECTION",
+        "sim": {
+          "outcome": "position_loss_stop",
+          "net_pnl": -33.7226,
+          "r_multiple": -1.3489,
+          "hold_ms": 900000,
+          "target_net_risk": 25.0
+        }
+      },
+      {
+        "symbol": "okx:ETH-USDT-SWAP",
+        "ts_ms": 1786570200000,
+        "side": "SHORT",
+        "entry_ref": 1878.54,
+        "stop_fraction": 0.003,
+        "motor": "trend",
+        "reason": "PORTFOLIO_DRAWDOWN_PROTECTION",
+        "sim": {
+          "outcome": "stop_loss",
+          "net_pnl": -19.5856,
+          "r_multiple": -0.7834,
+          "hold_ms": 10200000,
+          "target_net_risk": 25.0
+        }
+      },
+      {
+        "symbol": "okx:XRP-USDT-SWAP",
+        "ts_ms": 1786583700000,
+        "side": "SHORT",
+        "entry_ref": 1.0033,
+        "stop_fraction": 0.003,
+        "motor": "trend",
+        "reason": "PORTFOLIO_DRAWDOWN_PROTECTION",
+        "sim": {
+          "outcome": "stop_loss",
+          "net_pnl": -21.6081,
+          "r_multiple": -0.8643,
+          "hold_ms": 6000000,
+          "target_net_risk": 25.0
+        }
+      },
+      {
+        "symbol": "okx:ETH-USDT-SWAP",
+        "ts_ms": 1786584300000,
+        "side": "SHORT",
+        "entry_ref": 1875.72,
+        "stop_fraction": 0.003,
+        "motor": "trend",
+        "reason": "PORTFOLIO_DRAWDOWN_PROTECTION",
+        "sim": {
+          "outcome": "stop_loss",
+          "net_pnl": -20.1291,
+          "r_multiple": -0.8052,
+          "hold_ms": 5700000,
+          "target_net_risk": 25.0
+        }
+      },
+      {
+        "symbol": "okx:XRP-USDT-SWAP",
+        "ts_ms": 1786584300000,
+        "side": "SHORT",
+        "entry_ref": 1.0023,
+        "stop_fraction": 0.003,
+        "motor": "trend",
+        "reason": "PORTFOLIO_DRAWDOWN_PROTECTION",
+        "sim": {
+          "outcome": "position_loss_stop",
+          "net_pnl": -28.3116,
+          "r_multiple": -1.1325,
+          "hold_ms": 5400000,
+          "target_net_risk": 25.0
+        }
+      }
+    ]
+  },
+  "acik_sinir": "Bu analiz SİNYALİ OLUŞMUŞ adayları kapsar. dusuk_hacim gibi sinyal öncesi filtreler burada YOK — onlar için ablasyon gerekir (eşiği gevşetip yeniden koşmak). Ayrıca portföy etkileşimi (drawdown koruması, teminat) model dışı bırakıldı."
+}

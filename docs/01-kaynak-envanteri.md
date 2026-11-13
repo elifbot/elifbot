@@ -59,6 +59,11 @@ yüklenemedi; dosyalar Drive'da kalıyor, izleri `drive/MANIFEST/` altında):
 
 Doğrulama: `sha256sum -c drive/MANIFEST/sha256.txt`.
 
+Bu dört arşiv **açıldı**: içindeki 2.414 kod/doküman/konfig dosyası (31.9 MB)
+`drive/toplama/` altına alındı, iç içe zip'ler dahil. İkili dosyalar ve 300 KB üstü
+içerik Drive'da bırakıldı; gerekçesi `drive/toplama/excluded.csv` ve
+`drive/toplama/README.md` içinde.
+
 Bu dört arşiv **tarihsel sürüm koleksiyonu**dur; içlerinde gerçek piyasa tick verisi yok
 (kontrol edildi: patch, zip, html, pdf, jpg). Bu yüzden backtest için kullanılamazlar.
 

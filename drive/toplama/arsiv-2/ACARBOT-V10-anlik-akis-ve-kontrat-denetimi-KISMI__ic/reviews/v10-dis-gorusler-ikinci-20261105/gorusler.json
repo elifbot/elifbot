@@ -1,0 +1,159 @@
+{
+  "timestamp_utc": "2026-11-05T12:05:13.017705+00:00",
+  "models_attempted": 5,
+  "models_ok": 4,
+  "note": "Yanıtlar dış modellerin görüşüdür; otomatik emir onayı değildir. Sağlayıcı model etiketi kimlik doğrulaması sayılmaz.",
+  "results": [
+    {
+      "provider": "Kilo",
+      "requested_model": "cohere/north-mini-code:free",
+      "endpoint": "https://api.kilo.ai/api/gateway/chat/completions",
+      "sent_files": [
+        "acarbot/strategy.py",
+        "acarbot/ledger.py",
+        "acarbot/runner.py"
+      ],
+      "prompt_sha256": "cde3e3b3957e025b9a7ffea20413ca5fb27871b0f3a48bd20e47089bd6a3a686",
+      "http_status": 200,
+      "status": "OK",
+      "response_model": "cohere/north-mini-code:free",
+      "answer": "**acarbot/runner.py** dosyasında (gerçek emir göndermeyen, varsayımsal kayma ve ücretlerle çalışan bir \"kağıt\" bot) **en fazla altı somut hata veya riskli tasarım kararı** tespit ettim. Her birini önem sırasına göre sıraladım, ilgili işlev adını (veya runner'da kullanılan değişkenleri) verdim, nedenini açıkladım ve düzeltme önerisi sundum.\n\n---\n\n## 1️⃣  **Riskli tasarım kararı: `ledger.open()` fonksiyonu, risk planını doğrudan `RiskManager.plan()`'a devreder ve planın geri kalanını (örneğin stop/take-profit mesafeleri) doğrulamaz**\n\n**Neden:**\n`RiskManager.plan()`'ın geri döndürdüğü plan, `ledger.open()`'da doğrudan kullanılır. `ledger.py`'de `plan` değişkeni açıklanmamıştır ve `plan` nesnesinin hangi alanların güvenli olduğunu (örneğin `stop_price`, `take_profit_price`, `stop_distance`) bilmiyoruz. Eğer `RiskManager` geçersiz veya sıfır mesafeler içeren bir plan döndürürse, `Trade` nesnesi yanlışlıkla negatif veya sıfır risk mesafeleriyle oluşturulabilir. Bu, ardından `on_quote` fonksiyonunda durdurma/take-profit mantığının bozulmasına neden olabilir ve pozisyonlar asla kapanmayabilir.\n\n**Düzeltme önerisi:**\n`ledger.open()` fonksiyonuna, planın güvenliğini kontrol etme ve varsayılan güvenli değerler atama kodu ekleyin (örneğin `if not plan.stop_distance or plan.stop_distance <= 0: return None`). Ayrıca, `RiskManager`ın beklenen alanları içerdiğini doğrulamak için basit bir tip kontrolü (`hasattr(plan, 'stop_price')`) yapın.\n\n---\n\n## 2️⃣  **Somut hata: `ledger.on_quote()` fonksiyonu, `executable` değişkenini yanlış hesaplıyor (`q.bid`/`q.ask` kullanımı)**\n\n**Neden:**\n```python\nexecutable = q.bid if side is Side.LONG else q.ask\n```\nUzun pozisyonlar için, fiyatın **satış** fiyatından kapanması gerekir (pozisyon uzun olduğu için satmak gerekir). Kısa pozisyonlar için ise **alım** fiyatından kapanması gerekir. Kod, uzun pozisyonlar için `bid` (daha düşük) ve kısa pozisyonlar için `ask` (daha yüksek) kullanıyor. Bu, durdurma/take-profit seviyelerini yanlış yorumlamaya neden olur ve pozisyonlar yanlışlıkla erken veya geç kapanabilir.\n\n**Düzeltme önerisi:**\nHesaplamayı düzeltin:\n```python\nexecutable = q.ask if side is Side.LONG else q.bid\n```\n\n---\n\n## 3️⃣  **Riskli tasarım kararı: `ledger.on_quote()` fonksiyonu, stop'u `be` (breakeven) ve `trailing` değerleriyle güncellerken `max`/`min` fonksiyonunu yanlış kullanıyor**\n\n**Neden:**\n```python\np.stop = max(p.stop,be,trailing) if side is Side.LONG else min(p.stop,be,trailing)\n```\nUzun pozisyonlar için, stop'un **artması** gerekir (daha yüksek bir durdurma fiyatı daha iyi). Kısa pozisyonlar için stop'un **azalması** gerekir (daha düşük bir durdurma fiyatı daha iyi). Ancak `be` ve `trailing` değerleri, `initial_risk_distance` ile ilişkili olarak hesaplanır ve bazen stop'tan daha düşük olabilir (uzun pozisyonlar için). `max` fonksiyonu, stop'u gereksiz yere yükseltebilir ve pozisyonu korumak için gereksiz yere yüksek bir durdurma fiyatı belirleyebilir, bu da erken kapanışa neden olur. Aynı sorun kısa pozisyonlar için `min` fonksiyonu ile de geçerlidir.\n\n**Düzeltme önerisi:**\nStop'u, risk mesafesiyle ilişkili olarak yalnızca **güvenli bir şekilde** güncelleyin: uzun pozisyonlar için stop'u `max(p.stop, be, trailing)` olarak ayarlayın, ancak `trailing` değerini `executable - side.sign * p.initial_risk_distance` olarak hesaplayın (zaten doğru). Kısa pozisyonlar için stop'u `min(p.stop, be, trailing)` olarak ayarlayın. Ayrıca, stop'un pozisyondan daha düşük olmamasını sağlamak için ek bir kontrol ekleyin (uzun pozisyonlar için stop > entry, kısa pozisyonlar için stop < entry).\n\n---\n\n## 4️⃣  **Somut hata: `runner.py` dosyasında, `ledger.on_quote()` fonksiyonunu çağırdıktan sonra `funding` kontrolü yapılmadan önce pozisyonları kapatıyor**\n\n**Neden:**\n```python\nfor s,p in list(ledger.positions.items()):\n    q=quotes.get(s); f=funding.get(s)\n    if f and q and ms()-q.ts_ms<15000 and ms()>=f['next_ms']-180000:\n        trade=ledger.close(q,'FUNDING_AVOIDANCE',ms()); write(log,{'event':'CLOSE',**asdict(trade)})\n```\nKod, bir pozisyonun funding zamanına yaklaşırken (`f['next_ms']-180000`) **hedge** amaçlı olarak pozisyonu kapatıyor. Ancak `ledger.close()` fonksiyonu, pozisyonu risk durumu ve ödeme hesaplamaları ile birlikte kalıcı olarak kapatır. Eğer funding gerçekleşmezse (örneğin API hatası nedeniyle), pozisyon gerçekten kapatılmış olur ve bot, funding hareketinden beklenen kazancı kaybeder. Bu, varsayımsal bir bot için kabul edilebilir bir risk olsa da, kod, funding olayını gerçek bir olay olarak işaretleyerek (kapatma nedeni \"FUNDING_AVOIDANCE\") yanlış bir \"gerçeklik\" izlenimi yaratır.\n\n**Düzeltme önerisi:**\nFunding olayını bir uyarı olarak işaretleyin ve pozisyonu kapatmayın; bunun yerine, funding tahmini loguna ekleyin ve pozisyonu koruyun. Örnek:\n```python\nif f and ms() >= f['next_ms'] - 180000:\n    write(log,{'event':'FUNDING_APPROACH','symbol':s,'next_ms':f['next_ms'],'rate':f['rate']})\n```\n\n---\n\n## 5️⃣  **Riskli tasarım kararı: `runner.py` dosyasında, `ledger.on_quote()` fonksiyonunu çağırdıktan sonra `funding` verilerini yenilemek için `get_f(s)` fonksiyonunu her döngüde çağırıyor**\n\n**Neden:**\nKod, her döngüde (her saniyede bir) tüm semboller için funding verilerini yeniliyor (`next_f=time.monotonic()+120`). Bu, gereksiz API yüküne neden olur ve funding verilerinin güncel olmamasına (örneğin eski veriler) neden olabilir. Funding verileri yalnızca yaklaşık olarak gereklidir; nadiren değişirler ve yalnızca yaklaşık olarak her 8 saatte bir güncellenirler. Sürekli yenileme, gereksiz zaman harcamaya neden olur ve funding verilerinin güncel olmamasına (örneğin eski veriler) neden olabilir.\n\n**Düzeltme önerisi:**\nFunding verilerini, önceki yenilemeden en az 1 saat sonra veya funding zamanına 30 dakika kala yenileyin. Örnek:\n```python\nif time.monotonic() >= next_f:\n    await asyncio.gather(*(get_f(s) for s in syms))\n    next_f = time.monotonic() + 3600  # 1 saat\n```\n\n---\n\n## 6️⃣  **Somut hata: `runner.py` dosyasında, `ledger.on_quote",
+      "usage": {
+        "prompt_tokens": 5012,
+        "completion_tokens": 1799,
+        "total_tokens": 6811,
+        "cost": 0,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0,
+          "upstream_inference_prompt_cost": 0,
+          "upstream_inference_completions_cost": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      }
+    },
+    {
+      "provider": "Kilo",
+      "requested_model": "nvidia/nemotron-3.5-lightning:free",
+      "endpoint": "https://api.kilo.ai/api/gateway/chat/completions",
+      "sent_files": [
+        "acarbot/strategy.py",
+        "acarbot/ledger.py",
+        "acarbot/runner.py"
+      ],
+      "prompt_sha256": "cde3e3b3957e025b9a7ffea20413ca5fb27871b0f3a48bd20e47089bd6a3a686",
+      "http_status": 200,
+      "status": "OK",
+      "response_model": "nvidia/nemotron-3.5-lightning:free",
+      "answer": "Bağımsız yazılım ve risk denetçisi olarak, sağlanan `acarbot` kod deposunu detaylı bir şekilde inceleyerek, kârlılık varsayımı altında (gerçek emir gönderilmeden sanal takip) 6 somut hatayı ve riskli tasarım kararını belirttim. Kodun çalışma mantığı, veri akışı ve risk yönetimi açısından aşağıdaki bulgular yapıldı.\n\n### 1. Strateji Seçicisi ve \"Magic Number\" Riski\n**Dosya:** `acarbot/strategy.py`\n**İşlev:** `decide()`\n**Neden:** `STRATEGIES` tuple'ı içinde yer alan `'bolldon'` ifadesi, kodun çalışma mantığında bir tanımlama hatası veya eksiklik gösteriyor. `decide` fonksiyonunun iç mantığında `bolldon` stratejisi için herhangi bir blok (if/elif) bulunmuyor, ancak `STRATEGIES` listesinde yer alıyor. Bu durum, strateji adı geçersiz olarak fırlatılan `ValueError` hatasına yol açabilir veya beklenmedik davranışlara (None döndürme) sebep olabilir. Ayrıca `confirm` parametresi 2 olarak sabitlenmiş; stratejiye göre değişmesi gerekirken, her strateji için uygun konfirmasyon sayısı farklı olmalı (örneğin `rsirev` için 1, `trend` için 2 gibi).\n**Düzeltme:** `STRATEGIES` tuple'ından `'bolldon'` silinmelidir veya `decide` fonksiyonuna `bolldon` için ilgili mantık eklenmelidir. `confirm` parametresi stratejiye göre ayarlanmalı veya yapılandırılmalı.\n\n### 2. Tarihsel Veri Eksikliği ve \"Look-ahead Bias\"\n**Dosya:** `acarbot/runner.py`\n**İşlev:** `run()` - `await market.candles('gateio',s,'5m',260)` çağrısı\n**Neden:** Kod, stratejinin çalışması için `closed_candles` fonksiyonu ile 250+ kapatılmış mumun (yukarıda 5dk, yani 20 saatten fazla) gerektiğini kontrol eder. Ancak `market.candles` çağrısı \"son N mum\" verisini getirirken, tarihsel arka plan verisinin (historical data) tam olarak nasıl yüklendiği veya eksik olduğu belirtilmemiş. Stratejiler (özellikle EMA ve Bollinger Bands) uzun dönem trendleri ve volatiliti hesaplamak için geniş arka plan ihtiyaç duyar. Eksik veya yanlış sıralı tarihsel veri kullanımı, \"look-ahead bias\" (ön bilgiye dayalı predisposition) riskini artırır ve stratejinin gerçek performansını yansıtan sahte bir kârlılık gösterebilir.\n**Düzeltme:** `market.candles` çağrısının yeterli arka plan verisini (en az 300-400 mum) içerdiğini doğrulamak için veri uzunluğunu kontrol edilmeli veya veri adaptörü (adapter) yeterli \"warmup\" verisi sağlamak için güncellenmeli.\n\n### 3. Funding Rate ve Açık Pozisyon Yönetimi Eksikliği\n**Dosya:** `acarbot/runner.py`\n**İşlev:** `run()` - `get_f` fonksiyonu ve `ledger.on_quote` etkileşimi\n**Neden:** Kod, funding rate'ını (`funding`) kontrol amaçlı bir \"kapanış tetikleyici\" olarak kullanıyor (`if f and q and ms()-q.ts_ms<15000 and ms()>=f['next_ms']-180000:`). Ancak `ledger` sınıfı (`acarbot/ledger.py`), açık pozisyonlar üzerinden funding maliyetlerini veya ödeme akışlarını hesaplamaz veya kaydetmez. `RiskManager` yapılandırması (`RiskConfig`) içinde funding ilgili bir parametre yok. Bu, strateji kârlılığını etkileyen önemli bir maliyet headbudu göz ardı edildiği anlamına geliyor. Özellikle uzun vadeli backtest veya paper trading'de, funding'lar pozisyonun son kârlılığını yıpratabilir veya pozisyonleri erken kapanmaya zorlayabilir.\n**Düzeltme:** `ledger` sınıfına funding maliyetini hesaplayan bir mekanizma eklenmeli, ya da `runner` içinde funding maliyetleri hesaplanarak `ledger.close` çağrıları veya pozisyon büyüklüğü ayarlamaları yapılması gerekir.\n\n### 4. Spread ve Likidite Kontrolü Yetersizliği\n**Dosya:** `acarbot/runner.py`\n**İşlev:** `run()` - Quote ve Strateji değerlendirme döngüsü\n**Neden:** `decide` fonksiyonu içinde `quote_volume` kontrolü yapılır, ancak `runner` içinde `q.spread_bps > 8` koşulu ile spread kontrolü yapılıp yapılmayacağı kararsız kalıyor. Ayrıca `cost = 11 + 4 + q.spread_bps` formülü ile taker ücret ve slippage ekleniyor, ancak bu cost hesaplaması piyasa koşullarına (volatilite, order book derinliği) göre değişken olabilir. Strateji, spread'in 8 bps'nin altında olmasını beklerken, Gate.io gibi bazı borsalarda anlık spread'ler bu sınırı aşabilir. Spread'in yeterince dar olmadığı takdirde, stratejinin \"EDGE_BELOW_COST\" reddedilmesi veya pozisyon açılmamasının sebebi olabilir, fakat bu kontrolün mantığı kodun geri kalanından bağımsız olarak değişken kalıyor.\n**Düzeltme:** Spread toleransının (`8 bps`) yapılandırılabilir bir değişken olarak tanımlanması ve `cost` formülünün piyasa koşullarına göre dinamik ayarlanması sağlanmalı.\n\n### 5. ATR ve Volatilite Eksikliği / Sıfır Bölme Riski\n**Dosya:** `acarbot/strategy.py`\n**İşlev:** `bollinger()` ve `decide()` fonksiyonları\n**Neden:** `bollinger` fonksiyonu, standart sapma (sd) hesaplanırken `period` uzunluğundan az veri varsa `None` döndürür. Ancak `decide` fonksiyonunda `upper, lower = bollinger(v[:i+1])` çağrısı yapılır ve sonrasında `if not a or a <= 0: reason = 'ATR_MISSING'` kontrolü yapılır. Eğer `bollinger` `None` döndürürse, kod `upper, lower` değişkenlerine atamada hata (ValueError) verebilir veya stratejinin beklenmedik şekilde sonlanmasına sebep olabilir. Ayrıca `a/q.mid*10000` ifadesi `q.mid` (fiyat) sıfır olma ihtimaline karşı koruması yok, bu da sıfır fiyat hatasına (division by zero) yol açabilir.\n**Düzeltme:** `bollinger` fonksiyonunun dönüş değerinin kontrol edilmesi ve `decide` içinde `q.mid` sıfır kontrolü eklenmesi.\n\n### 6. Risk Yönetimi: Maksimum Gros Exposure ve Pozisyon Açma Sırası Kontrolü\n**Dosya:** `acarbot/ledger.py`\n**İşlev:** `open()` metodu\n**Neden:** `RiskManager` yapılandırması `max_gross_exposure=1000` (varsayılan 1000 bir",
+      "usage": {
+        "prompt_tokens": 5638,
+        "completion_tokens": 1800,
+        "total_tokens": 7438,
+        "cost": 0,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 4192,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0,
+          "upstream_inference_prompt_cost": 0,
+          "upstream_inference_completions_cost": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      }
+    },
+    {
+      "provider": "Kilo",
+      "requested_model": "dots-studio/dots-3-note-preview:free",
+      "endpoint": "https://api.kilo.ai/api/gateway/chat/completions",
+      "sent_files": [
+        "acarbot/strategy.py",
+        "acarbot/ledger.py",
+        "acarbot/runner.py"
+      ],
+      "prompt_sha256": "cde3e3b3957e025b9a7ffea20413ca5fb27871b0f3a48bd20e47089bd6a3a686",
+      "http_status": 200,
+      "status": "OK",
+      "response_model": "dots-studio/dots-3-note-preview:free",
+      "answer": "İnceleme, prompt içinde verilen üç dosya (`strategy.py`, `ledger.py`, `runner.py`) üzerinden yapılmıştır. Aşağıda, **en fazla 6 somut hata veya riskli tasarımı**, dosya, işlev adı, neden ve düzeltme önerisi şeklinde Türkçe sunulmuştur. Kodda gözlemlenmeyen yapılar (örneğin harici kütüphanelerin içi, testler) varsayılmamıştır.\n\n---\n\n### 1. **`strategy.py` → `decide()` fonksiyonu – RSI Hesaplamasında Veri Kısıtlaması ve Hata Kontrolü Eksik**\n\n**Neden:**  \n`rsi()` fonksiyonu, `rsi(v[:i+1])` ve `rsi(v[:i])` şeklinde Longer veri serileri bekler. Ancak `decide()` fonksiyonunda `i = len(c) - 1` olarak alınıyor ve `one(i)` içinde `rsi(v[:i])` call ediliyor. `i=0` olduğunda `v[:0]` boş liste döndürür. `rsi()` fonksiyonu boş liste girdi alırsa (muhtemel bir implementasyon hatası veya beklenmeyen durum), `None` döndürmeli veya hata vermeli. Ancak kodda `rsi()`'nin boş liste durumunda ne yapacağı net değil.  \nAyrıca, `prev = rsi(v[:i])` ifadesinde `i=0` için `v[:0]` boş liste verilir ve bu, RSI'nın ilk hesaplamada beklenmedik bir değer (örneğin `None` veya `NaN`) döndürmesine neden olabilir. Bu da `rsirev` stratejisinde `prev < 35 <= r` gibi karşılaştırmalarda `TypeError` veya mantıksal hata oluşturur.\n\n**Düzeltme Önerisi:**  \n`rsi()` fonksiyonuna空 listesi kontrolü ekleyin:  \n```python\ndef rsi(values, period=14):\n    if len(values) < period + 1:\n        return None\n    # ...\n```\nAyrıca `decide()` içinde:\n```python\nif i < 1:  # RSI için en az 1 önceki bar gerekir\n    return Result(None, 'INSUFFICIENT_RSI_HISTORY', c[-1].open_ms)\n```\nveya `prev` için:\n```python\nprev = rsi(v[:i]) if i > 0 else None\n```\n\n---\n\n### 2. **`ledger.py` → `on_quote()` fonksiyonu – Trailing Stop Mantığı Yanlış Uygulanıyor (Short Pozisyonlar)**\n\n**Neden:**  \nAşağıdaki satırda:\n```python\np.stop = max(p.stop, be, trailing) if side is Side.LONG else min(p.stop, be, trailing)\n```\n**Short** pozisyonlar için stop kaybı **aşağı** doğru olmalıdır. Yani prices düşerse short kazanır, artarsa kaybeder. Bu nedenle stop, **mevcut stop’tan daha düşük** (daha koruyucu) bir seviyeye alınmalıdır. Ancak `min()` kullanarak stop’u **daha düşük** bir değere almak, stop’un **uzaklaşması** (risk artması) anlamına gelir.  \nÖrnek: Stop 100, price 90 (kâr), `trailing = 90 - R` (R=10) → 80. `min(100, be, 80)` → 80. Stop 80’e düşer, yani price 80’e düşene kadar stop tetiklenmez. Ama price 85’e çıkarsa, stop 80’ten sonra tetiklenmez → **kayıp riski artar**.  \nDoğrusu: Short için stop, **mevcut stop’tan daha yüksek** (daha yakın) olmalıdır.\n\n**Düzeltme Önerisi:**  \nShort için stop, price arttıkça **yukarı** doğru kaymalıdır:\n```python\nif side is Side.LONG:\n    p.stop = max(p.stop, be, trailing)\nelse:  # SHORT\n    # Price düştükçe stop da yukarı doğru kaymalıdır (daha koruyucu)\n    p.stop = min(p.stop, be, trailing)  # ← BU YANLIŞ\n```\nDoğrusu:\n```python\nif side is Side.LONG:\n    p.stop = max(p.stop, be, trailing)\nelse:\n    # SHORT: stop, price düştükçe yukarı kayar (daha yüksek olur)\n    p.stop = min(p.stop, be, trailing)  # Hala yanlış!\n```\nAslında:\n- LONG: price ↑ → stop ↑ (max)\n- SHORT: price ↓ → stop ↓ (min) → ama bu, stop’un **uzaklaşması** demektir.  \nDoğru mantık:  \n**Short pozisyonda, stop, price düştükçe aşağı değil, yukarı doğru kaymalıdır (kayıp sınırlaması için).**  \nYani:\n```python\nif side is Side.LONG:\n    p.stop = max(p.stop, be, trailing)\nelse:\n    # SHORT: price düştükçe kâr artar, stop yukarı kayar (daha yüksek olur)\n    p.stop = min(p.stop, be, trailing)  # ← Bu, stop'u düşürür → HATA\n```\n**Doğrusu:**\n```python\nif side is Side.LONG:\n    p.stop = max(p.stop, be, trailing)\nelse:\n    # SHORT: stop, price düştükçe yukarı doğru kayar (daha yüksek olur)\n    p.stop = max(p.stop, be, trailing)  # ← BU DOĞRU\n```\nÇünkü short’ta stop, **price düştükçe yukarı kayar** (daha yüksek olur), yani kayıp sınırlaması price arttıkça devreye girer.\n\n---\n\n### 3. **`runner.py` → `run()` fonksiyonu – `funding` Bilgisi Yokluğunda Pozisyon Kapatma Mantığı Güvenilir Değil**\n\n**Neden:**  \nAşağıdaki kod bloğunda:\n```python\nfor s,p in list(ledger.positions.items()):\n    q=quotes.get(s); f=funding.get(s)\n    if f and q and ms()-q.ts_ms<15000 and ms()>=f['next_ms']-180000:\n        trade=ledger.close(q,'FUNDING_AVOIDANCE',ms()); write(log,{'event':'CLOSE',**asdict(trade)})\n```\nFunding avoidance mantığı, **sadece `funding` bilgisi varsa** ve **quote taze ise** kapatma yapar. Ancak:\n- `funding` bilgisi alınamazsa (`get_f()` hata verirse), `funding[s]` yoktur → kapatma olmaz.\n- Quote eserse (`ms()-q.ts_ms >= 15000`) → kapatma olmaz.\n- Zaman kontrolü `ms() >= f['next_ms'] - 180000` → funding’dan 3 dakika önce kapatma yapar.\n\nBu, **funding bilgisi eksikse veya gecikmişse, bot funding avoidance yapmaz ve açık pozisyon funding anında marjinal kayba yol açabilir.**  \nAyrıca, `funding` verisi 120 saniyede bir yenilenir; bu arada funding zamanı geçebilir ve bot bunun farkında olmaz.\n\n**Düzeltme Önerisi:**  \nFunding avoidance için alternatif bir strateji:\n- Funding zamanı bilinmiyorsa, **her",
+      "usage": {
+        "prompt_tokens": 5278,
+        "completion_tokens": 1800,
+        "total_tokens": 7078,
+        "cost": 0,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0,
+          "upstream_inference_prompt_cost": 0,
+          "upstream_inference_completions_cost": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      }
+    },
+    {
+      "provider": "OVHcloud",
+      "requested_model": "Mistral-Small-3.2-24B-Instruct-2506",
+      "endpoint": "https://oai.endpoints.kepler.ai.cloud.ovh.net/v1/chat/completions",
+      "sent_files": [
+        "acarbot/strategy.py",
+        "acarbot/ledger.py",
+        "acarbot/runner.py"
+      ],
+      "prompt_sha256": "cde3e3b3957e025b9a7ffea20413ca5fb27871b0f3a48bd20e47089bd6a3a686",
+      "http_status": 400,
+      "status": "ERROR",
+      "error": "{\"message\":\"feature 'reasoning_effort for this model' is not currently supported\"}"
+    },
+    {
+      "provider": "OVHcloud",
+      "requested_model": "Qwen3.8-27B",
+      "endpoint": "https://oai.endpoints.kepler.ai.cloud.ovh.net/v1/chat/completions",
+      "sent_files": [
+        "acarbot/strategy.py",
+        "acarbot/ledger.py",
+        "acarbot/runner.py"
+      ],
+      "prompt_sha256": "cde3e3b3957e025b9a7ffea20413ca5fb27871b0f3a48bd20e47089bd6a3a686",
+      "http_status": 200,
+      "status": "OK",
+      "response_model": "Qwen3.8-27B",
+      "answer": "Bağımsız yazılım ve risk denetçisi olarak `acarbot` kod tabanını inceledim. Kod, \"PAPER\" (sanal) işlem yaptığını iddia etse de, mimari ve mantık hataları nedeniyle gerçek piyasa koşullarında ciddi finansal kayıplara veya veri bütünlüğü sorunlarına yol açabilecek riskler barındırıyor.\n\nİşte öncelik sırasına göre tespit edilen 6 somut hata ve riskli tasarım kararı:\n\n### 1. `ledger.py` - `on_quote` İşlevi: Stop Loss Mantık Hatası (Kritik)\n*   **Dosya/İşlev:** `acarbot/ledger.py` -> `Ledger.on_quote`\n*   **Neden:** Stop loss kontrolü `if (executable-p.stop)*side.sign <= 0` şeklinde yazılmış.\n    *   **LONG pozisyonda:** `side.sign = 1`. Koşul `(executable - stop) <= 0` olur. Bu, fiyatın stop seviyesine **düşmesi** durumunda tetiklenir. Doğru.\n    *   **SHORT pozisyonda:** `side.sign = -1`. Koşul `(executable - stop) * -1 <= 0` yani `stop - executable <= 0` veya `stop <= executable` olur. Bu, fiyatın stop seviyesinin **üzerine çıkması** durumunda tetiklenir. Doğru.\n    *   **Ancak Asıl Hata:** Kodun devamındaki `trailing stop` mantığına bakıldığında: `trailing=executable-side.sign*p.initial_risk_distance`.\n        *   LONG için: `trailing = executable - risk`. Stop, `max(p.stop, be, trailing)` ile güncellenir.\n        *   SHORT için: `trailing = executable + risk`. Stop, `min(p.stop, be, trailing)` ile güncellenir.\n    *   **Risk:** `on_quote` fonksiyonu her quote'da çağrılır. Eğer fiyat stop seviyesini aşarsa pozisyon kapatılır. Ancak `close` fonksiyonu `q.bid` (LONG) veya `q.ask` (SHORT) kullanır. Stop tetiklendiğinde, piyasa fiyatı stop seviyesinin çok ötesine geçmiş olabilir (gap). Kod, stop seviyesinden değil, **mevcut quote fiyatından** (slipaj dahil) kapatır. Bu, \"Stop Loss\"un aslında \"Market Close\" olduğu anlamına gelir. Gerçek bir stop emri, stop seviyesinden emir verir ve fill garantisi yoktur, ancak bu kodda stop seviyesi sadece bir tetikleyici olarak kullanılmış, emir fiyatı olarak değil. Daha da önemlisi, `close` fonksiyonu `q.bid`/`q.ask` kullanır. Eğer stop tetiklendiği anda spread genişlemişse, kayıp hesaplanan `stop` seviyesinden çok daha fazla olabilir.\n    *   **Düzeltme Önerisi:** Stop tetiklendiğinde, `close` fonksiyonuna geçerken, kayıp hesaplamasında `stop` seviyesi yerine `executable` fiyatı kullanılması zaten yapılıyor (doğru). Ancak, `on_quote` içindeki `if (executable-p.stop)*side.sign <= 0` kontrolü, fiyatın stop seviyesini **aştığı** anı yakalar. Sorun, `close` fonksiyonunun `q.bid`/`q.ask` kullanmasıdır. Gerçek hayatta stop emri verildiğinde, emir defterindeki likiditeye göre fill olur. Bu kodda, `q.bid`/`q.ask` anlık en iyi fiyat olduğu için, stop tetiklendiği anda fiyatın çok hızlı hareket etmesi durumunda (flash crash), `q.bid`/`q.ask` stop seviyesinin çok ötesinde olabilir. Bu, \"slippage\" varsayımının (2bps) gerçek slippage'den çok daha düşük kalmasına neden olur. **Öneri:** Stop tetiklendiğinde, `close` fonksiyonuna `stop` seviyesini de parametre olarak geçirip, `min(executable, stop)` (LONG) veya `max(executable, stop)` (SHORT) gibi bir \"worst case\" fill fiyatı varsayımı yapın veya en azından log'a \"Stop triggered, filled at market price\" notu düşün. Mevcut haliyle, stop'un koruyucu etkisi yanıltıcıdır.\n\n### 2. `strategy.py` - `decide` İşlevi: RSI ve Bollinger Band Hesaplama Verimsizliği ve Hata (Yüksek)\n*   **Dosya/İşlev:** `acarbot/strategy.py` -> `decide` -> `one(i)` içi fonksiyonlar\n*   **Neden:**\n    *   `rsi(v[:i+1])` ve `rsi(v[:i])` çağrıları, her `i` indeksi için (yani her mum için) RSI'ı sıfırdan hesaplar. `v` listesi 250+ elemanlıdır. Bu, O(N^2) karmaşıklığa yol açar. 250 mum için 250*250/2 = ~31,250 işlem. Bu, her 5 dakikada bir çalışsa bile CPU'yu gereksiz yere yorar.\n    *   Daha kritik olanı: `bollinger(v[:i+1])` ve `bollinger(v[:i])` çağrıları. `bollinger` fonksiyonu `v[-period:]` alır. `v[:i+1]` listesi, `i`'nin son elemanı dahil tüm geçmiş veridir. `bollinger` fonksiyonu, bu listenin **son** 20 elemanını alır. Bu doğru.\n    *   **Ancak Hata:** `rsi` fonksiyonu `omnistudio.strategy.indicators` modülünden geliyor. Bu fonksiyonun `v[:i]` (i elemanlı liste) ile çağrılması, RSI'ın `i`'nci mum için hesaplanmasını sağlar. Ancak `rsi` fonksiyonu genellikle bir periyot (varsayılan 14) gerektirir. Kodda `rsi(v[:i+1])` çağrısında periyot parametresi verilmiyor. Eğer `rsi` fonksiyonu varsayılan periyot kullanıyorsa, `i < 14` olduğunda hata verebilir veya `None` döndürebilir. `one(i)` fonksiyonunda `r=rsi(v[:i+1])` ve `prev=rsi(v[:i])` çağrılıyor. `i` küçükse (örneğin 10), `rsi` `None` dönebilir. `rsirev` stratejisinde `prev is not None and prev<35<=r` kontrolü var. `r` `None` ise `35<=r` karşılaştırması `TypeError` fırlatır.\n    *   **Düzeltme Önerisi:**\n        1.  RSI ve Bollinger Band değerlerini `decide` fonksiyonunun başında, tüm `c` listesi için bir kez hesaplayıp listeler olarak saklayın. `one(i)` fonksiyonu bu listelerden `i`'nci elemanı okusun. Bu, performansı O(N) yapar.\n        2.  `rsi` fonksiyonunun `None` döndürme durumunu mutlaka kontrol edin. `if r is None or prev is None: return None` ekleyin.\n\n### 3. `runner.py` - `run` İşlevi: Funding Rate Kontrolü ve Pozisyon Kapatma Zamanlaması (Yüksek)\n*   **Dosya/İşlev:** `acarbot/runner.py` -> `run` -> `while` döngüsü içindeki funding kontrolü\n*   **Neden:**\n    *   `if f and q and",
+      "usage": {
+        "prompt_tokens": 5345,
+        "completion_tokens": 1800,
+        "total_tokens": 7145,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      }
+    }
+  ]
+}

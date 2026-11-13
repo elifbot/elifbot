@@ -1,0 +1,493 @@
+{
+  "source": "measured",
+  "enabled": true,
+  "measured_at": "2026-11-07T21:58:04+00:00",
+  "measured_symbols": 10,
+  "optimistic_warning": false,
+  "by_exchange": {
+    "binance": {
+      "spread_bps": 1.5,
+      "slippage_bps": 2.0,
+      "latency_ms": 250,
+      "exit_slippage_bps": 3.0,
+      "maker_fee": 0.0002,
+      "taker_fee": 0.0005
+    },
+    "okx": {
+      "spread_bps": 1.1254,
+      "slippage_bps": 23.5635,
+      "latency_ms": 350,
+      "exit_slippage_bps": 25.6257,
+      "maker_fee": 0.0002,
+      "taker_fee": 0.0005
+    }
+  },
+  "measured_spread_bps": {
+    "okx:BTC-USDT-SWAP": 0.0132,
+    "okx:ETH-USDT-SWAP": 0.0449,
+    "okx:SOL-USDT-SWAP": 1.1244,
+    "okx:XRP-USDT-SWAP": 0.8652,
+    "okx:DOGE-USDT-SWAP": 1.4059,
+    "okx:ADA-USDT-SWAP": 5.554,
+    "okx:AVAX-USDT-SWAP": 1.2232,
+    "okx:LINK-USDT-SWAP": 0.9296,
+    "okx:DOT-USDT-SWAP": 1.1263,
+    "okx:LTC-USDT-SWAP": 1.9299
+  },
+  "measured_slippage_bps": {
+    "okx:BTC-USDT-SWAP": 0.0066,
+    "okx:ETH-USDT-SWAP": 0.0225,
+    "okx:SOL-USDT-SWAP": 0.5622,
+    "okx:XRP-USDT-SWAP": 3.182,
+    "okx:DOGE-USDT-SWAP": 22.8234,
+    "okx:ADA-USDT-SWAP": 14.9185,
+    "okx:AVAX-USDT-SWAP": 1.6022,
+    "okx:LINK-USDT-SWAP": 1.1398,
+    "okx:DOT-USDT-SWAP": 2.1693,
+    "okx:LTC-USDT-SWAP": 2.427
+  },
+  "measured_exit_slippage_bps": {
+    "okx:BTC-USDT-SWAP": 0.0066,
+    "okx:ETH-USDT-SWAP": 0.0225,
+    "okx:SOL-USDT-SWAP": 0.5622,
+    "okx:XRP-USDT-SWAP": 2.7343,
+    "okx:DOGE-USDT-SWAP": 25.1009,
+    "okx:ADA-USDT-SWAP": 16.193,
+    "okx:AVAX-USDT-SWAP": 1.4226,
+    "okx:LINK-USDT-SWAP": 0.8744,
+    "okx:DOT-USDT-SWAP": 3.5066,
+    "okx:LTC-USDT-SWAP": 2.5519
+  },
+  "measured_latency_ms": {
+    "okx:BTC-USDT-SWAP": 195,
+    "okx:ETH-USDT-SWAP": 151,
+    "okx:SOL-USDT-SWAP": 194,
+    "okx:XRP-USDT-SWAP": 197,
+    "okx:DOGE-USDT-SWAP": 152,
+    "okx:ADA-USDT-SWAP": 152,
+    "okx:AVAX-USDT-SWAP": 165,
+    "okx:LINK-USDT-SWAP": 151,
+    "okx:DOT-USDT-SWAP": 151,
+    "okx:LTC-USDT-SWAP": 151
+  },
+  "exchange_provenance": {
+    "binance": {
+      "source": "default_assumption",
+      "measured_symbol_count": 0,
+      "measured_symbols": [],
+      "fallback_spread_bps": 1.5,
+      "fallback_slippage_bps": 2.0,
+      "fallback_exit_slippage_bps": 3.0,
+      "fallback_latency_ms": 250
+    },
+    "okx": {
+      "source": "measured_symbols",
+      "measured_symbol_count": 10,
+      "measured_symbols": [
+        "okx:ADA-USDT-SWAP",
+        "okx:AVAX-USDT-SWAP",
+        "okx:BTC-USDT-SWAP",
+        "okx:DOGE-USDT-SWAP",
+        "okx:DOT-USDT-SWAP",
+        "okx:ETH-USDT-SWAP",
+        "okx:LINK-USDT-SWAP",
+        "okx:LTC-USDT-SWAP",
+        "okx:SOL-USDT-SWAP",
+        "okx:XRP-USDT-SWAP"
+      ],
+      "fallback_spread_bps": 1.1254,
+      "fallback_slippage_bps": 23.5635,
+      "fallback_exit_slippage_bps": 25.6257,
+      "fallback_latency_ms": 350
+    }
+  },
+  "measurement_details": {
+    "okx:BTC-USDT-SWAP": {
+      "spread_bps": 0.0132,
+      "slippage_bps": 0.0066,
+      "exit_slippage_bps": 0.0066,
+      "latency_ms": 195,
+      "samples": 24,
+      "rounds": 4,
+      "percentile": 75.0,
+      "window_seconds": 148.0,
+      "first_sample_at": "2026-11-07T21:33:24+00:00",
+      "last_sample_at": "2026-11-07T21:35:52+00:00",
+      "shallow_book_samples": 0,
+      "spread_stats": {
+        "p50": 0.0132,
+        "p75": 0.0132,
+        "p90": 0.0132,
+        "p95": 0.0132,
+        "max": 0.0132,
+        "n": 24
+      },
+      "entry_slippage_stats": {
+        "p50": 0.0066,
+        "p75": 0.0066,
+        "p90": 0.0066,
+        "p95": 0.0066,
+        "max": 0.0066,
+        "n": 24
+      },
+      "exit_slippage_stats": {
+        "p50": 0.0066,
+        "p75": 0.0066,
+        "p90": 0.0066,
+        "p95": 0.0066,
+        "max": 0.0066,
+        "n": 24
+      }
+    },
+    "okx:ETH-USDT-SWAP": {
+      "spread_bps": 0.0449,
+      "slippage_bps": 0.0225,
+      "exit_slippage_bps": 0.0225,
+      "latency_ms": 151,
+      "samples": 24,
+      "rounds": 4,
+      "percentile": 75.0,
+      "window_seconds": 148.0,
+      "first_sample_at": "2026-11-07T21:35:52+00:00",
+      "last_sample_at": "2026-11-07T21:38:20+00:00",
+      "shallow_book_samples": 0,
+      "spread_stats": {
+        "p50": 0.0449,
+        "p75": 0.0449,
+        "p90": 0.0449,
+        "p95": 0.0449,
+        "max": 0.0449,
+        "n": 24
+      },
+      "entry_slippage_stats": {
+        "p50": 0.0225,
+        "p75": 0.0225,
+        "p90": 0.0225,
+        "p95": 0.0225,
+        "max": 0.0225,
+        "n": 24
+      },
+      "exit_slippage_stats": {
+        "p50": 0.0225,
+        "p75": 0.0225,
+        "p90": 0.0225,
+        "p95": 0.0225,
+        "max": 0.0225,
+        "n": 24
+      }
+    },
+    "okx:SOL-USDT-SWAP": {
+      "spread_bps": 1.1244,
+      "slippage_bps": 0.5622,
+      "exit_slippage_bps": 0.5622,
+      "latency_ms": 194,
+      "samples": 24,
+      "rounds": 4,
+      "percentile": 75.0,
+      "window_seconds": 148.0,
+      "first_sample_at": "2026-11-07T21:38:20+00:00",
+      "last_sample_at": "2026-11-07T21:40:48+00:00",
+      "shallow_book_samples": 0,
+      "spread_stats": {
+        "p50": 1.1239,
+        "p75": 1.1244,
+        "p90": 1.1247,
+        "p95": 1.1247,
+        "max": 1.1247,
+        "n": 24
+      },
+      "entry_slippage_stats": {
+        "p50": 0.562,
+        "p75": 0.5622,
+        "p90": 0.5623,
+        "p95": 0.5623,
+        "max": 0.5623,
+        "n": 24
+      },
+      "exit_slippage_stats": {
+        "p50": 0.562,
+        "p75": 0.5622,
+        "p90": 0.5623,
+        "p95": 0.5623,
+        "max": 0.5623,
+        "n": 24
+      }
+    },
+    "okx:XRP-USDT-SWAP": {
+      "spread_bps": 0.8652,
+      "slippage_bps": 3.182,
+      "exit_slippage_bps": 2.7343,
+      "latency_ms": 197,
+      "samples": 24,
+      "rounds": 4,
+      "percentile": 75.0,
+      "window_seconds": 148.0,
+      "first_sample_at": "2026-11-07T21:40:48+00:00",
+      "last_sample_at": "2026-11-07T21:43:16+00:00",
+      "shallow_book_samples": 0,
+      "spread_stats": {
+        "p50": 0.865,
+        "p75": 0.8652,
+        "p90": 0.8654,
+        "p95": 0.8654,
+        "max": 0.8654,
+        "n": 24
+      },
+      "entry_slippage_stats": {
+        "p50": 2.8761,
+        "p75": 3.182,
+        "p90": 3.5565,
+        "p95": 3.7295,
+        "max": 3.8153,
+        "n": 24
+      },
+      "exit_slippage_stats": {
+        "p50": 2.6051,
+        "p75": 2.7343,
+        "p90": 3.2002,
+        "p95": 3.2717,
+        "max": 3.597,
+        "n": 24
+      }
+    },
+    "okx:DOGE-USDT-SWAP": {
+      "spread_bps": 1.4059,
+      "slippage_bps": 22.8234,
+      "exit_slippage_bps": 25.1009,
+      "latency_ms": 152,
+      "samples": 24,
+      "rounds": 4,
+      "percentile": 75.0,
+      "window_seconds": 148.0,
+      "first_sample_at": "2026-11-07T21:43:16+00:00",
+      "last_sample_at": "2026-11-07T21:45:44+00:00",
+      "shallow_book_samples": 0,
+      "spread_stats": {
+        "p50": 1.4055,
+        "p75": 1.4059,
+        "p90": 1.4062,
+        "p95": 1.4062,
+        "max": 1.4062,
+        "n": 24
+      },
+      "entry_slippage_stats": {
+        "p50": 22.0792,
+        "p75": 22.8234,
+        "p90": 22.9455,
+        "p95": 23.2113,
+        "max": 24.7159,
+        "n": 24
+      },
+      "exit_slippage_stats": {
+        "p50": 24.817,
+        "p75": 25.1009,
+        "p90": 25.8454,
+        "p95": 26.7024,
+        "max": 28.1902,
+        "n": 24
+      }
+    },
+    "okx:ADA-USDT-SWAP": {
+      "spread_bps": 5.554,
+      "slippage_bps": 14.9185,
+      "exit_slippage_bps": 16.193,
+      "latency_ms": 152,
+      "samples": 24,
+      "rounds": 4,
+      "percentile": 75.0,
+      "window_seconds": 148.0,
+      "first_sample_at": "2026-11-07T21:45:44+00:00",
+      "last_sample_at": "2026-11-07T21:48:12+00:00",
+      "shallow_book_samples": 0,
+      "spread_stats": {
+        "p50": 5.554,
+        "p75": 5.554,
+        "p90": 5.554,
+        "p95": 5.554,
+        "max": 5.554,
+        "n": 24
+      },
+      "entry_slippage_stats": {
+        "p50": 14.5356,
+        "p75": 14.9185,
+        "p90": 15.0836,
+        "p95": 15.0909,
+        "max": 15.0937,
+        "n": 24
+      },
+      "exit_slippage_stats": {
+        "p50": 16.1241,
+        "p75": 16.193,
+        "p90": 16.2319,
+        "p95": 16.2319,
+        "max": 16.5531,
+        "n": 24
+      }
+    },
+    "okx:AVAX-USDT-SWAP": {
+      "spread_bps": 1.2232,
+      "slippage_bps": 1.6022,
+      "exit_slippage_bps": 1.4226,
+      "latency_ms": 165,
+      "samples": 24,
+      "rounds": 4,
+      "percentile": 75.0,
+      "window_seconds": 148.0,
+      "first_sample_at": "2026-11-07T21:48:12+00:00",
+      "last_sample_at": "2026-11-07T21:50:40+00:00",
+      "shallow_book_samples": 0,
+      "spread_stats": {
+        "p50": 1.2231,
+        "p75": 1.2232,
+        "p90": 1.2232,
+        "p95": 1.2232,
+        "max": 1.2232,
+        "n": 24
+      },
+      "entry_slippage_stats": {
+        "p50": 1.4756,
+        "p75": 1.6022,
+        "p90": 1.7481,
+        "p95": 1.7481,
+        "max": 1.7481,
+        "n": 24
+      },
+      "exit_slippage_stats": {
+        "p50": 0.9825,
+        "p75": 1.4226,
+        "p90": 1.5236,
+        "p95": 1.5668,
+        "max": 1.5668,
+        "n": 24
+      }
+    },
+    "okx:LINK-USDT-SWAP": {
+      "spread_bps": 0.9296,
+      "slippage_bps": 1.1398,
+      "exit_slippage_bps": 0.8744,
+      "latency_ms": 151,
+      "samples": 24,
+      "rounds": 4,
+      "percentile": 75.0,
+      "window_seconds": 148.0,
+      "first_sample_at": "2026-11-07T21:50:40+00:00",
+      "last_sample_at": "2026-11-07T21:53:08+00:00",
+      "shallow_book_samples": 0,
+      "spread_stats": {
+        "p50": 0.9295,
+        "p75": 0.9296,
+        "p90": 0.9296,
+        "p95": 0.9296,
+        "max": 0.9297,
+        "n": 24
+      },
+      "entry_slippage_stats": {
+        "p50": 1.0502,
+        "p75": 1.1398,
+        "p90": 1.4883,
+        "p95": 1.4883,
+        "max": 1.5033,
+        "n": 24
+      },
+      "exit_slippage_stats": {
+        "p50": 0.6186,
+        "p75": 0.8744,
+        "p90": 1.3109,
+        "p95": 1.3109,
+        "max": 1.3109,
+        "n": 24
+      }
+    },
+    "okx:DOT-USDT-SWAP": {
+      "spread_bps": 1.1263,
+      "slippage_bps": 2.1693,
+      "exit_slippage_bps": 3.5066,
+      "latency_ms": 151,
+      "samples": 24,
+      "rounds": 4,
+      "percentile": 75.0,
+      "window_seconds": 148.0,
+      "first_sample_at": "2026-11-07T21:53:08+00:00",
+      "last_sample_at": "2026-11-07T21:55:36+00:00",
+      "shallow_book_samples": 0,
+      "spread_stats": {
+        "p50": 1.1263,
+        "p75": 1.1263,
+        "p90": 1.1264,
+        "p95": 1.1264,
+        "max": 1.1264,
+        "n": 24
+      },
+      "entry_slippage_stats": {
+        "p50": 1.8146,
+        "p75": 2.1693,
+        "p90": 2.5389,
+        "p95": 2.5389,
+        "max": 2.5389,
+        "n": 24
+      },
+      "exit_slippage_stats": {
+        "p50": 2.7363,
+        "p75": 3.5066,
+        "p90": 3.5729,
+        "p95": 3.6013,
+        "max": 3.6026,
+        "n": 24
+      }
+    },
+    "okx:LTC-USDT-SWAP": {
+      "spread_bps": 1.9299,
+      "slippage_bps": 2.427,
+      "exit_slippage_bps": 2.5519,
+      "latency_ms": 151,
+      "samples": 24,
+      "rounds": 4,
+      "percentile": 75.0,
+      "window_seconds": 148.0,
+      "first_sample_at": "2026-11-07T21:55:36+00:00",
+      "last_sample_at": "2026-11-07T21:58:04+00:00",
+      "shallow_book_samples": 0,
+      "spread_stats": {
+        "p50": 1.9292,
+        "p75": 1.9299,
+        "p90": 1.9307,
+        "p95": 1.9307,
+        "max": 1.9307,
+        "n": 24
+      },
+      "entry_slippage_stats": {
+        "p50": 2.1925,
+        "p75": 2.427,
+        "p90": 2.8015,
+        "p95": 2.8093,
+        "max": 2.8093,
+        "n": 24
+      },
+      "exit_slippage_stats": {
+        "p50": 1.1029,
+        "p75": 2.5519,
+        "p90": 2.7477,
+        "p95": 2.7477,
+        "max": 2.801,
+        "n": 24
+      }
+    }
+  },
+  "measurement_quality": {
+    "grade": "adequate",
+    "reasons": [
+      "taban yeterli"
+    ],
+    "symbols": 10,
+    "rounds": 4,
+    "samples_per_symbol": 24,
+    "min_samples_observed": 24,
+    "window_seconds": 148.0,
+    "caveat": "Ölçüm yalnızca bu sembollerde ve bu zaman penceresinde alındı. Tam pazardaki küçük coinlerde kayma DAHA KÖTÜ olabilir."
+  },
+  "target_notional": 3000.0,
+  "fallback_basis": {
+    "okx": "ölçülen p90 x 1.50 (ölçülmeyen semboller için varsayım)",
+    "note": "Bu değer ÖLÇÜM DEĞİLDİR; ölçülen sembollerden türetilmiş muhafazakâr varsayımdır. Diğer borsalar hiç ölçülmedi."
+  }
+}

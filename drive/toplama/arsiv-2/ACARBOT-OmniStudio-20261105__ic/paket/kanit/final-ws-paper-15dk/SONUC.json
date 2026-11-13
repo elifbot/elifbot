@@ -1,0 +1,323 @@
+{
+  "status": "COMPLETED",
+  "mode": "ws",
+  "strategy": "trend",
+  "started_utc": "2026-11-05T20:20:18Z",
+  "finished_utc": "2026-11-05T20:35:23Z",
+  "active_sec": 904.5,
+  "requested_sec": 900.0,
+  "council_mode": "RULE_BASED_QUANT",
+  "coverage": {
+    "binance_usdm": {
+      "total": 440,
+      "executable": 20,
+      "rejected": 420,
+      "reasons": {
+        "TRADIFI": 234,
+        "durum=SETTLING": 137,
+        "settlement=USDC": 38,
+        "vadeli/teslimat": 4,
+        "settlement=USD1": 3,
+        "settlement=U": 2,
+        "settlement=BTC": 1,
+        "durum=PENDING_TRADING": 1
+      }
+    },
+    "binance_coinm": {
+      "total": 30,
+      "executable": 0,
+      "rejected": 30,
+      "reasons": {
+        "vadeli/teslimat": 10,
+        "settlement=BTC": 1,
+        "settlement=AAVE": 1,
+        "settlement=ADA": 1,
+        "settlement=AVAX": 1,
+        "settlement=BCH": 1,
+        "settlement=BNB": 1,
+        "settlement=DOGE": 1,
+        "settlement=DOT": 1,
+        "settlement=ETC": 1,
+        "settlement=ETH": 1,
+        "settlement=FIL": 1,
+        "settlement=LINK": 1,
+        "settlement=LTC": 1,
+        "settlement=NEAR": 1,
+        "settlement=SOL": 1,
+        "settlement=SUI": 1,
+        "settlement=TRX": 1,
+        "settlement=UNI": 1,
+        "settlement=XLM": 1,
+        "settlement=XRP": 1
+      }
+    },
+    "okx_swap": {
+      "total": 50,
+      "executable": 20,
+      "rejected": 30,
+      "reasons": {
+        "kripto dışı dayanak": 15,
+        "settlement=BTC": 1,
+        "settlement=ETH": 1,
+        "settlement=SOL": 1,
+        "settlement=DOGE": 1,
+        "settlement=XRP": 1,
+        "settlement=BCH": 1,
+        "settlement=ADA": 1,
+        "settlement=DOT": 1,
+        "settlement=ETC": 1,
+        "settlement=FIL": 1,
+        "settlement=HYPE": 1,
+        "settlement=LINK": 1,
+        "settlement=LTC": 1,
+        "settlement=SUI": 1,
+        "settlement=UNI": 1
+      }
+    },
+    "okx_futures": {
+      "total": 287,
+      "executable": 0,
+      "rejected": 287,
+      "reasons": {
+        "X-PERP": 259,
+        "vadeli/teslimat sözleşmesi": 16,
+        "settlement=BTC": 6,
+        "settlement=ETH": 6
+      }
+    },
+    "gateio_usdt": {
+      "total": 20,
+      "executable": 20,
+      "rejected": 0,
+      "reasons": {}
+    },
+    "gateio_btc": {
+      "total": 1,
+      "executable": 0,
+      "rejected": 1,
+      "reasons": {
+        "inverse": 1
+      }
+    },
+    "_totals": {
+      "total": 828,
+      "executable": 60,
+      "rejected": 768,
+      "coverage_pct": 7.25
+    }
+  },
+  "counters": {
+    "instruments_total": 828,
+    "instruments_paper_eligible": 60,
+    "warmup_symbols": 40,
+    "warmup_ready": 40,
+    "measured_rows": 40,
+    "quote_refresh_ok": 528,
+    "funding_ok": 1200,
+    "flow_ok": 1800,
+    "bars_evaluated": 102,
+    "strategy_SIGNAL": 5,
+    "signals": 5,
+    "council_calls": 5,
+    "reject_COUNCIL": 5,
+    "strategy_NO_SIGNAL": 81,
+    "strategy_VOLUME_CONFIRMATION": 13,
+    "reject_warmup": 18,
+    "strategy_CONFIRMATION": 3
+  },
+  "measure": {
+    "now_ms": 1793910021265,
+    "breadth": {
+      "available": true,
+      "up": 4,
+      "down": 35,
+      "ratio": 0.10256410256410256,
+      "sample": 39
+    },
+    "flow_symbols": 40,
+    "funding_symbols": 40
+  },
+  "measured_rows": 40,
+  "top_volume": [
+    {
+      "market": "binance_usdm",
+      "symbol": "BTCUSDT",
+      "quote_volume": 42729335.7801,
+      "atr_pct": 0.2502,
+      "spread_bps": 0.013,
+      "flow_pressure": 0.25721498205929233,
+      "funding_rate": 0.0001
+    },
+    {
+      "market": "binance_usdm",
+      "symbol": "ETHUSDT",
+      "quote_volume": 23660428.00574,
+      "atr_pct": 0.3157,
+      "spread_bps": 0.044,
+      "flow_pressure": 0.18657505698021234,
+      "funding_rate": 8.373e-05
+    },
+    {
+      "market": "okx_swap",
+      "symbol": "ETH-USDT-SWAP",
+      "quote_volume": 22088807.92047,
+      "atr_pct": 0.3196,
+      "spread_bps": 0.044,
+      "flow_pressure": -0.8272596513542104,
+      "funding_rate": -7.70111185548e-05
+    },
+    {
+      "market": "okx_swap",
+      "symbol": "BTC-USDT-SWAP",
+      "quote_volume": 17229774.22144,
+      "atr_pct": 0.2499,
+      "spread_bps": 0.013,
+      "flow_pressure": -0.6505089231028008,
+      "funding_rate": 9.00390005442e-05
+    },
+    {
+      "market": "binance_usdm",
+      "symbol": "ZECUSDT",
+      "quote_volume": 7435165.42365,
+      "atr_pct": 0.8343,
+      "spread_bps": 0.081,
+      "flow_pressure": 0.4985801240852006,
+      "funding_rate": 0.0001
+    },
+    {
+      "market": "okx_swap",
+      "symbol": "ZEC-USDT-SWAP",
+      "quote_volume": 3600977.4108,
+      "atr_pct": 0.8209,
+      "spread_bps": 0.08,
+      "flow_pressure": -0.3061231335450993,
+      "funding_rate": 0.0001
+    },
+    {
+      "market": "binance_usdm",
+      "symbol": "XRPUSDT",
+      "quote_volume": 2030558.26623,
+      "atr_pct": 0.3281,
+      "spread_bps": 0.804,
+      "flow_pressure": -0.19869182632462962,
+      "funding_rate": 0.0001
+    },
+    {
+      "market": "okx_swap",
+      "symbol": "SOL-USDT-SWAP",
+      "quote_volume": 1208054.4556,
+      "atr_pct": 0.366,
+      "spread_bps": 1.114,
+      "flow_pressure": 0.49939551345503513,
+      "funding_rate": -6.38649164987e-05
+    },
+    {
+      "market": "okx_swap",
+      "symbol": "ANTHROPIC-USDT-SWAP",
+      "quote_volume": 1010800.57841,
+      "atr_pct": 0.6881,
+      "spread_bps": 6.026,
+      "flow_pressure": -0.499050028746877,
+      "funding_rate": 0.0
+    },
+    {
+      "market": "okx_swap",
+      "symbol": "DOGE-USDT-SWAP",
+      "quote_volume": 563358.2468,
+      "atr_pct": 0.3186,
+      "spread_bps": 1.38,
+      "flow_pressure": 0.7929496259430118,
+      "funding_rate": -2.93347318084e-05
+    }
+  ],
+  "execution": {
+    "equity_start": "10000",
+    "equity_now": "10000.000000",
+    "realized_net": "0.000000",
+    "fees_paid": "0.000000",
+    "funding_net": "0.000000",
+    "funding_events": 0,
+    "closed_trades": 0,
+    "open_positions": 0,
+    "win_rate_pct": 0.0,
+    "profit_factor": null,
+    "avg_r": 0.0,
+    "max_drawdown": "0.000000",
+    "breaker": false,
+    "breaker_reason": "",
+    "rejects": {},
+    "per_market": {},
+    "open": []
+  },
+  "council_comparison": {
+    "council_mode": "RULE_BASED_QUANT",
+    "evaluated": 4,
+    "measured_approved": 0,
+    "assumed_approved": 0,
+    "decisions_differ": 0,
+    "note": "Adaylar `signal_at_close` ile üretildi: strateji kararı mumun kapanış anındaki veriyle verilmiş gibi hesaplandı (geçmiş karar), akış/funding/makas bağlamı ise ölçüm anındaki gerçek değerlerdir. Konsey anahtarsız RULE_BASED_QUANT modunda çalıştı; bu bir YZ onayı değildir. Karşılaştırma yalnız, maildeki botun ÖLÇMEDİĞİ üç boyutun kararı değiştirip değiştirmediğini gösterir."
+  },
+  "ws_stats": {
+    "binance_usdm": {
+      "connections": 1,
+      "updates": 18144,
+      "closed": 60,
+      "latency_sum_ms": 59152,
+      "latency_max_ms": 3042,
+      "closed_5s": 60
+    },
+    "gateio_usdt": {
+      "connections": 1
+    },
+    "okx_swap": {
+      "connections": 1,
+      "updates": 9548,
+      "closed": 60,
+      "latency_sum_ms": 47963,
+      "latency_max_ms": 1373,
+      "closed_5s": 60
+    }
+  },
+  "market_health": {
+    "binance_usdm": {
+      "reachable": true,
+      "rest_ok": 818,
+      "rest_fail": 0,
+      "last_error": ""
+    },
+    "binance_coinm": {
+      "reachable": true,
+      "rest_ok": 1,
+      "rest_fail": 0,
+      "last_error": ""
+    },
+    "okx_swap": {
+      "reachable": true,
+      "rest_ok": 812,
+      "rest_fail": 0,
+      "last_error": ""
+    },
+    "okx_futures": {
+      "reachable": true,
+      "rest_ok": 1,
+      "rest_fail": 0,
+      "last_error": ""
+    },
+    "gateio_usdt": {
+      "reachable": true,
+      "rest_ok": 204,
+      "rest_fail": 0,
+      "last_error": ""
+    },
+    "gateio_btc": {
+      "reachable": true,
+      "rest_ok": 1,
+      "rest_fail": 0,
+      "last_error": ""
+    }
+  },
+  "errors": [],
+  "real_orders": 0,
+  "paper_only": true,
+  "real_money_approved": false
+}

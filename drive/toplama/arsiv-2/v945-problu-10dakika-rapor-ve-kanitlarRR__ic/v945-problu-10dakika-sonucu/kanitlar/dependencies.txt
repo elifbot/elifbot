@@ -1,0 +1,100 @@
+Requirement already satisfied: aiohttp==3.14.3 in /usr/local/lib/python3.13/site-packages (from -r requirements-tested.txt (line 2)) (3.14.3)
+Collecting ccxt==4.5.91 (from -r requirements-tested.txt (line 3))
+  Downloading ccxt-4.5.91-py3-none-any.whl.metadata (158 kB)
+Requirement already satisfied: numpy==2.3.5 in /usr/local/lib/python3.13/site-packages (from -r requirements-tested.txt (line 4)) (2.3.5)
+Requirement already satisfied: pandas==2.2.3 in /usr/local/lib/python3.13/site-packages (from -r requirements-tested.txt (line 5)) (2.2.3)
+Requirement already satisfied: pytest==9.0.3 in /usr/local/lib/python3.13/site-packages (from -r requirements-tested.txt (line 6)) (9.0.3)
+Collecting pytest-asyncio==1.4.1.post1 (from -r requirements-tested.txt (line 7))
+  Downloading pytest_asyncio-1.4.1.post1-py3-none-any.whl.metadata (4.4 kB)
+Requirement already satisfied: requests==2.33.0 in /usr/local/lib/python3.13/site-packages (from -r requirements-tested.txt (line 8)) (2.33.0)
+Collecting tabulate==0.10.0 (from -r requirements-tested.txt (line 9))
+  Downloading tabulate-0.10.0-py3-none-any.whl.metadata (40 kB)
+Requirement already satisfied: PyYAML==6.0.3 in /usr/local/lib/python3.13/site-packages (from -r requirements-tested.txt (line 10)) (6.0.3)
+Requirement already satisfied: aiohappyeyeballs>=2.5.0 in /usr/local/lib/python3.13/site-packages (from aiohttp==3.14.3->-r requirements-tested.txt (line 2)) (2.7.1)
+Requirement already satisfied: aiosignal>=1.4.0 in /usr/local/lib/python3.13/site-packages (from aiohttp==3.14.3->-r requirements-tested.txt (line 2)) (1.4.0)
+Requirement already satisfied: attrs>=17.3.0 in /usr/local/lib/python3.13/site-packages (from aiohttp==3.14.3->-r requirements-tested.txt (line 2)) (26.1.0)
+Requirement already satisfied: frozenlist>=1.1.1 in /usr/local/lib/python3.13/site-packages (from aiohttp==3.14.3->-r requirements-tested.txt (line 2)) (1.8.0)
+Requirement already satisfied: multidict<7.0,>=4.5 in /usr/local/lib/python3.13/site-packages (from aiohttp==3.14.3->-r requirements-tested.txt (line 2)) (6.9.1)
+Requirement already satisfied: propcache>=0.2.0 in /usr/local/lib/python3.13/site-packages (from aiohttp==3.14.3->-r requirements-tested.txt (line 2)) (0.5.4)
+Requirement already satisfied: yarl<2.0,>=1.17.0 in /usr/local/lib/python3.13/site-packages (from aiohttp==3.14.3->-r requirements-tested.txt (line 2)) (1.25.1)
+Requirement already satisfied: certifi>=2026.6.17 in /usr/local/lib/python3.13/site-packages (from ccxt==4.5.91->-r requirements-tested.txt (line 3)) (2026.10.19)
+Collecting cryptography<51,>=50 (from ccxt==4.5.91->-r requirements-tested.txt (line 3))
+  Downloading cryptography-50.0.2-cp311-abi3-manylinux_2_34_x86_64.whl.metadata (4.4 kB)
+Requirement already satisfied: typing_extensions==4.16.0 in /usr/local/lib/python3.13/site-packages (from ccxt==4.5.91->-r requirements-tested.txt (line 3)) (4.16.0)
+Collecting aiohttp-fast-zlib==0.3.0 (from ccxt==4.5.91->-r requirements-tested.txt (line 3))
+  Downloading aiohttp_fast_zlib-0.3.0-py3-none-any.whl.metadata (5.7 kB)
+Collecting zlib-ng==1.0.0 (from ccxt==4.5.91->-r requirements-tested.txt (line 3))
+  Downloading zlib_ng-1.0.0-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (6.8 kB)
+Collecting uvloop==0.22.1 (from ccxt==4.5.91->-r requirements-tested.txt (line 3))
+  Downloading uvloop-0.22.1-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (4.9 kB)
+Requirement already satisfied: orjson<4,>=3.11.9 in /usr/local/lib/python3.13/site-packages (from ccxt==4.5.91->-r requirements-tested.txt (line 3)) (3.11.9)
+Collecting coincurve==21.0.0 (from ccxt==4.5.91->-r requirements-tested.txt (line 3))
+  Downloading coincurve-21.0.0-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (4.0 kB)
+Collecting propcache>=0.2.0 (from aiohttp==3.14.3->-r requirements-tested.txt (line 2))
+  Downloading propcache-0.5.2-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (16 kB)
+Collecting cffi==2.0.0 (from ccxt==4.5.91->-r requirements-tested.txt (line 3))
+  Downloading cffi-2.0.0-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.6 kB)
+Collecting pycparser==3.0 (from ccxt==4.5.91->-r requirements-tested.txt (line 3))
+  Downloading pycparser-3.0-py3-none-any.whl.metadata (8.2 kB)
+Collecting charset_normalizer==3.4.7 (from ccxt==4.5.91->-r requirements-tested.txt (line 3))
+  Downloading charset_normalizer-3.4.7-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (40 kB)
+Collecting idna==3.18 (from ccxt==4.5.91->-r requirements-tested.txt (line 3))
+  Downloading idna-3.18-py3-none-any.whl.metadata (6.1 kB)
+Collecting urllib3==2.8.0 (from ccxt==4.5.91->-r requirements-tested.txt (line 3))
+  Downloading urllib3-2.8.0-py3-none-any.whl.metadata (7.4 kB)
+Requirement already satisfied: python-dateutil>=2.8.2 in /usr/local/lib/python3.13/site-packages (from pandas==2.2.3->-r requirements-tested.txt (line 5)) (2.9.0.post0)
+Requirement already satisfied: pytz>=2020.1 in /usr/local/lib/python3.13/site-packages (from pandas==2.2.3->-r requirements-tested.txt (line 5)) (2025.2)
+Requirement already satisfied: tzdata>=2022.7 in /usr/local/lib/python3.13/site-packages (from pandas==2.2.3->-r requirements-tested.txt (line 5)) (2026.5)
+Requirement already satisfied: iniconfig>=1.0.1 in /usr/local/lib/python3.13/site-packages (from pytest==9.0.3->-r requirements-tested.txt (line 6)) (2.3.1)
+Requirement already satisfied: packaging>=22 in /usr/local/lib/python3.13/site-packages (from pytest==9.0.3->-r requirements-tested.txt (line 6)) (26.3)
+Requirement already satisfied: pluggy<2,>=1.5 in /usr/local/lib/python3.13/site-packages (from pytest==9.0.3->-r requirements-tested.txt (line 6)) (1.7.0)
+Requirement already satisfied: pygments>=2.7.2 in /usr/local/lib/python3.13/site-packages (from pytest==9.0.3->-r requirements-tested.txt (line 6)) (2.21.0)
+Requirement already satisfied: six>=1.5 in /usr/local/lib/python3.13/site-packages (from python-dateutil>=2.8.2->pandas==2.2.3->-r requirements-tested.txt (line 5)) (1.17.0)
+Downloading ccxt-4.5.91-py3-none-any.whl (6.8 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 6.8/6.8 MB 72.0 MB/s  0:00:00
+Downloading charset_normalizer-3.4.7-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (215 kB)
+Downloading idna-3.18-py3-none-any.whl (65 kB)
+Downloading urllib3-2.8.0-py3-none-any.whl (135 kB)
+Downloading pytest_asyncio-1.4.1.post1-py3-none-any.whl (17 kB)
+Downloading tabulate-0.10.0-py3-none-any.whl (39 kB)
+Downloading aiohttp_fast_zlib-0.3.0-py3-none-any.whl (8.6 kB)
+Downloading cffi-2.0.0-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (219 kB)
+Downloading coincurve-21.0.0-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (1.6 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.6/1.6 MB 92.1 MB/s  0:00:00
+Downloading propcache-0.5.2-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (61 kB)
+Downloading pycparser-3.0-py3-none-any.whl (48 kB)
+Downloading uvloop-0.22.1-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (4.4 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.4/4.4 MB 151.0 MB/s  0:00:00
+Downloading zlib_ng-1.0.0-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (132 kB)
+Downloading cryptography-50.0.2-cp311-abi3-manylinux_2_34_x86_64.whl (4.8 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.8/4.8 MB 126.4 MB/s  0:00:00
+Installing collected packages: zlib-ng, uvloop, urllib3, tabulate, pycparser, propcache, idna, coincurve, charset_normalizer, pytest-asyncio, cffi, cryptography, aiohttp-fast-zlib, ccxt
+  Attempting uninstall: urllib3
+    Found existing installation: urllib3 2.7.0
+    Uninstalling urllib3-2.7.0:
+      Successfully uninstalled urllib3-2.7.0
+  Attempting uninstall: pycparser
+    Found existing installation: pycparser 3.11
+    Uninstalling pycparser-3.11:
+      Successfully uninstalled pycparser-3.11
+  Attempting uninstall: propcache
+    Found existing installation: propcache 0.5.4
+    Uninstalling propcache-0.5.4:
+      Successfully uninstalled propcache-0.5.4
+  Attempting uninstall: idna
+    Found existing installation: idna 3.20
+    Uninstalling idna-3.20:
+      Successfully uninstalled idna-3.20
+  Attempting uninstall: charset_normalizer
+    Found existing installation: charset-normalizer 3.5.2
+    Uninstalling charset-normalizer-3.5.2:
+      Successfully uninstalled charset-normalizer-3.5.2
+  Attempting uninstall: cffi
+    Found existing installation: cffi 2.1.1
+    Uninstalling cffi-2.1.1:
+      Successfully uninstalled cffi-2.1.1
+
+Successfully installed aiohttp-fast-zlib-0.3.0 ccxt-4.5.91 cffi-2.0.0 charset_normalizer-3.4.7 coincurve-21.0.0 cryptography-50.0.2 idna-3.18 propcache-0.5.2 pycparser-3.0 pytest-asyncio-1.4.1.post1 tabulate-0.10.0 urllib3-2.8.0 uvloop-0.22.1 zlib-ng-1.0.0
+
+[notice] A new release of pip is available: 26.2.2 -> 26.3
+[notice] To update, run: pip install --upgrade pip

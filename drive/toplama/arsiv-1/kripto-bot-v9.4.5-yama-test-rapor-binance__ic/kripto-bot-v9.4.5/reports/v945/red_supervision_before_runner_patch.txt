@@ -1,0 +1,96 @@
+..........FFFF                                                           [100%]
+=================================== FAILURES ===================================
+_________________ test_real_run_status[background_fail-FAILED] _________________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f984ff373f0>
+tmp_path = PosixPath('/tmp/pytest-of-user/pytest-80/test_real_run_status_backgroun0')
+caplog = <_pytest.logging.LogCaptureFixture object at 0x7f984ff8e4e0>
+mode = 'background_fail', expected = 'FAILED'
+
+    @pytest.mark.parametrize('mode,expected',[('early_stop','INTERRUPTED'),('sigterm','INTERRUPTED'),('sigint','INTERRUPTED'),('indefinite','INTERRUPTED'),('normal','COMPLETED'),('drain_stop','INTERRUPTED'),('drain_limit','COMPLETED'),('panel_stop','COMPLETED'),('cancel','INTERRUPTED'),('loop_exception','FAILED'),('background_fail','FAILED'),('background_return','FAILED'),('mono_gap','DISCONTINUOUS'),('wall_jump','DISCONTINUOUS')])
+    def test_real_run_status(monkeypatch,tmp_path,caplog,mode,expected):
+        caplog.set_level('INFO')
+        result,r,raised=asyncio.run(exercise(monkeypatch,tmp_path,mode))
+>       assert result['phase']==expected
+E       AssertionError: assert 'COMPLETED' == 'FAILED'
+E         
+E         - FAILED
+E         + COMPLETED
+
+tests/test_v944_run_status.py:69: AssertionError
+------------------------------ Captured log call -------------------------------
+INFO     kripto_bot_v9_2:live_runner.py:1651 Aktif giriş penceresi (4s) tamamlandı. Açık 0 pozisyon doğal kapanışa bırakıldı.
+INFO     kripto_bot_v9_2:live_runner.py:1677 CANLI_TEST_TAMAMLANDI | Kapanan=0 | Acik=0 | Brüt=$+0.0000 | Net=$+0.0000 | Evren=0
+INFO     kripto_bot_v9_2:live_runner.py:1711 KOSU_SONUCU | Durum=COMPLETED | Neden=duration_target_reached | ToplamDegerlendirme=0 | TekrarKorumasi=0 | TekrarDisiCagri=0
+________________ test_real_run_status[background_return-FAILED] ________________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f984fe707a0>
+tmp_path = PosixPath('/tmp/pytest-of-user/pytest-80/test_real_run_status_backgroun1')
+caplog = <_pytest.logging.LogCaptureFixture object at 0x7f984ff8e8a0>
+mode = 'background_return', expected = 'FAILED'
+
+    @pytest.mark.parametrize('mode,expected',[('early_stop','INTERRUPTED'),('sigterm','INTERRUPTED'),('sigint','INTERRUPTED'),('indefinite','INTERRUPTED'),('normal','COMPLETED'),('drain_stop','INTERRUPTED'),('drain_limit','COMPLETED'),('panel_stop','COMPLETED'),('cancel','INTERRUPTED'),('loop_exception','FAILED'),('background_fail','FAILED'),('background_return','FAILED'),('mono_gap','DISCONTINUOUS'),('wall_jump','DISCONTINUOUS')])
+    def test_real_run_status(monkeypatch,tmp_path,caplog,mode,expected):
+        caplog.set_level('INFO')
+        result,r,raised=asyncio.run(exercise(monkeypatch,tmp_path,mode))
+>       assert result['phase']==expected
+E       AssertionError: assert 'COMPLETED' == 'FAILED'
+E         
+E         - FAILED
+E         + COMPLETED
+
+tests/test_v944_run_status.py:69: AssertionError
+------------------------------ Captured log call -------------------------------
+INFO     kripto_bot_v9_2:live_runner.py:1651 Aktif giriş penceresi (4s) tamamlandı. Açık 0 pozisyon doğal kapanışa bırakıldı.
+INFO     kripto_bot_v9_2:live_runner.py:1677 CANLI_TEST_TAMAMLANDI | Kapanan=0 | Acik=0 | Brüt=$+0.0000 | Net=$+0.0000 | Evren=0
+INFO     kripto_bot_v9_2:live_runner.py:1711 KOSU_SONUCU | Durum=COMPLETED | Neden=duration_target_reached | ToplamDegerlendirme=0 | TekrarKorumasi=0 | TekrarDisiCagri=0
+_________________ test_real_run_status[mono_gap-DISCONTINUOUS] _________________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f984ff413d0>
+tmp_path = PosixPath('/tmp/pytest-of-user/pytest-80/test_real_run_status_mono_gap_0')
+caplog = <_pytest.logging.LogCaptureFixture object at 0x7f984ff35390>
+mode = 'mono_gap', expected = 'DISCONTINUOUS'
+
+    @pytest.mark.parametrize('mode,expected',[('early_stop','INTERRUPTED'),('sigterm','INTERRUPTED'),('sigint','INTERRUPTED'),('indefinite','INTERRUPTED'),('normal','COMPLETED'),('drain_stop','INTERRUPTED'),('drain_limit','COMPLETED'),('panel_stop','COMPLETED'),('cancel','INTERRUPTED'),('loop_exception','FAILED'),('background_fail','FAILED'),('background_return','FAILED'),('mono_gap','DISCONTINUOUS'),('wall_jump','DISCONTINUOUS')])
+    def test_real_run_status(monkeypatch,tmp_path,caplog,mode,expected):
+        caplog.set_level('INFO')
+        result,r,raised=asyncio.run(exercise(monkeypatch,tmp_path,mode))
+>       assert result['phase']==expected
+E       AssertionError: assert 'COMPLETED' == 'DISCONTINUOUS'
+E         
+E         - DISCONTINUOUS
+E         + COMPLETED
+
+tests/test_v944_run_status.py:69: AssertionError
+------------------------------ Captured log call -------------------------------
+INFO     kripto_bot_v9_2:live_runner.py:1651 Aktif giriş penceresi (4s) tamamlandı. Açık 0 pozisyon doğal kapanışa bırakıldı.
+INFO     kripto_bot_v9_2:live_runner.py:1677 CANLI_TEST_TAMAMLANDI | Kapanan=0 | Acik=0 | Brüt=$+0.0000 | Net=$+0.0000 | Evren=0
+INFO     kripto_bot_v9_2:live_runner.py:1711 KOSU_SONUCU | Durum=COMPLETED | Neden=duration_target_reached | ToplamDegerlendirme=0 | TekrarKorumasi=0 | TekrarDisiCagri=0
+________________ test_real_run_status[wall_jump-DISCONTINUOUS] _________________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f984ff41610>
+tmp_path = PosixPath('/tmp/pytest-of-user/pytest-80/test_real_run_status_wall_jump0')
+caplog = <_pytest.logging.LogCaptureFixture object at 0x7f984ff37e70>
+mode = 'wall_jump', expected = 'DISCONTINUOUS'
+
+    @pytest.mark.parametrize('mode,expected',[('early_stop','INTERRUPTED'),('sigterm','INTERRUPTED'),('sigint','INTERRUPTED'),('indefinite','INTERRUPTED'),('normal','COMPLETED'),('drain_stop','INTERRUPTED'),('drain_limit','COMPLETED'),('panel_stop','COMPLETED'),('cancel','INTERRUPTED'),('loop_exception','FAILED'),('background_fail','FAILED'),('background_return','FAILED'),('mono_gap','DISCONTINUOUS'),('wall_jump','DISCONTINUOUS')])
+    def test_real_run_status(monkeypatch,tmp_path,caplog,mode,expected):
+        caplog.set_level('INFO')
+        result,r,raised=asyncio.run(exercise(monkeypatch,tmp_path,mode))
+>       assert result['phase']==expected
+E       AssertionError: assert 'COMPLETED' == 'DISCONTINUOUS'
+E         
+E         - DISCONTINUOUS
+E         + COMPLETED
+
+tests/test_v944_run_status.py:69: AssertionError
+------------------------------ Captured log call -------------------------------
+INFO     kripto_bot_v9_2:live_runner.py:1651 Aktif giriş penceresi (4s) tamamlandı. Açık 0 pozisyon doğal kapanışa bırakıldı.
+INFO     kripto_bot_v9_2:live_runner.py:1677 CANLI_TEST_TAMAMLANDI | Kapanan=0 | Acik=0 | Brüt=$+0.0000 | Net=$+0.0000 | Evren=0
+INFO     kripto_bot_v9_2:live_runner.py:1711 KOSU_SONUCU | Durum=COMPLETED | Neden=duration_target_reached | ToplamDegerlendirme=0 | TekrarKorumasi=0 | TekrarDisiCagri=0
+=========================== short test summary info ============================
+FAILED tests/test_v944_run_status.py::test_real_run_status[background_fail-FAILED]
+FAILED tests/test_v944_run_status.py::test_real_run_status[background_return-FAILED]
+FAILED tests/test_v944_run_status.py::test_real_run_status[mono_gap-DISCONTINUOUS]
+FAILED tests/test_v944_run_status.py::test_real_run_status[wall_jump-DISCONTINUOUS]
+4 failed, 10 passed in 0.38s

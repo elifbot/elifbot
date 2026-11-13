@@ -1,0 +1,55 @@
+{
+  "status": "PARTIAL",
+  "started_utc": "2026-11-05T12:10:07.412800+00:00",
+  "finished_utc": "2026-11-05T12:10:27.185773+00:00",
+  "active_sec": 15.001,
+  "total_sec": 19.773,
+  "markets": {
+    "binance_usdm": {
+      "status": "ERROR",
+      "error": "HTTP 451: {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a restricted location according to 'b. Eligibility"
+    },
+    "okx_futures": {
+      "status": "AVAILABLE",
+      "discovered": 287,
+      "selected": 20
+    },
+    "okx_swap": {
+      "status": "AVAILABLE",
+      "discovered": 540,
+      "selected": 20
+    },
+    "binance_coinm": {
+      "status": "ERROR",
+      "error": "HTTP 451: {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a restricted location according to 'b. Eligibility"
+    }
+  },
+  "symbols_selected": 40,
+  "paper_eligible": 5,
+  "paper_unsupported": 35,
+  "counts": {
+    "candles_ok": 80,
+    "fresh_quotes": 200,
+    "ticker_fetch_ok": 10,
+    "bars_evaluated": 1,
+    "strategy_NO_SIGNAL": 1
+  },
+  "execution": {
+    "open": [],
+    "closed": [],
+    "closed_trades": 0,
+    "realized_net": 0,
+    "equity_realized": 1000,
+    "fees_on_closed": 0.0
+  },
+  "errors": [],
+  "real_orders": 0,
+  "real_money_approved": false,
+  "limitations": [
+    "Binance 451 olursa eksik; başka kaynakla ikame yok.",
+    "Yalnız lineer USDT sürekli sözleşmeler PAPER; inverse ve vadeli yalnız izlenir.",
+    "Tüm sözleşme listesi yalnız başlangıçta alınır.",
+    "Piyasa derinliği, funding muhasebesi ve gerçek dolum garanti edilmez.",
+    "Bağımsız YZ incelemesi tasarım içindir; canlı işlem hakemi değildir."
+  ]
+}

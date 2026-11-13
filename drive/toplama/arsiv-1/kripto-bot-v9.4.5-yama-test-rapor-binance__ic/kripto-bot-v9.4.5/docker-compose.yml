@@ -1,0 +1,18 @@
+services:
+  kripto-bot-v94:
+    build: .
+    container_name: kripto-bot-v94
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./reports:/app/reports
+      - ./configs:/app/configs:ro
+    environment:
+      - PYTHONUNBUFFERED=1
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/health', timeout=4).read()"]
+      interval: 20s
+      timeout: 5s
+      retries: 3
+      start_period: 25s

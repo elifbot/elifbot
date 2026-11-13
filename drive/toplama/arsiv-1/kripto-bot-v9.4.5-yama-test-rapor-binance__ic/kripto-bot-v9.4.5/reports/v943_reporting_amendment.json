@@ -1,0 +1,22 @@
+{
+  "type": "reporting_scope_correction_plus_packaging_r3",
+  "at_utc": "2026-11-03T09:54:57.700034+00:00",
+  "runtime_source_changed": false,
+  "new_tests_or_long_run_started": true,
+  "previous_zip_preserved_sha256": "1616cbb1c64f342f46d9eb3924599ced59dc5dfa3c932d71642cdb2e09708078",
+  "deprecated_broad_field": "live_operational_checks_passed",
+  "replacement_fields": {
+    "sampled_connectivity_checks_passed": true,
+    "pending_in_flight_observed_live": false,
+    "live_pending_scenario_verified": false,
+    "live_order_open_close_cycle_verified": false,
+    "operational_readiness_approved": false
+  },
+  "observed_live_in_flight_samples": 0,
+  "zero_observed_samples_does_not_prove_no_pending_existed": true,
+  "copy_cost_and_thread_visibility_validated": false,
+  "long_paper_plan": "REGISTERED_AND_RUNNING_AT_DELIVERY",
+  "new_docker_pytest_passed": 121,
+  "long_run_complete": false,
+  "supersedes_previous_amendment_metadata": true
+}
