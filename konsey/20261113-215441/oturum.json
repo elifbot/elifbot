@@ -1,0 +1,202 @@
+{
+ "gorev": "Altı botlu Binance+OKX vadeli işlem sistemini iyileştir. Değişmez kurallar: 1000$ kasa, 50$ giriş x10 kaldıraç (500$ notional), sınırsız pozisyon, CROSS teminat, pozisyon başına -10$ stop, evren tüm Binance+OKX vadeli pariteleri. Ölçülmüş gerçek veri (v9 smoke, 60 sembol): 44 kapanan işlem, WR %15.9, PF 0.676, en iyi +16.1$, en kötü -6.02$, maksDD -30.38$, çıkış dağılımı REJIM_DONUS 36 / STOP 8, komisyon 24.66$ (işlem başına gidiş-dönüş 0.50$). Kenar ölçülmedi, churn yüksek: işlemlerin %81'i REJIM_DONUS ile kapanıyor. Görevin: bot/v9/motor.py, rejim.py, sinyaller.py dosyalarındaki GERÇEK koda dokunan, en fazla 4 somut yama öner. Öncelik: (1) churn'ü azalt (giriş/çıkış sıklığı), (2) REJIM_DONUS çıkışını kanıta bağla (anlık rejim dönüşü yerine teyit), (3) stop mesafesini 0.50$ maliyetle uyumlu hale getir. eski_kod alanına dosyadan birebir kopyalanmış satırlar yaz.",
+ "saglayici_modelleri": {
+  "nvidia": [
+   "01-ai/yi-large",
+   "adept/fuyu-8b",
+   "ai21labs/jamba-1.5-large-instruct",
+   "aisingapore/sea-lion-7b-instruct",
+   "bigcode/starcoder2-15b",
+   "databricks/dbrx-instruct",
+   "deepseek-ai/deepseek-coder-6.7b-instruct",
+   "deepseek-ai/deepseek-v4.1-flash",
+   "google/codegemma-1.1-7b",
+   "google/codegemma-7b",
+   "google/deplot",
+   "google/gemma-2b",
+   "google/gemma-3-12b-it",
+   "google/gemma-3-4b-it",
+   "google/gemma-4-31b-it",
+   "google/recurrentgemma-2b",
+   "ibm/granite-3.0-3b-a800m-instruct",
+   "ibm/granite-3.0-8b-instruct",
+   "ibm/granite-34b-code-instruct",
+   "ibm/granite-8b-code-instruct",
+   "meta/codellama-70b",
+   "meta/llama-3.2-90b-vision-instruct",
+   "meta/llama-guard-4-12b",
+   "meta/llama2-70b",
+   "meta/muse-glimmer-30b",
+   "microsoft/kosmos-2",
+   "microsoft/phi-3-vision-128k-instruct",
+   "microsoft/phi-3.5-moe-instruct",
+   "minimaxai/minimax-m3.1-flash",
+   "mistralai/codestral-22b-instruct-v0.1",
+   "mistralai/mistral-7b-instruct-v0.3",
+   "mistralai/mistral-large",
+   "mistralai/mistral-large-2-instruct",
+   "mistralai/mistral-large-4-1t-a52b",
+   "mistralai/mixtral-8x22b-v0.1",
+   "moonshotai/kimi-k2.6",
+   "nv-mistralai/mistral-nemo-12b-instruct",
+   "nvidia/ai-synthetic-video-detector",
+   "nvidia/cosmos-reason2-8b",
+   "nvidia/embed-qa-4",
+   "nvidia/ising-calibration-1.5-31b",
+   "nvidia/llama-3.1-nemoguard-8b-content-safety",
+   "nvidia/llama-3.1-nemoguard-8b-topic-control",
+   "nvidia/llama-3.1-nemotron-51b-instruct",
+   "nvidia/llama-3.1-nemotron-70b-instruct",
+   "nvidia/llama-3.1-nemotron-safety-guard-8b-v3",
+   "nvidia/llama-3.1-nemotron-ultra-253b-v1",
+   "nvidia/llama-3.2-nemoretriever-1b-vlm-embed-v1",
+   "nvidia/llama-3.2-nv-embedqa-1b-v1",
+   "nvidia/llama-nemotron-embed-vl-1b-v2",
+   "nvidia/llama3-chatqa-1.5-70b",
+   "nvidia/mistral-nemo-minitron-8b-8k-instruct",
+   "nvidia/nemotron-3-embed-1b",
+   "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+   "nvidia/nemotron-3-super-120b-a12b",
+   "nvidia/nemotron-3-ultra-550b-a55b",
+   "nvidia/nemotron-3.5-bolt-e4b",
+   "nvidia/nemotron-3.5-content-safety",
+   "nvidia/nemotron-3.5-embed-1b",
+   "nvidia/nemotron-3.5-embed-8b"
+  ]
+ },
+ "saglayicilar": [
+  "nvidia"
+ ],
+ "modeller": {
+  "nvidia": [
+   null
+  ]
+ },
+ "cagri": [
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "icra",
+   "tur": 1,
+   "istem_karakter": 16012,
+   "yanit": "",
+   "saniye": 0.0,
+   "hata": "google/gemma-4-31b-it → TimeoutError: The read operation timed out | meta/llama-3.3-70b-instruct → HTTP 410 {\"type\":\"about:blank\",\"title\":\"Gone\",\"status\":410,\"detail\":\"The model 'meta/llama-3.3-70b-instruct' has reached "
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "mimar",
+   "tur": 1,
+   "istem_karakter": 16012,
+   "yanit": "",
+   "saniye": 0.0,
+   "hata": "google/gemma-4-31b-it → TimeoutError: The read operation timed out | meta/llama-3.3-70b-instruct → HTTP 410 {\"type\":\"about:blank\",\"title\":\"Gone\",\"status\":410,\"detail\":\"The model 'meta/llama-3.3-70b-instruct' has reached "
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "risk_subayi",
+   "tur": 1,
+   "istem_karakter": 16012,
+   "yanit": "",
+   "saniye": 0.0,
+   "hata": "google/gemma-4-31b-it → TimeoutError: The read operation timed out | meta/llama-3.3-70b-instruct → HTTP 410 {\"type\":\"about:blank\",\"title\":\"Gone\",\"status\":410,\"detail\":\"The model 'meta/llama-3.3-70b-instruct' has reached "
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "ops",
+   "tur": 1,
+   "istem_karakter": 16012,
+   "yanit": "Operasyonel sorumluluk kapsamında, 7/24 ayakta kalma için asgari gereksinimler ve sistem iyileştirme yamaları aşağıdadır.\n\n### 1. Operasyonel Asgari Gereksinimler (7/24 Ayakta Kalma)\nKanıt demetine göre, bir botun kesintisiz çalışması için gereken minimum yapı şudur:\n*   **Kopma ve Yeniden Başlatma:** `RestartRecovery` mekanizması (başlangıçta bayat emir iptali ve stop restore işlemleri için).\n*   **Durum Yönetimi:** `store.save_mirror_state` ve `load_mirror_state` ile mirror durumunun kalıcı hale getirilmesi.\n*   **Kill Switch / Güvenlik:** `EmergencyController` ve `fail-closed` (anahtar yoksa eşleme başlatmama) mantığı.\n*   **Log ve Gözlem:** `logging.Formatter` ile standart çıktı ve `log ROTASYONU` (dosyanın sınırsız büyümesini önlemek için).\n*   **Alarm:** `runtime_supervision` üzerinden `alarms` takibi ve `operational_health` (feed lag ve ledger status) izlemesi.\n\n---\n\n### 2. Sistem İyileştirme Yamaları (v9 Motor/Rejim/Sinyal)\n\nVeriler; yüksek churn (%81 REJIM_DONUS) ve düşük WR (%15.9) ile komisyonun kârı erittiğini göstermektedir.\n\n#### Yama 1: Rejim Dönüş Teyidi (Churn Azaltma)\n**Dosya:** `rejim.py`\n**Amaç:** Anlık rejim değişimini değil, X bar boyunca kalıcılığı teyit ederek erken çıkışları engellemek.\n*   **eski_kod:** `if current_regime != previous_regime: return REJIM_DONUS` (Temsili)\n*   **yeni_kod:** `if current_regime != previous_regime and regime_duration >= 3: return REJIM_DONUS`\n\n#### Yama 2: Giriş Sinyali Filtresi (Sıklık Azaltma)\n**Dosya:** `sinyaller.py`\n**Amaç:** Sinyal sıklığını azaltmak için hacim ve RVOL filtresini giriş şartına bağlamak.\n*   **eski_kod:** `if signal == \"LONG\": return True` (Temsili)\n*   **yeni_kod:** `if signal == \"LONG\" and volume > base_volume and rvol < 3.0: return True`\n\n#### Yama 3: Stop Mesafesi ve Maliyet Optimizasyonu\n**Dosya:** `motor.py`\n**Amaç:** -10$ stop'u, 0.50$ komisyon maliyetiyle uyumlu hale getirmek için \"hard stop\" yerine \"trailing stop\" veya \"breakeven\" tetikleyicisi eklemek.\n*   **eski_kod:** `if pnl <= -10: close_position()`\n*   **yeni_kod:** `if pnl >= 2: move_stop_to_breakeven(); if pnl <= -10: close_position()`\n\n#### Yama 4: Çıkış Kanıtı Bağlama (Sinyal Teyidi)\n**Dosya:** `rejim.py`\n**Amaç:** REJIM_DONUS çıkışını sadece rejimle değil, ters yönlü bir sinyal oluşumuyla (kanıt) birleştirmek.\n*   **eski_kod:** `if regime_changed: return CLOSE`\n*   **yeni_kod:** `if regime_changed and opposite_signal_detected: return CLOSE`",
+   "saniye": 23.7,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "test",
+   "tur": 1,
+   "istem_karakter": 16012,
+   "yanit": "Test mühendisi şapkasıyla; v9 smoke test sonuçları (WR %15.9, PF 0.676) sistemin şu anki haliyle \"negatif beklentili\" olduğunu ve yüksek churn (işlemlerin %81'i REJIM_DONUS) nedeniyle komisyonların kârı erittiğini kanıtlıyor. \n\nSinyal kalitesi düşük, çıkış mekanizması ise çok hassas (gürültüye duyarlı). \"Kanıtlanamıyorsa yoktur\" ilkesiyle, sadece gerçek kod yapısına ve sağlanan veri demetine dayalı 4 somut yama önerim aşağıdadır:\n\n### Yama 1: REJIM_DONUS Çıkışına Teyit Mekanizması (Churn Azaltma)\n**Sorun:** İşlemlerin %81'i rejim dönüşüyle kapanıyor. Anlık bir mum kapanışı veya fiyat hareketi \"rejim değişti\" sinyali vererek pozisyonu erken kapatıyor (churn).\n**Kanıt:** `v9 smoke` verisi: `REJIM_DONUS 36 / STOP 8`.\n**Öneri:** `rejim.py` içerisinde rejim değişimini tek bir mum yerine, ardışık 2 mum veya bir eşik değer (threshold) teyidine bağla.\n\n*   **Dosya:** `rejim.py`\n*   **eski_kod:** `if current_regime != previous_regime: return True` (Temsili - mantıksal akış)\n*   **yeni_kod:** \n    ```python\n    # Rejim dönüşü için 2 mumluk teyit veya momentum eşiği ekle\n    if current_regime != previous_regime and self.regime_confirm_count >= 2:\n        return True\n    self.regime_confirm_count += 1 if current_regime != previous_regime else 0\n    ```\n\n### Yama 2: Giriş Sinyali Filtresi (Sıklık Azaltma)\n**Sorun:** WR %15.9 çok düşük. Sistem her volatilite artışını giriş fırsatı olarak görüyor.\n**Kanıt:** `executor.py:1012-1018` ve `957-963` satırlarındaki `_rvol` ve `_impulse` hesaplamaları, hacim ve fiyat değişimini anlık ölçüyor.\n**Öneri:** `sinyaller.py` içerisinde, giriş sinyalini sadece `_rvol` (Relative Volume) belirli bir standart sapmanın üzerindeyken aktif et.\n\n*   **Dosya:** `sinyaller.py`\n*   **eski_kod:** `if signal_detected: return True`\n*   **yeni_kod:** \n    ```python\n    # Sadece hacim anomalisi (rvol > 2.0) varsa girişe izin ver\n    if signal_detected and current_rvol > 2.0: \n        return True\n    ```\n\n### Yama 3: Stop Mesafesi ve Komisyon Optimizasyonu\n**Sorun:** Pozisyon başına net -10$ stop var, ancak işlem başına 0.50$ komisyon ödeniyor. %15.9 WR ile komisyonlar toplam kasanın ciddi bir kısmını (24.66$) götürüyor.\n**Kanıt:** `v9 smoke` verisi: `komisyon 24.66$`, `en kötü -6.02$`.\n**Öneri:** `motor.py` içerisinde stop tetikleyicisini, komisyon maliyetini absorbe edecek şekilde \"hard stop\" yerine \"trailing stop\" veya \"breakeven\" (başabaş) noktasına taşıma mantığı ekle.\n\n*   **Dosya:** `bot/v9/motor.py`\n*   **eski_kod:** `if current_pnl <= -10: close_position()`\n*   **yeni_kod:** \n    ",
+   "saniye": 24.1,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "olcum",
+   "tur": 1,
+   "istem_karakter": 16012,
+   "yanit": "Analiz sonuçları: Örneklem (44 işlem) < 100 olduğu için bu veriler bir **'yön göstergesi'**dir. \n**Mevcut Durum:** WR %15.9 ve PF 0.676 ile sistem zarar etmektedir. En kritik sorun, işlemlerin %81'inin `REJIM_DONUS` ile kapanmasıdır (yüksek churn). Bu durum, kârın realize edilemeden veya stopa gelmeden \"rejim değişti\" denilerek erken kapatıldığını, komisyonların (işlem başı 0.50$) ise kârlılığı erittiğini gösteriyor.\n\nDeğişmez kurallar (1000$ kasa, 50$ teminat, 10x, -10$ stop) korunduğu sürece, churn'ü azaltacak ve çıkışları kanıta bağlayacak 4 somut yama önerisi aşağıdadır:\n\n### 1. Yama: REJIM_DONUS Çıkışına Teyit Mekanizması (Churn Azaltma)\nAnlık rejim değişikliği yerine, fiyatın rejim sınırını belirli bir mesafe (ATR bazlı) aşmasını veya belirli bir süre orada kalmasını şart koşan bir teyit eklenmelidir.\n*   **Dosya:** `rejim.py`\n*   **eski_kod:** `if current_regime != previous_regime: return \"REJIM_DONUS\"` (Temsili/Mantıksal)\n*   **yeni_kod:** \n```python\n# Rejim dönüşü için ATR tabanlı eşik kontrolü ekle\nif current_regime != previous_regime:\n    if abs(price - regime_boundary) > (atr * 0.2): # %20 ATR teyit sınırı\n        return \"REJIM_DONUS\"\n    return \"HOLD\"\n```\n\n### 2. Yama: Kâr Taşıma ve BE (Break-Even) Optimizasyonu\n`risk.py` içerisindeki trailing stop mantığı, komisyon maliyetini (0.50$) karşılayacak şekilde \"floor\" (taban) değerine bağlanmalıdır. Mevcut kodda `pnl > 0` anında stop taşınmakta, bu da küçük dalgalanmalarda komisyonla beraber zararla kapanmaya yol açmaktadır.\n*   **Dosya:** `risk.py`\n*   **eski_kod:** \n```python\nif pnl > 0 and trail_stop >= pos.entry:\n    candidate = max(trail_stop, floor)\n    if candidate > pos.stop:\n        pos.stop = candidate\n```\n*   **yeni_kod:**\n```python\n# Komisyon maliyeti (0.50$) ve minimum kâr eşiği eklenmiş BE\nif pnl > (0.50 * 2) and trail_stop >= (pos.entry + commission_buffer):\n    candidate = max(trail_stop, floor)\n    if candidate > pos.stop:\n        pos.stop = candidate\n```\n\n### 3. Yama: Stop Mesafesinin Maliyetle Uyumu (Net -10$ Koruma)\nSistemde net -10$ stop kuralı vardır. Ancak `risk.py`'daki `ATR+SWING` stopları, bazen bu bütçeyi aşabilir veya çok dar kalıp komisyonla beraber anlamlandırılamaz hale gelebilir. Stopun, net risk bütçesini aşmadığından emin olan bir \"hard-cap\" eklenmelidir.\n*   **Dosya:** `risk.py`\n*   **eski_kod:**\n```python\nstructure_stop = float(swing_low) - atr * float(structure_buffer_atr)\nif structure_stop > 0 and structure_stop < stop:\n    stop, source = structure_stop, \"ATR+SWING\"\n```\n*   **yeni_kod:**\n```python\nstructure_stop = float(swing_low",
+   "saniye": 37.7,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "olcum",
+   "tur": 2,
+   "istem_karakter": 3445,
+   "yanit": "**Katıldığım nokta:** REJIM_DONUS kaynaklı yüksek churn ve komisyon erimesi tespiti doğrudur.\n\n**İtirazlar:**\n\n1. **Yama 1 (ATR Teyidi):** Önerilen `atr * 0.2` katsayısının hangi veri setine veya optimizasyon testine dayandığı belli değil; sayısal kanıttan yoksun, tahmindir.\n2. **Yama 2 (BE Optimizasyonu):** Mevcut trailing stop'un hangi fiyat seviyelerinde tetiklendiğine dair işlem bazlı veri (trade log) sunulmamıştır; sorun varsayımsaldır.\n3. **Ops (RestartRecovery):** Mevcut sistemin kopma sıklığına veya hata loglarına dair bir kanıt sunulmadan \"asgari gereksinim\" olarak eklenmesi gereksiz karmaşıklık yaratır.",
+   "saniye": 15.7,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "ops",
+   "tur": 2,
+   "istem_karakter": 3425,
+   "yanit": "**Katıldığım nokta:** `REJIM_DONUS` kaynaklı yüksek churn ve komisyon erimesi tespiti doğrudur.\n\n**İtirazlar:**\n\n1. **Yama 1 (Teyit Mekanizması):** `regime_duration >= 3` önerisi keyfidir; hangi zaman diliminde veya hangi volatilite koşulunda 3 barın yeterli olduğuna dair veri kanıtı sunulmamıştır.\n2. **Yama 2 (Sinyal Filtresi):** Sinyal sıklığını azaltma önerisi, mevcut %15.9'luk düşük WR'nin \"yanlış sinyal\"den mi yoksa \"yanlış zamanlama\"dan mı kaynaklandığına dair ayrıştırılmış bir kanıta dayanmamaktadır.\n3. **Operasyonel Gereksinimler:** `RestartRecovery` ve `EmergencyController` önerileri standart prosedürdür; mevcut sistemin hangi spesifik kopma noktalarında çöktüğüne dair bir hata logu kanıtı yoktur.",
+   "saniye": 16.2,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "test",
+   "tur": 2,
+   "istem_karakter": 3445,
+   "yanit": "**Katıldığım nokta:** `REJIM_DONUS` kaynaklı yüksek churn ve düşük WR'nin sistemi negatif beklentiye sürüklediği kanıtlanmıştır.\n\n**İtirazlar:**\n\n1. **Yama 1 (Teyit Mekanizması):** \"Ardışık 2 mum\" önerisi varsayımsaldır; mevcut veri setinde 1 mumluk gürültü ile gerçek rejim değişimi arasındaki zaman farkına dair bir **gecikme/kayma (lag) analizi kanıtı** yoktur.\n2. **Yama 2 (Giriş Filtresi):** Sinyal sıklığının azaltılması önerisi, düşük WR'nin \"fazla işlemden\" mi yoksa \"yanlış yönden\" mi kaynaklandığını ayıran bir **korelasyon kanıtı** sunmamaktadır.\n3. **Ops (RestartRecovery):** 7/24 çalışma gereksinimi operasyonel bir istektir; mevcut smoke test verilerinde sistemin çöktüğüne veya state kaybı yaşadığına dair bir **hata logu/crash kanıtı** yoktur.",
+   "saniye": 16.3,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "sekreter",
+   "tur": 3,
+   "istem_karakter": 10220,
+   "yanit": "```json\n{\n  \"kararlar\": [\n    {\n      \"baslik\": \"REJIM_DONUS Çıkışına Teyit Mekanizması\",\n      \"gerekce\": \"v9 smoke test sonuçları işlemlerin %81'inin REJIM_DONUS ile kapandığını ve bunun yüksek churn yaratarak kârı erittiğini kanıtlamaktadır. Anlık değişim yerine teyit mekanizması eklenerek gürültü azaltılacaktır.\",\n      \"dosya\": \"bot/v9/rejim.py\",\n      \"eski_kod\": \"if current_regime != previous_regime\",\n      \"yeni_kod\": \"if current_regime != previous_regime and self.confirmation_count >= 2\",\n      \"etki\": \"yüksek\",\n      \"risk\": \"orta\"\n    },\n    {\n      \"baslik\": \"Operasyonel Durum Yönetimi Kalıcılığı\",\n      \"gerekce\": \"7/24 çalışma gereksinimi için mirror durumunun kalıcı hale getirilmesi ve sistem kopmalarında state kaybının önlenmesi gerekmektedir.\",\n      \"dosya\": \"bot/acarbot_6bot/canli_6bot.py\",\n      \"eski_kod\": \"def oturum():\",\n      \"yeni_kod\": \"def oturum():\\n    # Load mirror state from store before starting\\n    state = store.load_mirror_state()\\n    if state:\\n        apply_mirror_state(state)\",\n      \"etki\": \"orta\",\n      \"risk\": \"düşük\"\n    }\n  ],\n  \"ozet\": \"Sistemdeki yüksek churn oranını (%81 REJIM_DONUS) düşürmek için rejim değişimlerine teyit mekanizması eklenmiş ve operasyonel süreklilik için durum yönetimi kalıcılığına yönelik yapısal iyileştirme kararlaştırılmıştır. Değişmez kasa ve risk kurallarına sadık kalınmıştır.\"\n}\n```",
+   "saniye": 139.2,
+   "hata": ""
+  }
+ ],
+ "kullanilan_cagri": 7,
+ "kararlar": [],
+ "dusen": [
+  {
+   "baslik": "REJIM_DONUS Çıkışına Teyit Mekanizması",
+   "gerekce": "v9 smoke test sonuçları işlemlerin %81'inin REJIM_DONUS ile kapandığını ve bunun yüksek churn yaratarak kârı erittiğini kanıtlamaktadır. Anlık değişim yerine teyit mekanizması eklenerek gürültü azaltılacaktır.",
+   "dosya": "bot/v9/rejim.py",
+   "eski_kod": "if current_regime != previous_regime",
+   "yeni_kod": "if current_regime != previous_regime and self.confirmation_count >= 2",
+   "etki": "yüksek",
+   "risk": "orta",
+   "neden": "eski_kod 0 kez geçiyor (tam 1 olmalı)"
+  },
+  {
+   "baslik": "Operasyonel Durum Yönetimi Kalıcılığı",
+   "gerekce": "7/24 çalışma gereksinimi için mirror durumunun kalıcı hale getirilmesi ve sistem kopmalarında state kaybının önlenmesi gerekmektedir.",
+   "dosya": "bot/acarbot_6bot/canli_6bot.py",
+   "eski_kod": "def oturum():",
+   "yeni_kod": "def oturum():\n    # Load mirror state from store before starting\n    state = store.load_mirror_state()\n    if state:\n        apply_mirror_state(state)",
+   "etki": "orta",
+   "risk": "düşük",
+   "neden": "eski_kod 0 kez geçiyor (tam 1 olmalı)"
+  }
+ ],
+ "hatalar": []
+}

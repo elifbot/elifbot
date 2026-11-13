@@ -1,0 +1,25 @@
+{
+ "kararlar": [],
+ "dusen": [
+  {
+   "baslik": "REJIM_DONUS Çıkışına Teyit Mekanizması",
+   "gerekce": "v9 smoke test sonuçları işlemlerin %81'inin REJIM_DONUS ile kapandığını ve bunun yüksek churn yaratarak kârı erittiğini kanıtlamaktadır. Anlık değişim yerine teyit mekanizması eklenerek gürültü azaltılacaktır.",
+   "dosya": "bot/v9/rejim.py",
+   "eski_kod": "if current_regime != previous_regime",
+   "yeni_kod": "if current_regime != previous_regime and self.confirmation_count >= 2",
+   "etki": "yüksek",
+   "risk": "orta",
+   "neden": "eski_kod 0 kez geçiyor (tam 1 olmalı)"
+  },
+  {
+   "baslik": "Operasyonel Durum Yönetimi Kalıcılığı",
+   "gerekce": "7/24 çalışma gereksinimi için mirror durumunun kalıcı hale getirilmesi ve sistem kopmalarında state kaybının önlenmesi gerekmektedir.",
+   "dosya": "bot/acarbot_6bot/canli_6bot.py",
+   "eski_kod": "def oturum():",
+   "yeni_kod": "def oturum():\n    # Load mirror state from store before starting\n    state = store.load_mirror_state()\n    if state:\n        apply_mirror_state(state)",
+   "etki": "orta",
+   "risk": "düşük",
+   "neden": "eski_kod 0 kez geçiyor (tam 1 olmalı)"
+  }
+ ]
+}
