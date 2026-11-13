@@ -63,14 +63,17 @@ jobs:
         continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
+          NVIDIA_API_KEY: ${{ vars.NVIDIA_API_KEY || secrets.NVIDIA_API_KEY }}
           GOREV: ${{ github.event.inputs.gorev }}
           SAGLAYICILAR: ${{ github.event.inputs.saglayici }}
           BUTCE: ${{ github.event.inputs.butce }}
           TESHIS: ${{ github.event.inputs.teshis }}
           TESHIS_MODEL: ${{ github.event.inputs.teshis_model }}
+          ACARBOT_MODEL: ${{ vars.ACARBOT_MODEL }}
+          ACARBOT_ZAMAN_ASIMI: "300"
         run: |
           ETIKET="$(date -u +%Y%m%d-%H%M%S)"
+          [ -n "$NVIDIA_API_KEY" ] && echo "::add-mask::$NVIDIA_API_KEY"
           ARGS=()
           IFS=',' read -ra LISTE <<< "$SAGLAYICILAR"
           for s in "${LISTE[@]}"; do ARGS+=(--saglayici "$(echo "$s" | tr -d ' ')"); done
