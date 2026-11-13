@@ -1,0 +1,15 @@
+{
+ "nvidia": {
+  "anahtar": true,
+  "katalog": 83,
+  "denenen": [
+   {
+    "model": "google/gemma-4-31b-it",
+    "ok": true,
+    "hata": "",
+    "yanit": "Pong! 🏓"
+   }
+  ],
+  "calisan": "google/gemma-4-31b-it"
+ }
+}
