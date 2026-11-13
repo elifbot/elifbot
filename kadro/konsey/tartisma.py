@@ -1,0 +1,110 @@
+# -*- coding: utf-8 -*-
+"""tartisma.py — 3 tur: öneri → itiraz → sekreter/oy.
+
+Tur 1: her rol (ve istenirse her model) kendi demetinden öneri üretir.
+Tur 2: her rol diğerlerinin önerisini eleştirir.
+Tur 3: sekreter JSON karar listesi üretir; kural ihlali içeren kararlar kodla düşürülür.
+"""
+from __future__ import annotations
+
+import json
+import re
+from dataclasses import dataclass, field
+from pathlib import Path
+
+from . import saglayici as sg
+from .roller import ROLLER, itiraz_istemi, oneri_istemi, sekreter_istemi
+
+HAVUZ = Path(__file__).resolve().parents[2] / "havuz" / "digest"
+
+# kural sayılarını değiştirmeye çalışan kararları yakalayan desen
+KURAL_IHLALI = re.compile(
+    r"(kasa(yı|sı)?\s*(1\s*\.?000|2000|200\s*\.?000)|"
+    r"teminat\w*\s*(art|yükselt|100|25)\b|"
+    r"kaldıra\w*\s*(art|yükselt|\b(20|25|50|100)x)|"
+    r"stop\w*\s*(gevşet|kaldır|[-–]?\s*(20|30|50)\s*\$)|"
+    r"pozisyon\s*(limiti|sınırı)\s*(koy|ekle))",
+    re.IGNORECASE)
+
+
+@dataclass
+class Oturum:
+    gorev: str
+    saglayicilar: list[str]
+    modeller: dict[str, list[str]]
+    butce: sg.Butce
+    oneriler: dict[str, str] = field(default_factory=dict)
+    itirazlar: dict[str, str] = field(default_factory=dict)
+    kararlar: list[dict] = field(default_factory=list)
+    dusen: list[dict] = field(default_factory=list)
+    hatalar: list[str] = field(default_factory=list)
+
+
+def _demet_oku(konu: str) -> str:
+    p = HAVUZ / f"{konu}.md"
+    return p.read_text(encoding="utf-8") if p.exists() else ""
+
+
+def oneri_turu(o: Oturum, kuru: bool) -> None:
+    for rol in ROLLER:
+        demet = _demet_oku(rol.konu)
+        if not demet:
+            o.hatalar.append(f"demet yok: {rol.konu}")
+            continue
+        parcalar = []
+        for sag in o.saglayicilar:
+            for model in o.modeller.get(sag, [None])[:1]:
+                metin = sg.cagir(sag, oneri_istemi(rol, demet, o.gorev), model=model,
+                                 butce=o.butce, rol=rol.ad, tur=1, kuru_kosu=kuru)
+                if metin:
+                    parcalar.append(metin.strip())
+        o.oneriler[rol.ad] = "\n\n".join(parcalar) if parcalar else ""
+
+
+def itiraz_turu(o: Oturum, kuru: bool) -> None:
+    for rol in ROLLER:
+        kendi = o.oneriler.get(rol.ad, "")
+        if not kendi:
+            continue
+        digerleri = {ad: m for ad, m in o.oneriler.items() if ad != rol.ad and m}
+        if not digerleri:
+            continue
+        sag = o.saglayicilar[0]
+        metin = sg.cagir(sag, itiraz_istemi(rol, kendi, digerleri), butce=o.butce,
+                         rol=rol.ad, tur=2, kuru_kosu=kuru)
+        if metin:
+            o.itirazlar[rol.ad] = metin.strip()
+
+
+def _json_ayikla(metin: str) -> dict:
+    m = re.search(r"\{.*\}", metin, flags=re.S)
+    if not m:
+        return {}
+    try:
+        return json.loads(m.group(0))
+    except json.JSONDecodeError:
+        return {}
+
+
+def sekreter_turu(o: Oturum, kuru: bool) -> None:
+    if not o.oneriler:
+        return
+    sag = o.saglayicilar[0]
+    metin = sg.cagir(sag, sekreter_istemi(o.oneriler, o.itirazlar), butce=o.butce,
+                     rol="sekreter", tur=3, sicaklik=0.1, kuru_kosu=kuru)
+    veri = _json_ayikla(metin)
+    for k in veri.get("kararlar", [])[:5]:
+        metin_k = " ".join(str(k.get(x, "")) for x in ("baslik", "gerekce", "etki"))
+        if KURAL_IHLALI.search(metin_k):
+            o.dusen.append({**k, "neden": "değişmez kural ihlali"})
+            continue
+        o.kararlar.append(k)
+
+
+def kos(o: Oturum, kuru: bool = False, turlar: int = 3) -> Oturum:
+    oneri_turu(o, kuru)
+    if turlar >= 2:
+        itiraz_turu(o, kuru)
+    if turlar >= 3:
+        sekreter_turu(o, kuru)
+    return o

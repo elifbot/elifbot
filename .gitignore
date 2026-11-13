@@ -13,3 +13,7 @@ drive/*.zip
 
 # koşu çıktıları: rapor + jurnal tutulur, geçici dosyalar tutulmaz
 runs/*/durum.json.tmp
+
+# konsey geçici çıktıları (gerçek oturumlar commit edilir)
+konsey/kuru-*/
+konsey/ci_*/
