@@ -1,0 +1,20 @@
+--- a/ws_bot.py
++++ b/ws_bot.py
+@@ -1062,7 +1062,8 @@
+-        else:
+-            stop = (giris_fiyat * (1 - self.sl_pct / 100) if s.yon == "LONG"
+-                    else giris_fiyat * (1 + self.sl_pct / 100))
++        else:
++            # Net -10
+Risk subayı olarak raporu inceledim. Mevcut veriler (WR %15.9, PF 0.676) sistemin "rastgele gürültüde stoplandığını" ve REJIM_DONUS çıkışlarının (işlemlerin %81'i) stratejik bir kanıta değil, muhtemelen zaman aşımı veya zayıf sinyale dayalı olduğunu gösteriyor.
+
+**En kötü durumda kasa ne olur?**
+Sınırsız pozisyon limiti olduğu için, korelasyon yönetimi olmazsa tüm kasa aynı yöne dönebilir. 100 eşzamanlı pozisyonun aynı anda stoplandığı bir senaryoda kasa **-1.000$ (sıfırlanma)** olur. Ancak mevcut stop kuralı (-10$) ile tekil işlem riski %1'dir.
+
+İşte churn'ü azaltan ve stop mesafesini maliyetle uyumlu hale getiren yama önerileri:
+
+### 1. Churn Azaltma: Yönsel Risk Filtresi (Veto Mekanizması)
+Sınırsız pozisyon limiti, yüksek korelasyonlu paritelerde "cluster stop" riskini artırır. `executor.py` içindeki mevcut risk bütçesi kontrolünü aktif ederek churn'ü (gereksiz giriş-çıkış döngüsünü) azaltıyoruz.
+
+**Dosya:** `executor.py`
+**Diff:**
