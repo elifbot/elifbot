@@ -5,7 +5,7 @@
 - 6 bot tek akışta koşuyor, panelde 6 dikey kart olarak izleniyor.
 - Orijinal paketteki 5 yapısal hata bulundu, 2'si koda yamalandı (stop −10, teminat fiziği).
 - v8 motoru yazıldı: kurala sabit, stop borsada, teminat fiziği ve tasfiye modelli.
-- 37 test yeşil; kural testleri sayıları kilitliyor.
+- 38 test yeşil; kural testleri sayıları kilitliyor.
 - **Eksik:** gerçek piyasa verisi (ağ kapalı) → kenar ölçümü yapılmadı.
 
 ## Sıradaki işler (öncelik sırası)

@@ -8,7 +8,7 @@
 - [x] 60 dakikalık 6-bot koşusu yapıldı → `docs/07-rapor-60dk.md`.
 - [x] 25 dakikalık gerçek döküm analiz edildi → `docs/02-veri-analizi.md`.
 - [x] 5 yapısal hata bulundu; stop (−20→−10) ve teminat fiziği koda yamalandı.
-- [x] v8 motoru yazıldı: kurala sabit, stop borsada, teminat/tasfiye modelli, 37 test.
+- [x] v8 motoru yazıldı: kurala sabit, stop borsada, teminat/tasfiye modelli, 38 test.
 - [x] Panel: 6 bot tek ekranda dikey kart.
 - [x] AI kadro: 14 ajan + 10 beceri + yönlendirme + çalışma kuralları.
 - [x] Drive'daki bugünkü 31 öğe: 13'ü depoya; 4 büyük arşiv (250 MB) manifest + sha256 ile
