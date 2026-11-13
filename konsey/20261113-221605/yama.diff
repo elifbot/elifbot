@@ -1,0 +1,10 @@
+--- a/bot/v9/motor.py
++++ b/bot/v9/motor.py
+@@ -51,6 +51,7 @@
+     komisyon_giris: float = 0.0
+     skor: float = 0.0
+     motor: str = ""
++    regime_flip_count: int = 0
+ 
+ 
+ @dataclass

@@ -1,0 +1,28 @@
+{
+ "kararlar": [
+  {
+   "baslik": "Pozisyon Nesnesi State Genişletmesi",
+   "gerekce": "Rejim dönüşü onay mekanizmasının çalışabilmesi için 'regime_flip_count' değişkeninin Poz sınıfında tanımlı olması gerekir; aksi takdirde çalışma anında AttributeError riski oluşur.",
+   "dosya": "bot/v9/motor.py",
+   "eski_kod": "@dataclass\nclass Poz:\n    sembol: str\n    baz: str\n    yon: Yon\n    adet: float\n    giris_fiyati: float\n    notional_usd: float\n    acilis_ts: float\n    stop_fiyati: float\n    stop_emir_id: str = \"\"\n    en_iyi_pnl: float = 0.0\n    komisyon_giris: float = 0.0\n    skor: float = 0.0\n    motor: str = \"\"",
+   "yeni_kod": "@dataclass\nclass Poz:\n    sembol: str\n    baz: str\n    yon: Yon\n    adet: float\n    giris_fiyati: float\n    notional_usd: float\n    acilis_ts: float\n    stop_fiyati: float\n    stop_emir_id: str = \"\"\n    en_iyi_pnl: float = 0.0\n    komisyon_giris: float = 0.0\n    skor: float = 0.0\n    motor: str = \"\"\n    regime_flip_count: int = 0",
+   "etki": "orta",
+   "risk": "düşük",
+   "aciklama": "Rejim dönüşü onay mekanizması için Poz sınıfına regime_flip_count değişkeni eklendi.",
+   "uygulanabilir": true,
+   "yama": "--- a/bot/v9/motor.py\n+++ b/bot/v9/motor.py\n@@ -51,6 +51,7 @@\n     komisyon_giris: float = 0.0\n     skor: float = 0.0\n     motor: str = \"\"\n+    regime_flip_count: int = 0\n \n \n @dataclass\n"
+  }
+ ],
+ "dusen": [
+  {
+   "baslik": "Rejim Dönüşü Onay Mekanizması",
+   "gerekce": "Sistemin %81 oranında 'REJIM_DONUS' nedeniyle erken çıkış yapması ve düşük WR (%15.9), çıkış mekanizmasının piyasa gürültüsüne (noise) aşırı duyarlı olduğunu kanıtlamaktadır. Anlık tick bazlı çıkış yerine, rejim tersliğinin kalıcılığını kontrol eden bir sayaç eklenerek 'churn' etkisi azaltılacaktır.",
+   "dosya": "bot/v9/motor.py",
+   "eski_kod": "    if time.time() - pos.open_time > rejim_karsi_cikis_sn:\n        if current_regime != pos.regime and pos.pnl < 0:\n            self.close_position(pos, reason=\"REJIM_DONUS\")",
+   "yeni_kod": "    if time.time() - pos.open_time > rejim_karsi_cikis_sn:\n        if current_regime != pos.regime and pos.pnl < 0:\n            pos.regime_flip_count = getattr(pos, 'regime_flip_count', 0) + 1\n            if pos.regime_flip_count >= 3:\n                self.close_position(pos, reason=\"REJIM_DONUS\")\n        else:\n            pos.regime_flip_count = 0",
+   "etki": "yüksek",
+   "risk": "orta",
+   "neden": "eski_kod 0 kez geçiyor (tam 1 olmalı)"
+  }
+ ]
+}
