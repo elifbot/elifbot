@@ -71,17 +71,25 @@ def itiraz_istemi(rol: Rol, kendi: str, digerleri: dict[str, str]) -> list[dict]
     ]
 
 
-def sekreter_istemi(oneriler: dict[str, str], itirazlar: dict[str, str]) -> list[dict]:
+def sekreter_istemi(oneriler: dict[str, str], itirazlar: dict[str, str],
+                    dosya_indeksi: str = "") -> list[dict]:
     o = "\n\n".join(f"## {ad}\n{m[:900]}" for ad, m in oneriler.items())
     i = "\n\n".join(f"## {ad}\n{m[:500]}" for ad, m in itirazlar.items())
     return [
         {"role": "system", "content":
-            "Sen konseyin sekretersin. Önerileri ve itirazları süzüp karar listesi çıkarırsın. "
+            "Sen konseyin sekretersin. Önerileri ve itirazları süzüp UYGULANABİLİR kararlar çıkarırsın. "
             "YALNIZCA geçerli JSON döndür, başka metin yok. " + KURAL},
         {"role": "user", "content":
             f"ÖNERİLER:\n{o}\n\nİTİRAZLAR:\n{i}\n\n"
-            "En fazla 5 karar seç. Şema:\n"
-            '{"kararlar":[{"baslik":"...","gerekce":"...","kanit":"dosya:satır",'
-            '"etki":"yüksek|orta|düşük","risk":"düşük|orta|yüksek"}]}\n'
-            "Kural sayılarını değiştiren hiçbir karar yazma."},
+            f"REPODAKİ GERÇEK DOSYALAR (başka dosya adı uydurma):\n{dosya_indeksi}\n\n"
+            "En fazla 4 karar seç. Her karar bir dosyada somut bir kod değişikliği olmalı.\n"
+            "Şema:\n"
+            '{"kararlar":[{"baslik":"...","gerekce":"...","dosya":"bot/v9/motor.py",'
+            '"eski_kod":"dosyadan AYNEN kopyalanmış 3-20 satır","yeni_kod":"onun yerine geçecek kod",'
+            '"etki":"yüksek|orta|düşük","risk":"düşük|orta|yüksek"}],"ozet":"tek paragraf"}\n'
+            "KURALLAR:\n"
+            "1) eski_kod, dosyada birebir var olan bir parça olmalı (girinti dahil). "
+            "Emin değilsen o kararı hiç yazma.\n"
+            "2) yeni_kod aynı girinti düzeyinde geçerli Python olmalı.\n"
+            "3) Kural sayılarını (1000$, 50$, 10x, -10$) değiştiren hiçbir karar yazma."},
     ]
