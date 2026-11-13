@@ -1,0 +1,171 @@
+{
+ "gorev": "Altı botlu Binance+OKX vadeli işlem sistemini iyileştir. Değişmez kurallar: 1000$ kasa, 50$ giriş x10 kaldıraç (500$ notional), sınırsız pozisyon, CROSS teminat, pozisyon başına -10$ stop, evren tüm Binance+OKX vadeli pariteleri. Ölçülmüş gerçek veri (v9 smoke, 60 sembol): 44 kapanan işlem, WR %15.9, PF 0.676, en iyi +16.1$, en kötü -6.02$, maksDD -30.38$, çıkış dağılımı REJIM_DONUS 36 / STOP 8, komisyon 24.66$. Kenar ölçülmedi, churn yüksek. Görevin: havuzdaki tüm bilgileri tarayıp (1) churn'ü azaltan, (2) REJIM_DONUS çıkışını kanıta bağlayan, (3) stop mesafesini 0.50$ maliyetle uyumlu hale getiren somut, uygulanabilir bir yama önerisi üret. Dosya+fonksiyon düzeyinde diff öner.",
+ "saglayici_modelleri": {
+  "nvidia": [
+   "01-ai/yi-large",
+   "adept/fuyu-8b",
+   "ai21labs/jamba-1.5-large-instruct",
+   "aisingapore/sea-lion-7b-instruct",
+   "bigcode/starcoder2-15b",
+   "databricks/dbrx-instruct",
+   "deepseek-ai/deepseek-coder-6.7b-instruct",
+   "deepseek-ai/deepseek-v4.1-flash",
+   "google/codegemma-1.1-7b",
+   "google/codegemma-7b",
+   "google/deplot",
+   "google/gemma-2b",
+   "google/gemma-3-12b-it",
+   "google/gemma-3-4b-it",
+   "google/gemma-4-31b-it",
+   "google/recurrentgemma-2b",
+   "ibm/granite-3.0-3b-a800m-instruct",
+   "ibm/granite-3.0-8b-instruct",
+   "ibm/granite-34b-code-instruct",
+   "ibm/granite-8b-code-instruct",
+   "meta/codellama-70b",
+   "meta/llama-3.2-90b-vision-instruct",
+   "meta/llama-guard-4-12b",
+   "meta/llama2-70b",
+   "meta/muse-glimmer-30b",
+   "microsoft/kosmos-2",
+   "microsoft/phi-3-vision-128k-instruct",
+   "microsoft/phi-3.5-moe-instruct",
+   "minimaxai/minimax-m3.1-flash",
+   "mistralai/codestral-22b-instruct-v0.1",
+   "mistralai/mistral-7b-instruct-v0.3",
+   "mistralai/mistral-large",
+   "mistralai/mistral-large-2-instruct",
+   "mistralai/mistral-large-4-1t-a52b",
+   "mistralai/mixtral-8x22b-v0.1",
+   "moonshotai/kimi-k2.6",
+   "nv-mistralai/mistral-nemo-12b-instruct",
+   "nvidia/ai-synthetic-video-detector",
+   "nvidia/cosmos-reason2-8b",
+   "nvidia/embed-qa-4",
+   "nvidia/ising-calibration-1.5-31b",
+   "nvidia/llama-3.1-nemoguard-8b-content-safety",
+   "nvidia/llama-3.1-nemoguard-8b-topic-control",
+   "nvidia/llama-3.1-nemotron-51b-instruct",
+   "nvidia/llama-3.1-nemotron-70b-instruct",
+   "nvidia/llama-3.1-nemotron-safety-guard-8b-v3",
+   "nvidia/llama-3.1-nemotron-ultra-253b-v1",
+   "nvidia/llama-3.2-nemoretriever-1b-vlm-embed-v1",
+   "nvidia/llama-3.2-nv-embedqa-1b-v1",
+   "nvidia/llama-nemotron-embed-vl-1b-v2",
+   "nvidia/llama3-chatqa-1.5-70b",
+   "nvidia/mistral-nemo-minitron-8b-8k-instruct",
+   "nvidia/nemotron-3-embed-1b",
+   "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+   "nvidia/nemotron-3-super-120b-a12b",
+   "nvidia/nemotron-3-ultra-550b-a55b",
+   "nvidia/nemotron-3.5-bolt-e4b",
+   "nvidia/nemotron-3.5-content-safety",
+   "nvidia/nemotron-3.5-embed-1b",
+   "nvidia/nemotron-3.5-embed-8b"
+  ]
+ },
+ "saglayicilar": [
+  "nvidia"
+ ],
+ "modeller": {
+  "nvidia": [
+   null
+  ]
+ },
+ "cagri": [
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "mimar",
+   "tur": 1,
+   "istem_karakter": 23294,
+   "yanit": "Sistem mimarı olarak, v9 smoke verisindeki düşük WR (%15.9) ve yüksek churn (REJIM_DONUS baskınlığı) sorunlarını çözmek için kanıta dayalı yama önerim aşağıdadır.\n\n### 1. Churn Azaltma: Cascade Filtresi Entegrasyonu\nSistemdeki yüksek churn, düşük kaliteli sinyallerin (gürültü) işleme girmesinden kaynaklanmaktadır. Kanıtlar, \"Cascade Eşiği\" (tasfiye zinciri) kullanımının isabet oranını %60.1'den %86.3'e çıkardığını göstermektedir.\n\n*   **Kanıt:** `futures_bot_v37/ws_bot.py:86-92` ve `futures_bot_v34/ws_bot.py:85-91`.\n*   **Uygulama:** Eşik 3 (son 60 saniyede $\\ge 3$ sinyal) seçilerek sadece yüksek momentumlu/tasfiye odaklı kurulumlar kabul edilecektir.\n\n### 2. REJIM_DONUS Çıkışının Kanıta Bağlanması\nMevcut sistemde çıkışların %81.8'i (36/44) `REJIM_DONUS` ile gerçekleşmektedir. Bu, sinyalin giriş motoru ile çıkış rejimi arasındaki uyumsuzluğu gösterir.\n\n*   **Kanıt:** `test_trading_system.py:69-75` ve `test_trading_system.py:128-134`.\n*   **Analiz:** `FadeStrategy` (tersine dönüş) ve `Trend` motorları farklı stop/çıkış dinamiklerine sahiptir. `REJIM_DONUS` çıkışları, sinyalin \"motor\" tipinin (fade vs trend) değiştiği anlarda tetiklenmektedir.\n*   **Yama:** Giriş sinyaline `motor` etiketi eklenerek, sadece aynı motor tipindeki rejim değişikliği çıkış tetikleyicisi olarak kabul edilecektir.\n\n### 3. Stop Mesafesi ve Maliyet Uyumu ($-10$ Net Stop)\nSistem kuralı pozisyon başına net $-10\\$$ stop gerektirir. $500\\$$ notional değerde bu, $\\%2$ brüt kayba tekabül eder. Ancak mevcut kodda stoplar sabit yüzdelerle veya rastgele `sl_pct` ile belirlenmiştir.\n\n*   **Kanıt:** `ws_bot.py:1062-1068` (v4), `ws_bot.py:981-987` (v37).\n*   **Hata:** `stop = giris_fiyat * (1 - self.sl_pct / 100)` kullanımı, volatiliteye göre stop mesafesini değiştirir ve $-10\\$$ sabit risk kuralını ihlal eder.\n*   **Yama:** Stop mesafesi, `stop_distance_fraction` üzerinden değil, doğrudan notional değer üzerinden sabit $\\%2$ (brüt) olarak kilitlenecektir.\n\n---\n\n### Uygulanabilir Yama (Diff)\n\n#### Dosya: `app/executor.py` (veya `ws_bot.py` giriş fonksiyonu)\n```python\n<<<<\n        stop = (giris_fiyat * (1 - self.sl_pct / 100) if s.yon == \"LONG\"\n                else giris_fiyat * (1 + self.sl_pct / 100))\n====\n        # Kural: 500$ notional, -10$ net stop = %2 brüt stop\n        # Kanıt: Değişmez Kural (1000$ kasa / 50$ teminat / 10x)\n        fixed_sl_pct = 2.0 \n        stop = (giris_fiyat * (1 - fixed_sl_pct / 100) if s.yon == \"LONG\"\n                else giris_fiyat * (1 + fixed_sl_pct / 100))\n>>>>\n```\n\n#### Dosya: `app/executor.py` (Sinyal Filtreleme Katmanı)\n```python\n<<<<\n        sonuc = self.portfoy.open_position(s.exchange, s.symbol, s.yon, giris_fiyat, MARJ, ...)\n====\n        # Churn Azaltma: Cascade Eşiği Filtresi\n        # Kanıt: futures_bot_v37/ws_bot.py:86-92 (Eşik 3 seçildi)\n        if not self.cascade_tracker.is_valid(s.symbol, threshold=3):\n            return {\"symbol\": s.symbol, \"signal\": \"BEKLE\", \"reason\": \"cascade_threshold_not_met\"}\n            \n        sonuc = self.portfoy.open_position(s.exchange, s.symbol, s.yon, giris_fiyat, MARJ, ...)\n>>>>\n```\n\n#### Dosya: `core/strategy.py` (Sinyal Nesnesi)\n```python\n<<<<\n    def __init__(self, side, impulse_pct, rvol, stop_distance_fraction, motor=\"fade\"):\n====\n    def __init__(self, side, impulse_",
+   "saniye": 279.6,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "risk_subayi",
+   "tur": 1,
+   "istem_karakter": 23158,
+   "yanit": "",
+   "saniye": 0.0,
+   "hata": "google/gemma-4-31b-it → TimeoutError: The read operation timed out | meta/llama-3.3-70b-instruct → HTTP 410 {\"type\":\"about:blank\",\"title\":\"Gone\",\"status\":410,\"detail\":\"The model 'meta/llama-3.3-70b-instruct' has reached "
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "icra",
+   "tur": 1,
+   "istem_karakter": 23192,
+   "yanit": "Önce temel sorunu tanımlayalım: **\"Kağıtta çalışır\"** ile **\"Borsada çalışır\"** arasındaki fark; kağıt üzerinde emrin gönderildiği an dolduğu varsayılması (veya basit bir simülatörle geçiştirilmesi), borsada ise emrin deftere yazılması, öncelik sırası, kısmi dolumlar, `post-only` reddi ve ağ gecikmesiyle fiyatın kaymasıdır.\n\nVerdiğin smoke test sonuçları (WR %15.9, PF 0.676) sistemin şu an \"rastgele gürültüye\" trade ettiğini ve yüksek churn (işlem sıklığı) ile komisyonların kârı yediğini gösteriyor. `REJIM_DONUS` çıkışlarının %81'i (36/44) oluşturması, stratejinin stop olmadan önce \"sinyal değişti\" diyerek pozisyonu kapattığını ancak bunu kârlı bir şekilde yapamadığını kanıtlıyor.\n\nİşte belirlenen kısıtlar altında (1000$ kasa, 50$ giriş, -10$ stop) churn'ü azaltan ve icrayı borsaya uygun hale getiren yama:\n\n### 1. Analiz ve Yama Mantığı\n*   **Churn Azaltma:** `REJIM_DONUS` çıkışlarını sadece \"karşıt sinyal\" ile değil, minimum bir \"kâr eşiği\" veya \"zaman filtresi\" ile bağlamalıyız.\n*   **Stop Uyumu:** Pozisyon başına -10$ stop, 500$ notional (10x) için %2'lik bir hareket demektir. `paper.py` içindeki `DOLUM_ANI_STOP_IHLALI` (satır 310-316) gerçek borsada \"slippage\" (kayma) nedeniyle -10$ yerine -12$ veya -15$ olarak gerçekleşir.\n*   **Kanıt Bağlantısı:** `test_v52_hardening.py` içindeki `_stale_fill_blocks` ve `bind_plan` mekanizması, emrin güncelliğini kontrol eder. Churn'ü azaltmak için bu kontrolü \"sinyal kalitesine\" bağlayacağız.\n\n### 2. Uygulanabilir Yama (Diff)\n\n#### Dosya: `src/exchanges.py` (veya ilgili broker sınıfı)\n**Amaç:** `post-only` emirlerin reddini yönetmek ve kısmi dolumları (partial fills) tek bir pozisyon olarak konsolide etmek.\n\n```python\n--- a/src/exchanges.py\n+++ b/src/exchanges.py\n@@ -1114,7 +1114,12 @@\n-        status = order\n+        # YAMA: Post-only reddi durumunda emri hemen iptal et ve churn'ü önlemek için \n+        # aynı tick içinde tekrar denemeyi engelle.\n+        if order.get(\"status\") == \"CANCELED\" and \"post-only\" in order.get(\"reason\", \"\").lower():\n+            return {\"status\": \"REJECTED_POST_ONLY\", \"filled\": 0.0, \"avg_px\": None}\n+        \n+        status = order\n```\n\n#### Dosya: `exec/paper.py` $\\rightarrow$ `exec/broker.py` (Canlı İcra Katmanı)\n**Amaç:** `REJIM_DONUS` çıkışlarını kanıta bağlamak ve stop mesafesini optimize etmek.\n\n```python\n--- a/exec/paper.py\n+++ b/exec/broker.py\n@@ -310,6 +310,15 @@\n-        self.trades.append({\n-            \"type\": \"ORDER_CANCELED\", \"order_id\": order.id, \"symbol\": order.symbol,\n-            \"reason\": \"DOLUM_ANI_STOP_IHLALI\", \"live_price\": price,\n-            \"stop_loss\": stop, \"limit_price\": order.limit_price,\n-            \"filled_quantity\": order.filled_quantity,\n-            \"quantity\": order.quantity, \"timestamp\": order.created_ms,\n+        # YAMA: Stop mesafesini 0.50$ maliyet (komisyon+kayma) ile uyumlu hale getir.\n+        # Net -10$ stop'u korumak için, tetikleme fiyatını 0.20$ yukarı/aşağı çek.\n+        adjusted_stop = stop + (0.20 if order.side == OrderSide.BUY else -0.20)\n+        \n+        # REJIM_DONUS kanıtı: Sadece fiyat girişten %0.1 uzaklaştıysa veya \n+        # karşıt sinyal 'strong' ise çıkış yap.\n+        if motor == \"REJIM_DONUS\" and abs(price - order.limit_price) / order.limit_price < 0.001:\n+            return \"HOLD_POSITION\" # Churn'ü azaltan filtre\n+\n+        self.trades.append({\n+            \"type\": \"ORDER_CANCELED\", \"order_id\": order.id, \"symbol\": order.symbol,\n+            \"reason\": \"DOLUM",
+   "saniye": 229.3,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "test",
+   "tur": 1,
+   "istem_karakter": 23094,
+   "yanit": "",
+   "saniye": 0.0,
+   "hata": "google/gemma-4-31b-it → TimeoutError: The read operation timed out | bütçe doldu"
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "olcum",
+   "tur": 1,
+   "istem_karakter": 22957,
+   "yanit": "",
+   "saniye": 0.0,
+   "hata": "bütçe/süre doldu — çağrı yapılmadı"
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "ops",
+   "tur": 1,
+   "istem_karakter": 23308,
+   "yanit": "",
+   "saniye": 0.0,
+   "hata": "bütçe/süre doldu — çağrı yapılmadı"
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "mimar",
+   "tur": 2,
+   "istem_karakter": 2752,
+   "yanit": "",
+   "saniye": 0.0,
+   "hata": "bütçe/süre doldu — çağrı yapılmadı"
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "icra",
+   "tur": 2,
+   "istem_karakter": 2750,
+   "yanit": "",
+   "saniye": 0.0,
+   "hata": "bütçe/süre doldu — çağrı yapılmadı"
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "sekreter",
+   "tur": 3,
+   "istem_karakter": 2412,
+   "yanit": "",
+   "saniye": 0.0,
+   "hata": "bütçe/süre doldu — çağrı yapılmadı"
+  }
+ ],
+ "kullanilan_cagri": 2,
+ "kararlar": [],
+ "dusen": [],
+ "hatalar": []
+}
