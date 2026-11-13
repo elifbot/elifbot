@@ -58,11 +58,14 @@ class Butce:
     azami_cagri: int = 24
     azami_saniye: float = 900.0
     kullanilan: int = 0
+    denemeler: int = 0
     baslangic: float = field(default_factory=time.time)
     kayitlar: list[Cagri] = field(default_factory=list)
 
     def bitti(self) -> bool:
-        return self.kullanilan >= self.azami_cagri or (time.time() - self.baslangic) > self.azami_saniye
+        return (self.kullanilan >= self.azami_cagri
+                or self.denemeler >= self.azami_cagri * 6      # başarısız denemeler de sayılır
+                or (time.time() - self.baslangic) > self.azami_saniye)
 
 
 def _kirp(mesajlar: list[dict], esik: int = ESIK_KARAKTER) -> list[dict]:
@@ -122,14 +125,18 @@ def cagir(saglayici: str, mesajlar: list[dict], model: str | None = None,
         if y and y not in adaylar:
             adaylar.append(y)
 
-    son_hata = "denenmedi"
+    hatalar: list[str] = []
     for m in adaylar:
+        if butce.bitti():
+            hatalar.append("bütçe doldu")
+            break
         metin, hata = _tek_cagri(s, m, mesajlar, butce, rol, tur,
                                  sicaklik, azami_token, istem_karakter)
         if metin:
             _CALISAN[saglayici] = m
             return metin
-        son_hata = f"{m}: {hata}"
+        hatalar.append(f"{m} → {hata}")
+    son_hata = " | ".join(hatalar) if hatalar else "aday yok"
     butce.kayitlar.append(Cagri(saglayici, adaylar[0] if adaylar else "?", rol, tur,
                                 istem_karakter, "", 0.0, son_hata[:220]))
     return ""
@@ -163,6 +170,7 @@ def _tek_cagri(s: "Saglayici", model: str, mesajlar: list[dict], butce: "Butce",
                                         metin, round(time.time() - t0, 1)))
             return metin, ""
         except urllib.error.HTTPError as e:
+            butce.denemeler += 1
             try:
                 govde_hata = e.read().decode()[:200]
             except Exception:
@@ -174,6 +182,7 @@ def _tek_cagri(s: "Saglayici", model: str, mesajlar: list[dict], butce: "Butce",
                 continue
             break
         except Exception as e:                       # ağ/timeout
+            butce.denemeler += 1
             son_hata = f"{type(e).__name__}: {e}"[:120]
             if deneme < 2:
                 time.sleep(2 ** deneme * 3)
