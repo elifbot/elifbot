@@ -1,0 +1,146 @@
+# toplama-4.zip icerik listesi (145 dosya, acilmis 82.1 MB)
+       312 toplama 4/.env.example
+    684025 toplama 4/10 KASIM BOT.rar
+    171428 toplama 4/15000 - 20000 TL Ders Calisma Tablet Rehberi.pdf
+   2614675 toplama 4/5-1-1 MEBİ yazılısı (1).pdf
+   2614675 toplama 4/5-1-1 MEBİ yazılısı.pdf
+    171428 toplama 4/8 kasìm/15000 - 20000 TL Ders Calisma Tablet Rehberi.pdf
+   2614675 toplama 4/8 kasım/5-1-1 MEBİ yazılısı (1).pdf
+   2614675 toplama 4/8 kasım/5-1-1 MEBİ yazılısı.pdf
+    584532 toplama 4/8 kasìm/ACARBOT_FINAL_v5.3.zip
+    810701 toplama 4/8 kasìm/ACARBOT_FINAL_v5.4.zip
+     14856 toplama 4/8 kasìm/ANALIZ_KAPI_ATFI.md
+     15788 toplama 4/8 kasìm/ANALIZ_v5.4_GIRIS_KENARI.md
+     15999 toplama 4/8 kasìm/app.js
+   1107766 toplama 4/8 kasìm/birlestirilmis_2sayfa.pdf
+     65536 toplama 4/8 kasìm/bot_data (1).db
+     65536 toplama 4/8 kasìm/bot_data.db
+      1843 toplama 4/8 kasìm/env (1).example
+       939 toplama 4/8 kasìm/env.example
+  13283768 toplama 4/8 kasìm/GeminiSetup.exe
+     70342 toplama 4/8 kasìm/kripto-bot-ekibi (1).zip
+     74542 toplama 4/8 kasìm/kripto-bot-ekibi (2).zip
+     48600 toplama 4/8 kasìm/kripto-bot-ekibi.zip
+     35702 toplama 4/8 kasìm/KriptoBot-Panel.zip
+      7183 toplama 4/8 kasìm/mail_v54_taslak.txt
+   2129884 toplama 4/8 kasìm/Onaylanmayan 811303.crdownload
+   1580759 toplama 4/8 kasìm/Onaylanmayan 945343.crdownload
+       222 toplama 4/8 kasìm/package.json
+    261919 toplama 4/8 kasìm/panel-canli-2-oto-islem (1).png
+    245631 toplama 4/8 kasìm/panel-canli-2-oto-islem.png
+    205342 toplama 4/8 kasìm/panel-canli-3-oda (1).png
+    205670 toplama 4/8 kasìm/panel-canli-3-oda.png
+    189671 toplama 4/8 kasìm/panel-onizleme.png
+     10901 toplama 4/8 kasìm/TEST_RAPORU_15dk_v5.2_2tur.md
+      7691 toplama 4/8 kasìm/TEST_RAPORU_15dk_v5.3.md
+   1060072 toplama 4/8 kasìm/WhatsApp Unknown 2026-11-08 at 12.32.30.zip
+     10792 toplama 4/8 kasìm/ZARAR_ANALIZI_v5.5.md
+       117 toplama 4/acarbot-final/.env.example
+       279 toplama 4/acarbot-final/BIRLESTIRME_PLANI.md
+    339219 toplama 4/acarbot-system (1).html
+    339219 toplama 4/acarbot-system.html
+    339219 toplama 4/acarbot-systemM.html
+    723494 toplama 4/ACARBOT_Arsiv_Veri_Analizi_Raporu.pdf
+    135810 toplama 4/ACARBOT_FINAL_v1.1.zip
+      5800 toplama 4/ACARBOT_FINAL_v1.2 (1).zip
+      3629 toplama 4/ACARBOT_FINAL_v1.2 (2).zip
+      4926 toplama 4/ACARBOT_FINAL_v1.2 (3).zip
+    141792 toplama 4/ACARBOT_FINAL_v1.2.zip
+    165733 toplama 4/ACARBOT_FINAL_v1.7.zip
+    158860 toplama 4/ACARBOT_FINAL_v1.8.zip
+    167404 toplama 4/ACARBOT_FINAL_v1.9.zip
+    230617 toplama 4/ACARBOT_FINAL_v2.0.1.zip
+    227298 toplama 4/ACARBOT_FINAL_v2.0.zip
+    289970 toplama 4/ACARBOT_FINAL_v3.0.zip
+    371927 toplama 4/ACARBOT_FINAL_v4.0.zip
+    397132 toplama 4/ACARBOT_FINAL_v5.0.zip
+    422798 toplama 4/ACARBOT_FINAL_v5.1 (1).zip
+    422798 toplama 4/ACARBOT_FINAL_v5.1.zip
+    584532 toplama 4/ACARBOT_FINAL_v5.3.zip
+    810701 toplama 4/ACARBOT_FINAL_v5.4.zip
+   1048969 toplama 4/ACARBOT_FINAL_v5_6_2.zip
+     92143 toplama 4/ACARBOT_NOVA_Birlesik_Bot_Analiz_Raporu.pdf
+      3785 toplama 4/ACARBOT_Raporu_Kapak.html
+    105658 toplama 4/acarbot_super.zip
+   2327141 toplama 4/ACARBOT_TUM_SURUMLER_bulut_yedek.zip
+    128815 toplama 4/ACARBOT_V20.zip
+     37374 toplama 4/ACARBOT_V20_1SAATLIK_PAPER_TEST_RAPORU_2026-11-10.md
+     50799 toplama 4/ACARBOT_V20_FULL.zip
+     29789 toplama 4/ACARBOT_v4_Sistem_Rehberi.html
+    497331 toplama 4/ACARBOT_v4_Sistem_Rehberi.pdf
+    502101 toplama 4/ACARBOT_V6.2_NORMAL.zip
+   1644620 toplama 4/ACARBOT_V6.2_TEK.py
+     33658 toplama 4/ACARBOT_veri_analizi_2026-11-06.xlsx
+     76132 toplama 4/ACAR_FUTURES_APEX_v1.0_PAPER.zip
+     76911 toplama 4/ACAR_FUTURES_APEX_v1.1_PAPER_UNLIMITED_POSITIONS.zip
+     14856 toplama 4/ANALIZ_KAPI_ATFI.md
+     15788 toplama 4/ANALIZ_v5.4_GIRIS_KENARI.md
+     15999 toplama 4/app.js
+    363990 toplama 4/ARENA 191 BELGEDEN ÇIKAN.zip
+     12982 toplama 4/ARENA FINAL BOT KARI₧IM.zip
+      9543 toplama 4/ARENA FÿNAL.pdf
+      2393 toplama 4/ayarlar.json
+      7177 toplama 4/birlesik_trading_bot (1).zip
+      5067 toplama 4/birlesik_trading_bot (2).zip
+      5396 toplama 4/birlesik_trading_bot (3).zip
+      6320 toplama 4/birlesik_trading_bot (4).zip
+     11035 toplama 4/birlesik_trading_bot (5).zip
+      8464 toplama 4/birlesik_trading_bot (6).zip
+      6217 toplama 4/birlesik_trading_bot.zip
+   1107766 toplama 4/birlestirilmis_2sayfa.pdf
+      1446 toplama 4/BOOTEX.LOG
+   3491323 toplama 4/BotMasasi_v4.6.0.zip
+   3511144 toplama 4/BotMasasi_v5.3.1 final.zip
+     65536 toplama 4/bot_data (1).db
+     65536 toplama 4/bot_data.db
+     56434 toplama 4/bot_final.zip
+     64124 toplama 4/bot_final_v2.zip
+    114457 toplama 4/CHATGPT.zip
+   2643025 toplama 4/CIKARILAN_KODLAR.zip
+   6833341 toplama 4/CIKARILAN_KODLAR_TEK_DOSYA.txt
+     38618 toplama 4/CLADE BOT.zip
+      8751 toplama 4/DEGISIKLIKLER_FINAL_v5.1.md
+      1843 toplama 4/env (1).example
+       939 toplama 4/env.example
+        53 toplama 4/evren api anahtarì.txt
+      2059 toplama 4/EXE_YAP.bat
+      7717 toplama 4/gemini-code-1793993532299.py
+     10785 toplama 4/gemini-code-1793993821091.py
+      2800 toplama 4/gemini-code-1793997729212.txt
+  13283768 toplama 4/GeminiSetup.exe
+      4655 toplama 4/GEMÿNÿ 2.zip
+    106641 toplama 4/GLM KARI₧IM FÿNAL.zip
+    139162 toplama 4/glm son sürüm.zip
+     34745 toplama 4/GLM.zip
+    149840 toplama 4/gpt 05 final.zip
+    147963 toplama 4/gpt son sürüm.zip
+    117819 toplama 4/Güncel Sipariƒ Listesi.xlsx
+     70342 toplama 4/kripto-bot-ekibi (1).zip
+     74542 toplama 4/kripto-bot-ekibi (2).zip
+     48600 toplama 4/kripto-bot-ekibi.zip
+     35702 toplama 4/KriptoBot-Panel.zip
+      9702 toplama 4/LB-EXT-1.xlsx
+      7183 toplama 4/mail_v54_taslak.txt
+     60282 toplama 4/NOVA-BOT-v2.0.0-final-20261106.zip
+        70 toplama 4/nvidia api.txt
+   2129884 toplama 4/Onaylanmayan 811303.crdownload
+   1580759 toplama 4/Onaylanmayan 945343.crdownload
+       222 toplama 4/package.json
+    261919 toplama 4/panel-canli-2-oto-islem (1).png
+    245631 toplama 4/panel-canli-2-oto-islem.png
+    205342 toplama 4/panel-canli-3-oda (1).png
+    205670 toplama 4/panel-canli-3-oda.png
+    189671 toplama 4/panel-onizleme.png
+     10901 toplama 4/TEST_RAPORU_15dk_v5.2_2tur.md
+      7691 toplama 4/TEST_RAPORU_15dk_v5.3.md
+    174615 toplama 4/Trading_Botu_Kod_Inceleme_Raporu (1).pdf
+     29295 toplama 4/Trading_Botu_Kod_Inceleme_Raporu.docx
+    174615 toplama 4/Trading_Botu_Kod_Inceleme_Raporu.pdf
+      5087 toplama 4/trading_system_v2_final.zip
+     10836 toplama 4/trading_system_v2_ultra.zip
+     13800 toplama 4/trading_system_v2_ultra_plus.zip
+    417565 toplama 4/v22 claude final.zip
+   1060072 toplama 4/WhatsApp Unknown 2026-11-08 at 12.32.30.zip
+       167 toplama 4/Yeni Metin Belgesi.txt
+      1227 toplama 4/YENI_SOHBET_ISTEMI.txt
+     10792 toplama 4/ZARAR_ANALIZI_v5.5.md

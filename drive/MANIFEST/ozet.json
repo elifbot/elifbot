@@ -1,0 +1,72 @@
+{
+ "1": {
+  "ad": "toplama-1.zip",
+  "bayt": 49514195,
+  "dosya": 10,
+  "acilmis_bayt": 81549452,
+  "ust": [
+   "toplama 1"
+  ],
+  "uzanti": {
+   ".zip": 7,
+   ".patch": 3
+  }
+ },
+ "2": {
+  "ad": "toplama-2.zip",
+  "bayt": 52103079,
+  "dosya": 387,
+  "acilmis_bayt": 70887845,
+  "ust": [
+   "toplama 2"
+  ],
+  "uzanti": {
+   ".indir": 106,
+   ".py": 101,
+   ".zip": 51,
+   ".html": 35,
+   ".md": 20,
+   ".pdf": 14,
+   ".json": 11,
+   ".txt": 10
+  }
+ },
+ "3": {
+  "ad": "toplama-3.zip",
+  "bayt": 101605253,
+  "dosya": 396,
+  "acilmis_bayt": 152427848,
+  "ust": [
+   "toplama"
+  ],
+  "uzanti": {
+   ".indir": 106,
+   ".py": 101,
+   ".zip": 57,
+   ".html": 35,
+   ".md": 20,
+   ".pdf": 14,
+   ".json": 11,
+   ".txt": 10
+  }
+ },
+ "4": {
+  "ad": "toplama-4.zip",
+  "bayt": 58646039,
+  "dosya": 145,
+  "acilmis_bayt": 86076281,
+  "ust": [
+   "toplama 4"
+  ],
+  "uzanti": {
+   ".zip": 64,
+   ".pdf": 14,
+   ".md": 13,
+   ".png": 10,
+   ".txt": 8,
+   ".example": 6,
+   ".html": 5,
+   ".db": 4
+  }
+ }
+}
