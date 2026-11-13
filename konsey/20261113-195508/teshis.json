@@ -1,0 +1,21 @@
+{
+ "nvidia": {
+  "anahtar": true,
+  "katalog": 83,
+  "denenen": [
+   {
+    "model": "deepseek-ai/deepseek-v4.1-flash",
+    "ok": false,
+    "hata": "",
+    "yanit": ""
+   },
+   {
+    "model": "google/gemma-4-31b-it",
+    "ok": true,
+    "hata": "",
+    "yanit": "Pong! 🏓"
+   }
+  ],
+  "calisan": "google/gemma-4-31b-it"
+ }
+}
