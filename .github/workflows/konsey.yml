@@ -73,8 +73,8 @@ jobs:
           ACARBOT_ZAMAN_ASIMI: "300"
           ACARBOT_SURE: "3000"
           ACARBOT_PARALEL: "3"
-          ACARBOT_ESIK: "16000"
-          ACARBOT_TOKEN: "900"
+          ACARBOT_ESIK: "11000"
+          ACARBOT_TOKEN: "700"
         run: |
           ETIKET="$(date -u +%Y%m%d-%H%M%S)"
           [ -n "$NVIDIA_API_KEY" ] && echo "::add-mask::$NVIDIA_API_KEY"
