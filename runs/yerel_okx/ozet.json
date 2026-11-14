@@ -1,0 +1,61 @@
+{
+  "bar": 360,
+  "sembol": 6,
+  "kaynak": "okx 1H candles (gerçek)",
+  "sonuclar": [
+    {
+      "islem": 1,
+      "kazanma_orani": 0.0,
+      "realize_usd": -10.0,
+      "komisyon_usd": 0.5,
+      "kar_faktoru": 0.0,
+      "ortalama_islem": -10.0,
+      "cikis_nedenleri": {
+        "stop": 1
+      },
+      "red_nedenleri": {
+        "hacim": 161,
+        "veri": 132,
+        "kesisme_yok": 51
+      },
+      "surum": "v1 kbot (EMA+hacim)",
+      "acik_pozisyon": 0,
+      "acik_pnl_usd": 0.0
+    },
+    {
+      "islem": 0,
+      "kazanma_orani": 0.0,
+      "realize_usd": 0,
+      "komisyon_usd": 0.0,
+      "kar_faktoru": 0.0,
+      "ortalama_islem": 0.0,
+      "cikis_nedenleri": {},
+      "red_nedenleri": {
+        "veri": 354,
+        "trend": 4,
+        "notr": 1,
+        "panik": 1
+      },
+      "surum": "v2 kbot2 (rejim+komite)",
+      "acik_pozisyon": 0,
+      "acik_pnl_usd": 0.0
+    },
+    {
+      "islem": 0,
+      "kazanma_orani": 0.0,
+      "realize_usd": 0,
+      "komisyon_usd": 0.0,
+      "kar_faktoru": 0.0,
+      "ortalama_islem": 0.0,
+      "cikis_nedenleri": {},
+      "red_nedenleri": {
+        "veri": 354,
+        "RSI": 3,
+        "ADX": 3
+      },
+      "surum": "v3 kbot3 (kanit esikleri)",
+      "acik_pozisyon": 0,
+      "acik_pnl_usd": 0.0
+    }
+  ]
+}
