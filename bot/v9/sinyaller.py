@@ -108,9 +108,6 @@ class KomiteKarari:
 
 
 def komite(h: Hafiza, r: RejimSonucu, ts: float, min_skor: float = 0.55) -> KomiteKarari:
-    # RVOL Filtresi: Düşük hacimli sahte kırılımları engellemek için hacim teyidi şarttır
-    if h.hacim_orani < 1.5:
-        return KomiteKarari(None, (), False)
     adaylar = [a for a in (f(h, r, ts) for f in DEDEKTORLER) if a is not None]
     if not adaylar:
         return KomiteKarari(None, (), False)

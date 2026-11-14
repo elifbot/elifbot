@@ -1,0 +1,26 @@
+{
+ "kararlar": [],
+ "dusen": [
+  {
+   "dosya": "bot/v9/motor.py",
+   "hedef": "Poz dataclass",
+   "islem": "EKLE",
+   "kod": "ters_rejim_sayaci: int = 0",
+   "neden": "dosya/eski_kod boş"
+  },
+  {
+   "dosya": "bot/v9/motor.py",
+   "hedef": "_izle metodu",
+   "islem": "GUNCELLE",
+   "mantik": "if rejim_ters: pos.ters_rejim_sayaci += 1 else: pos.ters_rejim_sayaci = 0",
+   "neden": "dosya/eski_kod boş"
+  },
+  {
+   "dosya": "bot/v9/motor.py",
+   "hedef": "satır 140-144",
+   "islem": "DEGISKILIK",
+   "yeni_kosul": "if pos.ters_rejim_sayaci >= 20 and pnl < 0: self.kapat(pos)",
+   "neden": "dosya/eski_kod boş"
+  }
+ ]
+}
