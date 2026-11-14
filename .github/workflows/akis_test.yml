@@ -1,0 +1,54 @@
+name: Canli Akis Testi (OKX WS 30 dk)
+
+on:
+  workflow_dispatch:
+    inputs:
+      dakika:
+        description: "test suresi (dk)"
+        default: "30"
+      sembol:
+        description: "sembol sayisi"
+        default: "20"
+
+permissions:
+  contents: write
+
+jobs:
+  akis:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Bagimlilik
+        run: pip install websocket-client
+      - name: Borsa erisimi
+        run: |
+          mkdir -p runs
+          {
+            echo "tarih: $(date -u)"
+            echo "okx rest: $(curl -s -o /dev/null -w '%{http_code}' https://www.okx.com/api/v5/public/time)"
+            echo "okx trades: $(curl -s 'https://www.okx.com/api/v5/market/trades?instId=BTC-USDT-SWAP&limit=1' | head -c 200)"
+          } > runs/akis_tani.txt 2>&1 || true
+          cat runs/akis_tani.txt
+      - name: 30 dk CANLI akis testi
+        run: |
+          python3 -m bot.canli.akis_test --dakika "${{ github.event.inputs.dakika }}" \
+            --sembol "${{ github.event.inputs.sembol }}" \
+            --etiket "akis_$(date -u +%Y%m%d_%H%M%S)" 2>&1 | tee -a runs/akis_tani.txt
+      - name: Sonucu dala yaz
+        if: always()
+        run: |
+          git config user.name "akis-test"
+          git config user.email "akis@users.noreply.github.com"
+          git checkout -b "akis/$(date -u +%Y%m%d-%H%M%S)"
+          git add -A runs || true
+          git commit -m "canli akis testi sonucu" || echo "degisiklik yok"
+          git push origin HEAD || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: akis-test-sonuc
+          path: runs/
