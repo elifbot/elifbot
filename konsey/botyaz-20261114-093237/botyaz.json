@@ -1,0 +1,14 @@
+{
+ "turlar": [
+  {
+   "tur": 0,
+   "yazildi": false,
+   "hata": "kod boş",
+   "tani": {
+    "yanit_karakter": 3392,
+    "saniye": 170.7,
+    "ornek": "```json\n{\n  \"kod\": \"from dataclasses import dataclass\\nfrom typing import List, Tuple\\nimport argparse\\nimport json\\nimport math\\nimport pathlib\\nimport random\\nimport time\\n\\n@dataclass\\nclass Ayarlar:\\n    kasa_usd: float = 1000.0\\n    teminat_usd: float = 50.0\\n    kaldirac: float = 10.0\\n    sto"
+   }
+  }
+ ]
+}
