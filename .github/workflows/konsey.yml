@@ -86,7 +86,6 @@ jobs:
           BUTCE: ${{ github.event.inputs.butce }}
           TESHIS: ${{ github.event.inputs.teshis }}
           TESHIS_MODEL: ${{ github.event.inputs.teshis_model }}
-          ACARBOT_MODEL: ${{ vars.ACARBOT_MODEL }}
           ACARBOT_ZAMAN_ASIMI: "300"
           ACARBOT_SURE: "3000"
           ACARBOT_MODEL: ${{ github.event.inputs.yerel_model }}
