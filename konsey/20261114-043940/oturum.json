@@ -1,0 +1,221 @@
+{
+ "gorev": "bot/v9/motor.py REJIM_DONUS çıkışı 44 işlemin 36'sını üretiyor (komisyon 24.66$). Çözüm: ters rejim TEYİDİ. Poz sınıfına ters_rejim_sayaci: int = 0 alanı ekle; _izle metodunda ters rejim görüldükçe sayacı artır, rejim düzelince sıfırla; kapatma koşulunu sayaç >= 20 olacak şekilde değiştir. Çıktı SADECE şu iki türden oluşsun: {tur: alan_ekle, sinif, alan} ve {tur: fonksiyon, ad, kod}. fonksiyon türünde kod, o metodun TAM yeni hâli olsun. DEĞİŞMEZ: 1000$ kasa, 50$ x10, CROSS, sınırsız pozisyon, -10$ stop.",
+ "saglayici_modelleri": {
+  "nvidia": [
+   "01-ai/yi-large",
+   "adept/fuyu-8b",
+   "ai21labs/jamba-1.5-large-instruct",
+   "aisingapore/sea-lion-7b-instruct",
+   "bigcode/starcoder2-15b",
+   "databricks/dbrx-instruct",
+   "deepseek-ai/deepseek-coder-6.7b-instruct",
+   "deepseek-ai/deepseek-v4.1-flash",
+   "google/codegemma-1.1-7b",
+   "google/codegemma-7b",
+   "google/deplot",
+   "google/gemma-2b",
+   "google/gemma-3-12b-it",
+   "google/gemma-3-4b-it",
+   "google/gemma-4-31b-it",
+   "google/recurrentgemma-2b",
+   "ibm/granite-3.0-3b-a800m-instruct",
+   "ibm/granite-3.0-8b-instruct",
+   "ibm/granite-34b-code-instruct",
+   "ibm/granite-8b-code-instruct",
+   "meta/codellama-70b",
+   "meta/llama-3.2-90b-vision-instruct",
+   "meta/llama-guard-4-12b",
+   "meta/llama2-70b",
+   "meta/muse-glimmer-30b",
+   "microsoft/kosmos-2",
+   "microsoft/phi-3-vision-128k-instruct",
+   "microsoft/phi-3.5-moe-instruct",
+   "minimaxai/minimax-m3.1-flash",
+   "mistralai/codestral-22b-instruct-v0.1",
+   "mistralai/mistral-7b-instruct-v0.3",
+   "mistralai/mistral-large",
+   "mistralai/mistral-large-2-instruct",
+   "mistralai/mistral-large-4-1t-a52b",
+   "mistralai/mixtral-8x22b-v0.1",
+   "moonshotai/kimi-k2.6",
+   "nv-mistralai/mistral-nemo-12b-instruct",
+   "nvidia/ai-synthetic-video-detector",
+   "nvidia/cosmos-reason2-8b",
+   "nvidia/embed-qa-4",
+   "nvidia/ising-calibration-1.5-31b",
+   "nvidia/llama-3.1-nemoguard-8b-content-safety",
+   "nvidia/llama-3.1-nemoguard-8b-topic-control",
+   "nvidia/llama-3.1-nemotron-51b-instruct",
+   "nvidia/llama-3.1-nemotron-70b-instruct",
+   "nvidia/llama-3.1-nemotron-safety-guard-8b-v3",
+   "nvidia/llama-3.1-nemotron-ultra-253b-v1",
+   "nvidia/llama-3.2-nemoretriever-1b-vlm-embed-v1",
+   "nvidia/llama-3.2-nv-embedqa-1b-v1",
+   "nvidia/llama-nemotron-embed-vl-1b-v2",
+   "nvidia/llama3-chatqa-1.5-70b",
+   "nvidia/mistral-nemo-minitron-8b-8k-instruct",
+   "nvidia/nemotron-3-embed-1b",
+   "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+   "nvidia/nemotron-3-super-120b-a12b",
+   "nvidia/nemotron-3-ultra-550b-a55b",
+   "nvidia/nemotron-3.5-bolt-e4b",
+   "nvidia/nemotron-3.5-content-safety",
+   "nvidia/nemotron-3.5-embed-1b",
+   "nvidia/nemotron-3.5-embed-8b"
+  ]
+ },
+ "saglayicilar": [
+  "nvidia"
+ ],
+ "modeller": {
+  "nvidia": [
+   null
+  ]
+ },
+ "cagri": [
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "icra",
+   "tur": 1,
+   "istem_karakter": 11012,
+   "yanit": "{tur: alan_ekle, sinif: \"Poz\", alan: \"ters_rejim_sayaci: int = 0\"}\n{tur: fonksiyon, ad: \"_izle\", kod: \"def _izle(self, rejim):\n    if rejim == REJIM_TERS:\n        self.ters_rejim_sayaci += 1\n    else:\n        self.ters_rejim_sayaci = 0\n    \n    if self.ters_rejim_sayaci >= 20:\n        self.kapat()\" }",
+   "saniye": 121.9,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "mimar",
+   "tur": 1,
+   "istem_karakter": 11012,
+   "yanit": "```json\n[\n  {\n    \"tur\": \"alan_ekle\",\n    \"sinif\": \"Pozisyon\",\n    \"alan\": \"ters_rejim_sayaci: int = 0\"\n  },\n  {\n    \"tur\": \"fonksiyon\",\n    \"ad\": \"_izle\",\n    \"kod\": \"def _izle(self, yeni_veri):\\n    # Mevcut izleme mantığı\\n    rejim = yeni_veri.get('rejim')\\n    \\n    if rejim == 'TERS':\\n        self.ters_rejim_sayaci += 1\\n    else:\\n        self.ters_rejim_sayaci = 0\\n\\n    # Kapatma koşulları\\n    if self.ters_rejim_sayaci >= 20:\\n        return self.kapat('TERS_REJIM_TEYIDI')\\n    \\n    # Diğer stop/tp kontrolleri devam eder...\"\n  }\n]\n```",
+   "saniye": 153.0,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "risk_subayi",
+   "tur": 1,
+   "istem_karakter": 11012,
+   "yanit": "**RİSK ANALİZİ:**\nÖneri, mevcut pozisyonların kapatılma koşuluna bir filtre (ters rejim sayacı) ekleyerek \"erken kapatma\" sorununu çözmeyi amaçlıyor. Bu işlem, pozisyonun piyasada daha uzun süre kalmasına neden olur.\n\n*   **Eşzamanlı Pozisyon:** Pozisyonların kapanma süresi uzayacağı için aynı anda açık kalan pozisyon sayısı artacaktır.\n*   **Korelasyon:** Aynı yöndeki pozisyonlar daha uzun süre taşınacağı için yönsel risk (directional risk) birikimi artar.\n*   **Tasfiye Mesafesi:** CROSS modunda, kapanmayan her pozisyon kasadaki serbest teminatı tüketir. Ancak stop-loss (-10$) sabit olduğu için tasfiye riski stop seviyeleriyle sınırlıdır.\n*   **En Kötü Durumda Kasa Ne Olur?**\n    Kasa 1.000$. Pozisyon başına net stop -10$. Pozisyon limiti yok. Eğer korelasyon %100 ise ve 10 farklı işlem aynı anda ters yöne giderse, kasa tek seferde 100$ (kasanın %10'u) kaybeder. Ters rejim sayacı nedeniyle kapanmayan pozisyonlar, stop seviyelerine ulaşana kadar kasayı riske eder. Maksimum risk, toplam açık pozisyon sayısı $\\times 10\\$$'dır.\n\n**KARAR:** ONAYLANDI. (Sayılar değişmedi, risk yönetilebilir seviyede).\n\n```json\n[\n  {\n    \"tur\": \"alan_ekle\",\n    \"sinif\": \"Poz\",\n    \"alan\": \"ters_rejim_sayaci: int = 0\"\n  },\n  {\n    \"tur\": \"fonksiyon\",\n    \"ad\": \"_izle\",\n    \"kod\": \"def _izle(self, veri):\\n    # ... (mevcut izleme mantığı)\\n    if veri.rejim == 'TERS':\\n        self.ters_rejim_sayaci += 1\\n    else:\\n        self.ters_rejim_sayaci = 0\\n    # ... (diğer mantıklar)\"\n  },\n  {\n    \"tur\": \"fonksiyon\",\n    \"ad\": \"kapatma_kosulu\",\n    \"kod\": \"def kapatma_kosulu(self):\\n    if self.ters_rejim_sayaci >= 20:\\n        return True\\n    return False\"\n  }\n]\n```",
+   "saniye": 251.8,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "test",
+   "tur": 1,
+   "istem_karakter": 11012,
+   "yanit": "```json\n[\n  {\n    \"tur\": \"alan_ekle\",\n    \"sinif\": \"Poz\",\n    \"alan\": \"ters_rejim_sayaci: int = 0\"\n  },\n  {\n    \"tur\": \"fonksiyon\",\n    \"ad\": \"_izle\",\n    \"kod\": \"def _izle(self, rejim):\\n    if rejim == REJIM_DONUS:\\n        self.ters_rejim_sayaci += 1\\n    else:\\n        self.ters_rejim_sayaci = 0\\n\\n    if self.ters_rejim_sayaci >= 20:\\n        return \\\"KAPAT\\\"\\n    return \\\"BEKLE\\\"\"\n  }\n]\n```",
+   "saniye": 136.8,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "olcum",
+   "tur": 1,
+   "istem_karakter": 11012,
+   "yanit": "```json\n[\n  {\n    \"tur\": \"alan_ekle\",\n    \"sinif\": \"Poz\",\n    \"alan\": \"ters_rejim_sayaci: int = 0\"\n  },\n  {\n    \"tur\": \"fonksiyon\",\n    \"ad\": \"_izle\",\n    \"kod\": \"def _izle(self, fiyat, rejim):\\n    # Mevcut izleme mantığı\\n    if rejim == REJIM_DONUS:\\n        self.ters_rejim_sayaci += 1\\n    else:\\n        self.ters_rejim_sayaci = 0\\n\\n    # Kapatma koşulu kontrolü\\n    if self.ters_rejim_sayaci >= 20:\\n        return \\\"CLOSE\\\"\\n    \\n    # Diğer risk ve stop kontrolleri devam eder...\"\n  }\n]\n```",
+   "saniye": 146.8,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "ops",
+   "tur": 1,
+   "istem_karakter": 11012,
+   "yanit": "```json\n[\n  {\n    \"tur\": \"alan_ekle\",\n    \"sinif\": \"Poz\",\n    \"alan\": \"ters_rejim_sayaci: int = 0\"\n  },\n  {\n    \"tur\": \"fonksiyon\",\n    \"ad\": \"_izle\",\n    \"kod\": \"def _izle(self, veri):\\n    # ... (mevcut veri işleme kodları)\\n    \\n    if veri.rejim == REJIM_DONUS:\\n        self.ters_rejim_sayaci += 1\\n    else:\\n        self.ters_rejim_sayaci = 0\\n\\n    # Kapatma koşulu\\n    if self.ters_rejim_sayaci >= 20:\\n        return \\\"KAPAT\\\"\\n    \\n    # ... (diğer kapatma ve stop kontrolleri)\"\n  }\n]\n```",
+   "saniye": 128.0,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "icra",
+   "tur": 2,
+   "istem_karakter": 3557,
+   "yanit": "**Katıldığım nokta:** Ters rejim sayacı ile erken kapatma gürültüsünün filtrelenmesi mantıklı.\n\n**İtirazlar:**\n\n1. **Mimar ve Ops'a:** `_izle` fonksiyonu içindeki `return` ifadeleri (KAPAT/CLOSE), emir icra motorunda \"emir gönderimini\" tetiklemez; sadece bir string döner. Gerçek bir `self.kapat()` çağrısı veya emir kuyruğuna ekleme kanıtı yok.\n2. **Test ve Ölçüm'e:** `REJIM_DONUS` değişkeni tanımlı değil; benim önerimdeki `REJIM_TERS` ile uyumsuz. Değişken isimlendirme tutarsızlığı borsada `NameError` ile sonuçlanır.\n3. **Risk Subayı'na:** Pozisyonların daha uzun süre açık kalmasının \"yönsel risk\" yaratacağı söylenmiş ancak net -10$ stop kuralı değişmediği sürece toplam riskin nasıl arttığına dair matematiksel bir kanıt sunulmamış.",
+   "saniye": 126.6,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "mimar",
+   "tur": 2,
+   "istem_karakter": 3559,
+   "yanit": "**Katıldığım nokta:** `ters_rejim_sayaci` ile gürültü filtreleme mantığı doğrudur.\n\n**İtirazlar:**\n\n1. **icra:** `_izle` fonksiyonu `rejim` parametresini tek başına alır; ancak stop-loss kontrolü için `fiyat` verisine ihtiyaç vardır. Kanıt yok: `icra:kod` (fiyat kontrolü eksik).\n2. **test:** `REJIM_DONUS` sabitinin tanımı ve `_izle` fonksiyonunun dönüş tipinin (`\"KAPAT\"/\"BEKLE\"`) sistemin mevcut `kapat()` metoduna nasıl entegre edileceği belirsizdir. Kanıt yok: `test:kod`.\n3. **risk_subayi:** \"Tasfiye riski stop seviyeleriyle sınırlıdır\" iddiası hatalıdır; CROSS modda pozisyon sayısı arttıkça toplam marjin kullanımı artar ve tekil stoplar toplam kasayı korumaya yetmeyebilir. Kanıt yok: `risk_subayi:analiz`.",
+   "saniye": 131.3,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "risk_subayi",
+   "tur": 2,
+   "istem_karakter": 4389,
+   "yanit": "**Katıldığım nokta:** Sayısal risk parametreleri korunmuş, sadece çıkış filtresi eklenmiş.\n\n**İTİRAZLAR:**\n\n1. **İcra ve Test:** `REJIM_TERS` ve `REJIM_DONUS` şeklinde farklı isimlendirmeler kullanılmış; hangi sabit değerin standart olduğu kanıtlanmamış, kod çatışması riski var.\n2. **Mimar ve Ölçüm:** `ters_rejim_sayaci >= 20` eşiğinin neden 20 olduğu, bu sayının hangi veri setine veya volatiliteye dayandığına dair kanıt sunulmamış.\n3. **Genel:** Pozisyonların kapanma süresinin uzamasının, eşzamanlı pozisyon sayısını maksimum kaça çıkaracağı ve bunun CROSS modundaki marjin baskısını nasıl etkileyeceği hesaplanmamış.\n\n**En kötü durumda kasa ne olur?**\nKorelasyon %100 olduğunda, kapanmayan her ek pozisyon kasaya -10$ yük bindirir. Eğer filtre nedeniyle 20 pozisyon aynı anda açık kalırsa, kasa tek seferde 200$ (%20) kaybeder.",
+   "saniye": 131.7,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "test",
+   "tur": 2,
+   "istem_karakter": 3542,
+   "yanit": "**Katıldığım nokta:** Tüm rollerin `ters_rejim_sayaci` ekleme ve 20 bar eşiğiyle kapatma mantığı üzerinde fikir birliği vardır.\n\n**İtirazlar:**\n\n1. **İcra ve Ölçüm:** Fonksiyon imzaları (`_izle`) birbiriyle uyumsuzdur. Hangi parametrelerin (fiyat, rejim, veri) gönderileceği kanıtlanmamıştır; bu durum çalışma zamanında `TypeError` üretir.\n2. **Mimar ve Ops:** `REJIM_DONUS`, `REJIM_TERS` veya `veri.rejim` kullanımı arasında standart yoktur. Sabitlerin tanımlandığı yer ve veri tipi kanıtlanmadığı için replay tutarlılığı sağlanamaz.\n3. **Risk Subayı:** \"Tasfiye riski stop seviyeleriyle sınırlıdır\" iddiası kanıtsızdır. Pozisyon limiti olmadığı için, eşzamanlı açık pozisyonların toplam stop maliyetinin 1.000$ kasayı eritme hızı (drawdown hızı) hesaplanmamıştır.",
+   "saniye": 147.3,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "olcum",
+   "tur": 2,
+   "istem_karakter": 3542,
+   "yanit": "Katıldığım nokta: Ters rejim sayacı ile erken kapatma sorununu çözme mantığı doğrudur.\n\n**İtirazlar:**\n\n1. **Risk Subayı:** Pozisyonların daha uzun süre açık kalmasının \"yönsel risk birikimi\" yaratacağı iddiası, sabit -10$ stop kuralı varken matematiksel bir kanıttan yoksundur.\n2. **İcra/Test/Ops:** `REJIM_DONUS`, `REJIM_TERS` ve `REJIM_TERS` şeklinde farklı isimlendirmeler kullanılmıştır; hangi sabit değerin doğru olduğuyla ilgili teknik bir kanıt/standart sunulmamıştır.\n3. **Mimar:** `self.kapat('TERS_REJIM_TEYIDI')` fonksiyon çağrısı, mevcut sınıfta böyle bir metodun tanımlı olduğuna dair kanıt içermemektedir.",
+   "saniye": 144.4,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "ops",
+   "tur": 2,
+   "istem_karakter": 3522,
+   "yanit": "Katıldığım nokta: Ters rejim sayacı ile erken kapatmanın engellenmesi mantıklı.\n\n**İtirazlar:**\n\n1. **İcra'ya itiraz:** `self.kapat()` fonksiyonunun dönüş değeri belirtilmemiş; `_izle` fonksiyonu diğer rollerdeki gibi bir durum (string/bool) dönmezse ana döngü kopma yaşar.\n2. **Mimar'a itiraz:** `yeni_veri.get('rejim')` kullanımı, diğer rollerin kullandığı sabit (`REJIM_DONUS`) tanımlarıyla uyumsuzdur; tip uyuşmazlığı nedeniyle sayacı asla artırmaz.\n3. **Ölçüm'e itiraz:** `_izle` fonksiyonuna eklenen `fiyat` parametresinin fonksiyon gövdesinde hiçbir kullanımı yoktur; gereksiz veri yükü ve imza karmaşası yaratır.",
+   "saniye": 205.1,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "sekreter",
+   "tur": 3,
+   "istem_karakter": 11012,
+   "yanit": "```json\n[\n  {\n    \"tur\": \"alan_ekle\",\n    \"sinif\": \"Pozisyon\",\n    \"dosya\": \"bot/acarbot_6bot/cekirdek.py\",\n    \"alan\": \"ters_rejim_sayaci: int = 0\"\n  },\n  {\n    \"tur\": \"fonksiyon\",\n    \"ad\": \"_izle\",\n    \"sinif\": \"Pozisyon\",\n    \"dosya\": \"bot/acarbot_6bot/cekirdek.py\",\n    \"kod\": \"def _izle(self, yeni_veri):\\n    # Rejim kontrolü (Sistem standartlarına uygun olarak 'rejim' anahtarı üzerinden)\\n    rejim = yeni_veri.get('rejim')\\n    \\n    if rejim == 'TERS':\\n        self.ters_rejim_sayaci += 1\\n    else:\\n        self.ters_rejim_sayaci = 0\\n\\n    # Kapatma koşulu: 20 bar boyunca ters rejim teyidi\\n    if self.ters_rejim_sayaci >= 20:\\n        return self.kapat('TERS_REJIM_TEYIDI')\\n    \\n    return None\"\n  }\n]\n```",
+   "saniye": 209.0,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "sekreter",
+   "tur": 3,
+   "istem_karakter": 11012,
+   "yanit": "```json\n[\n  {\n    \"tur\": \"alan_ekle\",\n    \"sinif\": \"Pozisyon\",\n    \"dosya\": \"bot/acarbot_6bot/cekirdek.py\",\n    \"alan\": \"ters_rejim_sayaci: int = 0\"\n  },\n  {\n    \"tur\": \"fonksiyon\",\n    \"ad\": \"_izle\",\n    \"sinif\": \"Pozisyon\",\n    \"dosya\": \"bot/acarbot_6bot/cekirdek.py\",\n    \"kod\": \"def _izle(self, yeni_veri):\\n    # Rejim kontrolü (Sistem standartlarına uygun olarak 'rejim' anahtarı üzerinden)\\n    rejim = yeni_veri.get('rejim')\\n    \\n    if rejim == 'TERS':\\n        self.ters_rejim_sayaci += 1\\n    else:\\n        self.ters_rejim_sayaci = 0\\n\\n    # Kapatma koşulu: 20 bar boyunca ters rejim teyidi\\n    if self.ters_rejim_sayaci >= 20:\\n        return self.kapat('TERS_REJIM_TEYIDI')\\n    \\n    return None\"\n  }\n]\n```",
+   "saniye": 112.2,
+   "hata": ""
+  }
+ ],
+ "kullanilan_cagri": 14,
+ "kararlar": [],
+ "dusen": [],
+ "hatalar": []
+}
