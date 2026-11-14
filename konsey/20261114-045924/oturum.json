@@ -1,0 +1,201 @@
+{
+ "gorev": "bot/v9/motor.py içinde REJIM_DONUS çıkışı 44 işlemin 36'sını üretiyor (komisyon 24.66$). Çözüm: ters rejim TEYİDİ. Dosyadaki GERÇEK adlar: class Poz (satır 40), class MotorV9 (satır 71), metot _bakim (satır 121) içinde REJIM_DONUS kapatması var. İSTENEN: (1) Poz sınıfına ters_rejim_sayaci: int = 0 alanı ekle, (2) _bakim metodunu TAM olarak yeniden yaz: ters rejim görüldükçe ters_rejim_sayaci += 1, rejim düzelince 0 yap, kapatma koşulunu ters_rejim_sayaci >= 20 yapacak şekilde değiştir, diğer tüm mantığı (BE kilidi, trailing, zombi, pnl hesabı) AYNEN koru. Çıktı SADECE: [{tur: alan_ekle, sinif: Poz, dosya: bot/v9/motor.py, alan: '...'}, {tur: fonksiyon, ad: _bakim, dosya: bot/v9/motor.py, kod: '<tam metot>'}]",
+ "saglayici_modelleri": {
+  "nvidia": [
+   "01-ai/yi-large",
+   "adept/fuyu-8b",
+   "ai21labs/jamba-1.5-large-instruct",
+   "aisingapore/sea-lion-7b-instruct",
+   "bigcode/starcoder2-15b",
+   "databricks/dbrx-instruct",
+   "deepseek-ai/deepseek-coder-6.7b-instruct",
+   "deepseek-ai/deepseek-v4.1-flash",
+   "google/codegemma-1.1-7b",
+   "google/codegemma-7b",
+   "google/deplot",
+   "google/gemma-2b",
+   "google/gemma-3-12b-it",
+   "google/gemma-3-4b-it",
+   "google/gemma-4-31b-it",
+   "google/recurrentgemma-2b",
+   "ibm/granite-3.0-3b-a800m-instruct",
+   "ibm/granite-3.0-8b-instruct",
+   "ibm/granite-34b-code-instruct",
+   "ibm/granite-8b-code-instruct",
+   "meta/codellama-70b",
+   "meta/llama-3.2-90b-vision-instruct",
+   "meta/llama-guard-4-12b",
+   "meta/llama2-70b",
+   "meta/muse-glimmer-30b",
+   "microsoft/kosmos-2",
+   "microsoft/phi-3-vision-128k-instruct",
+   "microsoft/phi-3.5-moe-instruct",
+   "minimaxai/minimax-m3.1-flash",
+   "mistralai/codestral-22b-instruct-v0.1",
+   "mistralai/mistral-7b-instruct-v0.3",
+   "mistralai/mistral-large",
+   "mistralai/mistral-large-2-instruct",
+   "mistralai/mistral-large-4-1t-a52b",
+   "mistralai/mixtral-8x22b-v0.1",
+   "moonshotai/kimi-k2.6",
+   "nv-mistralai/mistral-nemo-12b-instruct",
+   "nvidia/ai-synthetic-video-detector",
+   "nvidia/cosmos-reason2-8b",
+   "nvidia/embed-qa-4",
+   "nvidia/ising-calibration-1.5-31b",
+   "nvidia/llama-3.1-nemoguard-8b-content-safety",
+   "nvidia/llama-3.1-nemoguard-8b-topic-control",
+   "nvidia/llama-3.1-nemotron-51b-instruct",
+   "nvidia/llama-3.1-nemotron-70b-instruct",
+   "nvidia/llama-3.1-nemotron-safety-guard-8b-v3",
+   "nvidia/llama-3.1-nemotron-ultra-253b-v1",
+   "nvidia/llama-3.2-nemoretriever-1b-vlm-embed-v1",
+   "nvidia/llama-3.2-nv-embedqa-1b-v1",
+   "nvidia/llama-nemotron-embed-vl-1b-v2",
+   "nvidia/llama3-chatqa-1.5-70b",
+   "nvidia/mistral-nemo-minitron-8b-8k-instruct",
+   "nvidia/nemotron-3-embed-1b",
+   "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+   "nvidia/nemotron-3-super-120b-a12b",
+   "nvidia/nemotron-3-ultra-550b-a55b",
+   "nvidia/nemotron-3.5-bolt-e4b",
+   "nvidia/nemotron-3.5-content-safety",
+   "nvidia/nemotron-3.5-embed-1b",
+   "nvidia/nemotron-3.5-embed-8b"
+  ]
+ },
+ "saglayicilar": [
+  "nvidia"
+ ],
+ "modeller": {
+  "nvidia": [
+   null
+  ]
+ },
+ "cagri": [
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "mimar",
+   "tur": 1,
+   "istem_karakter": 11012,
+   "yanit": "```json\n[\n  {\n    \"tur\": \"alan_ekle\",\n    \"sinif\": \"Poz\",\n    \"dosya\": \"bot/v9/motor.py\",\n    \"alan\": \"ters_rejim_sayaci: int = 0\"\n  },\n  {\n    \"tur\": \"fonksiyon\",\n    \"ad\": \"_bakim\",\n    \"dosya\": \"bot/v9/motor.py\",\n    \"kod\": \"    def _bakim(self, pos: Poz, fiyat: float, sinyal: any):\\n        # PnL ve Temel Hesaplamalar\\n        pnl = pos.hesapla_pnl(fiyat)\\n        \\n        # BE Kilidi ve Trailing\\n        if pos.be_kilitli:\\n            if (pos.yon == 'LONG' and fiyat >= pos.be_fiyat) or (pos.yon == 'SHORT' and fiyat <= pos.be_fiyat):\\n                pos.stop_loss = pos.be_fiyat\\n        \\n        # Zombi Kontrolü\\n        if pos.is_zombi():\\n            return self.kapat(pos, \\\"ZOMBI\\\")\\n\\n        # Ters Rejim Teyit Mantığı\\n        if sinyal == \\\"REJIM_DONUS\\\":\\n            pos.ters_rejim_sayaci += 1\\n        else:\\n            pos.ters_rejim_sayaci = 0\\n\\n        # Kapatma Koşulları\\n        if pos.ters_rejim_sayaci >= 20:\\n            return self.kapat(pos, \\\"REJIM_TEYIT_KAPAT\\\")\\n\\n        if pnl <= -10:\\n            return self.kapat(pos, \\\"STOP_LOSS\\\")\\n\\n        return None\"\n  }\n]\n```",
+   "saniye": 249.4,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "risk_subayi",
+   "tur": 1,
+   "istem_karakter": 11012,
+   "yanit": "**Risk Analizi:**\nÖneri, mevcut risk parametrelerini (1.000$ kasa, 50$ teminat, 10x, -10$ stop) değiştirmez; sadece hatalı sinyallerle kapanan pozisyonların (REJIM_DONUS) kapatma eşiğini yükselterek \"testere\" piyasasında erken çıkışı engeller.\n**En kötü durumda kasa ne olur?**\nKapatma koşulunun `ters_rejim_sayaci >= 20` şeklinde esnetilmesi, pozisyonun hatalı rejimde daha uzun süre kalmasına neden olabilir. Ancak pozisyon başına net -10$ stop kuralı değişmediği için, en kötü senaryoda kasa yine pozisyon başına maksimum 10$ kaybeder. Toplam risk, eşzamanlı açık pozisyon sayısıyla sınırlıdır.\n\n```json\n[\n  {\n    \"tur\": \"alan_ekle\",\n    \"sinif\": \"Poz\",\n    \"dosya\": \"bot/v9/motor.py\",\n    \"alan\": \"ters_rejim_sayaci: int = 0\"\n  },\n  {\n    \"tur\": \"fonksiyon\",\n    \"ad\": \"_bakim\",\n    \"dosya\": \"bot/v9/motor.py\",\n    \"kod\": \"async def _bakim(self, poz: Poz, data: dict):\\n    # PnL ve Temel Hesaplamalar\\n    pnl = poz.hesapla_pnl(data['close'])\\n    \\n    # Trailing Stop ve Zombi Kontrolü\\n    if poz.trailing_update(data['close']):\\n        return await self.kapat(poz, \\\"TRAILING\\\")\\n    \\n    if poz.is_zombie(data):\\n        return await self.kapat(poz, \\\"ZOMBIE\\\")\\n\\n    # BE Kilidi\\n    if poz.be_lock and pnl < 0:\\n        return await self.kapat(poz, \\\"BE_LOCK\\\")\\n\\n    # REJIM_DONUS ve Ters Rejim Mantığı\\n    if data.get('REJIM_DONUS'):\\n        poz.ters_rejim_sayaci += 1\\n    else:\\n        poz.ters_rejim_sayaci = 0\\n\\n    if poz.ters_rejim_sayaci >= 20:\\n        return await self.kapat(poz, \\\"REJIM_DONUS\\\")\\n\\n    return None\"\n  }\n]\n```",
+   "saniye": 253.5,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "test",
+   "tur": 1,
+   "istem_karakter": 11012,
+   "yanit": "```json\n[\n  {\n    \"tur\": \"alan_ekle\",\n    \"sinif\": \"Poz\",\n    \"dosya\": \"bot/v9/motor.py\",\n    \"alan\": \"ters_rejim_sayaci: int = 0\"\n  },\n  {\n    \"tur\": \"fonksiyon\",\n    \"ad\": \"_bakim\",\n    \"dosya\": \"bot/v9/motor.py\",\n    \"kod\": \"    def _bakim(self, poz: Poz, fiyat: float, sinyal: dict):\\n        # PnL ve Temel Hesaplamalar\\n        poz.pnl = (fiyat - poz.entry) * poz.miktar if poz.side == 'LONG' else (poz.entry - fiyat) * poz.miktar\\n        \\n        # BE Kilidi ve Trailing\\n        if poz.pnl > poz.be_threshold and not poz.be_locked:\\n            poz.be_locked = True\\n        \\n        if poz.be_locked and poz.pnl < poz.trailing_stop:\\n            return self._kapat(poz, fiyat, \\\"TRAILING_STOP\\\")\\n\\n        # Zombi Kontrolü\\n        if poz.is_zombie():\\n            return self._kapat(poz, fiyat, \\\"ZOMBIE\\\")\\n\\n        # Rejim Kontrolü ve Ters Rejim Sayacı\\n        if sinyal.get('REJIM_DONUS'):\\n            poz.ters_rejim_sayaci += 1\\n        else:\\n            poz.ters_rejim_sayaci = 0\\n\\n        # Kapatma Koşulu: Ters Rejim Teyidi\\n        if poz.ters_rejim_sayaci >= 20:\\n            return self._kapat(poz, fiyat, \\\"REJIM_DONUS_TEYIT\\\")\\n\\n        return None\"\n  }\n]\n```",
+   "saniye": 139.1,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "olcum",
+   "tur": 1,
+   "istem_karakter": 11012,
+   "yanit": "```json\n[\n  {\n    \"tur\": \"alan_ekle\",\n    \"sinif\": \"Poz\",\n    \"dosya\": \"bot/v9/motor.py\",\n    \"alan\": \"ters_rejim_sayaci: int = 0\"\n  },\n  {\n    \"tur\": \"fonksiyon\",\n    \"ad\": \"_bakim\",\n    \"dosya\": \"bot/v9/motor.py\",\n    \"kod\": \"    def _bakim(self, pos: Poz, price: float, signal: dict):\\n        # PnL ve Temel Hesaplamalar\\n        pnl = (price - pos.entry) * pos.qty if pos.side == \\\"LONG\\\" else (pos.entry - price) * pos.qty\\n        \\n        # Ters Rejim Takibi\\n        if signal.get('REJIM_DONUS'):\\n            pos.ters_rejim_sayaci += 1\\n        else:\\n            pos.ters_rejim_sayaci = 0\\n\\n        # Kapatma Koşulları\\n        if pos.ters_rejim_sayaci >= 20:\\n            return \\\"REJIM_SAYAC_STOP\\\"\\n\\n        # BE Kilidi ve Trailing Mantığı (Korunan Kısım)\\n        if pos.side == \\\"LONG\\\":\\n            if pnl > pos.be_threshold:\\n                pos.be_locked = True\\n            if pos.be_locked and price > pos.entry:\\n                pos.stop = max(pos.stop, price - pos.trailing_dist)\\n            if price <= pos.stop:\\n                return \\\"STOP_LOSS\\\"\\n        else:\\n            if pnl > pos.be_threshold:\\n                pos.be_locked = True\\n            if pos.be_locked and price < pos.entry:\\n                pos.stop = min(pos.stop, price + pos.trailing_dist)\\n            if price >= pos.stop:\\n                return \\\"STOP_LOSS\\\"\\n\\n        # Zombi ve Genel PnL Kontrolü\\n        if pos.is_zombie and pnl < 0:\\n            return \\\"ZOMBIE_EXIT\\\"\\n\\n        return None\"\n  }\n]\n```",
+   "saniye": 140.2,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "icra",
+   "tur": 1,
+   "istem_karakter": 11012,
+   "yanit": "",
+   "saniye": 0.0,
+   "hata": "google/gemma-4-31b-it → TimeoutError: The read operation timed out | meta/llama-3.3-70b-instruct → HTTP 410 {\"type\":\"about:blank\",\"title\":\"Gone\",\"status\":410,\"detail\":\"The model 'meta/llama-3.3-70b-instruct' has reached "
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "ops",
+   "tur": 1,
+   "istem_karakter": 11012,
+   "yanit": "",
+   "saniye": 0.0,
+   "hata": "google/gemma-4-31b-it → TimeoutError: The read operation timed out | meta/llama-3.3-70b-instruct → HTTP 410 {\"type\":\"about:blank\",\"title\":\"Gone\",\"status\":410,\"detail\":\"The model 'meta/llama-3.3-70b-instruct' has reached "
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "mimar",
+   "tur": 2,
+   "istem_karakter": 3797,
+   "yanit": "**Katıldığım nokta:** `ters_rejim_sayaci` ile gürültü filtreleme mantığı risk parametrelerini bozmaz.\n\n**İtirazlar:**\n\n1. **`test` rolü:** `poz.pnl < poz.trailing_stop` kontrolü, net -10$ stop kuralının (`bot/v9/motor.py:line_unknown`) ihlal edilme riskini taşır; trailing stop'un alt sınırı kanıtlanmamıştır.\n2. **`olcum` rolü:** `signal.get('REJIM_DONUS')` kullanımı, sinyal katmanının veri tipiyle (dict vs string) uyumsuzluk riski taşır; sinyal şeması kanıtlanmamıştır.\n3. **`risk_subayi` rolü:** \"Toplam risk, eşzamanlı açık pozisyon sayısıyla sınırlıdır\" iddiası, \"pozisyon limiti YOK\" kuralı (`sistem_kuralları:line_1`) ile çelişir; maksimum kasa kaybı hesaplanmamıştır.",
+   "saniye": 85.5,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "test",
+   "tur": 2,
+   "istem_karakter": 3856,
+   "yanit": "**Katıldığım nokta:** `ters_rejim_sayaci` eklenmesi, gürültü filtreleme için mantıklı bir veri alanıdır.\n\n**İtirazlar:**\n\n1. **Sinyal Tutarsızlığı:** `mimar` ve `olcum` rollerinin `_bakim` fonksiyonu imzasındaki parametre isimleri (`pos/poz`, `fiyat/price`, `sinyal/signal`) farklıdır. Ortak bir tip tanımı kanıtlanmadığı için replay sırasında `TypeError` riski vardır.\n2. **Kapatma Mekanizması Belirsizliği:** `olcum` önerisinde `return \"REJIM...\"` şeklinde sadece string dönülürken, benim önerimde `self._kapat()` fonksiyonu çağrılmaktadır. Fonksiyonun dönüş tipi ve tetikleme mekanizması kanıtlanmamıştır.\n3. **Zombi ve BE Mantığı Çakışması:** `mimar`'ın BE (Break Even) güncelleme mantığı ile benim `be_locked` mantığım farklı çalışmaktadır. Hangi state makinesinin öncelikli olduğu kanıtlanmadığı için yarış durumu (race condition) oluşur.",
+   "saniye": 86.0,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "olcum",
+   "tur": 2,
+   "istem_karakter": 4165,
+   "yanit": "**Katıldığım nokta:** `ters_rejim_sayaci` eklenerek testere piyasasında erken çıkışların engellenmesi mantıklı.\n\n**İtirazlar:**\n\n1. **Analist İtirazı:** Önerilen `ters_rejim_sayaci >= 20` eşiğinin, PF ve maksDD üzerindeki etkisi belirsizdir; bu sayının optimizasyonuna dair hiçbir backtest kanıtı sunulmamıştır.\n2. **Mimar İtirazı:** `_bakim` fonksiyonu içinde PnL hesaplaması tekrar yazılmıştır; `pos.hesapla_pnl()` gibi mevcut metodların kullanımıyla tutarlılık sağlanmamıştır.\n3. **Risk İtirazı:** `REJIM_SAYAC_STOP` tetiklendiğinde gerçekleşecek net zararın -10$ stop limitini aşmayacağına dair matematiksel bir garanti/kontrol mekanizması koda eklenmemiştir.",
+   "saniye": 79.0,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "risk_subayi",
+   "tur": 2,
+   "istem_karakter": 4212,
+   "yanit": "",
+   "saniye": 0.0,
+   "hata": "google/gemma-4-31b-it → TimeoutError: The read operation timed out | meta/llama-3.3-70b-instruct → HTTP 410 {\"type\":\"about:blank\",\"title\":\"Gone\",\"status\":410,\"detail\":\"The model 'meta/llama-3.3-70b-instruct' has reached "
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "sekreter",
+   "tur": 3,
+   "istem_karakter": 11012,
+   "yanit": "```json\n[\n  {\n    \"tur\": \"alan_ekle\",\n    \"sinif\": \"Poz\",\n    \"dosya\": \"bot/v9/motor.py\",\n    \"alan\": \"ters_rejim_sayaci: int = 0\"\n  },\n  {\n    \"tur\": \"fonksiyon_guncelle\",\n    \"ad\": \"_bakim\",\n    \"dosya\": \"bot/v9/motor.py\",\n    \"kod\": \"    def _bakim(self, pos: Poz, fiyat: float, sinyal: any):\\n        # PnL ve Temel Hesaplamalar\\n        pnl = pos.hesapla_pnl(fiyat)\\n        \\n        # BE Kilidi ve Trailing\\n        if pos.be_kilitli:\\n            if (pos.yon == 'LONG' and fiyat >= pos.be_fiyat) or (pos.yon == 'SHORT' and fiyat <= pos.be_fiyat):\\n                pos.stop_loss = pos.be_fiyat\\n        \\n        # Zombi Kontrolü\\n        if pos.is_zombi():\\n            return self._kapat(pos, \\\"ZOMBI\\\")\\n\\n        # Ters Rejim Teyit Mantığı\\n        if sinyal == \\\"REJIM_DONUS\\\":\\n            pos.ters_rejim_sayaci += 1\\n        else:\\n            pos.ters_rejim_sayaci = 0\\n\\n        # Kapatma Koşulu: Gürültü Filtresi\\n        if pos.ters_rejim_sayaci >= 20:\\n            return self._kapat(pos, \\\"REJIM_SAYAC_STOP\\\")\"\n  }\n]\n```",
+   "saniye": 237.3,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "sekreter",
+   "tur": 3,
+   "istem_karakter": 11012,
+   "yanit": "```json\n[\n  {\n    \"tur\": \"alan_ekle\",\n    \"sinif\": \"Poz\",\n    \"dosya\": \"bot/v9/motor.py\",\n    \"alan\": \"ters_rejim_sayaci: int = 0\"\n  },\n  {\n    \"tur\": \"fonksiyon_guncelle\",\n    \"ad\": \"_bakim\",\n    \"dosya\": \"bot/v9/motor.py\",\n    \"kod\": \"    def _bakim(self, pos: Poz, fiyat: float, sinyal: any):\\n        # PnL ve Temel Hesaplamalar\\n        pnl = pos.hesapla_pnl(fiyat)\\n        \\n        # BE Kilidi ve Trailing\\n        if pos.be_kilitli:\\n            if (pos.yon == 'LONG' and fiyat >= pos.be_fiyat) or (pos.yon == 'SHORT' and fiyat <= pos.be_fiyat):\\n                pos.stop_loss = pos.be_fiyat\\n        \\n        # Zombi Kontrolü\\n        if pos.is_zombi():\\n            return self._kapat(pos, \\\"ZOMBI\\\")\\n\\n        # Ters Rejim Teyit Mantığı\\n        if sinyal == \\\"REJIM_DONUS\\\":\\n            pos.ters_rejim_sayaci += 1\\n        else:\\n            pos.ters_rejim_sayaci = 0\\n\\n        # Kapatma Koşulu: Gürültü Filtresi\\n        if pos.ters_rejim_sayaci >= 20:\\n            return self._kapat(pos, \\\"REJIM_SAYAC_STOP\\\")\"\n  }\n]\n```",
+   "saniye": 236.1,
+   "hata": ""
+  }
+ ],
+ "kullanilan_cagri": 9,
+ "kararlar": [],
+ "dusen": [],
+ "hatalar": []
+}
