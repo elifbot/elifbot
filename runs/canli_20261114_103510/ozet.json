@@ -1,0 +1,194 @@
+{
+ "kaynak": "OKX canli (public klines)",
+ "borsa": "okx",
+ "bar": 840,
+ "semboller": [
+  "BTC-USDT-SWAP",
+  "ETH-USDT-SWAP",
+  "SOXL-USDT-SWAP",
+  "SOL-USDT-SWAP",
+  "ZEC-USDT-SWAP",
+  "AKE-USDT-SWAP",
+  "SNDK-USDT-SWAP",
+  "NVDA-USDT-SWAP",
+  "XRP-USDT-SWAP",
+  "HYPE-USDT-SWAP",
+  "XAU-USDT-SWAP",
+  "DOGE-USDT-SWAP",
+  "PEPE-USDT-SWAP",
+  "SPCX-USDT-SWAP",
+  "MU-USDT-SWAP",
+  "NEAR-USDT-SWAP",
+  "SOXS-USDT-SWAP",
+  "BARD-USDT-SWAP",
+  "SKHYNIX-USDT-SWAP",
+  "UNI-USDT-SWAP",
+  "KORU-USDT-SWAP",
+  "PUMP-USDT-SWAP",
+  "SNXX-USDT-SWAP",
+  "SUI-USDT-SWAP",
+  "SHELL-USDT-SWAP"
+ ],
+ "sonuclar": [
+  {
+   "surum": "v1 kbot (EMA+hacim)",
+   "islem": 70,
+   "kazanma_orani": 0.3429,
+   "realize_usd": -144.38,
+   "komisyon_usd": 35.0,
+   "kar_faktoru": 0.551,
+   "ortalama_islem": -2.06,
+   "cikis_nedenleri": {
+    "stop": 27,
+    "sure": 43
+   },
+   "red_nedenleri": {
+    "hacim": 4978,
+    "kesisme_yok": 1535,
+    "veri": 550
+   },
+   "acik_pozisyon": 20
+  },
+  {
+   "surum": "v2 kbot2 (rejim+komite)",
+   "islem": 98,
+   "kazanma_orani": 0.2857,
+   "realize_usd": -230.72,
+   "komisyon_usd": 49.0,
+   "kar_faktoru": 0.474,
+   "ortalama_islem": -2.35,
+   "cikis_nedenleri": {
+    "stop": 39,
+    "sure": 59
+   },
+   "red_nedenleri": {
+    "veri": 1475,
+    "notr": 885,
+    "panik": 264,
+    "trend": 117,
+    "sikisma": 31
+   },
+   "acik_pozisyon": 23
+  },
+  {
+   "surum": "v3 kbot3 (kanit esikleri)",
+   "islem": 190,
+   "kazanma_orani": 0.3263,
+   "realize_usd": -548.88,
+   "komisyon_usd": 95.0,
+   "kar_faktoru": 0.481,
+   "ortalama_islem": -2.89,
+   "cikis_nedenleri": {
+    "stop": 100,
+    "izli_kar": 52,
+    "sure": 38
+   },
+   "red_nedenleri": {
+    "ADX": 1728,
+    "BB": 1615,
+    "veri": 1475,
+    "RSI": 264,
+    "giris_acisi": 184,
+    "uyum": 57
+   },
+   "acik_pozisyon": 17
+  }
+ ],
+ "analiz": {
+  "bar": 18750,
+  "ileri_bar": 30,
+  "maliyet": 0.002,
+  "kovalar": {
+   "adx": {
+    "20-25": {
+     "n": 1345,
+     "ort_getiri_pct": -0.292,
+     "isabet": 0.268,
+     "toplam_pct": -392.69
+    },
+    "25-30": {
+     "n": 1273,
+     "ort_getiri_pct": -0.3459,
+     "isabet": 0.276,
+     "toplam_pct": -440.33
+    },
+    "30-35": {
+     "n": 1303,
+     "ort_getiri_pct": -0.3336,
+     "isabet": 0.267,
+     "toplam_pct": -434.71
+    },
+    "35+": {
+     "n": 9223,
+     "ort_getiri_pct": -0.3292,
+     "isabet": 0.255,
+     "toplam_pct": -3036.47
+    },
+    "<20": {
+     "n": 5606,
+     "ort_getiri_pct": -0.2244,
+     "isabet": 0.3,
+     "toplam_pct": -1257.83
+    }
+   },
+   "bb": {
+    "0.3-0.5": {
+     "n": 3689,
+     "ort_getiri_pct": -0.22,
+     "isabet": 0.266,
+     "toplam_pct": -811.55
+    },
+    "0.5-1": {
+     "n": 6317,
+     "ort_getiri_pct": -0.2203,
+     "isabet": 0.29,
+     "toplam_pct": -1391.39
+    },
+    "1-2": {
+     "n": 2491,
+     "ort_getiri_pct": -0.2671,
+     "isabet": 0.35,
+     "toplam_pct": -665.39
+    },
+    "2+": {
+     "n": 2183,
+     "ort_getiri_pct": -0.8489,
+     "isabet": 0.4,
+     "toplam_pct": -1853.21
+    },
+    "<0.3": {
+     "n": 4070,
+     "ort_getiri_pct": -0.2065,
+     "isabet": 0.13,
+     "toplam_pct": -840.49
+    }
+   },
+   "rsi": {
+    "12-18": {
+     "n": 3588,
+     "ort_getiri_pct": -0.3154,
+     "isabet": 0.259,
+     "toplam_pct": -1131.54
+    },
+    "18+": {
+     "n": 6308,
+     "ort_getiri_pct": -0.329,
+     "isabet": 0.259,
+     "toplam_pct": -2075.34
+    },
+    "6-12": {
+     "n": 4260,
+     "ort_getiri_pct": -0.2682,
+     "isabet": 0.275,
+     "toplam_pct": -1142.57
+    },
+    "<6": {
+     "n": 4594,
+     "ort_getiri_pct": -0.264,
+     "isabet": 0.294,
+     "toplam_pct": -1212.59
+    }
+   }
+  }
+ }
+}
