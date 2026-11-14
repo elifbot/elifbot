@@ -1,0 +1,16 @@
+{
+ "yazilan": [
+  "bot/konsey_bot/__init__.py",
+  "bot/konsey_bot/ayarlar.py",
+  "bot/konsey_bot/strateji.py",
+  "bot/konsey_bot/risk.py",
+  "bot/konsey_bot/motor.py",
+  "bot/konsey_bot/cli.py"
+ ],
+ "hatali": [],
+ "kosu": {
+  "ok": false,
+  "hata": "/opt/hostedtoolcache/Python/3.11.18/x64/bin/python3: Error while finding module specification for 'bot.konsey_bot.cli' (ImportError: cannot import name 'konsey_bot' from partially initialized module 'bot.konsey_bot' (most likely due to a circular import) (/home/runner/work/elifbot/elifbot/bot/konsey_bot/__init__.py))\n",
+  "cikti": ""
+ }
+}
