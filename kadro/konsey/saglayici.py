@@ -39,7 +39,8 @@ SAGLAYICILAR: dict[str, Saglayici] = {
                         "openai/gpt-4.1-mini", "openai/gpt-4o-mini"),
     "nvidia": Saglayici("nvidia", "https://integrate.api.nvidia.com/v1", "NVIDIA_API_KEY",
                         (os.environ.get("ACARBOT_MODEL") or "google/gemma-4-31b-it"), "meta/llama-3.3-70b-instruct"),
-    "ollama": Saglayici("ollama", "http://localhost:11434/v1", None, "llama3.1", ""),
+    "ollama": Saglayici("ollama", os.environ.get("OLLAMA_TABAN") or "http://127.0.0.1:11434/v1",
+                        None, (os.environ.get("ACARBOT_MODEL") or "qwen2.5-coder:1.5b"), ""),
 }
 
 
@@ -230,7 +231,10 @@ IYI = ("nemotron", "llama-3.3", "llama-3.1", "deepseek", "qwen", "mistral", "gpt
 KOTU = ("embed", "rerank", "guard", "bge", "e5-", "clip", "vision-only", "safety")
 
 # çalışan modeli süreç içinde hatırla: her rol için yeniden keşif yapılmasın
-_CALISAN: dict[str, str] = {"nvidia": (os.environ.get("ACARBOT_MODEL") or "google/gemma-4-31b-it")}
+_CALISAN: dict[str, str] = {}
+if os.environ.get("ACARBOT_MODEL"):
+    _CALISAN["ollama"] = os.environ["ACARBOT_MODEL"]
+_CALISAN.setdefault("nvidia", "google/gemma-4-31b-it")
 
 
 def model_adaylari(saglayici: str, en_fazla: int = 4) -> list[str]:

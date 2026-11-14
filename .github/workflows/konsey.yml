@@ -21,6 +21,10 @@ on:
         description: "1 = model sondası (çalışan modeli bulur, konsey kurmaz)"
         required: false
         default: "0"
+      yerel_model:
+        description: "Anahtarsız yerel model (Ollama). Doluysa koşucuda kurulur, ör. qwen2.5-coder:1.5b"
+        required: false
+        default: ""
       teshis_model:
         description: "Sondayı bu model(ler)e sınırla (virgülle)"
         required: false
@@ -59,6 +63,19 @@ jobs:
           python3 -m havuz.indeks
           python3 -m havuz.digest
 
+      - name: Yerel model (anahtarsız)
+        if: github.event.inputs.yerel_model != ''
+        env:
+          YEREL: ${{ github.event.inputs.yerel_model }}
+        run: |
+          curl -fsSL https://ollama.com/install.sh | sh
+          nohup ollama serve > /tmp/ollama.log 2>&1 &
+          for i in $(seq 1 60); do
+            curl -sf http://127.0.0.1:11434/api/version && break || sleep 2
+          done
+          ollama pull "$YEREL"
+          ollama list
+
       - name: Konsey oturumu
         continue-on-error: true
         env:
@@ -69,9 +86,9 @@ jobs:
           BUTCE: ${{ github.event.inputs.butce }}
           TESHIS: ${{ github.event.inputs.teshis }}
           TESHIS_MODEL: ${{ github.event.inputs.teshis_model }}
-          ACARBOT_MODEL: ${{ vars.ACARBOT_MODEL }}
           ACARBOT_ZAMAN_ASIMI: "300"
           ACARBOT_SURE: "3000"
+          ACARBOT_MODEL: ${{ github.event.inputs.yerel_model }}
           ACARBOT_PARALEL: "3"
           ACARBOT_ESIK: "11000"
           ACARBOT_TOKEN: "700"
@@ -79,6 +96,7 @@ jobs:
           ETIKET="$(date -u +%Y%m%d-%H%M%S)"
           [ -n "$NVIDIA_API_KEY" ] && echo "::add-mask::$NVIDIA_API_KEY"
           ARGS=()
+          if [ -n "$ACARBOT_MODEL" ]; then SAGLAYICILAR="ollama"; fi
           IFS=',' read -ra LISTE <<< "$SAGLAYICILAR"
           for s in "${LISTE[@]}"; do ARGS+=(--saglayici "$(echo "$s" | tr -d ' ')"); done
           if [ "$TESHIS" = "1" ]; then
