@@ -120,6 +120,13 @@ def _kod(metin: str) -> str:
     m = re.search(r"```(?:python)?\n(.*?)```", metin or "", flags=re.S)
     if m:
         return m.group(1)
+    # kırpılmış kaçışlı JSON: "kod": "from ...\n..." içeriğini çöz
+    m = re.search(r'"kod"\s*:\s*"((?:[^"\\]|\\.)*)', metin or "")
+    if m:
+        try:
+            return json.loads('"' + m.group(1) + '"')
+        except json.JSONDecodeError:
+            pass
     # JSON/blok yok: ilk `import`/`from`/`class`/`def` satırından itibaren kurtar
     satirlar = (metin or "").splitlines()
     for i, satir in enumerate(satirlar):
@@ -187,7 +194,7 @@ def tek_yaz(butce: sg.Butce, saglayici: str, model: str, kuru: bool) -> dict:
     ]
     t0 = __import__("time").time()
     metin = sg.cagir(saglayici, istem, model=model or None, butce=butce, rol="yaz:bot",
-                     tur=1, sicaklik=0.2, kuru_kosu=kuru) or ""
+                     tur=1, sicaklik=0.2, azami_token=4000, kuru_kosu=kuru) or ""
     sure = round(__import__("time").time() - t0, 1)
     kod = _kod(metin)
     hata = ""
@@ -257,7 +264,7 @@ def tek_bot(butce: sg.Butce, saglayici: str, model: str, tur: int = 5, kuru: boo
                 f"HATA:\n{kosu.get('hata', '')[:1200]}\n\nKOD:\n{(KOK / TEK_DOSYA).read_text()[:6000]}"},
         ]
         metin = sg.cagir(saglayici, istem, model=model or None, butce=butce, rol=f"onar:{i}",
-                         tur=i, sicaklik=0.1, kuru_kosu=kuru)
+                         tur=i, sicaklik=0.1, azami_token=4000, kuru_kosu=kuru)
         kod = _kod(metin)
         try:
             ast.parse(kod)
