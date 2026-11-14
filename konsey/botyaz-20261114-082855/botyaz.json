@@ -1,0 +1,48 @@
+{
+ "yazilan": [
+  "bot/konsey_bot/__init__.py",
+  "bot/konsey_bot/strateji.py",
+  "bot/konsey_bot/risk.py",
+  "bot/konsey_bot/motor.py",
+  "bot/konsey_bot/cli.py"
+ ],
+ "hatali": [
+  {
+   "dosya": "bot/konsey_bot/ayarlar.py",
+   "hata": "syntax: 13. satır unexpected unindent"
+  }
+ ],
+ "kosu": {
+  "ok": false,
+  "etiket": "botyaz-20261114-082855",
+  "hata": "Traceback (most recent call last):\n  File \"<frozen runpy>\", line 189, in _run_module_as_main\n  File \"<frozen runpy>\", line 112, in _get_module_details\n  File \"/home/runner/work/elifbot/elifbot/bot/konsey_bot/__init__.py\", line 1, in <module>\n    from bot.konsey_bot.version import __version__\nModuleNotFoundError: No module named 'bot.konsey_bot.version'\n",
+  "cikti": "",
+  "iz": "Traceback (most recent call last):\n  File \"<frozen runpy>\", line 189, in _run_module_as_main\n  File \"<frozen runpy>\", line 112, in _get_module_details\n  File \"/home/runner/work/elifbot/elifbot/bot/konsey_bot/__init__.py\", line 1, in <module>\n    from bot.konsey_bot.version import __version__\nModuleNotFoundError: No module named 'bot.konsey_bot.version'\n"
+ },
+ "onarim": {
+  "turlar": [
+   {
+    "tur": 1,
+    "ok": false,
+    "hata": "Traceback (most recent call last):\n  File \"<frozen runpy>\", line 189, in _run_module_as_main\n  File \"<frozen runpy>\", line 112, in _get_module_details\n  File \"/home/runner/work/elifbot/elifbot/bot/konsey_bot/__init__.py\", line 1, in <module>\n    from bot.konsey_bot.version import __version__\nModuleNotFoundError: No module named 'bot.konsey_bot.version'\n"
+   },
+   {
+    "tur": 2,
+    "ok": false,
+    "hata": "Traceback (most recent call last):\n  File \"<frozen runpy>\", line 189, in _run_module_as_main\n  File \"<frozen runpy>\", line 112, in _get_module_details\n  File \"/home/runner/work/elifbot/elifbot/bot/konsey_bot/__init__.py\", line 1, in <module>\n    from bot.konsey_bot.version import __version__\nModuleNotFoundError: No module named 'bot.konsey_bot.version'\n"
+   },
+   {
+    "tur": 3,
+    "ok": false,
+    "hata": "Traceback (most recent call last):\n  File \"<frozen runpy>\", line 189, in _run_module_as_main\n  File \"<frozen runpy>\", line 112, in _get_module_details\n  File \"/home/runner/work/elifbot/elifbot/bot/konsey_bot/__init__.py\", line 1, in <module>\n    from bot.konsey_bot.version import __version__\nModuleNotFoundError: No module named 'bot.konsey_bot.version'\n"
+   }
+  ],
+  "son": {
+   "ok": false,
+   "etiket": "botyaz-20261114-082855",
+   "hata": "Traceback (most recent call last):\n  File \"<frozen runpy>\", line 189, in _run_module_as_main\n  File \"<frozen runpy>\", line 112, in _get_module_details\n  File \"/home/runner/work/elifbot/elifbot/bot/konsey_bot/__init__.py\", line 1, in <module>\n    from bot.konsey_bot.version import __version__\nModuleNotFoundError: No module named 'bot.konsey_bot.version'\n",
+   "cikti": "",
+   "iz": "Traceback (most recent call last):\n  File \"<frozen runpy>\", line 189, in _run_module_as_main\n  File \"<frozen runpy>\", line 112, in _get_module_details\n  File \"/home/runner/work/elifbot/elifbot/bot/konsey_bot/__init__.py\", line 1, in <module>\n    from bot.konsey_bot.version import __version__\nModuleNotFoundError: No module named 'bot.konsey_bot.version'\n"
+  }
+ }
+}
