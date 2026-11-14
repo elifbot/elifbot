@@ -1,0 +1,89 @@
+name: Model Sondası
+
+# GitHub'ın kendi ücretsiz model uçlarını dener; sonucu ayrı bir dala yazar.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  models: read
+
+jobs:
+  sonda:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Uç noktaları dene
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python3 - <<'PY'
+          import json, os, urllib.request, urllib.error, datetime
+
+          TOKEN = os.environ["GITHUB_TOKEN"]
+          UCLAR = [
+              "https://models.github.ai",
+              "https://models.github.ai/inference",
+              "https://models.github.ai/inference/v1",
+              "https://models.inference.ai.azure.com",
+              "https://api.githubcopilot.com",
+          ]
+          HAC = {"Authorization": f"Bearer {TOKEN}", "Accept": "application/json",
+                 "Content-Type": "application/json", "X-GitHub-Api-Version": "2022-11-28"}
+          rapor = {"zaman": datetime.datetime.utcnow().isoformat() + "Z", "uclar": []}
+
+          def dene(url, veri=None, yont="GET"):
+              try:
+                  istek = urllib.request.Request(url, data=(json.dumps(veri).encode() if veri else None),
+                                                 headers=HAC, method=yont)
+                  with urllib.request.urlopen(istek, timeout=30) as y:
+                      ham = y.read().decode(errors="ignore")
+                  return {"durum": 200, "govde": ham[:600], "bayt": len(ham)}
+              except urllib.error.HTTPError as e:
+                  return {"durum": e.code, "govde": e.read().decode(errors="ignore")[:600]}
+              except Exception as e:
+                  return {"durum": 0, "govde": f"{type(e).__name__}: {e}"[:200]}
+
+          for uc in UCLAR:
+              kayit = {"uc": uc}
+              kayit["modeller"] = dene(uc + "/models")
+              # katalog döndüyse ilk modeli konuşma testinde kullan
+              model = "openai/gpt-4.1-mini"
+              try:
+                  kat = json.loads(kayit["modeller"]["govde"])
+                  idler = [m.get("id") or m.get("name") for m in kat.get("data", [])]
+                  kayit["model_sayisi"] = len(idler)
+                  kayit["ilk_modeller"] = idler[:8]
+                  if idler:
+                      model = idler[0]
+              except Exception:
+                  kayit["model_sayisi"] = 0
+              kayit["sohbet"] = dene(uc + "/chat/completions", {
+                  "model": model,
+                  "messages": [{"role": "user", "content": "Sadece OK yaz."}],
+                  "max_tokens": 10})
+              kayit["sohbet_modeli"] = model
+              rapor["uclar"].append(kayit)
+
+          os.makedirs("sonda", exist_ok=True)
+          with open("sonda/ghmodeller.json", "w", encoding="utf-8") as f:
+              json.dump(rapor, f, ensure_ascii=False, indent=1)
+          for u in rapor["uclar"]:
+              print(u["uc"], "| katalog:", u["modeller"]["durum"],
+                    u.get("model_sayisi", 0), "| sohbet:", u["sohbet"]["durum"],
+                    "|", u["sohbet"]["govde"][:120].replace("\n", " "))
+          PY
+      - name: Sonucu dala yaz
+        if: always()
+        run: |
+          git config user.name "sonda-bot"
+          git config user.email "sonda@users.noreply.github.com"
+          DAL="sonda/ghmodeller-$(date -u +%Y%m%d-%H%M%S)"
+          git checkout -b "$DAL"
+          git add -A sonda || true
+          git commit -m "sonda: github model uçları" || echo "değişiklik yok"
+          git push origin "$DAL"
