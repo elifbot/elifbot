@@ -49,7 +49,8 @@ ama keşif de tek başına yetmez (404 = hesaba açık değil).
 |---|---|---|---|
 | 1 | `sinyaller.komite()` RVOL filtresi (`hacim_orani < 1.5` → giriş yok) | uygulandı | **ETKİ SIFIR** — A/B (5 dk/60 sembol) tüm metrikler birebir aynı |
 | 2 | `Poz`'a `regime_flip_count` alanı | reddedildi | alanı kullanan mantık yok → eksik yama |
-| 3 | REJIM_DONUS teyidi (çok parçalı) | koşuyor | sonuç bekleniyor |
+| 3 | REJIM_DONUS teyidi (çok parçalı) | üretilemedi | sekreter şemayı tutturamadı (dosya alanı boş) → 3 karar düştü |
+| 4 | REJIM_DONUS teyidi, ikinci deneme | üretilemedi | 14 çağrı, 0 karar; sekreter yine `dosya/eski_kod` doldurmadı |
 
 Ölçüm aracı: `python3 -m kadro.konsey.olcum --kararlar konsey/<etiket>/kararlar.json`
 Geçici kopyada yamasız/yamalı iki koşu yapar, aynı seed, farkı raporlar.
@@ -73,7 +74,10 @@ N ardışık tick sürmeli (teyit) veya ek PnL eşiği aranmalı.
 
 ## 7. Sıradaki adımlar
 
-1. REJIM_DONUS teyit yaması çıkarsa A/B ile ölç, etkili ise uygula.
-2. Etkisiz yamayı geri al (RVOL filtresi) — ölçülen fayda yok, ek karmaşıklık var.
-3. Gerçek borsa verisiyle koşu: ağ erişimi olan bir ortamda `--dakika 60 --sembol 120`.
-4. Kenar bulunana kadar canlıya çıkmak yok.
+1. **RVOL filtresi geri alındı** (ölçülen fayda sıfır, ek karmaşıklık).
+2. Sekreterin şema disiplini: `dosya` boş geldiğinde `kanit` alanından dosyayı çıkar;
+   ikinci aşama onarım çağrısına *dosya seçimini* de bırak. Bu, kalan tek darboğaz.
+3. Model yükseltmesi: gemma-4-31b-it 250–290 sn/çağrı ve kararsız; 3 oturumun 2'si
+   zaman aşımıyla kararsız kaldı. Daha hızlı bir model (veya ikinci sağlayıcı) şart.
+4. Gerçek borsa verisiyle koşu: ağ erişimi olan bir ortamda `--dakika 60 --sembol 120`.
+5. Kenar bulunana kadar canlıya çıkmak yok.
