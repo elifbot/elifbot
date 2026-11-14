@@ -112,6 +112,31 @@ def _json_ayikla(metin: str) -> dict:
         return {}
 
 
+def _karar_listesi(veri) -> list[dict]:
+    """Sekreter bizim şemayı tutturamıyor; yaygın alternatif şemaları da kabul et."""
+    if isinstance(veri, list):
+        return [x for x in veri if isinstance(x, dict)]
+    if not isinstance(veri, dict):
+        return []
+    for anahtar in ("kararlar", "uygulanabilir_yama", "yama", "degisiklikler", "oneriler"):
+        v = veri.get(anahtar)
+        if isinstance(v, list) and v:
+            return [x for x in v if isinstance(x, dict)]
+    return []
+
+
+def _karar_normalize(k: dict) -> dict:
+    """hedef/islem/kod gibi alanları bizim (dosya, eski_kod, yeni_kod) alanlarına çevirir."""
+    d = dict(k)
+    d.setdefault("baslik", d.get("hedef") or d.get("islem") or "(başlıksız)")
+    d.setdefault("gerekce", d.get("aciklama") or d.get("islem") or "")
+    if not d.get("kanit"):
+        d["kanit"] = d.get("dosya", "") + (f":{d['hedef']}" if d.get("hedef") else "")
+    if not d.get("yeni_kod") and d.get("kod"):
+        d["yeni_kod"] = str(d["kod"])
+    return d
+
+
 def sekreter_turu(o: Oturum, kuru: bool) -> None:
     if not o.oneriler:
         return
@@ -125,9 +150,9 @@ def sekreter_turu(o: Oturum, kuru: bool) -> None:
         metin = sg.cagir(sag, istem, butce=o.butce, rol="sekreter", tur=3,
                          sicaklik=0.1, kuru_kosu=kuru)
         veri = _json_ayikla(metin)
-        if veri.get("kararlar"):
+        if _karar_listesi(veri):
             break
-    for k in veri.get("kararlar", [])[:4]:
+    for k in [_karar_normalize(x) for x in _karar_listesi(veri)][:4]:
         if not k.get("dosya"):          # model dosyayı boş bıraktıysa kanıt/gerekçeden çıkar
             for alan in ("kanit", "gerekce", "baslik"):
                 m = re.search(r"(bot/[\w/]+\.py)", str(k.get(alan, "")))

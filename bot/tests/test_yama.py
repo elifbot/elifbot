@@ -64,3 +64,16 @@ def test_kanitten_dosya_cikarimi():
     diff, hata = ym.yama_uret(m.group(1), "class Poz:", "class Poz:  # x")
     assert not hata, hata
     assert "+class Poz:  # x" in diff
+
+
+def test_alternatif_sema_kabul_edilir():
+    from kadro.konsey.tartisma import _karar_listesi, _karar_normalize
+    veri = {"karar": "ONAYLANDI", "uygulanabilir_yama": [
+        {"dosya": "bot/v9/motor.py", "hedef": "class Poz", "islem": "ekle",
+         "kod": "ters_rejim_sayaci: int = 0"}]}
+    liste = _karar_listesi(veri)
+    assert len(liste) == 1
+    k = _karar_normalize(liste[0])
+    assert k["dosya"] == "bot/v9/motor.py"
+    assert k["yeni_kod"] == "ters_rejim_sayaci: int = 0"
+    assert k["kanit"].startswith("bot/v9/motor.py")
