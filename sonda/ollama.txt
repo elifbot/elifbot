@@ -1,0 +1,43 @@
+NAME                  ID              SIZE      MODIFIED      
+qwen2.5-coder:1.5b    d7372fd82851    986 MB    4 seconds ago    
+
+	dry_multiplier = 0.000, dry_base = 1.750, dry_allowed_length = 2, dry_penalty_last_n = 64
+	top_k = 40, top_p = 0.900, min_p = 0.000, xtc_probability = 0.000, xtc_threshold = 0.100, typical_p = 1.000, top_n_sigma = -1.000, temp = 0.800
+	mirostat = 0, mirostat_lr = 0.100, mirostat_ent = 5.000, adaptive_target = -1.000, adaptive_decay = 0.900
+slot launch_slot_: id  0 | task 0 | processing task, is_child = 0
+slot   operator(): id  0 | task 0 | new prompt, n_ctx_slot = 4096, n_keep = 4, task.n_tokens = 39
+slot   operator(): id  0 | task 0 | cached n_tokens = 0, memory_seq_rm [0, end)
+slot init_sampler: id  0 | task 0 | init sampler, took 0.01 ms, tokens: text = 39, total = 39
+slot print_timing: id  0 | task 0 | prompt eval time =     464.39 ms /    39 tokens (   11.91 ms per token,    83.98 tokens per second)
+slot print_timing: id  0 | task 0 |        eval time =     190.91 ms /     4 tokens (   63.64 ms per token,    15.71 tokens per second)
+slot print_timing: id  0 | task 0 |       total time =     655.30 ms /    43 tokens
+slot print_timing: id  0 | task 0 |    graphs reused =          3
+slot print_timing: id  0 | task 0 |   graph reallocs =          0    /     0        (same size) / (changed size)
+slot      release: id  0 | task 0 | stop processing: n_tokens = 42, truncated = 0
+srv  update_slots: all slots are idle
+[GIN] 2026/11/14 - 06:31:48 | 200 |     2.2s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2026/11/14 - 06:31:48 | 200 | 30.791µs |       127.0.0.1 | HEAD     "/"
+[GIN] 2026/11/14 - 06:31:48 | 200 | 739.692µs |       127.0.0.1 | POST     "/api/show"
+srv  server_strea: conv_id= (empty=1)
+slot get_availabl: id  0 | task -1 |  - checking sim = 0.462 (24/52) > 0.100
+slot get_availabl: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.462 (> 0.100 thold), f_keep = 0.571
+slot launch_slot_: id  0 | task -1 | sampler chain: logits -> ?penalties -> ?dry -> ?top-n-sigma -> top-k -> ?typical -> top-p -> ?min-p -> ?xtc -> temp-ext -> dist 
+slot launch_slot_: id  0 | task -1 | sampler params: 
+	repeat_last_n = 64, repeat_penalty = 1.000, frequency_penalty = 0.000, presence_penalty = 0.000
+	dry_multiplier = 0.000, dry_base = 1.750, dry_allowed_length = 2, dry_penalty_last_n = 64
+	top_k = 40, top_p = 0.900, min_p = 0.000, xtc_probability = 0.000, xtc_threshold = 0.100, typical_p = 1.000, top_n_sigma = -1.000, temp = 0.800
+	mirostat = 0, mirostat_lr = 0.100, mirostat_ent = 5.000, adaptive_target = -1.000, adaptive_decay = 0.900
+slot launch_slot_: id  0 | task 5 | processing task, is_child = 0
+slot   operator(): id  0 | task 5 | new prompt, n_ctx_slot = 4096, n_keep = 4, task.n_tokens = 52
+slot   operator(): id  0 | task 5 | cached n_tokens = 24, memory_seq_rm [24, end)
+slot init_sampler: id  0 | task 5 | init sampler, took 0.01 ms, tokens: text = 52, total = 52
+slot print_timing: id  0 | task 5 | prompt eval time =     347.08 ms /    28 tokens (   12.40 ms per token,    80.67 tokens per second)
+slot print_timing: id  0 | task 5 |        eval time =    1646.17 ms /    27 tokens (   63.31 ms per token,    15.79 tokens per second)
+slot print_timing: id  0 | task 5 |       total time =    1993.25 ms /    55 tokens
+slot print_timing: id  0 | task 5 |    graphs reused =         28
+slot print_timing: id  0 | task 5 |   graph reallocs =          0    /     0        (same size) / (changed size)
+slot      release: id  0 | task 5 | stop processing: n_tokens = 78, truncated = 0
+srv  update_slots: all slots are idle
+[GIN] 2026/11/14 - 06:31:50 | 200 |    1.99s |       127.0.0.1 | POST     "/api/generate"
+[GIN] 2026/11/14 - 06:31:50 | 200 | 24.691µs |       127.0.0.1 | HEAD     "/"
+[GIN] 2026/11/14 - 06:31:50 | 200 | 897.103µs |       127.0.0.1 | GET      "/api/tags"
