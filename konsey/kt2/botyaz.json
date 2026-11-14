@@ -1,0 +1,28 @@
+{
+ "yazilan": [
+  "bot/konsey_bot/__init__.py"
+ ],
+ "hatali": [
+  {
+   "dosya": "bot/konsey_bot/ayarlar.py",
+   "hata": "şu adlar eksik: Ayarlar"
+  },
+  {
+   "dosya": "bot/konsey_bot/strateji.py",
+   "hata": "şu adlar eksik: ema, sinyal"
+  },
+  {
+   "dosya": "bot/konsey_bot/risk.py",
+   "hata": "şu adlar eksik: boyut, stop_fiyati, pnl"
+  },
+  {
+   "dosya": "bot/konsey_bot/motor.py",
+   "hata": "şu adlar eksik: Motor"
+  },
+  {
+   "dosya": "bot/konsey_bot/cli.py",
+   "hata": "şu adlar eksik: main"
+  }
+ ],
+ "kosu": null
+}

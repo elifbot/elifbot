@@ -30,7 +30,6 @@ KURALLAR = (
 )
 
 DOSYALAR: list[tuple[str, str]] = [
-    (f"{PAKET}/__init__.py", "Paket başlatıcı. Sadece bir docstring ve sürüm sabiti olsun."),
     (f"{PAKET}/ayarlar.py",
      "Ayarlar dataclass'ı. Alanlar: kasa_usd=1000.0, teminat_usd=50.0, kaldiraç=10.0, "
      "stop_net_usd=-10.0, komisyon_oran=0.0005, evren_sayisi=6. "
@@ -93,7 +92,8 @@ def _istem(dosya: str, aciklama: str, arayuz: str, hata: str = "") -> list[dict]
             f"PROJEDEKİ DİĞER DOSYALARIN ARAYÜZÜ (bunları kullan, yeniden tanımlama):\n{arayuz}\n"
             f"{ek}\n"
             "Kurallar: sadece standart kütüphane kullan; dosya kendi başına import edilebilir olmalı; "
-            "içe aktarmalar `from bot.konsey_bot.xxx import ...` biçiminde olsun; "
+            "içe aktarmalar yalnız standart kütüphane veya yukarıdaki MEVCUT DOSYALAR'dan olsun "
+            "(olmayan modül import etme, `version` diye bir modül yok); "
             "Türkçe yorum kısa olsun; `...` ile kısaltma yapma, dosya eksiksiz olsun."},
     ]
 
@@ -143,12 +143,19 @@ def _arayuz(butce: sg.Butce) -> str:
                 imzalar.append(d.target.id)
         if imzalar:
             satirlar.append(f"{yol}: " + "; ".join(imzalar[:12]))
-    return "\n".join(satirlar) or "(henüz dosya yok)"
+    var = sorted(p.stem for p in (KOK / PAKET).glob("*.py"))
+    satirlar.append(f"MEVCUT DOSYALAR (yalnız bunlardan import edilebilir): {', '.join(var)}")
+    return "\n".join(satirlar)
 
 
 def yaz(botce: sg.Butce, saglayici: str = "ollama", model: str = "", kuru: bool = False) -> dict:
     """Tüm dosyaları sırayla yazdırır; (rapor) döndürür."""
     rapor = {"yazilan": [], "hatali": [], "kosu": None}
+    (KOK / PAKET).mkdir(parents=True, exist_ok=True)
+    (KOK / PAKET / "__init__.py").write_text(
+        '"""Konsey botu — dosyalar ajanlar tarafından yazıldı."""\n__version__ = "1.0.0"\n',
+        encoding="utf-8")
+    rapor["yazilan"].append(f"{PAKET}/__init__.py")
     for dosya, aciklama in DOSYALAR:
         istem = _istem(dosya, aciklama, _arayuz(botce))
         metin = sg.cagir(saglayici, istem, model=model or None, butce=botce,
@@ -165,16 +172,19 @@ def yaz(botce: sg.Butce, saglayici: str = "ollama", model: str = "", kuru: bool 
         eksik = _eksik(dosya, kod) if not hata else []
         if eksik:
             hata = f"şu adlar eksik: {', '.join(eksik)}"
-        if hata:                                     # tek onarım turu
+        deneme = 1
+        while hata and deneme < 3:                   # en fazla 3 deneme
             metin = sg.cagir(saglayici, _istem(dosya, aciklama, _arayuz(botce), hata),
                              model=model or None, butce=botce, rol=f"yaz:{Path(dosya).stem}",
                              tur=2, sicaklik=0.1, kuru_kosu=kuru)
             kod = _kod(metin)
             try:
                 ast.parse(kod)
-                hata = ""
+                eksik2 = _eksik(dosya, kod)
+                hata = f"şu adlar eksik: {', '.join(eksik2)}" if eksik2 else ""
             except SyntaxError as e:
                 hata = f"syntax: {e.lineno}. satır {e.msg}" if kod.strip() else "kod boş"
+            deneme += 1
         if hata:
             rapor["hatali"].append({"dosya": dosya, "hata": hata})
             continue
@@ -186,7 +196,7 @@ def yaz(botce: sg.Butce, saglayici: str = "ollama", model: str = "", kuru: bool 
 
 
 def onar(butce: sg.Butce, kosu: dict, saglayici: str, model: str, kuru: bool,
-         tur_sayisi: int = 3) -> dict:
+         onarilacak: list[str] | None = None, tur_sayisi: int = 3) -> dict:
     """Koşu hatasını dosyaya çevirip o dosyayı yeniden yazdırır (en fazla N tur)."""
     kayit = {"turlar": [], "son": kosu}
     for tur in range(1, tur_sayisi + 1):
@@ -197,9 +207,11 @@ def onar(butce: sg.Butce, kosu: dict, saglayici: str, model: str, kuru: bool,
         for m in re.finditer(r"konsey_bot/(\w+)\.py", hata + " " + str(kosu.get("iz"))):
             if m.group(1) not in adlar:
                 adlar.append(m.group(1))
-        if not adlar:                        # iz yoksa sırayla en kırılgan dosyalar
-            adlar = ["__init__", "cli"]
-        for ad in adlar[:2]:
+        if not adlar:                        # iz yoksa cli'yi düzelt
+            adlar = ["cli"]
+        if onarilacak:                       # yazılamamış dosyalar öncelikli
+            adlar = onarilacak + [x for x in adlar if x not in onarilacak]
+        for ad in adlar[:3]:
             dosya = f"{PAKET}/{ad}.py"
             aciklama = dict(DOSYALAR).get(dosya, "dosyayı düzelt")
             metin = sg.cagir(saglayici, _istem(dosya, aciklama, _arayuz(butce),
@@ -260,7 +272,8 @@ def main(argv: list[str] | None = None) -> int:
         kosu = dene(a.etiket)
         rapor["kosu"] = kosu
         if not kosu.get("ok"):
-            rapor["onarim"] = onar(butce, kosu, a.saglayici, a.model, a.kuru_kosu)
+            eksikler = [Path(x["dosya"]).stem for x in rapor["hatali"]]
+            rapor["onarim"] = onar(butce, kosu, a.saglayici, a.model, a.kuru_kosu, eksikler)
             rapor["kosu"] = rapor["onarim"]["son"]
     d = KOK / "konsey" / a.etiket
     d.mkdir(parents=True, exist_ok=True)
