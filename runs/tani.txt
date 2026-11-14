@@ -1,0 +1,40 @@
+tarih: Sat Nov 14 12:36:21 UTC 2026
+binance: 451
+okx: 200
+binance ornek: {
+  "code": 0,
+  "msg": "Service unavailable from a restricted location according to 'b. Eligibility' in https://www.binance.com/en/terms. Please contact customer service if you believe you received this message in error."
+}
+okx ornek: {"code":"0","data":[["1794659760000","67175.9","67194.6","67175.8","67194.6","125.31","1.2531","84185.7396","0"]],"msg":""}
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py", line 216, in urlopen
+    return opener.open(url, data, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py", line 525, in open
+    response = meth(req, response)
+               ^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py", line 634, in http_response
+    response = self.parent.error(
+               ^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py", line 563, in error
+    return self._call_chain(*args)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py", line 496, in _call_chain
+    result = func(*args)
+             ^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py", line 643, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 451: 
+kaynak: OKX canli (public klines) · sembol 25 · bar 1440 · 2026-11-14 12:36 UTC
+surum                           islem      WR      PF         net  acik
+  v1 kbot (EMA+hacim)             134   36.6%    1.70    +445.85$    18
+  v2 kbot2 (rejim+komite)         223   27.8%    0.87    -168.41$    22
+  v3 kbot3 (kanit esikleri)       373   38.9%    0.69    -630.43$    17
+
+--- eşik analizi (ileri 60 bar, maliyet %0,2)
+  adx: 20-25 n=2322 ort=+0.004% isabet=36% · 25-30 n=2231 ort=-0.127% isabet=35% · 30-35 n=2289 ort=-0.206% isabet=35% · 35+ n=16359 ort=-0.077% isabet=34% · <20 n=9799 ort=-0.029% isabet=37%
+  bb: 0.3-0.5 n=5940 ort=-0.188% isabet=31% · 0.5-1 n=10483 ort=-0.191% isabet=38% · 1-2 n=5594 ort=-0.116% isabet=45% · 2+ n=4972 ort=+0.560% isabet=49% · <0.3 n=6011 ort=-0.217% isabet=15%
+  rsi: 12-18 n=6308 ort=-0.124% isabet=34% · 18+ n=11243 ort=-0.050% isabet=34% · 6-12 n=7466 ort=-0.070% isabet=36% · <6 n=7983 ort=-0.052% isabet=38%
+
+yazildi: runs/canli_20261114_123622/ozet.json
