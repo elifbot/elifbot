@@ -1,0 +1,169 @@
+{
+ "kaynak": "SENTETIK (kuru kosu)",
+ "borsa": "binance",
+ "bar": 660,
+ "semboller": [
+  "S01",
+  "S02",
+  "S03"
+ ],
+ "sonuclar": [
+  {
+   "surum": "v1 kbot (EMA+hacim)",
+   "islem": 3,
+   "kazanma_orani": 0.6667,
+   "realize_usd": 26.59,
+   "komisyon_usd": 1.5,
+   "kar_faktoru": 3.659,
+   "ortalama_islem": 8.86,
+   "cikis_nedenleri": {
+    "stop": 1,
+    "sure": 2
+   },
+   "red_nedenleri": {
+    "hacim": 983,
+    "kesisme_yok": 385,
+    "veri": 66
+   },
+   "acik_pozisyon": 1
+  },
+  {
+   "surum": "v2 kbot2 (rejim+komite)",
+   "islem": 14,
+   "kazanma_orani": 0.1429,
+   "realize_usd": -26.76,
+   "komisyon_usd": 7.0,
+   "kar_faktoru": 0.767,
+   "ortalama_islem": -1.91,
+   "cikis_nedenleri": {
+    "stop": 11,
+    "sure": 3
+   },
+   "red_nedenleri": {
+    "veri": 177,
+    "trend": 123,
+    "notr": 34,
+    "sikisma": 1
+   },
+   "acik_pozisyon": 3
+  },
+  {
+   "surum": "v3 kbot3 (kanit esikleri)",
+   "islem": 6,
+   "kazanma_orani": 1.0,
+   "realize_usd": 186.16,
+   "komisyon_usd": 3.0,
+   "kar_faktoru": 99.0,
+   "ortalama_islem": 31.03,
+   "cikis_nedenleri": {
+    "sure": 6
+   },
+   "red_nedenleri": {
+    "veri": 177,
+    "giris_acisi": 9,
+    "ADX": 7,
+    "RSI": 6,
+    "BB": 3,
+    "uyum": 2
+   },
+   "acik_pozisyon": 3
+  }
+ ],
+ "analiz": {
+  "bar": 1740,
+  "ileri_bar": 20,
+  "maliyet": 0.002,
+  "kovalar": {
+   "adx": {
+    "20-25": {
+     "n": 93,
+     "ort_getiri_pct": 0.2422,
+     "isabet": 0.581,
+     "toplam_pct": 22.53
+    },
+    "25-30": {
+     "n": 97,
+     "ort_getiri_pct": -0.0042,
+     "isabet": 0.515,
+     "toplam_pct": -0.41
+    },
+    "30-35": {
+     "n": 82,
+     "ort_getiri_pct": 0.1021,
+     "isabet": 0.561,
+     "toplam_pct": 8.37
+    },
+    "35+": {
+     "n": 1059,
+     "ort_getiri_pct": 0.4297,
+     "isabet": 0.689,
+     "toplam_pct": 455.02
+    },
+    "<20": {
+     "n": 409,
+     "ort_getiri_pct": 0.107,
+     "isabet": 0.565,
+     "toplam_pct": 43.75
+    }
+   },
+   "bb": {
+    "0.3-0.5": {
+     "n": 115,
+     "ort_getiri_pct": -0.0154,
+     "isabet": 0.417,
+     "toplam_pct": -1.77
+    },
+    "0.5-1": {
+     "n": 764,
+     "ort_getiri_pct": 0.0802,
+     "isabet": 0.541,
+     "toplam_pct": 61.26
+    },
+    "1-2": {
+     "n": 688,
+     "ort_getiri_pct": 0.4725,
+     "isabet": 0.718,
+     "toplam_pct": 325.09
+    },
+    "2+": {
+     "n": 170,
+     "ort_getiri_pct": 0.8297,
+     "isabet": 0.9,
+     "toplam_pct": 141.06
+    },
+    "<0.3": {
+     "n": 3,
+     "ort_getiri_pct": 1.2053,
+     "isabet": 1.0,
+     "toplam_pct": 3.62
+    }
+   },
+   "rsi": {
+    "12-18": {
+     "n": 277,
+     "ort_getiri_pct": 0.2352,
+     "isabet": 0.603,
+     "toplam_pct": 65.15
+    },
+    "18+": {
+     "n": 830,
+     "ort_getiri_pct": 0.4843,
+     "isabet": 0.73,
+     "toplam_pct": 401.96
+    },
+    "6-12": {
+     "n": 321,
+     "ort_getiri_pct": 0.0948,
+     "isabet": 0.53,
+     "toplam_pct": 30.42
+    },
+    "<6": {
+     "n": 312,
+     "ort_getiri_pct": 0.1017,
+     "isabet": 0.538,
+     "toplam_pct": 31.74
+    }
+   }
+  }
+ }
+}

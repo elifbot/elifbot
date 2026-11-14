@@ -11,6 +11,9 @@ on:
         default: "20"
       dakika:
         description: "test suresi (dk)"
+        default: "120"
+      ileri:
+        description: "ileri bar (analiz)"
         default: "30"
 
 permissions:
@@ -41,6 +44,7 @@ jobs:
         run: |
           python3 -m bot.canli.canli_test --borsa "${{ github.event.inputs.borsa }}" \
             --sembol "${{ github.event.inputs.sembol }}" --dakika "${{ github.event.inputs.dakika }}" \
+            --analiz --ileri "${{ github.event.inputs.ileri }}" \
             --etiket "canli_$(date -u +%Y%m%d_%H%M%S)" 2>&1 | tee -a runs/tani.txt
       - name: Sonucu dala yaz
         if: always()
