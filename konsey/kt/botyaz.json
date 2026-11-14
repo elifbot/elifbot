@@ -1,0 +1,12 @@
+{
+ "yazilan": [
+  "bot/konsey_bot/__init__.py",
+  "bot/konsey_bot/ayarlar.py",
+  "bot/konsey_bot/strateji.py",
+  "bot/konsey_bot/risk.py",
+  "bot/konsey_bot/motor.py",
+  "bot/konsey_bot/cli.py"
+ ],
+ "hatali": [],
+ "kosu": null
+}

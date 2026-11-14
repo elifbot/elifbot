@@ -59,6 +59,29 @@ DOSYALAR: list[tuple[str, str]] = [
 ]
 
 
+# her dosyada bulunması zorunlu üst düzey adlar (yüzeysel yazımı yakalar)
+BEKLENEN: dict[str, tuple[str, ...]] = {
+    "ayarlar.py": ("Ayarlar",),
+    "strateji.py": ("ema", "sinyal"),
+    "risk.py": ("boyut", "stop_fiyati", "pnl"),
+    "motor.py": ("Motor",),
+    "cli.py": ("main",),
+}
+
+
+def _eksik(dosya: str, kod: str) -> list[str]:
+    ad = Path(dosya).name
+    beklenen = BEKLENEN.get(ad, ())
+    if not beklenen:
+        return []
+    try:
+        agac = ast.parse(kod)
+    except SyntaxError:
+        return []
+    var = {d.name for d in agac.body if isinstance(d, (ast.FunctionDef, ast.ClassDef))}
+    return [x for x in beklenen if x not in var]
+
+
 def _istem(dosya: str, aciklama: str, arayuz: str, hata: str = "") -> list[dict]:
     ek = (f"\nÖNCEKİ DENEME ŞU HATAYI VERDİ, DÜZELT:\n{hata[:600]}\n" if hata else "")
     return [
@@ -139,6 +162,9 @@ def yaz(botce: sg.Butce, saglayici: str = "ollama", model: str = "", kuru: bool 
                 ast.parse(kod)
             except SyntaxError as e:
                 hata = f"sözdizimi: {e.lineno}. satır {e.msg}"
+        eksik = _eksik(dosya, kod) if not hata else []
+        if eksik:
+            hata = f"şu adlar eksik: {', '.join(eksik)}"
         if hata:                                     # tek onarım turu
             metin = sg.cagir(saglayici, _istem(dosya, aciklama, _arayuz(botce), hata),
                              model=model or None, butce=botce, rol=f"yaz:{Path(dosya).stem}",
@@ -159,19 +185,63 @@ def yaz(botce: sg.Butce, saglayici: str = "ollama", model: str = "", kuru: bool 
     return rapor
 
 
+def onar(butce: sg.Butce, kosu: dict, saglayici: str, model: str, kuru: bool,
+         tur_sayisi: int = 3) -> dict:
+    """Koşu hatasını dosyaya çevirip o dosyayı yeniden yazdırır (en fazla N tur)."""
+    kayit = {"turlar": [], "son": kosu}
+    for tur in range(1, tur_sayisi + 1):
+        if kosu.get("ok") or butce.bitti():
+            break
+        hata = str(kosu.get("hata", ""))
+        adlar = []
+        for m in re.finditer(r"konsey_bot/(\w+)\.py", hata + " " + str(kosu.get("iz"))):
+            if m.group(1) not in adlar:
+                adlar.append(m.group(1))
+        if not adlar:                        # iz yoksa sırayla en kırılgan dosyalar
+            adlar = ["__init__", "cli"]
+        for ad in adlar[:2]:
+            dosya = f"{PAKET}/{ad}.py"
+            aciklama = dict(DOSYALAR).get(dosya, "dosyayı düzelt")
+            metin = sg.cagir(saglayici, _istem(dosya, aciklama, _arayuz(butce),
+                                               f"KOSU HATASI:\n{hata}"),
+                             model=model or None, butce=butce, rol=f"onar:{ad}", tur=tur,
+                             sicaklik=0.1, kuru_kosu=kuru)
+            kod = _kod(metin)
+            try:
+                ast.parse(kod)
+            except SyntaxError:
+                continue
+            (KOK / dosya).write_text(kod if kod.endswith("\n") else kod + "\n",
+                                     encoding="utf-8")
+        kosu = dene(kosu.get("etiket", "botyaz_test"))
+        kayit["turlar"].append({"tur": tur, "ok": kosu.get("ok"), "hata": str(kosu.get("hata"))[:400]})
+        kayit["son"] = kosu
+    return kayit
+
+
 def dene(etiket: str = "botyaz_test", dakika: float = 1.0, sembol: int = 5) -> dict:
-    """Yazılan botu gerçekten çalıştırır; hata varsa döndürür."""
-    try:
-        r = subprocess.run([sys.executable, "-m", "bot.konsey_bot.cli", "paper",
-                            "--dakika", str(dakika), "--sembol", str(sembol), "--etiket", etiket],
-                           cwd=KOK, capture_output=True, text=True, timeout=300)
-    except Exception as e:                            # noqa: BLE001
-        return {"ok": False, "hata": f"{type(e).__name__}: {e}", "cikti": ""}
-    if r.returncode != 0:
-        return {"ok": False, "hata": (r.stderr or r.stdout)[-1200:], "cikti": r.stdout[-500:]}
-    ozet = KOK / "runs" / etiket / "ozet.json"
-    return {"ok": True, "cikti": r.stdout[-800:],
-            "ozet": json.loads(ozet.read_text()) if ozet.exists() else None}
+    """Yazılan botu gerçekten çalıştırır.
+
+    Ajanlar `paper` alt komutunu yazmayı unutabiliyor; iki çağrı biçimi denenir.
+    """
+    for komut in (["paper"], []):
+        try:
+            r = subprocess.run([sys.executable, "-m", "bot.konsey_bot.cli", *komut,
+                                "--dakika", str(dakika), "--sembol", str(sembol),
+                                "--etiket", etiket],
+                               cwd=KOK, capture_output=True, text=True, timeout=300)
+        except Exception as e:                        # noqa: BLE001
+            return {"ok": False, "etiket": etiket, "hata": f"{type(e).__name__}: {e}",
+                    "iz": ""}
+        if r.returncode == 0:
+            ozet = KOK / "runs" / etiket / "ozet.json"
+            return {"ok": True, "etiket": etiket, "cikti": r.stdout[-800:],
+                    "ozet": json.loads(ozet.read_text()) if ozet.exists() else None}
+        hata = (r.stderr or r.stdout)[-1500:]
+        if "unrecognized arguments" not in hata and "invalid choice" not in hata:
+            return {"ok": False, "etiket": etiket, "hata": hata, "cikti": r.stdout[-500:],
+                    "iz": hata}
+    return {"ok": False, "etiket": etiket, "hata": hata, "cikti": "", "iz": hata}
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -187,7 +257,11 @@ def main(argv: list[str] | None = None) -> int:
     butce = sg.Butce(azami_cagri=a.butce)
     rapor = yaz(butce, a.saglayici, a.model, a.kuru_kosu)
     if not a.kuru_kosu and rapor["yazilan"]:
-        rapor["kosu"] = dene(a.etiket)
+        kosu = dene(a.etiket)
+        rapor["kosu"] = kosu
+        if not kosu.get("ok"):
+            rapor["onarim"] = onar(butce, kosu, a.saglayici, a.model, a.kuru_kosu)
+            rapor["kosu"] = rapor["onarim"]["son"]
     d = KOK / "konsey" / a.etiket
     d.mkdir(parents=True, exist_ok=True)
     (d / "botyaz.json").write_text(json.dumps(rapor, ensure_ascii=False, indent=1),
