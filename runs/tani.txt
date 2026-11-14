@@ -1,0 +1,35 @@
+tarih: Sat Nov 14 10:32:29 UTC 2026
+binance: 451
+okx: 200
+binance ornek: {
+  "code": 0,
+  "msg": "Service unavailable from a restricted location according to 'b. Eligibility' in https://www.binance.com/en/terms. Please contact customer service if you believe you received this message in error."
+}
+okx ornek: {"code":"0","data":[["1794652320000","67282.1","67304.7","67280","67282.6","833.24","8.3324","560683.35806","0"]],"msg":""}
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py", line 216, in urlopen
+    return opener.open(url, data, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py", line 525, in open
+    response = meth(req, response)
+               ^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py", line 634, in http_response
+    response = self.parent.error(
+               ^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py", line 563, in error
+    return self._call_chain(*args)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py", line 496, in _call_chain
+    result = func(*args)
+             ^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py", line 643, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 451: 
+kaynak: OKX canli (public klines) · sembol 20 · bar 130 · 2026-11-14 10:32 UTC
+surum                           islem      WR      PF         net  acik
+  v1 kbot (EMA+hacim)               2    0.0%    0.00     -20.00$    15
+  v2 kbot2 (rejim+komite)           9    0.0%    0.00     -90.00$    19
+  v3 kbot3 (kanit esikleri)        16   25.0%    0.84     -19.08$    20
+
+yazildi: runs/canli_20261114_103230/ozet.json
