@@ -103,6 +103,8 @@ def yama_istemi(karar: dict, dosya: str, kaynak: str) -> list[dict]:
         {"role": "user", "content":
             f"KARAR: {karar.get('baslik', '')}\nGEREKÇE: {karar.get('gerekce', '')}\n\n"
             f"DOSYA: {dosya}\n```python\n{kaynak}\n```\n\n"
+            f"MODELİN KENDİ ÖNERİSİ (fikir olarak kullan, birebir uygulamak zorunda değilsin): "
+            f"{karar.get('hedef', '')} / {karar.get('yeni_kod', '')[:400]}\n\n"
             "Bu kararı bu dosyada uygula. Şema:\n"
             '{"eski_kod":"dosyadan BİREBİR kopyalanmış 2-25 satır (girinti dahil)",'
             '"yeni_kod":"onun yerine geçecek kod","aciklama":"tek cümle"}\n'
