@@ -1,0 +1,82 @@
+{
+ "kaynak": "SENTETIK (kuru kosu)",
+ "borsa": "binance",
+ "bar": 330,
+ "semboller": [
+  "S01",
+  "S02",
+  "S03",
+  "S04",
+  "S05",
+  "S06",
+  "S07",
+  "S08",
+  "S09",
+  "S10"
+ ],
+ "sonuclar": [
+  {
+   "surum": "v1 kbot (EMA+hacim)",
+   "islem": 6,
+   "kazanma_orani": 0.1667,
+   "realize_usd": 14.25,
+   "komisyon_usd": 3.0,
+   "kar_faktoru": 1.285,
+   "ortalama_islem": 2.38,
+   "cikis_nedenleri": {
+    "stop": 5,
+    "sure": 1
+   },
+   "red_nedenleri": {
+    "hacim": 1442,
+    "kesisme_yok": 605,
+    "veri": 220
+   },
+   "acik_pozisyon": 5
+  },
+  {
+   "surum": "v2 kbot2 (rejim+komite)",
+   "islem": 24,
+   "kazanma_orani": 0.0417,
+   "realize_usd": -178.44,
+   "komisyon_usd": 12.0,
+   "kar_faktoru": 0.224,
+   "ortalama_islem": -7.44,
+   "cikis_nedenleri": {
+    "stop": 23,
+    "sure": 1
+   },
+   "red_nedenleri": {
+    "veri": 590,
+    "trend": 231,
+    "notr": 20,
+    "panik": 15,
+    "sikisma": 1
+   },
+   "acik_pozisyon": 10
+  },
+  {
+   "surum": "v3 kbot3 (kanit esikleri)",
+   "islem": 10,
+   "kazanma_orani": 0.9,
+   "realize_usd": 407.04,
+   "komisyon_usd": 5.0,
+   "kar_faktoru": 41.704,
+   "ortalama_islem": 40.7,
+   "cikis_nedenleri": {
+    "stop": 1,
+    "izli_kar": 1,
+    "sure": 8
+   },
+   "red_nedenleri": {
+    "veri": 590,
+    "ADX": 32,
+    "giris_acisi": 27,
+    "RSI": 15,
+    "uyum": 3,
+    "BB": 3
+   },
+   "acik_pozisyon": 10
+  }
+ ]
+}
