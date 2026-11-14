@@ -112,16 +112,32 @@ def _json_ayikla(metin: str) -> dict:
         return {}
 
 
-def _karar_listesi(veri) -> list[dict]:
-    """Sekreter bizim şemayı tutturamıyor; yaygın alternatif şemaları da kabul et."""
+def _karar_listesi(veri, _derinlik: int = 0) -> list[dict]:
+    """Sekreter şemayı tutturamıyor; yaygın alternatif şemaları da kabul et.
+
+    Görülen biçimler: {"kararlar":[...]}, {"uygulanabilir_yama":[...]},
+    {"karar":{"dosya":..,"degisiklikler":[...]}}, {"yama":{"degisiklikler":[...]}}.
+    """
+    if _derinlik > 3:
+        return []
     if isinstance(veri, list):
         return [x for x in veri if isinstance(x, dict)]
     if not isinstance(veri, dict):
         return []
-    for anahtar in ("kararlar", "uygulanabilir_yama", "yama", "degisiklikler", "oneriler"):
+    for anahtar in ("kararlar", "uygulanabilir_yama", "degisiklikler", "oneriler"):
         v = veri.get(anahtar)
-        if isinstance(v, list) and v:
-            return [x for x in v if isinstance(x, dict)]
+        if isinstance(v, list) and v and isinstance(v[0], dict):
+            return [dict(x) for x in v if isinstance(x, dict)]
+    for anahtar in ("karar", "yama", "sonuc", "plan", "cikti"):
+        v = veri.get(anahtar)
+        if isinstance(v, (dict, list)):
+            ic = _karar_listesi(v, _derinlik + 1)
+            if ic:
+                dosya = v.get("dosya") if isinstance(v, dict) else None
+                for x in ic:
+                    if dosya:
+                        x.setdefault("dosya", dosya)
+                return ic
     return []
 
 

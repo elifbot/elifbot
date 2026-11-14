@@ -77,3 +77,20 @@ def test_alternatif_sema_kabul_edilir():
     assert k["dosya"] == "bot/v9/motor.py"
     assert k["yeni_kod"] == "ters_rejim_sayaci: int = 0"
     assert k["kanit"].startswith("bot/v9/motor.py")
+
+
+def test_ic_ice_sema_cozulur():
+    from kadro.konsey.tartisma import _karar_listesi, _karar_normalize
+    veri = {"karar": {"durum": "UYGULANABİLİR", "dosya": "bot/v9/motor.py",
+                      "degisiklikler": [
+                          {"hedef": "Poz dataclass", "islem": "EKLE",
+                           "kod": "ters_rejim_sayaci: int = 0"},
+                          {"hedef": "_izle", "islem": "MANTIK_EKLE",
+                           "kod": "if ters:\n    pos.ters_rejim_sayaci += 1"}]}}
+    liste = _karar_listesi(veri)
+    assert len(liste) == 2
+    k = _karar_normalize(liste[1])
+    assert k["dosya"] == "bot/v9/motor.py"
+    assert "ters_rejim_sayaci" in k["yeni_kod"]
+    # ikinci biçim: {"yama": {...}}
+    assert len(_karar_listesi({"yama": {"degisiklikler": liste}})) == 2
