@@ -1,0 +1,44 @@
+{
+ "yazilan": [
+  "bot/konsey_bot/__init__.py",
+  "bot/konsey_bot/ayarlar.py",
+  "bot/konsey_bot/strateji.py",
+  "bot/konsey_bot/risk.py",
+  "bot/konsey_bot/motor.py",
+  "bot/konsey_bot/cli.py"
+ ],
+ "hatali": [],
+ "kosu": {
+  "ok": false,
+  "etiket": "botyaz-20261114-084544",
+  "hata": "Traceback (most recent call last):\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"/home/runner/work/elifbot/elifbot/bot/konsey_bot/cli.py\", line 5, in <module>\n    from bot.konsey_bot.cli import KonseyBot\n  File \"/home/runner/work/elifbot/elifbot/bot/konsey_bot/cli.py\", line 5, in <module>\n    from bot.konsey_bot.cli import KonseyBot\nImportError: cannot import name 'KonseyBot' from partially initialized module 'bot.konsey_bot.cli' (most likely due to a circular import) (/home/runner/work/elifbot/elifbot/bot/konsey_bot/cli.py)\n",
+  "cikti": "",
+  "iz": "Traceback (most recent call last):\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"/home/runner/work/elifbot/elifbot/bot/konsey_bot/cli.py\", line 5, in <module>\n    from bot.konsey_bot.cli import KonseyBot\n  File \"/home/runner/work/elifbot/elifbot/bot/konsey_bot/cli.py\", line 5, in <module>\n    from bot.konsey_bot.cli import KonseyBot\nImportError: cannot import name 'KonseyBot' from partially initialized module 'bot.konsey_bot.cli' (most likely due to a circular import) (/home/runner/work/elifbot/elifbot/bot/konsey_bot/cli.py)\n"
+ },
+ "onarim": {
+  "turlar": [
+   {
+    "tur": 1,
+    "ok": false,
+    "hata": "Traceback (most recent call last):\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"/home/runner/work/elifbot/elifbot/bot/konsey_bot/cli.py\", line 53, in <module>\n    main()\n  File \"/home/runner/work/elifbot/elifbot/bot/konsey_bot/cli.py\", line 39, in main\n    bot = KonseyBot(1000, 10)\n          ^^^^^^^^^^^^^^^^^^^\n  File \"/home/runne"
+   },
+   {
+    "tur": 2,
+    "ok": false,
+    "hata": "Traceback (most recent call last):\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"/home/runner/work/elifbot/elifbot/bot/konsey_bot/cli.py\", line 47, in <module>\n    main()\n  File \"/home/runner/work/elifbot/elifbot/bot/konsey_bot/cli.py\", line 36, in main\n    bot = KonseyBot(1000, 10)\n          ^^^^^^^^^^^^^^^^^^^\n  File \"/home/runne"
+   },
+   {
+    "tur": 3,
+    "ok": false,
+    "hata": "Traceback (most recent call last):\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"/home/runner/work/elifbot/elifbot/bot/konsey_bot/cli.py\", line 5, in <module>\n    from bot.konsey_bot.cli import KonseyBot\n  File \"/home/runner/work/elifbot/elifbot/bot/konsey_bot/cli.py\", line 5, in <module>\n    from bot.konsey_bot.cli import KonseyBo"
+   }
+  ],
+  "son": {
+   "ok": false,
+   "etiket": "botyaz-20261114-084544",
+   "hata": "Traceback (most recent call last):\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"/home/runner/work/elifbot/elifbot/bot/konsey_bot/cli.py\", line 5, in <module>\n    from bot.konsey_bot.cli import KonseyBot\n  File \"/home/runner/work/elifbot/elifbot/bot/konsey_bot/cli.py\", line 5, in <module>\n    from bot.konsey_bot.cli import KonseyBot\nImportError: cannot import name 'KonseyBot' from partially initialized module 'bot.konsey_bot.cli' (most likely due to a circular import) (/home/runner/work/elifbot/elifbot/bot/konsey_bot/cli.py)\n",
+   "cikti": "",
+   "iz": "Traceback (most recent call last):\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"/home/runner/work/elifbot/elifbot/bot/konsey_bot/cli.py\", line 5, in <module>\n    from bot.konsey_bot.cli import KonseyBot\n  File \"/home/runner/work/elifbot/elifbot/bot/konsey_bot/cli.py\", line 5, in <module>\n    from bot.konsey_bot.cli import KonseyBot\nImportError: cannot import name 'KonseyBot' from partially initialized module 'bot.konsey_bot.cli' (most likely due to a circular import) (/home/runner/work/elifbot/elifbot/bot/konsey_bot/cli.py)\n"
+  }
+ }
+}
