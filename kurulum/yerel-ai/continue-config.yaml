@@ -1,0 +1,24 @@
+# Continue.dev yapılandırması (~/.continue/config.yaml olarak kopyalayın)
+# Ön koşul: Ollama çalışıyor ve modeller çekildi:
+#   ollama pull qwen2.5-coder:7b
+#   ollama pull qwen2.5-coder:1.5b-base
+name: ACARBOT yerel
+version: 1.0.0
+schema: v1
+
+models:
+  - name: Qwen2.5-Coder 7B (sohbet/düzenleme)
+    provider: ollama
+    model: qwen2.5-coder:7b
+    apiBase: http://127.0.0.1:11434
+    roles:
+      - chat
+      - edit
+      - apply
+
+  - name: Qwen2.5-Coder 1.5B (otomatik tamamlama)
+    provider: ollama
+    model: qwen2.5-coder:1.5b-base
+    apiBase: http://127.0.0.1:11434
+    roles:
+      - autocomplete
