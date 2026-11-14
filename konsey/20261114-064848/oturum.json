@@ -1,0 +1,132 @@
+{
+ "gorev": "bot/v9/motor.py: REJIM_DONUS çıkışı 44 işlemin 36'sını üretiyor. class Poz (satır 40) ve metot _bakim (satır 121). İSTENEN: (1) Poz sınıfına ters_rejim_sayaci: int = 0 alanı ekle, (2) _bakim metodunun TAM yeni hâlini yaz: ters rejim görüldükçe ters_rejim_sayaci += 1, rejim düzelince 0, kapatma koşulu ters_rejim_sayaci >= 20, diğer mantık aynen. Çıktı SADECE JSON: [{tur: alan_ekle, sinif: Poz, dosya: bot/v9/motor.py, alan: 'ters_rejim_sayaci: int = 0'}, {tur: fonksiyon, ad: _bakim, dosya: bot/v9/motor.py, kod: '<tam metot>'}]",
+ "saglayici_modelleri": {
+  "ollama": [
+   "qwen2.5-coder:7b"
+  ]
+ },
+ "saglayicilar": [
+  "ollama"
+ ],
+ "modeller": {
+  "ollama": [
+   null
+  ]
+ },
+ "cagri": [
+  {
+   "saglayici": "ollama",
+   "model": "qwen2.5-coder:7b",
+   "rol": "icra",
+   "tur": 1,
+   "istem_karakter": 11012,
+   "yanit": "```json\n[\n    {\n        \"tur\": \"alan_ekle\",\n        \"sinif\": \"Poz\",\n        \"dosya\": \"bot/v9/motor.py\",\n        \"alan\": \"ters_rejim_sayaci: int = 0\"\n    },\n    {\n        \"tur\": \"fonksiyon\",\n        \"ad\": \"_bakim\",\n        \"dosya\": \"bot/v9/motor.py\",\n        \"kod\": \"def _bakim(self, order, symbol, plan, limit_price, order_quantity, plan_qty, entry_fee, side, motor, meta, filled, average, avg_px, status):\\n    if status == OrderStatus.REJECTED:\\n        self.ters_rejim_sayaci += 1\\n    elif status == OrderStatus.FILLED:\\n        self.ters_rejim_sayaci = 0\\n    if self.ters_rejim_sayaci >= 20:\\n        self.kapat()\\n    # Diğer mantık aynen\"\n    }\n]\n```",
+   "saniye": 62.0,
+   "hata": ""
+  },
+  {
+   "saglayici": "ollama",
+   "model": "qwen2.5-coder:7b",
+   "rol": "risk_subayi",
+   "tur": 1,
+   "istem_karakter": 11012,
+   "yanit": "```json\n[\n    {\n        \"tur\": \"alan_ekle\",\n        \"sinif\": \"Poz\",\n        \"dosya\": \"bot/v9/motor.py\",\n        \"alan\": \"ters_rejim_sayaci: int = 0\"\n    },\n    {\n        \"tur\": \"fonksiyon\",\n        \"ad\": \"_bakim\",\n        \"dosya\": \"bot/v9/motor.py\",\n        \"kod\": \"\"\"\nasync def _bakim(self, symbol: str, price: float, stop: float, side: str, qty: float, balance: float, policy: RiskPolicy) -> None:\n    if self.ters_rejim:\n        self.ters_rejim_sayaci += 1\n    else:\n        self.ters_rejim_sayaci = 0\n\n    if self.ters_rejim_sayaci >= 20:\n        self.ters_rejim = False\n        self.ters_rejim_sayaci = 0\n\n    # Diğer kod...\n\"\"\"\n    }\n]\n```",
+   "saniye": 126.8,
+   "hata": ""
+  },
+  {
+   "saglayici": "ollama",
+   "model": "qwen2.5-coder:7b",
+   "rol": "mimar",
+   "tur": 1,
+   "istem_karakter": 11012,
+   "yanit": "",
+   "saniye": 0.0,
+   "hata": "qwen2.5-coder:7b → TimeoutError: timed out"
+  },
+  {
+   "saglayici": "ollama",
+   "model": "qwen2.5-coder:7b",
+   "rol": "test",
+   "tur": 1,
+   "istem_karakter": 11012,
+   "yanit": "",
+   "saniye": 0.0,
+   "hata": "qwen2.5-coder:7b → TimeoutError: timed out"
+  },
+  {
+   "saglayici": "ollama",
+   "model": "qwen2.5-coder:7b",
+   "rol": "olcum",
+   "tur": 1,
+   "istem_karakter": 11012,
+   "yanit": "",
+   "saniye": 0.0,
+   "hata": "qwen2.5-coder:7b → TimeoutError: timed out"
+  },
+  {
+   "saglayici": "ollama",
+   "model": "qwen2.5-coder:7b",
+   "rol": "ops",
+   "tur": 1,
+   "istem_karakter": 11012,
+   "yanit": "```json\n[\n    {\n        \"tur\": \"alan_ekle\",\n        \"sinif\": \"Poz\",\n        \"dosya\": \"bot/v9/motor.py\",\n        \"alan\": \"ters_rejim_sayaci: int = 0\"\n    },\n    {\n        \"tur\": \"fonksiyon\",\n        \"ad\": \"_bakim\",\n        \"dosya\": \"bot/v9/motor.py\",\n        \"kod\": \"def _bakim(self):\\n    if self.ters_rejim_sayaci >= 20:\\n        self.kapat()\\n    elif self.ters_rejim_sayaci > 0:\\n        self.ters_rejim_sayaci += 1\\n    else:\\n        # Diğer mantık\\n        pass\"\n    }\n]\n```",
+   "saniye": 184.9,
+   "hata": ""
+  },
+  {
+   "saglayici": "ollama",
+   "model": "qwen2.5-coder:7b",
+   "rol": "ops",
+   "tur": 2,
+   "istem_karakter": 2314,
+   "yanit": "1. **Risk Subayı'nın Önerisi:** Risk Subayı'nın önerisi, `RiskPolicy` parametresini alıyor ancak bu parametrenin ne anlama geldiğini ve nasıl kullanılacağını belirtmiyor. Bu, kodun genel işleyişini anlamak zorunda kalır ve gereksiz karmaşıklığı artırabilir.\n\n2. **İcra'nın Önerisi:** İcra'nın önerisi, `OrderStatus` değerlerine göre `ters_rejim_sayaci`'yı artırıyor ve sıfırlıyor. Ancak, bu durumda `ters_rejim`'in nasıl güncelleneceği ve ne anlama geldiğini belirtmiyor. Bu, kodun genel işleyişini anlamak zorunda kalır ve gereksiz karmaşıklığı artırabilir.\n\n3. **Senin Önerisi:** Senin önerisi, `ters_rejim_sayaci`'yi bir alan olarak ekliyor ve `_bakim` fonksiyonunu tanımlıyor. Ancak, bu fonksiyonun hangi durumlarda çalıştığını ve ne anlama geldiğini belirtmiyor. Bu, kodun genel işleyişini anlamak zorunda kalır ve gereksiz karmaşıklığı artırabilir.",
+   "saniye": 109.3,
+   "hata": ""
+  },
+  {
+   "saglayici": "ollama",
+   "model": "qwen2.5-coder:7b",
+   "rol": "risk_subayi",
+   "tur": 2,
+   "istem_karakter": 2381,
+   "yanit": "1. **icra** rolünün önerisi, `order` parametresini bekliyor ama kodda bu parametre kullanılmıyor. Bu nedenle, bu önerinin `icra` rolünün beklediği şekilde çalışmayacağını düşünüyorum.\n\n2. **ops** rolünün önerisi, `_bakim` fonksiyonunda `self.ters_rejim_sayaci > 0` koşunu kontrol etmiyor. Bu nedenle, `self.ters_rejim_sayaci` 1 olduğunda `_bakim` fonksiyonu hiçbir şey yapmıyor, bu durumda `self.kapat()` fonksiyonu da çağrılmıyor. Bu, beklenmedik davranışa yol açabilir.\n\n3. **ops** rolünün önerisi, `_bakim` fonksiyonunda `else` bloğunda hiçbir şey yapmıyor. Bu nedenle, `_bakim` fonksiyonu herhangi bir şey yapmadığında, botun normal işlevini etkilemeyecektir.",
+   "saniye": 218.4,
+   "hata": ""
+  },
+  {
+   "saglayici": "ollama",
+   "model": "qwen2.5-coder:7b",
+   "rol": "icra",
+   "tur": 2,
+   "istem_karakter": 2349,
+   "yanit": "1. **risk_subayi**'nin önerisi, `self.ters_rejim` ve `self.ters_rejim_sayaci` arasındaki ilişkiyi tam olarak açıklamıyor. Bu, risk yönetimi politikasının nasıl etkileneceğini belirsiz kılar. **ops**'nin önerisi daha net ve risk politikasına uygun olabilir.\n\n2. **ops**'nin önerisi, `self.ters_rejim_sayaci`'nin nasıl güncelleneceği ve ne zaman `self.kapat()`'ı çağırmak gerektiğini açıklayıyor. Ancak, `self.ters_rejim_sayaci`'nin nasıl başlatıldığını ve risk politikasının nasıl etkileneceğini belirtmiyor. Bu, risk yönetimi politikasının nasıl etkileneceğini belirsiz kılar.\n\n3. **risk_subayi**'nin önerisi, `self.ters_rejim_sayaci`'nin nasıl güncelleneceği ve ne zaman `self.kapat()`'ı çağırmak gerektiğini açıklayıyor. Ancak, `self.ters_rejim_sayaci`'nin nasıl başlatıldığını ve risk politikasının nasıl etkileneceğini belirtmiyor. Bu, risk yönetimi politikasının nasıl etkileneceğini belirsiz kılar.",
+   "saniye": 60.0,
+   "hata": ""
+  },
+  {
+   "saglayici": "ollama",
+   "model": "qwen2.5-coder:7b",
+   "rol": "sekreter",
+   "tur": 3,
+   "istem_karakter": 10363,
+   "yanit": "```json\n{\n  \"kararlar\": [\n    {\n      \"baslik\": \"Risk Subayı'nın Önerisi\",\n      \"gerekce\": \"Risk Subayı'nın önerisi, `RiskPolicy` parametresini alıyor ancak bu parametrenin ne anlama geldiğini ve nasıl kullanılacağını belirtmiyor. Bu, kodun genel işleyişini anlamak zorunda kalır ve gereksiz karmaşıklığı artırabilir.\",\n      \"dosya\": \"bot/v9/motor.py\",\n      \"eski_kod\": \"def _bakim(self, order, symbol, plan, limit_price, order_quantity, plan_qty, entry_fee, side, motor, meta, filled, average, avg_px, status):\",\n      \"yeni_kod\": \"def _bakim(self, order, symbol, plan, limit_price, order_quantity, plan_qty, entry_fee, side, motor, meta, filled, average, avg_px, status, risk_policy):\",\n      \"etki\": \"düşük\",\n      \"risk\": \"düşük\"\n    },\n    {\n      \"baslik\": \"Risk Subayı'nın Önerisi\",\n      \"gerekce\": \"Risk Subayı'nın önerisi, `RiskPolicy` parametresini alıyor ancak bu parametrenin ne anlama geldiğini ve nasıl kullanılacağını belirtmiyor. Bu, kodun genel işleyişini anlamak zorunda kalır ve gereksiz karmaşıklığı artırabilir.\",\n      \"dosya\": \"bot/v9/motor.py\",\n      \"eski_kod\": \"def _evaluate_and_open(self, order, symbol, plan, limit_price, order_quantity, plan_qty, entry_fee, side, motor, meta, filled, average, avg_px, status):\",\n      \"yeni_kod\": \"def _evaluate_and_open(self, order, symbol, plan, limit_price, order_quantity, plan_qty, entry_fee, side, motor, meta, filled, average, avg_px, status, risk_policy):\",\n      \"etki\": \"düşük\",\n      \"risk\": \"düşük\"\n    },\n    {\n      \"baslik\": \"Risk Subayı'nın Önerisi\",\n      \"gerekce\": \"Risk Subayı'nın önerisi, `RiskPolicy` parametresini alıyor ancak bu parametrenin ne anlama geldiğini ve nasıl kullanılacağını belirtmiyor. Bu, kodun genel işleyişini anlamak zorunda kalır ve gereksiz karmaşıklığı artırabilir.\",\n      \"dosya\": \"bot/v9/motor.py\",\n      \"eski_kod\": \"def _execute_close(self, order, symbol, plan, limit_price, order_quantity, plan_qty, entry_fee, side, motor, meta, filled, average, avg_px, status):\",\n      \"yeni_kod\": \"def _execute_close(self, order, symbol, plan, limit_price, order_quantity, plan_qty, entry_fee, side, motor, meta, filled, average, avg_px, status, risk_policy):\",\n      \"etki\": \"düşük\",\n      \"risk\": \"düşük\"\n    },\n    {\n      \"baslik\": \"Risk Subayı'n",
+   "saniye": 211.5,
+   "hata": ""
+  },
+  {
+   "saglayici": "ollama",
+   "model": "qwen2.5-coder:7b",
+   "rol": "sekreter",
+   "tur": 3,
+   "istem_karakter": 10363,
+   "yanit": "```json\n{\n  \"kararlar\": [\n    {\n      \"baslik\": \"Risk Subayı'nın Önerisi\",\n      \"gerekce\": \"Risk Subayı'nın önerisi, `RiskPolicy` parametresini alıyor ancak bu parametrenin ne anlama geldiğini ve nasıl kullanılacağını belirtmiyor. Bu, kodun genel işleyişini anlamak zorunda kalır ve gereksiz karmaşıklığı artırabilir.\",\n      \"dosya\": \"bot/v9/motor.py\",\n      \"eski_kod\": \"def _bakim(self, order, symbol, plan, limit_price, order_quantity, plan_qty, entry_fee, side, motor, meta, filled, average, avg_px, status):\",\n      \"yeni_kod\": \"def _bakim(self, order, symbol, plan, limit_price, order_quantity, plan_qty, entry_fee, side, motor, meta, filled, average, avg_px, status, risk_policy):\",\n      \"etki\": \"düşük\",\n      \"risk\": \"düşük\"\n    },\n    {\n      \"baslik\": \"Risk Subayı'nın Önerisi\",\n      \"gerekce\": \"Risk Subayı'nın önerisi, `RiskPolicy` parametresini alıyor ancak bu parametrenin ne anlama geldiğini ve nasıl kullanılacağını belirtmiyor. Bu, kodun genel işleyişini anlamak zorunda kalır ve gereksiz karmaşıklığı artırabilir.\",\n      \"dosya\": \"bot/v9/motor.py\",\n      \"eski_kod\": \"def _evaluate_and_open(self, order, symbol, plan, limit_price, order_quantity, plan_qty, entry_fee, side, motor, meta, filled, average, avg_px, status):\",\n      \"yeni_kod\": \"def _evaluate_and_open(self, order, symbol, plan, limit_price, order_quantity, plan_qty, entry_fee, side, motor, meta, filled, average, avg_px, status, risk_policy):\",\n      \"etki\": \"düşük\",\n      \"risk\": \"düşük\"\n    },\n    {\n      \"baslik\": \"Risk Subayı'nın Önerisi\",\n      \"gerekce\": \"Risk Subayı'nın önerisi, `RiskPolicy` parametresini alıyor ancak bu parametrenin ne anlama geldiğini ve nasıl kullanılacağını belirtmiyor. Bu, kodun genel işleyişini anlamak zorunda kalır ve gereksiz karmaşıklığı artırabilir.\",\n      \"dosya\": \"bot/v9/motor.py\",\n      \"eski_kod\": \"def _execute_close(self, order, symbol, plan, limit_price, order_quantity, plan_qty, entry_fee, side, motor, meta, filled, average, avg_px, status):\",\n      \"yeni_kod\": \"def _execute_close(self, order, symbol, plan, limit_price, order_quantity, plan_qty, entry_fee, side, motor, meta, filled, average, avg_px, status, risk_policy):\",\n      \"etki\": \"düşük\",\n      \"risk\": \"düşük\"\n    },\n    {\n      \"baslik\": \"Risk Subayı'n",
+   "saniye": 206.1,
+   "hata": ""
+  }
+ ],
+ "kullanilan_cagri": 8,
+ "kararlar": [],
+ "dusen": [],
+ "hatalar": []
+}
