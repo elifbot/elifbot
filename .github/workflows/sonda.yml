@@ -69,9 +69,51 @@ jobs:
               kayit["sohbet_modeli"] = model
               rapor["uclar"].append(kayit)
 
+          # --- hangi hostlar erişilebilir
+          import socket
+          HOSTLAR = ["github.com", "api.github.com", "raw.githubusercontent.com",
+                     "objects.githubusercontent.com", "huggingface.co",
+                     "cdn-lfs.huggingface.co", "registry.ollama.ai", "ollama.com",
+                     "pypi.org", "files.pythonhosted.org", "api.openai.com",
+                     "integrate.api.nvidia.com", "api.groq.com", "openrouter.ai",
+                     "generativelanguage.googleapis.com", "api.anthropic.com"]
+          erisim = {}
+          for h in HOSTLAR:
+              try:
+                  socket.gethostbyname(h)
+                  erisim[h] = "dns-ok"
+              except Exception as e:
+                  erisim[h] = f"dns-yok ({type(e).__name__})"
+          rapor["hostlar"] = erisim
+
+          # --- copilot ucu: doğru başlıklarla gerçek deneme
+          cop = {}
+          for baslikler in (
+              {"Authorization": f"Bearer {TOKEN}", "Copilot-Integration-Id": "vscode-chat",
+               "Editor-Version": "vscode/1.95.0", "Content-Type": "application/json"},
+              {"Authorization": f"token {TOKEN}", "Content-Type": "application/json"},
+          ):
+              try:
+                  istek = urllib.request.Request(
+                      "https://api.githubcopilot.com/chat/completions",
+                      data=json.dumps({"model": "gpt-4o", "messages": [
+                          {"role": "user", "content": "OK"}], "max_tokens": 5}).encode(),
+                      headers=baslikler, method="POST")
+                  with urllib.request.urlopen(istek, timeout=30) as y:
+                      cop[" ".join(sorted(baslikler))[:60]] = {"durum": 200,
+                                                               "govde": y.read().decode()[:300]}
+              except urllib.error.HTTPError as e:
+                  cop[" ".join(sorted(baslikler))[:60]] = {
+                      "durum": e.code, "govde": e.read().decode(errors="ignore")[:300]}
+              except Exception as e:
+                  cop["copilot"] = {"durum": 0, "govde": f"{type(e).__name__}: {e}"[:200]}
+          rapor["copilot"] = cop
+
           os.makedirs("sonda", exist_ok=True)
           with open("sonda/ghmodeller.json", "w", encoding="utf-8") as f:
               json.dump(rapor, f, ensure_ascii=False, indent=1)
+          print("HOSTLAR:", json.dumps(erisim, ensure_ascii=False))
+          print("COPILOT:", json.dumps(cop, ensure_ascii=False)[:600])
           for u in rapor["uclar"]:
               print(u["uc"], "| katalog:", u["modeller"]["durum"],
                     u.get("model_sayisi", 0), "| sohbet:", u["sohbet"]["durum"],
