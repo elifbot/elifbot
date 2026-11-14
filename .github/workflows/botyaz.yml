@@ -7,7 +7,7 @@ on:
       model:
         description: "Ollama modeli"
         required: false
-        default: "qwen2.5-coder:3b"
+        default: "qwen2.5-coder:14b"
       butce:
         description: "Azami çağrı"
         required: false
@@ -19,7 +19,7 @@ permissions:
 jobs:
   yaz:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -37,11 +37,12 @@ jobs:
           ACARBOT_MODEL: ${{ github.event.inputs.model }}
           MODEL: ${{ github.event.inputs.model }}
           BUTCE: ${{ github.event.inputs.butce }}
-          ACARBOT_ZAMAN_ASIMI: "600"
+          ACARBOT_ZAMAN_ASIMI: "900"
         run: |
           ETIKET="botyaz-$(date -u +%Y%m%d-%H%M%S)"
-          python3 -m kadro.konsey.botyaz --saglayici ollama --model "$MODEL" \
-            --butce "$BUTCE" --etiket "$ETIKET"
+          python3 -m kadro.konsey.botyaz --tek --tur 5 --saglayici ollama --model "$MODEL" \
+            --butce "$BUTCE" --etiket "$ETIKET" || echo "koşu tamamlanmadı"
+          echo "--- dosya:"; wc -l bot/konsey_bot/bot.py || true
           echo "ETIKET=$ETIKET" >> "$GITHUB_ENV"
       - name: Sonucu dala yaz
         if: always()
@@ -50,6 +51,6 @@ jobs:
           git config user.email "botyaz@users.noreply.github.com"
           DAL="botyaz/$(date -u +%Y%m%d-%H%M%S)"
           git checkout -b "$DAL"
-          git add -A bot/konsey_bot konsey || true
+          git add -A bot/konsey_bot konsey runs || true
           git commit -m "botyaz: ajanların yazdığı bot" || echo "değişiklik yok"
           git push origin "$DAL"

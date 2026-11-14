@@ -148,6 +148,116 @@ def _arayuz(butce: sg.Butce) -> str:
     return "\n".join(satirlar)
 
 
+
+TEK_DOSYA = f"{PAKET}/bot.py"
+
+TEK_SPEC = """Tek dosyalık kripto vadeli işlem botu. Dosya kendi başına `python3 -m bot.konsey_bot.bot paper --dakika 5 --sembol 10 --etiket test` ile çalışmalı.
+
+İçinde SIRASIYLA şunlar olacak:
+1) `Ayarlar` dataclass: kasa_usd=1000.0, teminat_usd=50.0, kaldirac=10.0, stop_net_usd=-10.0,
+   komisyon_oran=0.0005; `notional_usd` özelliği (teminat*kaldirac), `stop_yuzde` özelliği.
+2) `ema(degerler, periyot) -> float` ve `sinyal(fiyatlar, hacimler) -> int` (EMA kesişimi + hacim onayı; 1 al, -1 sat, 0 bekle).
+3) `boyut(ayar, fiyat)`, `stop_fiyati(ayar, giris, yon)`, `pnl(ayar, giris, cikis, yon, miktar)`.
+4) `class Motor`: `__init__(ayar)`, `tick(sembol, fiyat, hacim, ts)`, `ozet()`.
+   Sembol başına tek pozisyon; stop tetiklenince kapat; `ozet()` -> dict:
+   {"islem": int, "kazanma_orani": float, "realize_usd": float, "komisyon_usd": float}.
+5) `main(argv=None)`: argparse (`paper` alt komutu + --dakika --sembol --etiket), sentetik
+   rastgele yürüyüş (tohum 42), Motor'u besle, `runs/<etiket>/ozet.json` yaz, konsola özet bas.
+6) `if __name__ == "__main__": main()`
+
+KISITLAR: yalnız standart kütüphane (argparse, json, math, pathlib, random, dataclasses, typing).
+Başka proje dosyası import etme. `...` ile kısaltma yapma. Yorumlar kısa ve Türkçe olsun. Kod eksiksiz olsun.
+""" + KURALLAR
+
+
+def tek_yaz(butce: sg.Butce, saglayici: str, model: str, kuru: bool) -> dict:
+    """Tüm botu tek dosyada, tek çağrıyla yazdırır; ast doğrular."""
+    istem = [
+        {"role": "system", "content":
+            "Sen kıdemli bir Python mühendisisin. Yalnızca JSON döndür: {\"kod\": \"<tam dosya>\"}. "
+            "Açıklama, markdown, ``` yok."},
+        {"role": "user", "content": TEK_SPEC},
+    ]
+    metin = sg.cagir(saglayici, istem, model=model or None, butce=butce, rol="yaz:bot",
+                     tur=1, sicaklik=0.2, kuru_kosu=kuru)
+    kod = _kod(metin)
+    hata = ""
+    if not kod.strip():
+        hata = "kod boş"
+    else:
+        try:
+            ast.parse(kod)
+            eksik = _eksik_adlar(kod)
+            if eksik:
+                hata = f"eksik adlar: {', '.join(eksik)}"
+        except SyntaxError as e:
+            hata = f"sözdizimi hatası {e.lineno}. satır: {e.msg}"
+    if hata:
+        return {"ok": False, "hata": hata, "kod": kod}
+    (KOK / TEK_DOSYA).parent.mkdir(parents=True, exist_ok=True)
+    (KOK / TEK_DOSYA).write_text(kod if kod.endswith("\n") else kod + "\n", encoding="utf-8")
+    return {"ok": True, "kod": kod}
+
+
+def _eksik_adlar(kod: str) -> list[str]:
+    try:
+        agac = ast.parse(kod)
+    except SyntaxError:
+        return []
+    var = {d.name for d in agac.body if isinstance(d, (ast.FunctionDef, ast.ClassDef))}
+    return [x for x in ("Ayarlar", "ema", "sinyal", "boyut", "stop_fiyati", "pnl", "Motor", "main")
+            if x not in var]
+
+
+def tek_dene(etiket: str = "tek", dakika: float = 2.0, sembol: int = 10) -> dict:
+    try:
+        r = subprocess.run([sys.executable, "-m", "bot.konsey_bot.bot", "paper",
+                            "--dakika", str(dakika), "--sembol", str(sembol), "--etiket", etiket],
+                           cwd=KOK, capture_output=True, text=True, timeout=300)
+    except Exception as e:                            # noqa: BLE001
+        return {"ok": False, "etiket": etiket, "hata": f"{type(e).__name__}: {e}"}
+    if r.returncode != 0:
+        return {"ok": False, "etiket": etiket, "hata": (r.stderr or r.stdout)[-1500:]}
+    ozet = KOK / "runs" / etiket / "ozet.json"
+    return {"ok": True, "etiket": etiket, "cikti": r.stdout[-1000:],
+            "ozet": json.loads(ozet.read_text()) if ozet.exists() else None}
+
+
+def tek_bot(butce: sg.Butce, saglayici: str, model: str, tur: int = 5, kuru: bool = False) -> dict:
+    """Yaz → çalıştır → hatayı geri besle; tur kadar tekrar."""
+    kayit = {"turlar": []}
+    sonuc = tek_yaz(butce, saglayici, model, kuru)
+    kayit["turlar"].append({"tur": 0, "yazildi": sonuc["ok"], "hata": sonuc.get("hata", "")[:400]})
+    if not sonuc["ok"]:
+        return kayit
+    for i in range(1, tur + 1):
+        kosu = tek_dene(f"tek{tur}{i}")
+        kayit["turlar"].append({"tur": i, "ok": kosu.get("ok"),
+                                "hata": str(kosu.get("hata", ""))[:500]})
+        if kosu.get("ok"):
+            kayit["son"] = kosu
+            return kayit
+        istem = [
+            {"role": "system", "content":
+                "Sen kıdemli bir Python mühendisisin. Aşağıdaki kod çalışırken hata verdi. "
+                "Hatayı düzelt ve dosyanın TAMAMINI JSON olarak döndür: {\"kod\": \"<tam dosya>\"}. "
+                "Açıklama yazma."},
+            {"role": "user", "content":
+                f"HATA:\n{kosu.get('hata', '')[:1200]}\n\nKOD:\n{(KOK / TEK_DOSYA).read_text()[:6000]}"},
+        ]
+        metin = sg.cagir(saglayici, istem, model=model or None, butce=butce, rol=f"onar:{i}",
+                         tur=i, sicaklik=0.1, kuru_kosu=kuru)
+        kod = _kod(metin)
+        try:
+            ast.parse(kod)
+        except SyntaxError:
+            kayit["turlar"].append({"tur": i, "not": "onarım kodu geçersiz, atlandı"})
+            continue
+        (KOK / TEK_DOSYA).write_text(kod if kod.endswith("\n") else kod + "\n", encoding="utf-8")
+    kayit["son"] = {"ok": False}
+    return kayit
+
+
 def yaz(botce: sg.Butce, saglayici: str = "ollama", model: str = "", kuru: bool = False) -> dict:
     """Tüm dosyaları sırayla yazdırır; (rapor) döndürür."""
     rapor = {"yazilan": [], "hatali": [], "kosu": None}
@@ -264,7 +374,19 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--butce", type=int, default=30)
     ap.add_argument("--kuru-kosu", action="store_true")
     ap.add_argument("--etiket", default="botyaz")
+    ap.add_argument("--tek", action="store_true", help="tek dosya modu")
+    ap.add_argument("--tur", type=int, default=5)
     a = ap.parse_args(argv)
+
+    if a.tek:
+        butce = sg.Butce(azami_cagri=a.butce)
+        rapor = tek_bot(butce, a.saglayici, a.model, a.tur, a.kuru_kosu)
+        d = KOK / "konsey" / a.etiket
+        d.mkdir(parents=True, exist_ok=True)
+        (d / "botyaz.json").write_text(json.dumps(rapor, ensure_ascii=False, indent=1),
+                                       encoding="utf-8")
+        print(json.dumps(rapor, ensure_ascii=False)[:1200])
+        return 0 if (rapor.get("son") or {}).get("ok") else 1
 
     butce = sg.Butce(azami_cagri=a.butce)
     rapor = yaz(butce, a.saglayici, a.model, a.kuru_kosu)
