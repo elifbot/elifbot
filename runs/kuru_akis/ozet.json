@@ -1,0 +1,54 @@
+{
+ "sure_sn": 42.5,
+ "tick": 272,
+ "bar": 72,
+ "sembol": 8,
+ "son_hata": "",
+ "sonuclar": [
+  {
+   "surum": "v1 kbot (EMA+hacim)",
+   "islem": 0,
+   "kazanma_orani": 0.0,
+   "realize_usd": 0,
+   "komisyon_usd": 0.0,
+   "kar_faktoru": 0.0,
+   "ortalama_islem": 0.0,
+   "cikis_nedenleri": {},
+   "red_nedenleri": {
+    "veri": 72
+   },
+   "acik_pozisyon": 0,
+   "acik_pnl_usd": 0
+  },
+  {
+   "surum": "v2 kbot2 (rejim+komite)",
+   "islem": 0,
+   "kazanma_orani": 0.0,
+   "realize_usd": 0,
+   "komisyon_usd": 0.0,
+   "kar_faktoru": 0.0,
+   "ortalama_islem": 0.0,
+   "cikis_nedenleri": {},
+   "red_nedenleri": {
+    "veri": 72
+   },
+   "acik_pozisyon": 0,
+   "acik_pnl_usd": 0
+  },
+  {
+   "surum": "v3 kbot3 (kanit esikleri)",
+   "islem": 0,
+   "kazanma_orani": 0.0,
+   "realize_usd": 0,
+   "komisyon_usd": 0.0,
+   "kar_faktoru": 0.0,
+   "ortalama_islem": 0.0,
+   "cikis_nedenleri": {},
+   "red_nedenleri": {
+    "veri": 72
+   },
+   "acik_pozisyon": 0,
+   "acik_pnl_usd": 0
+  }
+ ]
+}
