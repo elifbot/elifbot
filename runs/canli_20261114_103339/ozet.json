@@ -1,0 +1,97 @@
+{
+ "kaynak": "OKX canli (public klines)",
+ "borsa": "okx",
+ "bar": 720,
+ "semboller": [
+  "BTC-USDT-SWAP",
+  "ETH-USDT-SWAP",
+  "SOXL-USDT-SWAP",
+  "SOL-USDT-SWAP",
+  "ZEC-USDT-SWAP",
+  "AKE-USDT-SWAP",
+  "SNDK-USDT-SWAP",
+  "NVDA-USDT-SWAP",
+  "XRP-USDT-SWAP",
+  "HYPE-USDT-SWAP",
+  "XAU-USDT-SWAP",
+  "DOGE-USDT-SWAP",
+  "PEPE-USDT-SWAP",
+  "SPCX-USDT-SWAP",
+  "MU-USDT-SWAP",
+  "NEAR-USDT-SWAP",
+  "SOXS-USDT-SWAP",
+  "BARD-USDT-SWAP",
+  "SKHYNIX-USDT-SWAP",
+  "UNI-USDT-SWAP",
+  "KORU-USDT-SWAP",
+  "PUMP-USDT-SWAP",
+  "SNXX-USDT-SWAP",
+  "SUI-USDT-SWAP",
+  "WLD-USDT-SWAP"
+ ],
+ "sonuclar": [
+  {
+   "surum": "v1 kbot (EMA+hacim)",
+   "islem": 59,
+   "kazanma_orani": 0.3559,
+   "realize_usd": -110.69,
+   "komisyon_usd": 29.5,
+   "kar_faktoru": 0.544,
+   "ortalama_islem": -1.88,
+   "cikis_nedenleri": {
+    "stop": 21,
+    "sure": 38
+   },
+   "red_nedenleri": {
+    "hacim": 3487,
+    "kesisme_yok": 1047,
+    "veri": 550
+   },
+   "acik_pozisyon": 20
+  },
+  {
+   "surum": "v2 kbot2 (rejim+komite)",
+   "islem": 69,
+   "kazanma_orani": 0.3623,
+   "realize_usd": -110.31,
+   "komisyon_usd": 34.5,
+   "kar_faktoru": 0.642,
+   "ortalama_islem": -1.6,
+   "cikis_nedenleri": {
+    "stop": 26,
+    "sure": 43
+   },
+   "red_nedenleri": {
+    "veri": 1475,
+    "notr": 750,
+    "panik": 168,
+    "trend": 93,
+    "sikisma": 54
+   },
+   "acik_pozisyon": 25
+  },
+  {
+   "surum": "v3 kbot3 (kanit esikleri)",
+   "islem": 116,
+   "kazanma_orani": 0.319,
+   "realize_usd": -319.27,
+   "komisyon_usd": 58.0,
+   "kar_faktoru": 0.501,
+   "ortalama_islem": -2.75,
+   "cikis_nedenleri": {
+    "stop": 58,
+    "izli_kar": 31,
+    "sure": 27
+   },
+   "red_nedenleri": {
+    "veri": 1475,
+    "BB": 1438,
+    "ADX": 1312,
+    "RSI": 128,
+    "giris_acisi": 124,
+    "uyum": 25
+   },
+   "acik_pozisyon": 19
+  }
+ ]
+}

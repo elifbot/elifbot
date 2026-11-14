@@ -1,0 +1,35 @@
+tarih: Sat Nov 14 10:33:38 UTC 2026
+binance: 451
+okx: 200
+binance ornek: {
+  "code": 0,
+  "msg": "Service unavailable from a restricted location according to 'b. Eligibility' in https://www.binance.com/en/terms. Please contact customer service if you believe you received this message in error."
+}
+okx ornek: {"code":"0","data":[["1794652380000","67264.2","67282.7","67253.1","67253.1","849.91","8.4991","571724.88339","0"]],"msg":""}
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py", line 216, in urlopen
+    return opener.open(url, data, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py", line 525, in open
+    response = meth(req, response)
+               ^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py", line 634, in http_response
+    response = self.parent.error(
+               ^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py", line 563, in error
+    return self._call_chain(*args)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py", line 496, in _call_chain
+    result = func(*args)
+             ^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py", line 643, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 451: 
+kaynak: OKX canli (public klines) · sembol 25 · bar 720 · 2026-11-14 10:33 UTC
+surum                           islem      WR      PF         net  acik
+  v1 kbot (EMA+hacim)              59   35.6%    0.54    -110.69$    20
+  v2 kbot2 (rejim+komite)          69   36.2%    0.64    -110.31$    25
+  v3 kbot3 (kanit esikleri)       116   31.9%    0.50    -319.27$    19
+
+yazildi: runs/canli_20261114_103339/ozet.json
