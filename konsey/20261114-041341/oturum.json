@@ -1,0 +1,231 @@
+{
+ "gorev": "bot/v9/motor.py içindeki REJIM_DONUS çıkışını teyide bağla. Mevcut kod satır 140-144: pozisyon açıldıktan rejim_karsi_cikis_sn=120 sn sonra, rejim ters dönerse ve pnl negatifse anında kapanıyor; 44 işlemin 36'sı böyle kapanıyor, komisyon 24.66$. İSTENEN: Poz dataclass'ına ters_rejim_sayaci: int = 0 alanı ekle; _izle içinde ters rejim görüldükçe sayacı artır, rejim düzelince sıfırla; kapatma koşulunu ters_rejim_sayaci >= 20 yapacak şekilde değiştir. DEĞİŞMEZ: 1000$ kasa, 50$ x10, CROSS, sınırsız pozisyon, -10$ stop. Sadece JSON.",
+ "saglayici_modelleri": {
+  "nvidia": [
+   "01-ai/yi-large",
+   "adept/fuyu-8b",
+   "ai21labs/jamba-1.5-large-instruct",
+   "aisingapore/sea-lion-7b-instruct",
+   "bigcode/starcoder2-15b",
+   "databricks/dbrx-instruct",
+   "deepseek-ai/deepseek-coder-6.7b-instruct",
+   "deepseek-ai/deepseek-v4.1-flash",
+   "google/codegemma-1.1-7b",
+   "google/codegemma-7b",
+   "google/deplot",
+   "google/gemma-2b",
+   "google/gemma-3-12b-it",
+   "google/gemma-3-4b-it",
+   "google/gemma-4-31b-it",
+   "google/recurrentgemma-2b",
+   "ibm/granite-3.0-3b-a800m-instruct",
+   "ibm/granite-3.0-8b-instruct",
+   "ibm/granite-34b-code-instruct",
+   "ibm/granite-8b-code-instruct",
+   "meta/codellama-70b",
+   "meta/llama-3.2-90b-vision-instruct",
+   "meta/llama-guard-4-12b",
+   "meta/llama2-70b",
+   "meta/muse-glimmer-30b",
+   "microsoft/kosmos-2",
+   "microsoft/phi-3-vision-128k-instruct",
+   "microsoft/phi-3.5-moe-instruct",
+   "minimaxai/minimax-m3.1-flash",
+   "mistralai/codestral-22b-instruct-v0.1",
+   "mistralai/mistral-7b-instruct-v0.3",
+   "mistralai/mistral-large",
+   "mistralai/mistral-large-2-instruct",
+   "mistralai/mistral-large-4-1t-a52b",
+   "mistralai/mixtral-8x22b-v0.1",
+   "moonshotai/kimi-k2.6",
+   "nv-mistralai/mistral-nemo-12b-instruct",
+   "nvidia/ai-synthetic-video-detector",
+   "nvidia/cosmos-reason2-8b",
+   "nvidia/embed-qa-4",
+   "nvidia/ising-calibration-1.5-31b",
+   "nvidia/llama-3.1-nemoguard-8b-content-safety",
+   "nvidia/llama-3.1-nemoguard-8b-topic-control",
+   "nvidia/llama-3.1-nemotron-51b-instruct",
+   "nvidia/llama-3.1-nemotron-70b-instruct",
+   "nvidia/llama-3.1-nemotron-safety-guard-8b-v3",
+   "nvidia/llama-3.1-nemotron-ultra-253b-v1",
+   "nvidia/llama-3.2-nemoretriever-1b-vlm-embed-v1",
+   "nvidia/llama-3.2-nv-embedqa-1b-v1",
+   "nvidia/llama-nemotron-embed-vl-1b-v2",
+   "nvidia/llama3-chatqa-1.5-70b",
+   "nvidia/mistral-nemo-minitron-8b-8k-instruct",
+   "nvidia/nemotron-3-embed-1b",
+   "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+   "nvidia/nemotron-3-super-120b-a12b",
+   "nvidia/nemotron-3-ultra-550b-a55b",
+   "nvidia/nemotron-3.5-bolt-e4b",
+   "nvidia/nemotron-3.5-content-safety",
+   "nvidia/nemotron-3.5-embed-1b",
+   "nvidia/nemotron-3.5-embed-8b"
+  ]
+ },
+ "saglayicilar": [
+  "nvidia"
+ ],
+ "modeller": {
+  "nvidia": [
+   null
+  ]
+ },
+ "cagri": [
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "mimar",
+   "tur": 1,
+   "istem_karakter": 11012,
+   "yanit": "```json\n{\n  \"action\": \"modify_code\",\n  \"file\": \"bot/v9/motor.py\",\n  \"changes\": [\n    {\n      \"target\": \"Poz dataclass\",\n      \"addition\": \"ters_rejim_sayaci: int = 0\"\n    },\n    {\n      \"target\": \"_izle method\",\n      \"logic\": \"if rejim_ters: pos.ters_rejim_sayaci += 1 else: pos.ters_rejim_sayaci = 0\"\n    },\n    {\n      \"target\": \"lines 140-144\",\n      \"replacement\": \"if pos.ters_rejim_sayaci >= 20 and pnl < 0: close_position()\"\n    }\n  ],\n  \"constraints_validation\": {\n    \"kasa\": \"1000$\",\n    \"teminat\": \"50$\",\n    \"leverage\": \"10x\",\n    \"mode\": \"CROSS\",\n    \"position_limit\": \"NONE\",\n    \"stop_loss\": \"-10$\"\n  }\n}\n```",
+   "saniye": 126.3,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "icra",
+   "tur": 1,
+   "istem_karakter": 11012,
+   "yanit": "```json\n{\n  \"action\": \"modify_code\",\n  \"file\": \"bot/v9/motor.py\",\n  \"changes\": [\n    {\n      \"target\": \"Poz dataclass\",\n      \"addition\": \"ters_rejim_sayaci: int = 0\"\n    },\n    {\n      \"target\": \"_izle method\",\n      \"logic\": \"if rejim_ters: poz.ters_rejim_sayaci += 1 else: poz.ters_rejim_sayaci = 0\"\n    },\n    {\n      \"target\": \"lines 140-144\",\n      \"replacement\": \"if poz.ters_rejim_sayaci >= 20 and poz.pnl < 0: kapat_pozisyon()\"\n    }\n  ],\n  \"constraints_check\": {\n    \"kasa\": \"1000$\",\n    \"teminat\": \"50$\",\n    \"leverage\": \"10x\",\n    \"mode\": \"CROSS\",\n    \"position_limit\": \"NONE\",\n    \"stop_loss\": \"-10$\"\n  }\n}\n```",
+   "saniye": 126.8,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "risk_subayi",
+   "tur": 1,
+   "istem_karakter": 11012,
+   "yanit": "```json\n{\n  \"risk_assessment\": {\n    \"status\": \"APPROVED\",\n    \"veto\": false,\n    \"worst_case_scenario\": \"En kötü durumda kasa, her pozisyon için tanımlanan net -10$ stop limitine sadık kaldığı sürece, eşzamanlı açık pozisyon sayısı kadar risk taşır. Önerilen değişiklik (ters_rejim_sayaci >= 20) çıkış süresini uzattığı için, fiyatın stop noktasına ulaşma ihtimalini artırır ancak stop miktarı sabit (-10$) olduğu için kasa üzerindeki maksimum tekil işlem kaybı değişmez. Toplam risk, açık pozisyon sayısı * 10$ olarak kalır.\",\n    \"compliance_check\": {\n      \"kasa\": \"1000$ (SABİT)\",\n      \"teminat\": \"50$ (SABİT)\",\n      \"leverage\": \"10x (SABİT)\",\n      \"margin_mode\": \"CROSS (SABİT)\",\n      \"stop_loss\": \"-10$ (SABİT)\"\n    }\n  },\n  \"implementation\": {\n    \"file\": \"bot/v9/motor.py\",\n    \"changes\": [\n      {\n        \"target\": \"Poz dataclass\",\n        \"action\": \"ADD_FIELD\",\n        \"field\": \"ters_rejim_sayaci: int = 0\"\n      },\n      {\n        \"target\": \"_izle method\",\n        \"action\": \"LOGIC_UPDATE\",\n        \"logic\": \"if rejim_ters: pos.ters_rejim_sayaci += 1 else: pos.ters_rejim_sayaci = 0\"\n      },\n      {\n        \"target\": \"lines 140-144\",\n        \"action\": \"REPLACE_CONDITION\",\n        \"old_condition\": \"rejim_karsi_cikis_sn > 120 and rejim_ters and pnl < 0\",\n        \"new_condition\": \"pos.ters_rejim_sayaci >= 20\"\n      }\n    ]\n  }\n}\n```",
+   "saniye": 133.8,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "olcum",
+   "tur": 1,
+   "istem_karakter": 11012,
+   "yanit": "```json\n{\n  \"action\": \"modify_code\",\n  \"file\": \"bot/v9/motor.py\",\n  \"changes\": [\n    {\n      \"target\": \"Poz dataclass\",\n      \"addition\": \"ters_rejim_sayaci: int = 0\"\n    },\n    {\n      \"target\": \"_izle method\",\n      \"logic\": \"if rejim_ters: pos.ters_rejim_sayaci += 1 else: pos.ters_rejim_sayaci = 0\"\n    },\n    {\n      \"target\": \"lines 140-144\",\n      \"replacement\": \"if pos.ters_rejim_sayaci >= 20 and pnl < 0: close_position()\"\n    }\n  ],\n  \"constraints_validation\": {\n    \"kasa\": \"1000$\",\n    \"teminat\": \"50$\",\n    \"leverage\": \"10x\",\n    \"margin_mode\": \"CROSS\",\n    \"position_limit\": \"NONE\",\n    \"net_stop\": \"-10$\"\n  },\n  \"analyst_note\": \"Örneklem (n=44) < 100 olduğu için bu değişiklik bir 'yön göstergesi' olarak değerlendirilmelidir. Mevcut durumda 44 işlemin 36'sının (%81.8 WR) anlık rejim dönüşüyle kapanması, yüksek komisyon maliyetine (24.66$) yol açmaktadır. Teyit mekanizması (sayac >= 20) ile PF ve maksDD üzerindeki etkisi izlenmelidir.\"\n}\n```",
+   "saniye": 108.5,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "ops",
+   "tur": 1,
+   "istem_karakter": 11012,
+   "yanit": "```json\n{\n  \"file\": \"bot/v9/motor.py\",\n  \"changes\": [\n    {\n      \"target\": \"Poz dataclass\",\n      \"action\": \"add_field\",\n      \"field\": \"ters_rejim_sayaci: int = 0\"\n    },\n    {\n      \"target\": \"_izle function\",\n      \"action\": \"update_logic\",\n      \"logic\": \"if rejim_ters: poz.ters_rejim_sayaci += 1 else: poz.ters_rejim_sayaci = 0\"\n    },\n    {\n      \"target\": \"lines 140-144\",\n      \"action\": \"replace_condition\",\n      \"old_condition\": \"rejim_karsi_cikis_sn > 120 and rejim_ters and pnl < 0\",\n      \"new_condition\": \"poz.ters_rejim_sayaci >= 20\"\n    }\n  ],\n  \"constraints_verified\": {\n    \"kasa\": \"1000$\",\n    \"teminat\": \"50$\",\n    \"leverage\": \"10x\",\n    \"margin_mode\": \"CROSS\",\n    \"position_limit\": \"NONE\",\n    \"stop_loss\": \"-10$\"\n  }\n}\n```",
+   "saniye": 111.5,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "test",
+   "tur": 1,
+   "istem_karakter": 11012,
+   "yanit": "```json\n{\n  \"action\": \"modify_code\",\n  \"file\": \"bot/v9/motor.py\",\n  \"changes\": [\n    {\n      \"target\": \"Poz dataclass\",\n      \"addition\": \"ters_rejim_sayaci: int = 0\"\n    },\n    {\n      \"target\": \"_izle method\",\n      \"logic\": \"if rejim_ters: poz.ters_rejim_sayaci += 1 else: poz.ters_rejim_sayaci = 0\"\n    },\n    {\n      \"target\": \"lines 140-144\",\n      \"replacement\": \"if poz.ters_rejim_sayaci >= 20 and pnl < 0: close_position()\"\n    }\n  ],\n  \"constraints_validation\": {\n    \"equity\": \"1000$\",\n    \"margin\": \"50$\",\n    \"leverage\": \"10x\",\n    \"mode\": \"CROSS\",\n    \"position_limit\": \"NONE\",\n    \"stop_loss\": \"-10$\"\n  },\n  \"test_engineer_note\": \"REJIM_DONUS çıkışı zaman bazlı (120sn) tetikleyiciden, durum bazlı (sayaç >= 20) teyide bağlanmıştır. Kanıtlanamayan her türlü iyileştirme reddedilmiştir.\"\n}\n```",
+   "saniye": 138.1,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "mimar",
+   "tur": 2,
+   "istem_karakter": 4650,
+   "yanit": "Katıldığım nokta: `ters_rejim_sayaci` ile zaman bazlı çıkıştan (120sn) mum/tick bazlı çıkışa geçiş mantığı.\n\nİtirazlar:\n\n1. **İcra ve Test:** `poz.pnl` ve `pnl` değişkenleri arasında tutarsızlık var; `bot/v9/motor.py` içinde değişkenin tanımlı olduğu satır kanıtlanmadı.\n2. **Ops:** `new_condition` kısmında `pnl < 0` kontrolü silinmiş; bu durum kârlı pozisyonların erken kapatılmasına yol açar, `motor.py:140-144` orijinal mantığıyla çelişir.\n3. **Ölçüm:** `n=44` örneklemiyle yapılan analiz, istatistiksel anlamlılık kanıtı (`p-value` veya `confidence interval`) sunmadan \"yönetimsel karar\" olarak geçiştirilmiş.",
+   "saniye": 96.4,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "risk_subayi",
+   "tur": 2,
+   "istem_karakter": 5333,
+   "yanit": "**Katıldığım nokta:** Sabit risk parametrelerine (1000$/50$/10x/-10$) tüm roller sadık kalmış.\n\n**İtirazlar:**\n\n1. **İcra ve Test:** `pnl < 0` kontrolünü `replacement` kısmına eklemişler ancak `ops` bunu atlamış. `ops` önerisi, kârda olan pozisyonu da kapatacağı için stratejik kanıttan yoksundur.\n2. **Ölçüm:** Değişikliği \"yönetilebilir\" bulmuş ancak `n=44` örnekleminin, zaman bazlı çıkıştan (120sn) sayaç bazlı çıkışa (20 tick) geçişin korelasyon etkisini kanıtlamak için yetersiz olduğunu belirtmiş, onay mekanizması kanıtsızdır.\n3. **Mimar:** `ters_rejim_sayaci` artış hızının (tick süresi) belirsiz olduğu bir ortamda, 20 sayacının gerçek zaman karşılığına dair bir analiz sunmamıştır; zamanlama kanıtı yoktur.",
+   "saniye": 97.0,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "icra",
+   "tur": 2,
+   "istem_karakter": 4648,
+   "yanit": "Katıldığım nokta: Tüm rollerin kasa, teminat, kaldıraç ve stop limitleri konusundaki mutabakatı tamdır.\n\n**İtirazlar:**\n\n1. **Ops'a İtiraz:** `new_condition` kısmında `pnl < 0` kontrolünü kaldırmış. Risk subayının onayladığı \"zararda kapatma\" mantığından yoksun, kârlı pozisyonları da erken kapatma riski taşır.\n2. **Mimar ve Ölçüm'e İtiraz:** Değişken isimlendirmesinde `poz` yerine `pos` kullanmışlar. Mevcut kod tabanındaki `Poz` dataclass referanslarıyla uyumsuz, `NameError` üretir.\n3. **Test'e İtiraz:** `close_position()` fonksiyonu çağrılmış ancak `motor.py` içindeki gerçek fonksiyon ismi `kapat_pozisyon()` olabilir. Fonksiyon imza kanıtı sunulmamış.",
+   "saniye": 126.6,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "test",
+   "tur": 2,
+   "istem_karakter": 4740,
+   "yanit": "**Katıldığım nokta:** Tüm rollerin sabit kasa/teminat/stop parametrelerine sadık kalması ve `ters_rejim_sayaci` mantığında uzlaşması.\n\n**İtirazlar:**\n\n1. **İcra'ya İtiraz:** `kapat_pozisyon()` fonksiyon ismi kullanımı, diğer tüm rollerin kullandığı `close_position()` ile tutarsızdır. Replay tutarlılığı için fonksiyon ismi kanıtlanmış standartta olmalıdır.\n2. **Ölçüm'e İtiraz:** Örneklem sayısının (n=44) yetersiz olduğunu belirtmesine rağmen değişikliği onaylamıştır. \"Kanıtlanamıyorsa yoktur\" ilkesine göre, istatistiksel anlamlılık kanıtlanmadan onay verilemez.\n3. **Ops'a İtiraz:** `new_condition` kısmında `pnl < 0` kontrolünü kaldırmıştır. Risk subayının onayladığı \"stop noktasına ulaşma ihtimali\" ve benim önerdiğim \"zararda olma\" şartı kanıtsız şekilde silinemez.",
+   "saniye": 141.0,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "olcum",
+   "tur": 2,
+   "istem_karakter": 4894,
+   "yanit": "**Katıldığım nokta:** Örneklem (n=44) düşük olduğu için değişikliğin sadece \"yön göstergesi\" olarak kabul edilmesi ve komisyon maliyetini düşürme hedefi doğrudur.\n\n**İtirazlar:**\n\n1. **İcra ve Ops:** `pnl < 0` kontrolünü `new_condition` kısmında eksik bırakmışlar; bu durum kârlı pozisyonların da erkenden kapanmasına yol açarak PF'yi düşürebilir.\n2. **Risk Subayı:** Çıkış süresinin uzamasının \"stop noktasına ulaşma ihtimalini artırdığını\" belirtmiş ancak bu uzamanın maksDD üzerindeki sayısal etkisine dair bir simülasyon/kanıt sunmamıştır.\n3. **Test:** Zaman bazlı (120sn) tetikleyiciden sayaç bazlı tetikleyiciye geçişin, farklı volatilite rejimlerinde aynı süreyi karşılayıp karşılamadığına dair karşılaştırmalı veri sunmamıştır.",
+   "saniye": 141.2,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "ops",
+   "tur": 2,
+   "istem_karakter": 4661,
+   "yanit": "Katıldığım nokta: Tüm roller sabit kasa ve stop limitlerine sadık kalmış.\n\nİtirazlar:\n1. **İcra'ya:** `kapat_pozisyon()` fonksiyon ismi belirsiz; `motor.py` içindeki mevcut metod ismiyle (örneğin `close_position`) uyumlu olduğuna dair kanıt yok.\n2. **Test'e:** `REJIM_DONUS` çıkışının zaman bazlıdan sayaç bazlıya geçişinin, volatilite anlarında stop limitini (-10$) aşma riskini artırıp artırmadığına dair stres testi kanıtı yok.\n3. **Ölçüm'e:** Örneklem sayısının (n=44) yetersiz olduğunu belirtmesine rağmen, değişikliğin yönü hakkında istatistiksel bir temel veya hipotez kanıtı sunulmamış.",
+   "saniye": 155.0,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "sekreter",
+   "tur": 3,
+   "istem_karakter": 11012,
+   "yanit": "```json\n{\n  \"action\": \"modify_code\",\n  \"file\": \"bot/v9/motor.py\",\n  \"changes\": [\n    {\n      \"target\": \"Poz dataclass\",\n      \"addition\": \"ters_rejim_sayaci: int = 0\"\n    },\n    {\n      \"target\": \"_izle method\",\n      \"logic\": \"if rejim_ters: poz.ters_rejim_sayaci += 1 else: poz.ters_rejim_sayaci = 0\"\n    },\n    {\n      \"target\": \"lines 140-144\",\n      \"replacement\": \"if poz.ters_rejim_sayaci >= 20 and poz.pnl < 0: self._kapat()\"\n    }\n  ],\n  \"constraints_validation\": {\n    \"kasa\": \"1000$\",\n    \"teminat\": \"50$\",\n    \"leverage\": \"10x\",\n    \"mode\": \"CROSS\",\n    \"position_limit\": \"NONE\",\n    \"stop_loss\": \"-10$\"\n  },\n  \"secretary_notes\": {\n    \"resolution\": \"Tüm rollerin mutabık kaldığı 'ters_rejim_sayaci' mantığı kabul edildi. İtirazlar doğrultusunda; 'ops' önerisindeki pnl < 0 eksikliği giderildi, 'icra' ve 'test' arasındaki fonksiyon ismi tutarsızlığı repo dosyasındaki gerçek metod olan '_kapat()' ile çözüldü. Değişken ismi repo standartlarına uygun olarak 'poz' şeklinde sabitlendi.\"\n  }\n}\n```",
+   "saniye": 206.8,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "sekreter",
+   "tur": 3,
+   "istem_karakter": 11012,
+   "yanit": "```json\n{\n  \"decision\": \"APPROVED\",\n  \"file\": \"bot/v9/motor.py\",\n  \"changes\": [\n    {\n      \"target\": \"Poz dataclass\",\n      \"action\": \"ADD_FIELD\",\n      \"field\": \"ters_rejim_sayaci: int = 0\"\n    },\n    {\n      \"target\": \"_izle method\",\n      \"action\": \"UPDATE_LOGIC\",\n      \"logic\": \"if rejim_ters: poz.ters_rejim_sayaci += 1 else: poz.ters_rejim_sayaci = 0\"\n    },\n    {\n      \"target\": \"lines 140-144\",\n      \"action\": \"REPLACE_CONDITION\",\n      \"replacement\": \"if poz.ters_rejim_sayaci >= 20 and poz.pnl < 0: self._kapat()\"\n    }\n  ],\n  \"constraints_validation\": {\n    \"kasa\": \"1000$\",\n    \"teminat\": \"50$\",\n    \"leverage\": \"10x\",\n    \"mode\": \"CROSS\",\n    \"position_limit\": \"NONE\",\n    \"stop_loss\": \"-10$\"\n  },\n  \"secretary_notes\": {\n    \"variable_resolution\": \"Used 'poz' as per dataclass reference and 'self._kapat()' as per bot/v9/motor.py file structure.\",\n    \"logic_resolution\": \"Retained 'pnl < 0' check to prevent premature closing of profitable positions, overriding the 'ops' suggestion.\",\n    \"risk_compliance\": \"All fixed constraints are strictly maintained.\"\n  }\n}\n```",
+   "saniye": 191.8,
+   "hata": ""
+  },
+  {
+   "saglayici": "nvidia",
+   "model": "google/gemma-4-31b-it",
+   "rol": "muhendis",
+   "tur": 3,
+   "istem_karakter": 11012,
+   "yanit": "```json\n{\n  \"action\": \"modify_code\",\n  \"file\": \"bot/v9/motor.py\",\n  \"changes\": [\n    {\n      \"target\": \"Poz dataclass\",\n      \"addition\": \"    ters_rejim_sayaci: int = 0\"\n    },\n    {\n      \"target\": \"def _bakim(self, t: Tick, r) -> None:\",\n      \"replacement\": \"        ters = (poz.yon is Yon.LONG and r.rejim is Rejim.TREND_ASAGI) or \\\\\\n               (poz.yon is Yon.SHORT and r.rejim is Rejim.TREND_YUKARI)\\n        \\n        if ters:\\n            poz.ters_rejim_sayaci += 1\\n        else:\\n            poz.ters_rejim_sayaci = 0\\n\\n        if poz.ters_rejim_sayaci >= 20 and pnl < 0 and pnl > -self.kurallar.stop_net_usd * 0.70:\\n            self._kapat(poz, t.fiyat, t.ts, \\\"REJIM_DONUS\\\")\"\n    }\n  ]\n}\n```",
+   "saniye": 167.5,
+   "hata": ""
+  }
+ ],
+ "kullanilan_cagri": 15,
+ "kararlar": [],
+ "dusen": [],
+ "hatalar": []
+}
