@@ -27,13 +27,21 @@ jobs:
           python-version: "3.11"
       - name: Borsa erisimi
         run: |
-          curl -s -o /dev/null -w "binance %{http_code}\n" https://fapi.binance.com/fapi/v1/ping || true
-          curl -s -o /dev/null -w "okx     %{http_code}\n" https://www.okx.com/api/v5/public/time || true
+          mkdir -p runs
+          {
+            echo "tarih: $(date -u)"
+            echo "binance: $(curl -s -o /dev/null -w '%{http_code}' https://fapi.binance.com/fapi/v1/ping || echo FAIL)"
+            echo "okx: $(curl -s -o /dev/null -w '%{http_code}' https://www.okx.com/api/v5/public/time || echo FAIL)"
+            echo "binance ornek: $(curl -s 'https://fapi.binance.com/fapi/v1/klines?symbol=BTCUSDT&interval=1m&limit=1' | head -c 300)"
+            echo "okx ornek: $(curl -s 'https://www.okx.com/api/v5/market/candles?instId=BTC-USDT-SWAP&bar=1m&limit=1' | head -c 300)"
+            python3 -c "import urllib.request,json;print('py binance:', json.load(urllib.request.urlopen('https://fapi.binance.com/fapi/v1/ping', timeout=15)))" 2>&1
+          } > runs/tani.txt 2>&1 || true
+          cat runs/tani.txt
       - name: 30 dk canli test
         run: |
           python3 -m bot.canli.canli_test --borsa "${{ github.event.inputs.borsa }}" \
             --sembol "${{ github.event.inputs.sembol }}" --dakika "${{ github.event.inputs.dakika }}" \
-            --etiket "canli_$(date -u +%Y%m%d_%H%M%S)"
+            --etiket "canli_$(date -u +%Y%m%d_%H%M%S)" 2>&1 | tee -a runs/tani.txt
       - name: Sonucu dala yaz
         if: always()
         run: |
