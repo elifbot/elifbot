@@ -61,4 +61,6 @@ def test_kanitten_dosya_cikarimi():
     kanit = "bot/v9/motor.py:140-144"
     m = re.search(r"(bot/[\w/]+\.py)", kanit)
     assert m and m.group(1) == "bot/v9/motor.py"
-    assert ym.yama_uret(m.group(1), "class Poz:", "class Poz:  # x")[1].startswith("eski_kod")
+    diff, hata = ym.yama_uret(m.group(1), "class Poz:", "class Poz:  # x")
+    assert not hata, hata
+    assert "+class Poz:  # x" in diff
