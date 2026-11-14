@@ -1,0 +1,57 @@
+{
+ "nvidia": {
+  "anahtar": true,
+  "katalog": 83,
+  "denenen": [
+   {
+    "model": "nvidia/llama-3.1-nemotron-70b-instruct",
+    "ok": false,
+    "hata": "HTTP 404 {\"status\":404,\"title\":\"Not Found\",\"detail\":\"Function '9b96341b-9791-4db9-a00d-4e43aa192a39': Not found for account 'Q2E8-KdDbXSgRFx60SzOm1ihdwFUYka-HX1yMDNF8pc'\"}",
+    "yanit": ""
+   },
+   {
+    "model": "mistralai/mistral-large-2-instruct",
+    "ok": false,
+    "hata": "HTTP 404 {\"status\":404,\"title\":\"Not Found\",\"detail\":\"Function '7fadd4de-e22a-48e4-90e9-f02ef14a74b9': Not found for account 'Q2E8-KdDbXSgRFx60SzOm1ihdwFUYka-HX1yMDNF8pc'\"}",
+    "yanit": ""
+   },
+   {
+    "model": "deepseek-ai/deepseek-v4.1-flash",
+    "ok": false,
+    "hata": "TimeoutError: The read operation timed out",
+    "yanit": ""
+   },
+   {
+    "model": "qwen/qwen3-coder-480b-a35b-instruct",
+    "ok": false,
+    "hata": "HTTP 410 {\"type\":\"about:blank\",\"title\":\"Gone\",\"status\":410,\"detail\":\"The model 'qwen/qwen3-coder-480b-a35b-instruct' has reached its end of life on 2026-06-11T00:00:00Z and is no longer available.\"}\n",
+    "yanit": ""
+   },
+   {
+    "model": "moonshotai/kimi-k2.6",
+    "ok": false,
+    "hata": "HTTP 404 {\"status\":404,\"title\":\"Not Found\",\"detail\":\"Function '23d4f03a-b8a6-4adb-a183-7daa083a09cc': Not found for account 'Q2E8-KdDbXSgRFx60SzOm1ihdwFUYka-HX1yMDNF8pc'\"}",
+    "yanit": ""
+   },
+   {
+    "model": "minimaxai/minimax-m3.1-flash",
+    "ok": false,
+    "hata": "",
+    "yanit": ""
+   },
+   {
+    "model": "nvidia/nemotron-3-super-120b-a12b",
+    "ok": false,
+    "hata": "HTTP 404 {\"status\":404,\"title\":\"Not Found\",\"detail\":\"Function 'ac74040f-9fc9-4c5e-ac74-279ba5161d69': Not found for account 'Q2E8-KdDbXSgRFx60SzOm1ihdwFUYka-HX1yMDNF8pc'\"}",
+    "yanit": ""
+   },
+   {
+    "model": "ibm/granite-34b-code-instruct",
+    "ok": false,
+    "hata": "HTTP 404 {\"status\":404,\"title\":\"Not Found\",\"detail\":\"Function '4df48b4f-e3c5-4ade-82c7-c06b65e25d18': Not found for account 'Q2E8-KdDbXSgRFx60SzOm1ihdwFUYka-HX1yMDNF8pc'\"}",
+    "yanit": ""
+   }
+  ],
+  "calisan": null
+ }
+}
