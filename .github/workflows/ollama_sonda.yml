@@ -1,0 +1,54 @@
+name: Ollama Sondası
+
+# Anahtarsız model: GitHub Actions koşucusunda yerel LLM. Sonucu dala yazar.
+on:
+  workflow_dispatch:
+    inputs:
+      model:
+        description: "Ollama modeli"
+        required: false
+        default: "qwen2.5-coder:1.5b"
+
+permissions:
+  contents: write
+
+jobs:
+  sonda:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ollama kur
+        run: |
+          curl -fsSL https://ollama.com/install.sh | sh
+          ollama --version
+      - name: Sunucuyu başlat
+        run: |
+          nohup ollama serve > /tmp/ollama.log 2>&1 &
+          for i in $(seq 1 30); do
+            curl -sf http://127.0.0.1:11434/api/version && break
+            sleep 2
+          done
+          curl -s http://127.0.0.1:11434/api/version
+      - name: Modeli indir ve sor
+        env:
+          MODEL: ${{ github.event.inputs.model }}
+        run: |
+          set -e
+          time ollama pull "$MODEL"
+          echo "--- tek soru ---"
+          time ollama run "$MODEL" "Sadece 'HAZIR' yaz." || true
+          echo "--- kod sorusu ---"
+          time ollama run "$MODEL" "Python'da bir sınıfa alan ekleyen 3 satırlık örnek yaz. Sadece kod." || true
+      - name: Sonucu dala yaz
+        if: always()
+        run: |
+          git config user.name "sonda-bot"
+          git config user.email "sonda@users.noreply.github.com"
+          mkdir -p sonda
+          { ollama list; echo; tail -40 /tmp/ollama.log; } > sonda/ollama.txt || true
+          DAL="sonda/ollama-$(date -u +%Y%m%d-%H%M%S)"
+          git checkout -b "$DAL"
+          git add -A sonda || true
+          git commit -m "sonda: ollama" || echo "değişiklik yok"
+          git push origin "$DAL"
