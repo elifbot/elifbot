@@ -54,3 +54,11 @@ def test_coklu_degisiklik_bulunamayan_parca_reddedilir():
     diff, hata = ym.yama_uret_coklu("bot/v9/sinyaller.py", [
         {"eski_kod": "yok_boyle_satir()", "yeni_kod": "x = 1"}])
     assert not diff and "kez geçiyor" in hata
+
+
+def test_kanitten_dosya_cikarimi():
+    import re
+    kanit = "bot/v9/motor.py:140-144"
+    m = re.search(r"(bot/[\w/]+\.py)", kanit)
+    assert m and m.group(1) == "bot/v9/motor.py"
+    assert ym.yama_uret(m.group(1), "class Poz:", "class Poz:  # x")[1].startswith("eski_kod")
