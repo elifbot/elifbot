@@ -1,0 +1,42 @@
+tarih: Sat Nov 14 11:40:29 UTC 2026
+okx rest: 200
+okx trades: {"code":"0","data":[{"instId":"BTC-USDT-SWAP","tradeId":"3076240284","px":"67197.4","sz":"0.01","side":"sell","ts":"1794656428513","source":"0"}],"msg":""}
+semboller: BTC-USDT-SWAP, ETH-USDT-SWAP, SOXL-USDT-SWAP, SOL-USDT-SWAP, ZEC-USDT-SWAP, SNDK-USDT-SWAP, AKE-USDT-SWAP, NVDA-USDT-SWAP ... (20)
+  kalan 29 dk · tick 7091 · bar 170 · {'ws': 'bagli'}
+  kalan 28 dk · tick 29775 · bar 355 · {'ws': 'bagli'}
+  kalan 27 dk · tick 47868 · bar 532 · {'ws': 'bagli'}
+  kalan 26 dk · tick 61565 · bar 726 · {'ws': 'bagli'}
+  kalan 25 dk · tick 77604 · bar 903 · {'ws': 'bagli'}
+  kalan 24 dk · tick 100132 · bar 1101 · {'ws': 'bagli'}
+  kalan 23 dk · tick 111983 · bar 1271 · {'ws': 'bagli'}
+  kalan 22 dk · tick 122838 · bar 1466 · {'ws': 'bagli'}
+  kalan 21 dk · tick 131674 · bar 1654 · {'ws': 'bagli'}
+  kalan 20 dk · tick 137870 · bar 1821 · {'ws': 'bagli'}
+  kalan 19 dk · tick 145732 · bar 1997 · {'ws': 'bagli'}
+  kalan 18 dk · tick 151482 · bar 2178 · {'ws': 'bagli'}
+  kalan 17 dk · tick 157106 · bar 2351 · {'ws': 'bagli'}
+  kalan 16 dk · tick 161747 · bar 2533 · {'ws': 'bagli'}
+  kalan 15 dk · tick 166452 · bar 2706 · {'ws': 'bagli'}
+  kalan 14 dk · tick 172974 · bar 2889 · {'ws': 'bagli'}
+  kalan 13 dk · tick 177564 · bar 3055 · {'ws': 'bagli'}
+  kalan 12 dk · tick 182000 · bar 3240 · {'ws': 'bagli'}
+  kalan 11 dk · tick 185789 · bar 3412 · {'ws': 'bagli'}
+  kalan 10 dk · tick 199412 · bar 3584 · {'ws': 'bagli'}
+  kalan 9 dk · tick 216058 · bar 3763 · {'ws': 'bagli'}
+  kalan 8 dk · tick 225613 · bar 3952 · {'ws': 'bagli'}
+  kalan 7 dk · tick 234483 · bar 4133 · {'ws': 'bagli'}
+  kalan 6 dk · tick 240017 · bar 4329 · {'ws': 'bagli'}
+  kalan 5 dk · tick 244687 · bar 4514 · {'ws': 'bagli'}
+  kalan 4 dk · tick 248252 · bar 4680 · {'ws': 'bagli'}
+  kalan 3 dk · tick 256095 · bar 4868 · {'ws': 'bagli'}
+  kalan 2 dk · tick 261159 · bar 5043 · {'ws': 'bagli'}
+  kalan 1 dk · tick 266732 · bar 5216 · {'ws': 'bagli'}
+  kalan 0 dk · tick 272356 · bar 5392 · {'ws': 'bagli'}
+
+=== 1800.2 sn · 273024 tick · 5428 bar · 20 sembol
+surum                           islem      WR      PF         net  acik   acikPnL
+  v1 kbot (EMA+hacim)               9   22.2%    0.05     -24.10$    11     -0.24
+  v2 kbot2 (rejim+komite)          13    7.7%    0.08     -44.97$    18    -15.11
+  v3 kbot3 (kanit esikleri)        10   70.0%    1.90     +27.12$     3     -0.01
+
+yazildi: runs/akis_20261114_114030/ozet.json
