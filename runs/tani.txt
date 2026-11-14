@@ -1,0 +1,43 @@
+tarih: Sat Nov 14 10:31:55 UTC 2026
+binance: 451
+okx: 200
+binance ornek: {
+  "code": 0,
+  "msg": "Service unavailable from a restricted location according to 'b. Eligibility' in https://www.binance.com/en/terms. Please contact customer service if you believe you received this message in error."
+}
+okx ornek: {"code":"0","data":[["1794652260000","67246.8","67293.4","67238.7","67293.4","2305.25","23.0525","1550235.48915","0"]],"msg":""}
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py", line 216, in urlopen
+    return opener.open(url, data, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py", line 525, in open
+    response = meth(req, response)
+               ^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py", line 634, in http_response
+    response = self.parent.error(
+               ^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py", line 563, in error
+    return self._call_chain(*args)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py", line 496, in _call_chain
+    result = func(*args)
+             ^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py", line 643, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 451: 
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/runner/work/elifbot/elifbot/bot/canli/canli_test.py", line 138, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/home/runner/work/elifbot/elifbot/bot/canli/canli_test.py", line 98, in main
+    semboller = (binance_semboller if a.borsa == "binance" else okx_semboller)(a.sembol)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/elifbot/elifbot/bot/canli/canli_test.py", line 44, in binance_semboller
+    d = _get("https://fapi.binance.com/fapi/v1/ticker/24hr")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/elifbot/elifbot/bot/canli/canli_test.py", line 40, in _get
+    raise RuntimeError(f"{url} alınamadı: {son}")
+RuntimeError: https://fapi.binance.com/fapi/v1/ticker/24hr alınamadı: HTTP Error 451: 
