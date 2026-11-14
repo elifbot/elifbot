@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Canlı Test Ekranı — OKX 30 dk</title>
+<style>
+  :root{--bg:#0b0f14;--kart:#131a22;--cizgi:#243040;--metin:#e6edf3;--soluk:#8b98a5;
+        --yesil:#2ea043;--kirmizi:#da3633;--sari:#d29922;--mavi:#388bfd;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--metin);
+       font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;padding:24px}
+  h1{font-size:22px;margin:0 0 4px}
+  .alt{color:var(--soluk);font-size:13px;margin-bottom:20px}
+  .kutular{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:22px}
+  .kutu{background:var(--kart);border:1px solid var(--cizgi);border-radius:10px;padding:14px}
+  .kutu b{display:block;font-size:24px;line-height:1.1}
+  .kutu span{color:var(--soluk);font-size:12px}
+  table{width:100%;border-collapse:collapse;background:var(--kart);
+        border:1px solid var(--cizgi);border-radius:10px;overflow:hidden;margin-bottom:22px}
+  th,td{padding:11px 13px;text-align:right;border-bottom:1px solid var(--cizgi);font-variant-numeric:tabular-nums}
+  th:first-child,td:first-child{text-align:left}
+  thead th{background:#0f151d;color:var(--soluk);font-weight:600;font-size:12px;letter-spacing:.03em;text-transform:uppercase}
+  tr:last-child td{border-bottom:none}
+  .pos{color:var(--yesil);font-weight:600}
+  .neg{color:var(--kirmizi);font-weight:600}
+  .rozet{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;font-weight:600}
+  .kazandi{background:rgba(46,160,67,.15);color:var(--yesil);border:1px solid rgba(46,160,67,.4)}
+  .kaybetti{background:rgba(218,54,51,.15);color:var(--kirmizi);border:1px solid rgba(218,54,51,.4)}
+  .grafik{background:var(--kart);border:1px solid var(--cizgi);border-radius:10px;padding:16px;margin-bottom:22px}
+  .not{background:#12181f;border-left:3px solid var(--sari);border-radius:6px;padding:12px 14px;
+       color:#c9d4de;font-size:13.5px;margin-bottom:22px}
+  .not b{color:var(--sari)}
+  code{background:#0f151d;padding:2px 6px;border-radius:4px;font-size:12.5px;color:#9fb3c8}
+  .dipnot{color:var(--soluk);font-size:12px}
+</style>
+</head>
+<body>
+
+<h1>Canlı Test Ekranı — OKX WebSocket · 30 dakika</h1>
+<div class="alt">
+  Koşu <code>43591136539</code> · 14 Kasım 2026 · 11:40–12:10 UTC ·
+  <code>wss://ws.okx.com:8443/ws/v5/public</code> · 20 sembol · 5 sn bar
+</div>
+
+<div class="kutular">
+  <div class="kutu"><b>273.024</b><span>canlı tick</span></div>
+  <div class="kutu"><b>5.428</b><span>bar (5 sn)</span></div>
+  <div class="kutu"><b>20</b><span>sembol</span></div>
+  <div class="kutu"><b>1.800 sn</b><span>kesintisiz</span></div>
+  <div class="kutu"><b style="color:var(--yesil)">0</b><span>kopma / hata</span></div>
+</div>
+
+<table>
+  <thead>
+    <tr><th>Bot sürümü</th><th>İşlem</th><th>Kazanma</th><th>PF</th>
+        <th>Realize</th><th>Açık poz</th><th>Açık PnL</th><th>Durum</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>v1 · kbot (EMA9/21 + hacim)</td><td>9</td><td>%22,2</td><td>0,05</td>
+      <td class="neg">−24,10 $</td><td>11</td><td class="neg">−0,24 $</td>
+      <td><span class="rozet kaybetti">zarar</span></td>
+    </tr>
+    <tr>
+      <td>v2 · kbot2 (rejim + komite)</td><td>13</td><td>%7,7</td><td>0,08</td>
+      <td class="neg">−44,97 $</td><td>18</td><td class="neg">−15,11 $</td>
+      <td><span class="rozet kaybetti">zarar</span></td>
+    </tr>
+    <tr>
+      <td><b>v3 · kbot3 (kanıt eşikleri + kâr kilidi)</b></td><td>10</td><td><b>%70,0</b></td><td><b>1,90</b></td>
+      <td class="pos">+27,12 $</td><td>3</td><td class="neg">−0,01 $</td>
+      <td><span class="rozet kazandi">kâr</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="grafik">
+  <div style="color:var(--soluk);font-size:12px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:10px">
+    Realize kâr/zarar (30 dk, gerçek zamanlı)
+  </div>
+  <svg viewBox="0 0 600 160" width="100%" height="160" role="img" aria-label="Realize sonuçlar">
+    <line x1="0" y1="80" x2="600" y2="80" stroke="#243040" stroke-width="1"/>
+    <!-- ölçek: 50 $ = 60 px -->
+    <rect x="60"  y="80" width="90" height="29" fill="#da3633" rx="3"/>
+    <text x="105" y="126" fill="#8b98a5" font-size="12" text-anchor="middle">v1</text>
+    <text x="105" y="72"  fill="#da3633" font-size="13" text-anchor="middle">−24,10 $</text>
+
+    <rect x="255" y="80" width="90" height="54" fill="#da3633" rx="3"/>
+    <text x="300" y="151" fill="#8b98a5" font-size="12" text-anchor="middle">v2</text>
+    <text x="300" y="72"  fill="#da3633" font-size="13" text-anchor="middle">−44,97 $</text>
+
+    <rect x="450" y="48" width="90" height="32" fill="#2ea043" rx="3"/>
+    <text x="495" y="38" fill="#2ea043" font-size="13" text-anchor="middle">+27,12 $</text>
+    <text x="495" y="126" fill="#8b98a5" font-size="12" text-anchor="middle">v3</text>
+  </svg>
+</div>
+
+<table>
+  <thead><tr><th>Çıkış nedeni</th><th>v1</th><th>v2</th><th>v3</th></tr></thead>
+  <tbody>
+    <tr><td>İzli kâr (kâr kilidi)</td><td>0</td><td>0</td><td class="pos">6</td></tr>
+    <tr><td>−10 $ stop</td><td>2</td><td>4</td><td>3</td></tr>
+    <tr><td>Süre (240 bar)</td><td>7</td><td>9</td><td>1</td></tr>
+  </tbody>
+</table>
+
+<div class="not">
+  <b>Dürüst not:</b> v3 ilk kez canlı akışta kâr etti ama <b>10 işlem</b> istatistiksel kanıt değil.
+  Aynı bot, önceki 14 saatlik geçmiş-veri testinde 190 işlemde −549 $ yaptı. Tek oturuma güvenilmez;
+  anlamlı sonuç için 6–12 saat (100+ işlem) gerekiyor.
+</div>
+
+<div class="dipnot">
+  Kural seti: 1.000 $ kasa · 50 $ teminat · 10x (500 $ notional) · CROSS · pozisyon limiti yok ·
+  pozisyon başına −10 $ net stop · taker komisyon %0,05 × 2.<br>
+  Ham veri: <code>runs/akis_20261114_114030/ozet.json</code> ·
+  sayaç kaydı: <code>runs/akis_tani.txt</code> · rapor: <code>docs/11-canli-akis-30dk.md</code>
+</div>
+
+</body>
+</html>
