@@ -128,6 +128,12 @@ def sekreter_turu(o: Oturum, kuru: bool) -> None:
         if veri.get("kararlar"):
             break
     for k in veri.get("kararlar", [])[:4]:
+        if not k.get("dosya"):          # model dosyayı boş bıraktıysa kanıt/gerekçeden çıkar
+            for alan in ("kanit", "gerekce", "baslik"):
+                m = re.search(r"(bot/[\w/]+\.py)", str(k.get(alan, "")))
+                if m:
+                    k["dosya"] = m.group(1)
+                    break
         metin_k = " ".join(str(k.get(x, "")) for x in ("baslik", "gerekce", "etki"))
         if KURAL_IHLALI.search(metin_k):
             o.dusen.append({**k, "neden": "değişmez kural ihlali"})
