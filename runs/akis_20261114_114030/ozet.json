@@ -1,0 +1,75 @@
+{
+ "sure_sn": 1800.2,
+ "tick": 273024,
+ "bar": 5428,
+ "sembol": 20,
+ "son_hata": "",
+ "sonuclar": [
+  {
+   "surum": "v1 kbot (EMA+hacim)",
+   "islem": 9,
+   "kazanma_orani": 0.2222,
+   "realize_usd": -24.1,
+   "komisyon_usd": 4.5,
+   "kar_faktoru": 0.049,
+   "ortalama_islem": -2.68,
+   "cikis_nedenleri": {
+    "stop": 2,
+    "sure": 7
+   },
+   "red_nedenleri": {
+    "hacim": 1381,
+    "veri": 440,
+    "kesisme_yok": 356
+   },
+   "acik_pozisyon": 11,
+   "acik_pnl_usd": -0.24
+  },
+  {
+   "surum": "v2 kbot2 (rejim+komite)",
+   "islem": 13,
+   "kazanma_orani": 0.0769,
+   "realize_usd": -44.97,
+   "komisyon_usd": 6.5,
+   "kar_faktoru": 0.076,
+   "ortalama_islem": -3.46,
+   "cikis_nedenleri": {
+    "stop": 4,
+    "sure": 9
+   },
+   "red_nedenleri": {
+    "veri": 1180,
+    "notr": 283,
+    "panik": 36,
+    "trend": 35,
+    "sikisma": 5
+   },
+   "acik_pozisyon": 18,
+   "acik_pnl_usd": -15.11
+  },
+  {
+   "surum": "v3 kbot3 (kanit esikleri)",
+   "islem": 10,
+   "kazanma_orani": 0.7,
+   "realize_usd": 27.12,
+   "komisyon_usd": 5.0,
+   "kar_faktoru": 1.904,
+   "ortalama_islem": 2.71,
+   "cikis_nedenleri": {
+    "izli_kar": 6,
+    "stop": 3,
+    "sure": 1
+   },
+   "red_nedenleri": {
+    "BB": 2019,
+    "ADX": 1571,
+    "veri": 1180,
+    "RSI": 12,
+    "giris_acisi": 6,
+    "uyum": 2
+   },
+   "acik_pozisyon": 3,
+   "acik_pnl_usd": -0.01
+  }
+ ]
+}
