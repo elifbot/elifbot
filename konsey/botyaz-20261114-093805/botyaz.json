@@ -1,0 +1,38 @@
+{
+ "turlar": [
+  {
+   "tur": 0,
+   "yazildi": true,
+   "hata": "",
+   "tani": null
+  },
+  {
+   "tur": 1,
+   "ok": false,
+   "hata": "usage: bot.py [-h] [--dakika DAKIKA] [--etiket ETIKET] sembol\nbot.py: error: argument --dakika: invalid int value: '2.0'\n"
+  },
+  {
+   "tur": 2,
+   "ok": false,
+   "hata": "usage: bot.py [-h] [--dakika DAKIKA] [--etiket ETIKET] sembol\nbot.py: error: argument --dakika: invalid int value: '2.0'\n"
+  },
+  {
+   "tur": 3,
+   "ok": false,
+   "hata": "usage: bot.py [-h] [--dakika DAKIKA] [--etiket ETIKET] sembol\nbot.py: error: argument --dakika: invalid int value: '2.0'\n"
+  },
+  {
+   "tur": 4,
+   "ok": false,
+   "hata": "usage: bot.py [-h] [--dakika DAKIKA] [--etiket ETIKET] sembol\nbot.py: error: argument --dakika: invalid int value: '2.0'\n"
+  },
+  {
+   "tur": 5,
+   "ok": false,
+   "hata": "usage: bot.py [-h] [--dakika DAKIKA] [--etiket ETIKET] sembol\nbot.py: error: argument --dakika: invalid int value: '2.0'\n"
+  }
+ ],
+ "son": {
+  "ok": false
+ }
+}
