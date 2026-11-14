@@ -102,14 +102,30 @@ def itiraz_turu(o: Oturum, kuru: bool) -> None:
             o.itirazlar[ad] = metin
 
 
-def _json_ayikla(metin: str) -> dict:
-    m = re.search(r"\{.*\}", metin, flags=re.S)
-    if not m:
+def _json_ayikla(metin: str):
+    """JSON'u olduğu gibi, olmazsa onarıp çözer; liste de dönebilir.
+
+    Küçük yerel modeller sık sık `"sinif": Poz` (tırnaksız) veya sonda virgül
+    bırakarak geçersiz JSON üretiyor. Bunlar onarılır.
+    """
+    if not metin:
         return {}
-    try:
-        return json.loads(m.group(0))
-    except json.JSONDecodeError:
-        return {}
+    adaylar = re.findall(r"[\{\[].*[\}\]]", metin, flags=re.S)
+    for ham in sorted(adaylar, key=len, reverse=True):
+        temiz = re.sub(r"```\w*|```", "", ham)
+        tirnakli = re.sub(r'([:\[,]\s*)([A-Za-z_][A-Za-z0-9_]*)(?=\s*[,}\]])', r'\1"\2"', temiz)
+        adaylar2 = [ham, temiz, tirnakli]
+        for _ in range(3):                       # art arda onarım (tırnak + sondaki virgül)
+            son = adaylar2[-1]
+            yeni_ad = re.sub(r",(\s*[}\]])", r"\1", son)
+            if yeni_ad != son:
+                adaylar2.append(yeni_ad)
+        for aday in adaylar2:
+            try:
+                return json.loads(aday)
+            except json.JSONDecodeError:
+                continue
+    return {}
 
 
 def _karar_listesi(veri, _derinlik: int = 0) -> list[dict]:
@@ -216,7 +232,8 @@ def sekreter_turu(o: Oturum, kuru: bool) -> None:
         if hata:                              # onarım: dosyanın gerçek kaynağıyla tekrar dene
             yol = ym.KOK / dosya
             if yol.exists() and yol.suffix == ".py" and not o.butce.bitti():
-                kaynak = yol.read_text(encoding="utf-8", errors="ignore")
+                kaynak = ym.bolge(hedef["dosya"], hedef.get("fonksiyon") or "", 8) or \
+            yol.read_text(encoding="utf-8", errors="ignore")[:6000]
                 ham = sg.cagir(sag, yama_istemi(k, dosya, kaynak), butce=o.butce,
                                rol="yama", tur=3, sicaklik=0.0, kuru_kosu=kuru)
                 v = _json_ayikla(ham) if ham else {}
@@ -278,7 +295,8 @@ def _muhendis_turu(o: Oturum) -> None:
         yol = ym.KOK / hedef["dosya"]
         if not yol.exists():
             continue
-        kaynak = yol.read_text(encoding="utf-8", errors="ignore")
+        kaynak = ym.bolge(hedef["dosya"], hedef.get("fonksiyon") or "", 8) or \
+            yol.read_text(encoding="utf-8", errors="ignore")[:6000]
         api = [x.split(":")[0].split()[-1].rstrip("()") for x in ym.indeks().get(hedef["dosya"], [])]
         metin = sg.cagir(o.saglayicilar[0],
                          kr.muhendis_istemi(hedef, o.gorev, "\n".join(o.oneriler.values()),

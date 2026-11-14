@@ -295,3 +295,19 @@ def uygula_coklu(dosya: str, islemler: list[dict]) -> tuple[str, str]:
         ozgun.splitlines(keepends=True), metin.splitlines(keepends=True),
         fromfile=f"a/{dosya}", tofile=f"b/{dosya}", n=3, lineterm="\n"))
     return diff, ""
+
+
+def bolge(dosya: str, ad: str, pay: int = 8) -> str:
+    """Hedef fonksiyon/sınıfın kaynağını, biraz bağlamla döndürür.
+
+    Küçük yerel modeller 12 KB'lik dosyanın tamamını ne okuyabiliyor ne de
+    yeniden yazabiliyor; sadece ilgili bölgeyi göndermek şart.
+    """
+    aralik = _dugum_araligi(dosya, ad)
+    if not aralik:
+        return ""
+    ilk, son, _ = aralik
+    satirlar = (KOK / dosya).read_text(encoding="utf-8").splitlines()
+    bas = max(1, ilk - pay)
+    bit = min(len(satirlar), son + pay)
+    return "\n".join(f"{i:4d}| {satirlar[i - 1]}" for i in range(bas, bit + 1))

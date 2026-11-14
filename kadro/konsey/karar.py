@@ -83,8 +83,8 @@ def muhendis_istemi(hedef: dict, gorev: str, oneri_metni: str, kaynak: str,
             f"GÖREV: {gorev}\n\nHEDEF: {hedef.get('dosya', '')} · {hedef.get('fonksiyon', '')}\n\n"
             f"KONSEY TARTIŞMASI (öz):\n{oneri_metni[:2500]}\n\n"
             f"BU DOSYADAKİ GERÇEK SINIF/FONKSİYON ADLARI (başka ad uydurma):\n"
-            f"{', '.join(api or [])[:1200]}\n\n"
-            f"DOSYANIN TAM KAYNAĞI:\n```python\n{kaynak}\n```\n\n"
+            f"{', '.join(api or [])[:800]}\n\n"
+            f"İLGİLİ KAYNAK (satır numaralı):\n```python\n{kaynak}\n```\n\n"
             "Şema:\n"
             '{"degisiklikler":[{"tur":"alan_ekle","sinif":"Poz","alan":"ters_rejim_sayaci: int = 0"},'
             '{"tur":"fonksiyon","ad":"_izle","kod":"<tam fonksiyon, def satırından itibaren, dosyadaki girintisiyle>"}]}\n'
