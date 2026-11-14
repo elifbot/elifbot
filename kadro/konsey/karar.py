@@ -82,15 +82,14 @@ def muhendis_istemi(hedef: dict, gorev: str, oneri_metni: str, kaynak: str) -> l
             f"GÖREV: {gorev}\n\nHEDEF: {hedef.get('dosya', '')} · {hedef.get('fonksiyon', '')}\n\n"
             f"KONSEY TARTIŞMASI (öz):\n{oneri_metni[:2500]}\n\n"
             f"DOSYANIN TAM KAYNAĞI:\n```python\n{kaynak}\n```\n\n"
-            "Şema (tek anahtar, başka alan yok):\n"
-            '{"degisiklikler":[{"eski_kod":"dosyadan BİREBİR kopyalanmış 2-25 satır",'
-            '"yeni_kod":"onun yerine geçecek kod"}]}\n'
+            "Şema:\n"
+            '{"degisiklikler":[{"tur":"alan_ekle","sinif":"Poz","alan":"ters_rejim_sayaci: int = 0"},'
+            '{"tur":"fonksiyon","ad":"_izle","kod":"<tam fonksiyon, def satırından itibaren, dosyadaki girintisiyle>"}]}\n'
             "Kurallar:\n"
-            "1) 1-3 değişiklik yaz; parçalar sırayla uygulanır, sonraki parçanın eski_kodu "
-            "önceki parçanın çıktısında geçen hâliyle olmalı.\n"
-            "2) Her eski_kod dosyada birebir ve TEK kez geçmeli (girinti dahil).\n"
-            "3) yeni_kod aynı girintiyle geçerli Python olmalı; yeni isim kullanacaksan "
-            "onun tanımını da aynı yamada yaz.\n"
-            "4) 1000/50/10x/−10$ sayılarına dokunma.\n"
-            "5) Uygulanabilir bir değişiklik yoksa {\"degisiklikler\":[]} döndür."},
+            "1) SADECE bu iki türü kullan. Başka alan adı uydurma (addition/logic/target/replacement YASAK).\n"
+            "2) 'fonksiyon' türünde kod, o fonksiyonun TAM yeni hâli olmalı: def satırı + tüm gövdesi. "
+            "Kısaltma, '...', yorumla geçiştirme YASAK.\n"
+            "3) Yeni bir alan/isim kullanacaksan onu 'alan_ekle' ile tanımla; kullanan fonksiyonu da yaz.\n"
+            "4) 1000/50/10x/-10$ sayılarına dokunma.\n"
+            "5) Uygulanabilir değişiklik yoksa {\"degisiklikler\":[]} döndür."},
     ]

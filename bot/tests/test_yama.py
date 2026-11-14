@@ -103,3 +103,32 @@ def test_hedef_cikarimi_gercek_dosyalari_secer():
     assert h, "hedef bulunamadı"
     assert h[0]["dosya"] == "bot/v9/motor.py"
     assert all("yok.py" not in x["dosya"] for x in h)
+
+
+def test_anlamsal_islemler_sirali_uygulanir():
+    islemler = [
+        {"tur": "alan_ekle", "sinif": "Poz", "alan": "ters_rejim_sayaci: int = 0"},
+        {"tur": "fonksiyon", "ad": "_be_stop", "kod":
+            "def _be_stop(self, poz: Poz) -> float:\n"
+            "    pay = self.kurallar.basabas_fiyat_mesafesi + 0.0002\n"
+            "    px = poz.giris_fiyati * (1 + pay) if poz.yon is Yon.LONG else poz.giris_fiyati * (1 - pay)\n"
+            "    return self._enstruman(poz.sembol).fiyat_yuvarla(px)"},
+    ]
+    diff, hata = ym.uygula_coklu("bot/v9/motor.py", islemler)
+    assert not hata, hata
+    assert "ters_rejim_sayaci" in diff
+
+
+def test_bilinmeyen_islem_turu_reddedilir():
+    diff, hata = ym.uygula_coklu("bot/v9/motor.py", [{"tur": "sihir", "x": 1}])
+    assert not diff and "bilinmeyen tür" in hata
+
+
+def test_islem_listesi_eski_semayi_cevirir():
+    from kadro.konsey.tartisma import _islem_listesi
+    veri = {"degisiklikler": [
+        {"tur": "alan_ekle", "sinif": "Poz", "alan": "x: int = 0"},
+        {"eski_kod": "class Poz:", "yeni_kod": "class Poz:  # y"}]}
+    islemler = _islem_listesi(veri)
+    assert islemler[0]["tur"] == "alan_ekle"
+    assert islemler[1]["tur"] == "metin"

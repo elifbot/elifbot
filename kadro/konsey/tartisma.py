@@ -141,6 +141,29 @@ def _karar_listesi(veri, _derinlik: int = 0) -> list[dict]:
     return []
 
 
+def _islem_listesi(veri) -> list[dict]:
+    """Mühendis ajanının çıktısını anlamsal işlemlere çevirir.
+
+    Kabul edilen biçimler:
+      {"degisiklikler":[{"tur":"alan_ekle","sinif":"Poz","alan":"..."}]}
+      {"degisiklikler":[{"tur":"fonksiyon","ad":"_izle","kod":"..."}]}
+      eski biçim {"degisiklikler":[{"eski_kod":..,"yeni_kod":..}]} → fonksiyon yamasına çevrilir
+    """
+    ham = _karar_listesi(veri)
+    islemler: list[dict] = []
+    for x in ham:
+        tur = str(x.get("tur") or x.get("islem") or "").lower()
+        if tur in ("alan_ekle", "alan", "field") or (x.get("sinif") and x.get("alan")):
+            islemler.append({"tur": "alan_ekle", "sinif": x.get("sinif", ""),
+                             "alan": x.get("alan") or x.get("kod", "")})
+        elif tur in ("fonksiyon", "metot", "def") or (x.get("ad") and x.get("kod")):
+            islemler.append({"tur": "fonksiyon", "ad": x.get("ad", ""),
+                             "kod": x.get("kod") or x.get("yeni_kod", "")})
+        elif x.get("eski_kod") and x.get("yeni_kod"):     # düz metin eşleşmesi hâlâ geçerli
+            islemler.append({"tur": "metin", "eski_kod": x["eski_kod"], "yeni_kod": x["yeni_kod"]})
+    return islemler
+
+
 def _karar_normalize(k: dict) -> dict:
     """hedef/islem/kod gibi alanları bizim (dosya, eski_kod, yeni_kod) alanlarına çevirir."""
     d = dict(k)
@@ -228,17 +251,19 @@ def _muhendis_turu(o: Oturum) -> None:
                          kr.muhendis_istemi(hedef, o.gorev, "\n".join(o.oneriler.values()), kaynak),
                          butce=o.butce, rol="muhendis", tur=3, sicaklik=0.0)
         veri = _json_ayikla(metin)
-        parcalar = _karar_listesi(veri)
-        if not parcalar:
+        islemler = _islem_listesi(veri)
+        if not islemler:
+            o.dusen.append({"baslik": f"mühendis: {hedef['dosya']}",
+                            "neden": "işlem listesi okunamadı"})
             continue
-        diff, hata = ym.yama_uret_coklu(hedef["dosya"], parcalar)
+        diff, hata = ym.uygula_coklu(hedef["dosya"], islemler)
         if hata:
             o.dusen.append({"baslik": f"mühendis: {hedef['dosya']}", "neden": hata})
             continue
         o.kararlar.append({
             "baslik": f"{hedef['dosya']} · {hedef.get('fonksiyon') or 'genel'}",
             "gerekce": "sekreter karar üretemedi; mühendis ajanı önerilerden yama üretti",
-            "dosya": hedef["dosya"], "degisiklikler": parcalar,
+            "dosya": hedef["dosya"], "degisiklikler": islemler,
             "etki": "ölçülecek", "risk": "ölçülecek", "uygulanabilir": True, "yama": diff})
 
 
