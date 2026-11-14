@@ -118,7 +118,14 @@ def _kod(metin: str) -> str:
     if isinstance(v, dict) and isinstance(v.get("kod"), str) and v["kod"].strip():
         return v["kod"]
     m = re.search(r"```(?:python)?\n(.*?)```", metin or "", flags=re.S)
-    return m.group(1) if m else ""
+    if m:
+        return m.group(1)
+    # JSON/blok yok: ilk `import`/`from`/`class`/`def` satırından itibaren kurtar
+    satirlar = (metin or "").splitlines()
+    for i, satir in enumerate(satirlar):
+        if re.match(r"^\s*(import |from \w|class |def |\"\"\"|#!)", satir):
+            return "\n".join(satirlar[i:])
+    return ""
 
 
 def _arayuz(butce: sg.Butce) -> str:
@@ -178,10 +185,13 @@ def tek_yaz(butce: sg.Butce, saglayici: str, model: str, kuru: bool) -> dict:
             "Açıklama, markdown, ``` yok."},
         {"role": "user", "content": TEK_SPEC},
     ]
+    t0 = __import__("time").time()
     metin = sg.cagir(saglayici, istem, model=model or None, butce=butce, rol="yaz:bot",
-                     tur=1, sicaklik=0.2, kuru_kosu=kuru)
+                     tur=1, sicaklik=0.2, kuru_kosu=kuru) or ""
+    sure = round(__import__("time").time() - t0, 1)
     kod = _kod(metin)
     hata = ""
+    tani = {"yanit_karakter": len(metin), "saniye": sure, "ornek": metin[:300]}
     if not kod.strip():
         hata = "kod boş"
     else:
@@ -193,7 +203,7 @@ def tek_yaz(butce: sg.Butce, saglayici: str, model: str, kuru: bool) -> dict:
         except SyntaxError as e:
             hata = f"sözdizimi hatası {e.lineno}. satır: {e.msg}"
     if hata:
-        return {"ok": False, "hata": hata, "kod": kod}
+        return {"ok": False, "hata": hata, "kod": kod, "tani": tani}
     (KOK / TEK_DOSYA).parent.mkdir(parents=True, exist_ok=True)
     (KOK / TEK_DOSYA).write_text(kod if kod.endswith("\n") else kod + "\n", encoding="utf-8")
     return {"ok": True, "kod": kod}
@@ -227,7 +237,8 @@ def tek_bot(butce: sg.Butce, saglayici: str, model: str, tur: int = 5, kuru: boo
     """Yaz → çalıştır → hatayı geri besle; tur kadar tekrar."""
     kayit = {"turlar": []}
     sonuc = tek_yaz(butce, saglayici, model, kuru)
-    kayit["turlar"].append({"tur": 0, "yazildi": sonuc["ok"], "hata": sonuc.get("hata", "")[:400]})
+    kayit["turlar"].append({"tur": 0, "yazildi": sonuc["ok"], "hata": sonuc.get("hata", "")[:400],
+                            "tani": sonuc.get("tani")})
     if not sonuc["ok"]:
         return kayit
     for i in range(1, tur + 1):
