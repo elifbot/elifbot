@@ -1,0 +1,104 @@
+{
+ "zaman": "2026-11-14T06:30:01.104647Z",
+ "uclar": [
+  {
+   "uc": "https://models.github.ai",
+   "modeller": {
+    "durum": 200,
+    "govde": "OK\r\n",
+    "bayt": 4
+   },
+   "model_sayisi": 0,
+   "sohbet": {
+    "durum": 200,
+    "govde": "OK\r\n",
+    "bayt": 4
+   },
+   "sohbet_modeli": "openai/gpt-4.1-mini"
+  },
+  {
+   "uc": "https://models.github.ai/inference",
+   "modeller": {
+    "durum": 200,
+    "govde": "OK\r\n",
+    "bayt": 4
+   },
+   "model_sayisi": 0,
+   "sohbet": {
+    "durum": 200,
+    "govde": "OK\r\n",
+    "bayt": 4
+   },
+   "sohbet_modeli": "openai/gpt-4.1-mini"
+  },
+  {
+   "uc": "https://models.github.ai/inference/v1",
+   "modeller": {
+    "durum": 200,
+    "govde": "OK\r\n",
+    "bayt": 4
+   },
+   "model_sayisi": 0,
+   "sohbet": {
+    "durum": 200,
+    "govde": "OK\r\n",
+    "bayt": 4
+   },
+   "sohbet_modeli": "openai/gpt-4.1-mini"
+  },
+  {
+   "uc": "https://models.inference.ai.azure.com",
+   "modeller": {
+    "durum": 0,
+    "govde": "URLError: <urlopen error [Errno -2] Name or service not known>"
+   },
+   "model_sayisi": 0,
+   "sohbet": {
+    "durum": 0,
+    "govde": "URLError: <urlopen error [Errno -2] Name or service not known>"
+   },
+   "sohbet_modeli": "openai/gpt-4.1-mini"
+  },
+  {
+   "uc": "https://api.githubcopilot.com",
+   "modeller": {
+    "durum": 400,
+    "govde": "bad request: error: invalid apiVersion\n"
+   },
+   "model_sayisi": 0,
+   "sohbet": {
+    "durum": 405,
+    "govde": ""
+   },
+   "sohbet_modeli": "openai/gpt-4.1-mini"
+  }
+ ],
+ "hostlar": {
+  "github.com": "dns-ok",
+  "api.github.com": "dns-ok",
+  "raw.githubusercontent.com": "dns-ok",
+  "objects.githubusercontent.com": "dns-ok",
+  "huggingface.co": "dns-ok",
+  "cdn-lfs.huggingface.co": "dns-yok (gaierror)",
+  "registry.ollama.ai": "dns-ok",
+  "ollama.com": "dns-ok",
+  "pypi.org": "dns-ok",
+  "files.pythonhosted.org": "dns-ok",
+  "api.openai.com": "dns-ok",
+  "integrate.api.nvidia.com": "dns-ok",
+  "api.groq.com": "dns-ok",
+  "openrouter.ai": "dns-ok",
+  "generativelanguage.googleapis.com": "dns-ok",
+  "api.anthropic.com": "dns-ok"
+ },
+ "copilot": {
+  "Authorization Content-Type Copilot-Integration-Id Editor-Ver": {
+   "durum": 400,
+   "govde": "bad request: the Copilot-Integration-Id header does not match the GitHub App that issued this installation access token\n"
+  },
+  "Authorization Content-Type": {
+   "durum": 400,
+   "govde": "bad request: Authorization header is badly formatted\n"
+  }
+ }
+}
