@@ -1,0 +1,55 @@
+name: Bot Yaz
+
+# Botu sıfırdan ajanlara yazdırır (anahtarsız yerel model). Sonucu dala yazar.
+on:
+  workflow_dispatch:
+    inputs:
+      model:
+        description: "Ollama modeli"
+        required: false
+        default: "qwen2.5-coder:3b"
+      butce:
+        description: "Azami çağrı"
+        required: false
+        default: "30"
+
+permissions:
+  contents: write
+
+jobs:
+  yaz:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Ollama kur
+        run: |
+          curl -fsSL https://ollama.com/install.sh | sh
+          nohup ollama serve > /tmp/ollama.log 2>&1 &
+          for i in $(seq 1 60); do curl -sf http://127.0.0.1:11434/api/version && break || sleep 2; done
+          ollama pull "${{ github.event.inputs.model }}"
+          ollama list
+      - name: Botu yazdır
+        env:
+          ACARBOT_MODEL: ${{ github.event.inputs.model }}
+          MODEL: ${{ github.event.inputs.model }}
+          BUTCE: ${{ github.event.inputs.butce }}
+          ACARBOT_ZAMAN_ASIMI: "600"
+        run: |
+          ETIKET="botyaz-$(date -u +%Y%m%d-%H%M%S)"
+          python3 -m kadro.konsey.botyaz --saglayici ollama --model "$MODEL" \
+            --butce "$BUTCE" --etiket "$ETIKET"
+          echo "ETIKET=$ETIKET" >> "$GITHUB_ENV"
+      - name: Sonucu dala yaz
+        if: always()
+        run: |
+          git config user.name "botyaz-bot"
+          git config user.email "botyaz@users.noreply.github.com"
+          DAL="botyaz/$(date -u +%Y%m%d-%H%M%S)"
+          git checkout -b "$DAL"
+          git add -A bot/konsey_bot konsey || true
+          git commit -m "botyaz: ajanların yazdığı bot" || echo "değişiklik yok"
+          git push origin "$DAL"
