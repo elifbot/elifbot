@@ -1,82 +1,76 @@
 {
  "kaynak": "SENTETIK (kuru kosu)",
  "borsa": "binance",
- "bar": 330,
+ "bar": 630,
  "semboller": [
   "S01",
   "S02",
   "S03",
   "S04",
-  "S05",
-  "S06",
-  "S07",
-  "S08",
-  "S09",
-  "S10"
+  "S05"
  ],
  "sonuclar": [
   {
    "surum": "v1 kbot (EMA+hacim)",
-   "islem": 6,
-   "kazanma_orani": 0.1667,
-   "realize_usd": 14.25,
-   "komisyon_usd": 3.0,
-   "kar_faktoru": 1.285,
-   "ortalama_islem": 2.38,
+   "islem": 8,
+   "kazanma_orani": 0.5,
+   "realize_usd": 63.33,
+   "komisyon_usd": 4.0,
+   "kar_faktoru": 2.583,
+   "ortalama_islem": 7.92,
    "cikis_nedenleri": {
-    "stop": 5,
-    "sure": 1
+    "stop": 4,
+    "sure": 4
    },
    "red_nedenleri": {
-    "hacim": 1442,
-    "kesisme_yok": 605,
-    "veri": 220
+    "hacim": 1162,
+    "kesisme_yok": 462,
+    "veri": 110
    },
-   "acik_pozisyon": 5
+   "acik_pozisyon": 1
   },
   {
    "surum": "v2 kbot2 (rejim+komite)",
-   "islem": 24,
-   "kazanma_orani": 0.0417,
-   "realize_usd": -178.44,
-   "komisyon_usd": 12.0,
-   "kar_faktoru": 0.224,
-   "ortalama_islem": -7.44,
+   "islem": 22,
+   "kazanma_orani": 0.1818,
+   "realize_usd": -24.12,
+   "komisyon_usd": 11.0,
+   "kar_faktoru": 0.861,
+   "ortalama_islem": -1.1,
    "cikis_nedenleri": {
-    "stop": 23,
-    "sure": 1
+    "stop": 17,
+    "sure": 5
    },
    "red_nedenleri": {
-    "veri": 590,
-    "trend": 231,
-    "notr": 20,
-    "panik": 15,
-    "sikisma": 1
+    "veri": 295,
+    "trend": 167,
+    "notr": 68,
+    "panik": 5,
+    "sikisma": 2
    },
-   "acik_pozisyon": 10
+   "acik_pozisyon": 4
   },
   {
    "surum": "v3 kbot3 (kanit esikleri)",
    "islem": 10,
-   "kazanma_orani": 0.9,
-   "realize_usd": 407.04,
+   "kazanma_orani": 1.0,
+   "realize_usd": 281.81,
    "komisyon_usd": 5.0,
-   "kar_faktoru": 41.704,
-   "ortalama_islem": 40.7,
+   "kar_faktoru": 99.0,
+   "ortalama_islem": 28.18,
    "cikis_nedenleri": {
-    "stop": 1,
-    "izli_kar": 1,
-    "sure": 8
+    "sure": 9,
+    "izli_kar": 1
    },
    "red_nedenleri": {
-    "veri": 590,
-    "ADX": 32,
-    "giris_acisi": 27,
-    "RSI": 15,
-    "uyum": 3,
-    "BB": 3
+    "veri": 295,
+    "ADX": 28,
+    "giris_acisi": 19,
+    "RSI": 13,
+    "BB": 12,
+    "uyum": 2
    },
-   "acik_pozisyon": 10
+   "acik_pozisyon": 5
   }
  ]
 }
