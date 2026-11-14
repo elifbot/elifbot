@@ -257,6 +257,15 @@ def uygula_coklu(dosya: str, islemler: list[dict]) -> tuple[str, str]:
             kod = str(islem.get("kod", ""))
             if not ad or not kod.strip():
                 return "", f"{i}. işlem: ad/kod boş"
+            adaylar = {d.name for d in ast.walk(agac)
+                       if isinstance(d, (ast.FunctionDef, ast.AsyncFunctionDef))}
+            if ad not in adaylar:                  # isim kayması: en yakın gerçek adı dene
+                yakin = difflib.get_close_matches(ad, sorted(adaylar), n=1, cutoff=0.6)
+                if yakin:
+                    ad = yakin[0]
+                else:
+                    return "", (f"{i}. işlem: fonksiyon bulunamadı: {ad} "
+                                f"(dosyadakiler: {', '.join(sorted(adaylar)[:8])})")
             dugum = next((d for d in ast.walk(agac)
                           if isinstance(d, (ast.FunctionDef, ast.AsyncFunctionDef))
                           and d.name == ad), None)
