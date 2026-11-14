@@ -81,3 +81,27 @@ N ardışık tick sürmeli (teyit) veya ek PnL eşiği aranmalı.
    zaman aşımıyla kararsız kaldı. Daha hızlı bir model (veya ikinci sağlayıcı) şart.
 4. Gerçek borsa verisiyle koşu: ağ erişimi olan bir ortamda `--dakika 60 --sembol 120`.
 5. Kenar bulunana kadar canlıya çıkmak yok.
+
+## 8. Gece 2. yarı — şema savaşı (ölçülmüş kayıt)
+
+Konsey konuşuyor ama **uygulanabilir yama** üretmekte zorlanıyor. Nedeni modelin
+şema disiplini; her turda yeni bir biçim geldi ve her biri koda bağlandı:
+
+| Oturum | Çağrı | Karar | Ne oldu | Yapılan düzeltme |
+|---|---|---|---|---|
+| `20261113-215441` | 7 | 0 | `eski_kod` uyduruldu (dosya içeriği verilmemişti) | dosya kaynağıyla onarım çağrısı |
+| `20261113-220516` | 14 | **1** | RVOL yaması çıktı | (A/B: etki sıfır → geri alındı) |
+| `20261113-223147` | 8 | 0 | sekreter zaman aşımı | sekretere 2 deneme, küçük istem |
+| `20261113-233015` | 14 | 0 | `dosya` alanı boş | `kanit` metninden dosya çıkarma |
+| `20261114-002804` | 14 | 0 | şema farklı: `uygulanabilir_yama/hedef/kod` | alternatif şema uyarlayıcı |
+| `20261114-004954` | 14 | 0 | şema bir kat iç içe: `karar.degisiklikler` | iç içe sarmalayıcı çözümü |
+| `20261114-011339` | 8 | 0 | model 300 sn zaman aşımı (4 çağrı düştü) | — (model sorunu) |
+
+**Kritik bulgu:** son iki oturumda model **doğru içeriği** üretti
+(`ters_rejim_sayaci` sayacı, `_izle` içinde güncelleme, kapatma koşulu) ama bizim
+şemamızla değil. İçerik doğru, kılıf yanlış. Bu, modelin anlamadığı değil,
+**formatı tutturamadığı** anlamına gelir; şema uyarlayıcı bu yüzden yazıldı.
+
+**Kalan tek darboğaz:** `google/gemma-4-31b-it` saat ilerledikçe yavaşlıyor
+(16 sn → 250-290 sn → 300 sn zaman aşımı). Ücretsiz kota tükeniyor olabilir.
+Daha hızlı bir model/anahtar olmadan konsey turları tamamlanmıyor.
