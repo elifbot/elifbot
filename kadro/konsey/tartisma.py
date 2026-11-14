@@ -208,6 +208,39 @@ def sekreter_turu(o: Oturum, kuru: bool) -> None:
             continue
         o.kararlar.append({**k, "uygulanabilir": True, "yama": diff})
 
+    # --- yedek üretici: sekreter karar çıkaramadıysa mühendis ajanı devreye girer
+    if not o.kararlar and not kuru:
+        _muhendis_turu(o)
+
+
+def _muhendis_turu(o: Oturum) -> None:
+    """Sekreter çöktüğünde/şemayı tutturamadığında kararı ayrı bir ajan üretir."""
+    from . import karar as kr
+    from . import yama as ym
+    for hedef in kr.hedefler(o.oneriler, o.itirazlar, azami=2):
+        if o.butce.bitti():
+            break
+        yol = ym.KOK / hedef["dosya"]
+        if not yol.exists():
+            continue
+        kaynak = yol.read_text(encoding="utf-8", errors="ignore")
+        metin = sg.cagir(o.saglayicilar[0],
+                         kr.muhendis_istemi(hedef, o.gorev, "\n".join(o.oneriler.values()), kaynak),
+                         butce=o.butce, rol="muhendis", tur=3, sicaklik=0.0)
+        veri = _json_ayikla(metin)
+        parcalar = _karar_listesi(veri)
+        if not parcalar:
+            continue
+        diff, hata = ym.yama_uret_coklu(hedef["dosya"], parcalar)
+        if hata:
+            o.dusen.append({"baslik": f"mühendis: {hedef['dosya']}", "neden": hata})
+            continue
+        o.kararlar.append({
+            "baslik": f"{hedef['dosya']} · {hedef.get('fonksiyon') or 'genel'}",
+            "gerekce": "sekreter karar üretemedi; mühendis ajanı önerilerden yama üretti",
+            "dosya": hedef["dosya"], "degisiklikler": parcalar,
+            "etki": "ölçülecek", "risk": "ölçülecek", "uygulanabilir": True, "yama": diff})
+
 
 def kos(o: Oturum, kuru: bool = False, turlar: int = 3) -> Oturum:
     oneri_turu(o, kuru)
