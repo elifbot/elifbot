@@ -191,6 +191,12 @@ def sekreter_turu(o: Oturum, kuru: bool) -> None:
         veri = _json_ayikla(metin)
         if _karar_listesi(veri):
             break
+    # 1) model anlamsal işlem listesi verdiyse doğrudan derle
+    islemler = _islem_listesi(veri)
+    if islemler and any(x.get("tur") in ("alan_ekle", "fonksiyon") for x in islemler):
+        _islemleri_derle(o, islemler, veri)
+        return
+
     for k in [_karar_normalize(x) for x in _karar_listesi(veri)][:4]:
         if not k.get("dosya"):          # model dosyayı boş bıraktıysa kanıt/gerekçeden çıkar
             for alan in ("kanit", "gerekce", "baslik"):
@@ -236,6 +242,32 @@ def sekreter_turu(o: Oturum, kuru: bool) -> None:
         _muhendis_turu(o)
 
 
+def _islemleri_derle(o: Oturum, islemler: list[dict], veri) -> None:
+    """Anlamsal işlemleri dosya bazında gruplayıp yamaya çevirir."""
+    from . import yama as ym
+    gruplar: dict[str, list[dict]] = {}
+    for islem, ham in zip(islemler, _karar_listesi(veri)):
+        dosya = str(ham.get("dosya") or "")
+        if not dosya:                     # işlemde dosya yoksa tek aday varsa onu kullan
+            dosyalar = {str(x.get("dosya")) for x in _karar_listesi(veri) if x.get("dosya")}
+            dosya = dosyalar.pop() if len(dosyalar) == 1 else ""
+        if not dosya:
+            o.dusen.append({"baslik": "işlem", "neden": "dosya belirsiz"})
+            continue
+        gruplar.setdefault(dosya, []).append(islem)
+
+    for dosya, liste in gruplar.items():
+        diff, hata = ym.uygula_coklu(dosya, liste)
+        if hata:
+            o.dusen.append({"baslik": f"işlem: {dosya}", "neden": hata})
+            continue
+        o.kararlar.append({
+            "baslik": f"{dosya} · {len(liste)} işlem",
+            "gerekce": "sekreterin anlamsal işlem listesi (AST ile derlendi)",
+            "dosya": dosya, "degisiklikler": liste, "etki": "ölçülecek",
+            "risk": "ölçülecek", "uygulanabilir": True, "yama": diff})
+
+
 def _muhendis_turu(o: Oturum) -> None:
     """Sekreter çöktüğünde/şemayı tutturamadığında kararı ayrı bir ajan üretir."""
     from . import karar as kr
@@ -247,8 +279,10 @@ def _muhendis_turu(o: Oturum) -> None:
         if not yol.exists():
             continue
         kaynak = yol.read_text(encoding="utf-8", errors="ignore")
+        api = [x.split(":")[0].split()[-1].rstrip("()") for x in ym.indeks().get(hedef["dosya"], [])]
         metin = sg.cagir(o.saglayicilar[0],
-                         kr.muhendis_istemi(hedef, o.gorev, "\n".join(o.oneriler.values()), kaynak),
+                         kr.muhendis_istemi(hedef, o.gorev, "\n".join(o.oneriler.values()),
+                                            kaynak, api),
                          butce=o.butce, rol="muhendis", tur=3, sicaklik=0.0)
         veri = _json_ayikla(metin)
         islemler = _islem_listesi(veri)
