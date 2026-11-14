@@ -94,3 +94,12 @@ def test_ic_ice_sema_cozulur():
     assert "ters_rejim_sayaci" in k["yeni_kod"]
     # ikinci biçim: {"yama": {...}}
     assert len(_karar_listesi({"yama": {"degisiklikler": liste}})) == 2
+
+
+def test_hedef_cikarimi_gercek_dosyalari_secer():
+    from kadro.konsey import karar as kr
+    metin = "bot/v9/motor.py:140-144 _izle içinde REJIM_DONUS kapatması; olmayan bot/v9/yok.py de geçiyor"
+    h = kr.hedefler({"mimar": metin, "icra": metin})
+    assert h, "hedef bulunamadı"
+    assert h[0]["dosya"] == "bot/v9/motor.py"
+    assert all("yok.py" not in x["dosya"] for x in h)

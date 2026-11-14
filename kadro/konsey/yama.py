@@ -49,6 +49,9 @@ def _api(yol: Path) -> list[str]:
             adlar.append(f"def {d.name}():{d.lineno}")
         elif isinstance(d, ast.ClassDef):
             adlar.append(f"class {d.name}:{d.lineno}")
+            for m in d.body:                      # metotlar da hedef olabilir
+                if isinstance(m, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                    adlar.append(f"def {m.name}():{m.lineno}")
     return adlar
 
 
