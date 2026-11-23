@@ -42,6 +42,15 @@ class Handler(BaseHTTPRequestHandler):
                                   for step in job.get('steps', []) if step['status'] == 'in_progress']
                         freq = {k: f.get(k) for k in ('status', 'conclusion', 'url')}
                         freq['active_steps'] = active
+                        if f.get('status') == 'completed':
+                            paper_job = next((j for j in f.get('jobs', []) if 'freqtrade-kisa-paper / paper' in j.get('name', '')), None)
+                            if paper_job and str(paper_job.get('databaseId', '')).isdigit():
+                                a = subprocess.run(['gh', 'api', f"repos/elifbot/elifbot/check-runs/{paper_job['databaseId']}/annotations"],
+                                                   cwd=ROOT, capture_output=True, text=True, timeout=20, check=True)
+                                annotations = json.loads(a.stdout)
+                                match = next((x for x in annotations if x.get('title') == 'Freqtrade kısa dry-run'), None)
+                                if match:
+                                    freq['report'] = json.loads(match['message'])
                     except Exception:
                         freq = {'status': 'unknown', 'error': 'Freqtrade koşusu sorgulanamadı'}
                 body = json.dumps({'run': {k: run.get(k) for k in ('status','conclusion','url','createdAt','updatedAt')},
