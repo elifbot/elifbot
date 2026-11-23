@@ -14,6 +14,7 @@ permissions:
 
 jobs:
   sonda:
+    if: ${{ inputs.model != 'borsa-probe' }}
     runs-on: ubuntu-latest
     timeout-minutes: 40
     steps:
@@ -52,3 +53,9 @@ jobs:
           git add -A sonda || true
           git commit -m "sonda: ollama" || echo "değişiklik yok"
           git push origin "$DAL"
+
+  borsa:
+    if: ${{ inputs.model == 'borsa-probe' }}
+    permissions:
+      contents: read
+    uses: ./.github/workflows/tradingagents-borsa-sonda.yml
