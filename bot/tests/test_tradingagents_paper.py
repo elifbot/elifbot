@@ -81,6 +81,22 @@ class PaperTests(unittest.TestCase):
         self.assertFalse(opened)
         self.assertEqual(event['event'], 'reject_stale_portfolio')
 
+    def test_batch_margin_matches_full_book_accounting(self):
+        book = PaperBook(cash=1_000_000)
+        inst = Instrument('A-USDT-SWAP', .1, .01, .01)
+        prices, seen = {inst.symbol: 100}, {inst.symbol: 100}
+        free_margin = book.available(prices)
+        for direction in ([1, -1, 1] * 100):
+            opened, event = direct_entry(book, inst, 100, prices, seen, 100, 1900,
+                                         {'direction': direction}, False, free_margin)
+            self.assertTrue(opened)
+            p = book.positions[event['position_id']]
+            free_margin -= p['margin'] + p['opening_fee'] + p['direction'] * (p['entry'] - 100) * p['units']
+            self.assertAlmostEqual(free_margin, book.available(prices), places=5)
+        self.assertEqual(len(book.by_symbol[inst.symbol]), 300)
+        book.close(next(iter(book.positions)), 100, 'test')
+        self.assertEqual(len(book.by_symbol[inst.symbol]), 299)
+
     def test_private_endpoint_cannot_be_used(self):
         with self.assertRaises(ValueError):
             fetch('/api/v5/trade/order')

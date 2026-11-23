@@ -62,7 +62,7 @@ class CheckPublisher:
                 state.update({k: event.get(k) for k in ('seconds', 'universe', 'fresh_symbols', 'signals',
                               'queued', 'stale_signals', 'decisions', 'open_positions', 'cash', 'equity',
                               'positions', 'closed_trades', 'total_closed', 'trade_attempts', 'trade_opens',
-                              'analyst_active')})
+                              'analyst_active', 'details_truncated')})
             elif kind == 'paper_rejected':
                 reasons = state.setdefault('rejections', {})
                 reason = str(event.get('event', 'unknown'))[:100]
@@ -77,7 +77,7 @@ class CheckPublisher:
                              equity=event.get('equity'), usable_decisions=event.get('usable_decisions'),
                              positions=event.get('positions', []), closed_trades=event.get('closed_trades', []),
                              total_closed=event.get('total_closed'), trade_attempts=event.get('trade_attempts'),
-                             trade_opens=event.get('trade_opens'))
+                             trade_opens=event.get('trade_opens'), details_truncated=event.get('details_truncated', False))
             if kind in ('analysis_started', 'decision', 'agent_error', 'paper_open', 'paper_close',
                         'paper_rejected', 'skip_stale', 'signal_rejected_by_agent', 'data_error'):
                 # Reports/prompts can be very long; telemetry only needs a compact audit trail.

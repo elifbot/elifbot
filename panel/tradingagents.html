@@ -77,7 +77,7 @@ async function refreshLive(){try{
  text('entryStats',s.entry_mode==='signal_direct'?`Giriş denemesi ${fmt(s.trade_attempts||0)} · açılan ${fmt(s.trade_opens||0)} · ret nedenleri: ${Object.entries(s.rejections||{}).map(([k,v])=>`${k}: ${fmt(v)}`).join(', ')||'yok'}${s.details_truncated?' · Ayrıntılar telemetri sınırı nedeniyle kısaltıldı; tümü artifact içinde.':''}`:'Önceki koşu model onayıyla işlem açar.');
  const observed=s.recent||[];const posBody=byId('livePositionsTable');posBody.replaceChildren();
  if(Array.isArray(s.positions)){
-   text('positionNote','Açık pozisyonlar · tahmini net PnL, kapanış komisyonu ve kaymayı içerir.');
+   text('positionNote',`${s.details_truncated?'İlk 100 gösteriliyor; tüm pozisyonlar test artifact özetinde. ':'Açık pozisyonlar · '}Tahmini net PnL, kapanış komisyonu ve kaymayı içerir.`);
    if(!s.positions.length)posBody.appendChild(row(['Açık pozisyon yok','—','—','—','—']));
    for(const p of s.positions){const f=x=>x==null?'—':Number(x).toLocaleString('tr-TR',{maximumSignificantDigits:8});posBody.appendChild(row([p.symbol,p.direction,f(p.entry),f(p.mark),p.net_if_closed==null?'Fiyat eski':`${Number(p.net_if_closed).toFixed(2)} $`]))}
  }else{

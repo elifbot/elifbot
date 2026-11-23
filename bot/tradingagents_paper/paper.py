@@ -32,6 +32,7 @@ class PaperBook:
         self.initial = self.cash = cash
         self.margin, self.leverage, self.fee, self.slippage = margin, leverage, fee, slippage
         self.positions = {}
+        self.by_symbol = {}
         self.closed = []
         self.events = []
         self.sequence = 0
@@ -43,7 +44,7 @@ class PaperBook:
     def available(self, prices):
         return self.equity(prices) - sum(p['margin'] for p in self.positions.values())
 
-    def open(self, inst, price, prices, direction, now=None):
+    def open(self, inst, price, prices, direction, now=None, available_margin=None):
         now = time.time() if now is None else now
         if direction not in (1, -1):
             raise ValueError('direction must be 1 (LONG) or -1 (SHORT)')
@@ -67,7 +68,7 @@ class PaperBook:
             self.events.append({'event': 'reject_size', 'symbol': inst.symbol, 'notional': notional, 'ts': now})
             return False
         opening_fee, margin = notional * self.fee, notional / self.leverage
-        if self.available(prices) < margin + opening_fee:
+        if (self.available(prices) if available_margin is None else available_margin) < margin + opening_fee:
             self.events.append({'event': 'reject_margin', 'symbol': inst.symbol, 'ts': now})
             return False
         self.cash -= opening_fee
@@ -76,6 +77,7 @@ class PaperBook:
         self.positions[position_id] = {'symbol': inst.symbol, 'position_id': position_id, 'entry': fill,
             'units': units, 'contracts': contracts, 'direction': direction, 'ct_type': inst.ct_type,
             'notional': notional, 'margin': margin, 'opening_fee': opening_fee, 'opened': now}
+        self.by_symbol.setdefault(inst.symbol, set()).add(position_id)
         self.events.append({'event': 'open', 'position_id': position_id,
                             'direction': 'LONG' if direction == 1 else 'SHORT', 'symbol': inst.symbol,
                             'price': fill, 'contracts': contracts, 'notional': notional, 'fee': opening_fee, 'ts': now})
@@ -98,13 +100,15 @@ class PaperBook:
         self.closed.append(row)
         self.events.append(row)
         del self.positions[position_id]
+        self.by_symbol[p['symbol']].remove(position_id)
+        if not self.by_symbol[p['symbol']]:
+            del self.by_symbol[p['symbol']]
         return row
 
     def update(self, symbol, price, now=None):
         closed = []
-        for pid, p in list(self.positions.items()):
-            if p['symbol'] != symbol:
-                continue
+        for pid in list(self.by_symbol.get(symbol, ())):
+            p = self.positions[pid]
             exit_price = price * (1 - p['direction'] * self.slippage)
             exit_notional = p['notional'] if p['ct_type'] == 'inverse' else exit_price * p['units']
             net = p['direction'] * (exit_price - p['entry']) * p['units'] - p['opening_fee'] - exit_notional * self.fee
@@ -125,9 +129,11 @@ class PaperBook:
             self.close(pid, prices[p['symbol']], 'cross_liquidation_approx', now)
         return True
 
-    def position_snapshot(self, prices, seen, now):
+    def position_snapshot(self, prices, seen, now, limit=None):
         result = []
         for pid, p in self.positions.items():
+            if limit is not None and len(result) >= limit:
+                break
             symbol = p['symbol']
             mark = prices.get(symbol)
             age = max(0.0, now - seen[symbol]) if symbol in seen else None

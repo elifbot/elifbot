@@ -94,13 +94,18 @@ def signal(history):
             'window_seconds': last_ts - earlier[0], 'source': 'sampled_1m_direction'}
 
 
-def direct_entry(book, inst, price, prices, seen, now, wall_end, candidate):
+def direct_entry(book, inst, price, prices, seen, now, wall_end, candidate,
+                 stale_portfolio=None, available_margin=None):
     """Modeli beklemeden bir aday için sanal giriş dene; nedeni görünür olsun."""
-    if any(now - seen.get(p['symbol'], 0) > 20 for p in book.positions.values()):
+    if stale_portfolio is None:
+        stale_portfolio = any(now - seen.get(s, 0) > 20 for s in book.by_symbol)
+    if stale_portfolio:
         return False, {'event': 'reject_stale_portfolio', 'symbol': inst.symbol}
+    if now - seen.get(inst.symbol, 0) > 20:
+        return False, {'event': 'reject_stale_quote', 'symbol': inst.symbol}
     if inst.expiry_ms and inst.expiry_ms / 1000 <= wall_end:
         return False, {'event': 'reject_expiry_during_run', 'symbol': inst.symbol}
-    opened = book.open(inst, price, prices, candidate['direction'], now)
+    opened = book.open(inst, price, prices, candidate['direction'], now, available_margin=available_margin)
     return opened, book.events[-1]
 
 
@@ -147,7 +152,10 @@ def main(argv=None):
         event = {'time': datetime.now(timezone.utc).isoformat(), 'type': kind, **kw}
         with events_path.open('a', encoding='utf-8') as f:
             f.write(json.dumps(event, ensure_ascii=False) + '\n')
-        print(json.dumps(event, ensure_ascii=False), flush=True)
+        # High-frequency signals/rejections are in the artifact, not thousands
+        # of GitHub console lines per cycle.
+        if kind not in ('signal', 'paper_rejected', 'paper_open', 'paper_close'):
+            print(json.dumps(event, ensure_ascii=False), flush=True)
         if publisher:
             publisher.record(event)
         if kind == 'agent_error':
@@ -168,7 +176,7 @@ def main(argv=None):
     meta = instruments(get_all('public/instruments'))
     if not meta:
         raise RuntimeError('OKX SWAP/FUTURES sözleşmeleri alınamadı')
-    book = PaperBook()
+    book = PaperBook(cash=1_000_000.0)
     prices, seen = {}, {}
     history = collections.defaultdict(lambda: collections.deque(maxlen=40))
     pending = collections.deque()
@@ -216,12 +224,17 @@ def main(argv=None):
                     new_quotes.append((s, q))
                 for closed in book.update(s, q['price'], now):
                     log('paper_close', **closed)
-            if all(now - seen.get(p['symbol'], 0) <= 20 for p in book.positions.values()):
+            if all(now - seen.get(s, 0) <= 20 for s in book.by_symbol):
                 closed_before = len(book.closed)
                 if book.liquidation(prices, now):
                     for closed in book.closed[closed_before:]:
                         log('paper_close', **closed)
                     log('cross_liquidation_approx')
+            # Marks and closed trades are stable for this batch. Update the
+            # available margin incrementally for each fill instead of scanning
+            # thousands of positions on every signal.
+            free_margin = book.available(prices)
+            oldest_mark = min((seen.get(s, 0) for s in book.by_symbol), default=float('inf'))
             for s, q in new_quotes:
                 h = history[s]
                 candidate = signal(h)
@@ -231,8 +244,14 @@ def main(argv=None):
                 trade_attempts += 1
                 log('signal', symbol=s, **candidate)
                 # Direct paper entry: the model's later review is advisory only.
-                opened, paper_event = direct_entry(book, meta[s], q['price'], prices, seen, now, wall_end, candidate)
+                entry_now = time.time()
+                opened, paper_event = direct_entry(book, meta[s], q['price'], prices, seen, entry_now, wall_end, candidate,
+                    stale_portfolio=entry_now - oldest_mark > 20, available_margin=free_margin)
                 if opened:
+                    position = book.positions[paper_event['position_id']]
+                    free_margin -= (position['margin'] + position['opening_fee']
+                                    + position['direction'] * (position['entry'] - q['price']) * position['units'])
+                    oldest_mark = min(oldest_mark, seen[s])
                     trade_opens += 1
                     log('paper_open', **paper_event)
                 else:
@@ -287,7 +306,8 @@ def main(argv=None):
                 fresh_symbols=sum(now - seen.get(s, 0) <= 20 for s in meta), signals=signals,
                 queued=len(pending), stale_signals=stale_signals, decisions=decisions,
                 open_positions=len(book.positions), cash=round(book.cash, 2), equity=round(book.equity(prices), 2),
-                positions=book.position_snapshot(prices, seen, now), closed_trades=book.closed[-50:],
+                positions=book.position_snapshot(prices, seen, now, limit=100), closed_trades=book.closed[-50:],
+                details_truncated=len(book.positions) > 100,
                 total_closed=len(book.closed), trade_attempts=trade_attempts, trade_opens=trade_opens,
                 analyst_active=len(active))
             next_log = time.monotonic() + 10
@@ -308,7 +328,8 @@ def main(argv=None):
     valid = signals > 0 and quote_updates > 0
     log('finish', signals=signals, decisions=decisions, closed=summary['closed_count'], open_positions=len(book.positions),
         equity=round(summary['equity_usd'], 2), valid_decisions=valid_decisions, usable_decisions=usable_decisions,
-        trade_attempts=trade_attempts, trade_opens=trade_opens, positions=book.position_snapshot(prices, seen, time.time()),
+        trade_attempts=trade_attempts, trade_opens=trade_opens, positions=book.position_snapshot(prices, seen, time.time(), limit=100),
+        details_truncated=len(book.positions) > 100,
         closed_trades=book.closed[-50:], total_closed=len(book.closed), valid=valid)
     if publisher:
         publisher.finish()
