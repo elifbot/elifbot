@@ -11,10 +11,11 @@ on:
 
 permissions:
   contents: write
+  checks: write
 
 jobs:
   sonda:
-    if: ${{ inputs.model != 'borsa-probe' && inputs.model != 'paper-30m' && inputs.model != 'paper-3m' }}
+    if: ${{ inputs.model != 'borsa-probe' && inputs.model != 'paper-30m' && inputs.model != 'paper-3m' && inputs.model != 'tani' }}
     runs-on: ubuntu-latest
     timeout-minutes: 40
     steps:
@@ -67,3 +68,10 @@ jobs:
     uses: ./.github/workflows/tradingagents-okx-paper.yml
     with:
       dakika: ${{ inputs.model == 'paper-30m' && 30 || 3 }}
+
+  tani:
+    if: ${{ inputs.model == 'tani' }}
+    permissions:
+      contents: read
+      checks: write
+    uses: ./.github/workflows/tradingagents-tani.yml

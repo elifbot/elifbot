@@ -25,3 +25,11 @@ gh workflow run ollama_sonda.yml --ref "$(git branch --show-current)" -f model=p
 ```
 
 Actions koşusunda `tradingagents-paper / paper` işinin **OKX gerçek veri ve sanal işlem testi** adımı canlı takip edilebilir; çıktılar aynı koşudaki artifact'tedir. `model=paper-3m` kısa teknik duman testidir.
+
+## Arena inceleme paneli
+
+```bash
+.venv/tradingagents/bin/python -m panel.tradingagents_server --host 0.0.0.0 --port 8000
+```
+
+Panel GitHub'daki **45185083638** numaralı geçmiş koşunun anotasyonlarını `gh` ile okur; yeni bir gerçek piyasa koşusu başlatmaz. Çalıştırıldığı ortamın GitHub erişimi gerekir. Panel açılırken LONG/SHORT, TradingAgents grafiği ve sanal defter için ağsız bir teknik prova başlatılır; bu prova sentetik fiyatlar ve deterministik sahte model kullanır, performans ölçmez. Panelden tekrar çalıştırılabilir. Arena geliştirme ortamında OKX'e dış ağ erişimi ve yerel Ollama servisi bulunmadığı için burada gerçek piyasa/model testi yapılamaz.
