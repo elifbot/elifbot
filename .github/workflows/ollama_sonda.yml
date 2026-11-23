@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   sonda:
-    if: ${{ inputs.model != 'borsa-probe' && inputs.model != 'paper-30m' && inputs.model != 'paper-3m' && inputs.model != 'tani' && inputs.model != 'kapasite' && inputs.model != 'bot-uyumluluk' && inputs.model != 'freq-paper-3m' && inputs.model != 'freq-paper-30m' && inputs.model != 'octobot-tani' }}
+    if: ${{ inputs.model != 'borsa-probe' && inputs.model != 'paper-30m' && inputs.model != 'paper-3m' && inputs.model != 'tani' && inputs.model != 'kapasite' && inputs.model != 'bot-uyumluluk' && inputs.model != 'freq-paper-3m' && inputs.model != 'freq-paper-30m' && inputs.model != 'octobot-tani' && inputs.model != 'octobot-paper-3m' }}
     runs-on: ubuntu-latest
     timeout-minutes: 40
     steps:
@@ -107,3 +107,9 @@ jobs:
     permissions:
       contents: read
     uses: ./.github/workflows/octobot-tentacles.yml
+
+  octobot-kisa-paper:
+    if: ${{ inputs.model == 'octobot-paper-3m' }}
+    permissions:
+      contents: read
+    uses: ./.github/workflows/octobot-kisa-paper.yml

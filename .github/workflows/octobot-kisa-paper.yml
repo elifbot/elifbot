@@ -1,0 +1,32 @@
+name: OctoBot OKX sanal başlatma provası
+on:
+  workflow_call:
+permissions:
+  contents: read
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: OctoBot yükle
+        run: python -m pip install 'octobot[full]==2.1.1'
+      - name: Resmi bileşenleri kur
+        run: |
+          mkdir -p runs/octobot_smoke
+          cd runs/octobot_smoke
+          timeout 300 OctoBot tentacles --install --all
+      - name: Anahtarsız simulator kısa prova
+        run: |
+          cd runs/octobot_smoke
+          PYTHONPATH="$GITHUB_WORKSPACE" python -u -m bot.bot_karsilastirma.octobot_smoke
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: octobot-paper-prova
+          path: runs/octobot_smoke/
+          if-no-files-found: warn
+          retention-days: 7
