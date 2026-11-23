@@ -1,0 +1,47 @@
+name: TradingAgents CPU kapasite ölçümü
+on:
+  workflow_call:
+permissions:
+  contents: read
+jobs:
+  kapasite:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Koşucunun CPU ve bellek sınırını ölç
+        run: |
+          python3 - <<'PY'
+          import os
+          try:
+              quota = open('/sys/fs/cgroup/cpu.max').read().strip()
+          except OSError:
+              quota = 'bilinmiyor'
+          mem = 'bilinmiyor'
+          try:
+              mem = next(x.strip() for x in open('/proc/meminfo') if x.startswith('MemTotal:'))
+          except OSError:
+              pass
+          print(f'::notice title=Koşucu kaynakları::cpu_count={os.cpu_count()}, affinity={len(os.sched_getaffinity(0))}, cpu.max={quota}, {mem}')
+          PY
+      - name: OKX sözleşme tipi kontrolü
+        run: |
+          python3 - <<'PY'
+          import collections, json, urllib.request
+          from urllib.error import URLError
+          rows=[]
+          for kind in ('SWAP','FUTURES'):
+              url='https://www.okx.com/api/v5/public/instruments?instType='+kind
+              with urllib.request.urlopen(urllib.request.Request(url,headers={'User-Agent':'elifbot'}),timeout=15) as r:
+                  rows.extend(json.load(r)['data'])
+          groups=collections.Counter()
+          samples={}
+          for r in rows:
+              if r.get('state') != 'live': continue
+              parts=r.get('instId','').split('-')
+              q=parts[1] if len(parts)>1 else ''
+              key=(r.get('ctType',''),q,r.get('settleCcy',''),r.get('ctValCcy',''))
+              groups[key]+=1
+              samples.setdefault(key,r.get('instId'))
+          for key,n in groups.most_common():
+              print(f'::notice title=OKX kontrat tipi::{n} adet; ctType={key[0]}, quote={key[1]}, settle={key[2]}, ctValCcy={key[3]}, örnek={samples[key]}')
+          PY
