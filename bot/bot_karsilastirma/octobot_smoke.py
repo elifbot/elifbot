@@ -20,7 +20,8 @@ def main():
         raise RuntimeError('Official daily_trading profile not installed: '+str(profile_path))
     exchange = ccxt.okx({'enableRateLimit': True})
     markets = exchange.load_markets()
-    eligible = [m for m in markets.values() if m.get('active') and m.get('contract') and m.get('symbol')]
+    eligible = [m for m in markets.values() if m.get('active') and m.get('contract')
+                and m.get('type') in ('swap', 'future') and m.get('symbol')]
     if not eligible:
         raise RuntimeError('No active OKX contracts')
     groups = collections.defaultdict(list)
@@ -69,6 +70,7 @@ def main():
     (root/'smoke-report.json').write_text(json.dumps(result,indent=2))
     print('::notice title=OctoBot paper prova::'+json.dumps(result),flush=True)
     print('\n'.join(lines[-40:]),flush=True)
-    return 0 if good and not early else 1
+    # Starting the simulator is not enough: feed errors make the probe fail.
+    return 0 if good and not early and not errors else 1
 
 if __name__=='__main__': sys.exit(main())
