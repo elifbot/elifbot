@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   sonda:
-    if: ${{ inputs.model != 'borsa-probe' && inputs.model != 'paper-30m' && inputs.model != 'paper-3m' && inputs.model != 'tani' && inputs.model != 'kapasite' && inputs.model != 'bot-uyumluluk' && inputs.model != 'freq-paper-3m' }}
+    if: ${{ inputs.model != 'borsa-probe' && inputs.model != 'paper-30m' && inputs.model != 'paper-3m' && inputs.model != 'tani' && inputs.model != 'kapasite' && inputs.model != 'bot-uyumluluk' && inputs.model != 'freq-paper-3m' && inputs.model != 'freq-paper-30m' }}
     runs-on: ubuntu-latest
     timeout-minutes: 40
     steps:
@@ -94,3 +94,10 @@ jobs:
     permissions:
       contents: read
     uses: ./.github/workflows/freqtrade-kisa-paper.yml
+
+  freqtrade-uzun-paper:
+    if: ${{ inputs.model == 'freq-paper-30m' }}
+    permissions:
+      contents: read
+      checks: write
+    uses: ./.github/workflows/freqtrade-30-paper.yml

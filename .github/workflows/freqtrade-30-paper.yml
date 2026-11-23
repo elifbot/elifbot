@@ -1,0 +1,28 @@
+name: Freqtrade OKX 30 dakika paper
+on:
+  workflow_call:
+permissions:
+  contents: read
+  checks: write
+jobs:
+  paper:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Freqtrade 2026.10 yükle
+        run: python -m pip install 'freqtrade==2026.10'
+      - name: OKX canlı veri · gerçek Freqtrade dry-run
+        env:
+          GH_TOKEN: '${{ github.token }}'
+        run: python -u -m bot.bot_karsilastirma.freqtrade_live
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: freqtrade-30m-paper
+          path: runs/freqtrade_30m/
+          if-no-files-found: warn
+          retention-days: 7
