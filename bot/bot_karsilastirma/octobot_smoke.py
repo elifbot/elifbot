@@ -72,6 +72,9 @@ def main():
               'caution':'candle delivery is not proof of coverage, working signals or trades'}
     (root/'smoke-report.json').write_text(json.dumps(result,indent=2))
     print('::notice title=OctoBot paper prova::'+json.dumps(result),flush=True)
+    # Expose bounded, public runtime diagnostics when artifact storage is unreachable.
+    interesting = [line[:400] for line in lines if any(w in line.lower() for w in ('initializ', 'websocket', 'candles', 'error', 'starting octobot'))]
+    print('::notice title=OctoBot runtime diagnostics::' + ' | '.join(interesting[-8:])[:3000].replace('%', '%25').replace('\r','%0D').replace('\n','%0A'), flush=True)
     print('\n'.join(lines[-40:]),flush=True)
     # Starting the simulator is not enough: feed errors make the probe fail.
     return 0 if good and not early and not errors and candles else 1
