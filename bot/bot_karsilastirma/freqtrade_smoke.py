@@ -79,7 +79,9 @@ def main():
         except sqlite3.Error as e:
             report['database_error'] = str(e)
     if prematurely_exited or not heartbeat:
-        report['diagnostic_log_tail'] = text[-5000:]
+        report['diagnostic_log_tail'] = text[-1500:]
+        report['diagnostic_error_lines'] = [line[:700] for line in text.splitlines()
+                                            if 'Invalid configuration. Reason:' in line or 'Configuration error:' in line or 'ERROR -' in line][-3:]
     (ROOT / 'report.json').write_text(json.dumps(report, indent=2))
     # JSON escapes newlines, keeping the annotation valid and useful even when
     # Actions log/artifact downloads are unavailable in the preview environment.
