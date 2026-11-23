@@ -78,7 +78,11 @@ def main():
                     'select count(*), coalesce(sum(is_open), 0) from trades').fetchone()
         except sqlite3.Error as e:
             report['database_error'] = str(e)
+    if prematurely_exited or not heartbeat:
+        report['diagnostic_log_tail'] = text[-5000:]
     (ROOT / 'report.json').write_text(json.dumps(report, indent=2))
+    # JSON escapes newlines, keeping the annotation valid and useful even when
+    # Actions log/artifact downloads are unavailable in the preview environment.
     print('::notice title=Freqtrade kısa dry-run::' + json.dumps(report, ensure_ascii=False), flush=True)
     if prematurely_exited or not heartbeat:
         return 1
