@@ -22,6 +22,7 @@ def main():
     markets = exchange.load_markets()
     eligible = [m for m in markets.values() if m.get('active') and m.get('contract')
                 and m.get('type') in ('swap', 'future') and m.get('symbol')]
+    (root/'okx-swaps.json').write_text(json.dumps([m['symbol'] for m in eligible if m['type'] == 'swap']))
     if not eligible:
         raise RuntimeError('No active OKX contracts')
     groups = collections.defaultdict(list)
@@ -47,7 +48,7 @@ def main():
     outfile = root/'smoke-console.txt'
     env = dict(os.environ, MAX_ALLOWED_SYMBOLS='-1', MAX_ALLOWED_EXCHANGES='-1')
     with outfile.open('w') as out:
-        proc = subprocess.Popen(['OctoBot','--simulate','--no_web','--no-telegram'],
+        proc = subprocess.Popen([sys.executable, '-m', 'bot.bot_karsilastirma.octobot_launcher'],
                                 stdout=out, stderr=subprocess.STDOUT, env=env, start_new_session=True)
         try:
             code = proc.wait(timeout=180)
