@@ -107,6 +107,10 @@ def main(argv=None):
         with events_path.open('a', encoding='utf-8') as f:
             f.write(json.dumps(event, ensure_ascii=False) + '\n')
         print(json.dumps(event, ensure_ascii=False), flush=True)
+        if kind == 'agent_error':
+            print('::warning title=TradingAgents model hatası::' + str(kw.get('error', 'unknown')).replace('\n', ' ')[:500], flush=True)
+        elif kind == 'decision':
+            print('::notice title=TradingAgents kararı::' + str(kw.get('symbol')) + ' ' + str(kw.get('rating')), flush=True)
 
     meta = instruments(fetch('/api/v5/public/instruments?instType=SWAP'))
     initial = quotes(fetch('/api/v5/market/tickers?instType=SWAP'), time.time())
@@ -126,6 +130,7 @@ def main(argv=None):
     cursor = 0
     decisions = 0
     valid_decisions = 0
+    usable_decisions = 0
     fetch_errors = 0
     last_prices = {}
     fatal_agent_error = None
@@ -170,6 +175,8 @@ def main(argv=None):
             if age > 300 or symbol not in seen or now - seen[symbol] > 20:
                 log('skip_stale', symbol=symbol, age_seconds=round(age, 1))
                 continue
+            if result['rating'] in ('Buy', 'Overweight', 'Hold', 'Underweight', 'Sell'):
+                usable_decisions += 1
             action = rating_action(result['rating'])
             if action == 'open_long':
                 if any(now - seen.get(s, 0) > 20 for s in book.positions):
@@ -205,15 +212,16 @@ def main(argv=None):
 
     summary = book.summary(prices)
     summary.update({'symbols': symbols, 'duration_seconds': round(time.monotonic() - start, 1),
-                    'completed_decisions': decisions, 'valid_decisions': valid_decisions, 'data_errors': fetch_errors,
+                    'completed_decisions': decisions, 'valid_decisions': valid_decisions,
+                    'usable_decisions': usable_decisions, 'data_errors': fetch_errors,
                     'agent_error': fatal_agent_error, 'unrealized_uses_last_sample': True,
                     'freshness_seconds_at_end': {s: round(time.time() - seen[s], 1) for s in seen},
                     'pending_analysis_not_used': pending})
     (output / 'summary.json').write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding='utf-8')
     log('finish', decisions=decisions, closed=summary['closed_count'], open_positions=len(book.positions),
-        equity=round(summary['equity_usd'], 2), valid_decisions=valid_decisions,
-        valid=valid_decisions > 0 and not fatal_agent_error)
-    return 0 if valid_decisions > 0 and not fatal_agent_error else 1
+        equity=round(summary['equity_usd'], 2), valid_decisions=valid_decisions, usable_decisions=usable_decisions,
+        valid=usable_decisions > 0 and not fatal_agent_error)
+    return 0 if usable_decisions > 0 and not fatal_agent_error else 1
 
 
 if __name__ == '__main__':

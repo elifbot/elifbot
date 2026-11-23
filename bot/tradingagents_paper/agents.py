@@ -21,6 +21,15 @@ def create_graph(model, llm=None):
         def with_structured_output(self, *args, **kwargs):
             raise NotImplementedError('local text-only model')
 
+        def invoke(self, *args, **kwargs):
+            import time
+            started = time.monotonic()
+            print('TradingAgents model çağrısı başladı', flush=True)
+            try:
+                return super().invoke(*args, **kwargs)
+            finally:
+                print(f'TradingAgents model çağrısı tamamlandı: {time.monotonic() - started:.1f} sn', flush=True)
+
     if llm is None:
         llm = TextOnlyLocalChat(model=model, api_key='ollama', base_url='http://127.0.0.1:11434/v1',
                                 temperature=0, max_tokens=140, timeout=180, max_retries=0)

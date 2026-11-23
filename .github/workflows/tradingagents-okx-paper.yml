@@ -45,7 +45,7 @@ jobs:
           if p.exists():
               d = json.loads(p.read_text())
               print('::notice title=Paper sonuç::'
-                    f"Karar={d['completed_decisions']}, geçerli karar={d['valid_decisions']}, "
+                    f"Karar={d['completed_decisions']}, geçerli={d['valid_decisions']}, kullanılabilir={d['usable_decisions']}, "
                     f"kapanan={d['closed_count']}, açık={len(d['positions'])}, "
                     f"özkaynak={d['equity_usd']:.2f} USD")
           else:
