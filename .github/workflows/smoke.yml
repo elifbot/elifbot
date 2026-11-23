@@ -16,12 +16,29 @@ on:
         description: "Koşu etiketi"
         required: false
         default: "smoke"
+      mail_bots:
+        description: "Maildeki üç botu OKX public veriyle çalıştır"
+        required: false
+        default: "false"
+      mail_seconds:
+        description: "Freqtrade/OctoBot public-feed smoke süresi"
+        required: false
+        default: "180"
+      mail_pairs:
+        description: "OKX linear swap pariteleri"
+        required: false
+        default: "BTC/USDT:USDT,ETH/USDT:USDT,SOL/USDT:USDT"
+      mail_bars:
+        description: "Jesse için kapalı OKX 1m mum sayısı"
+        required: false
+        default: "3000"
 
 permissions:
   contents: write
 
 jobs:
   kosu:
+    if: github.event.inputs.mail_bots != 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 120
     steps:
@@ -51,3 +68,74 @@ jobs:
           git add -A "runs/${ETIKET}" || true
           git commit -m "smoke: ${ETIKET}" || echo "değişiklik yok"
           git push origin "$DAL"
+
+  mail-bots:
+    if: github.event.inputs.mail_bots == 'true'
+    name: Mail bot · ${{ matrix.bot }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - bot: freqtrade
+            python: "3.12"
+          - bot: octobot
+            python: "3.13"
+          - bot: jesse
+            python: "3.11"
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install exact bot release
+        run: |
+          python -m pip install --upgrade pip
+          case "${{ matrix.bot }}" in
+            freqtrade) python -m pip install "freqtrade==2026.10" ;;
+            octobot) python -m pip install "OctoBot==2.1.1" ;;
+            jesse) python -m pip install "jesse==3.7.0" ;;
+          esac
+          python -c "import importlib.metadata; print(importlib.metadata.version('${{ matrix.bot == 'octobot' && 'OctoBot' || matrix.bot }}'))"
+      - name: Prepare OctoBot profile
+        if: matrix.bot == 'octobot'
+        run: |
+          git clone --depth 1 --branch 2.1.1 https://github.com/Drakkar-Software/OctoBot.git vendor/octobot-2.1.1
+          mkdir -p user/profiles
+          cp -a vendor/octobot-2.1.1/packages/tentacles/profiles/daily_trading user/profiles/
+      - name: Freqtrade OKX dry-run
+        if: matrix.bot == 'freqtrade'
+        env:
+          FREQ_SMOKE_SECONDS: ${{ github.event.inputs.mail_seconds }}
+          MAIL_BOT_PAIRS: ${{ github.event.inputs.mail_pairs }}
+          MAIL_BOT_RUN_DIR: runs/mail_bot_real_market/freqtrade
+        run: python tools/mail_bot_matrix/freqtrade_smoke.py
+      - name: OctoBot OKX simulator probe
+        if: matrix.bot == 'octobot'
+        env:
+          MAIL_BOT_PAIRS: ${{ github.event.inputs.mail_pairs }}
+          PYTHONPATH: ${{ github.workspace }}
+        run: python tools/mail_bot_matrix/octobot_smoke.py
+      - name: Jesse OKX candle replay
+        if: matrix.bot == 'jesse'
+        run: |
+          python tools/mail_bot_matrix/okx_market.py \
+            --inst-id BTC-USDT-SWAP \
+            --bars "${{ github.event.inputs.mail_bars }}" \
+            --output runs/mail_bot_real_market/jesse/okx-btc-1m.json
+          python tools/mail_bot_matrix/jesse_backtest.py \
+            --input runs/mail_bot_real_market/jesse/okx-btc-1m.json \
+            --output runs/mail_bot_real_market/jesse/report.json
+      - name: Upload mail bot evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mail-bot-${{ matrix.bot }}
+          path: |
+            runs/mail_bot_real_market/
+            smoke-report.json
+            smoke-console.txt
+            candle-evidence.jsonl
+            okx-swaps.json
+          if-no-files-found: warn
