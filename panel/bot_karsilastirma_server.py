@@ -35,22 +35,22 @@ class Handler(BaseHTTPRequestHandler):
                 freq = None
                 if FREQ_RUN_ID:
                     try:
-                        p = subprocess.run(['gh', 'run', 'view', FREQ_RUN_ID, '--json', 'status,conclusion,url,jobs'],
+                        p = subprocess.run(['gh', 'run', 'view', FREQ_RUN_ID, '--json', 'status,conclusion,url,jobs,headSha'],
                                            cwd=ROOT, capture_output=True, text=True, timeout=20, check=True)
                         f = json.loads(p.stdout)
-                        active = [step['name'] for job in f.get('jobs', []) if 'freqtrade-kisa-paper' in job.get('name', '')
+                        active = [step['name'] for job in f.get('jobs', []) if 'freqtrade-uzun-paper' in job.get('name', '')
                                   for step in job.get('steps', []) if step['status'] == 'in_progress']
                         freq = {k: f.get(k) for k in ('status', 'conclusion', 'url')}
                         freq['active_steps'] = active
-                        if f.get('status') == 'completed':
-                            paper_job = next((j for j in f.get('jobs', []) if 'freqtrade-kisa-paper / paper' in j.get('name', '')), None)
-                            if paper_job and str(paper_job.get('databaseId', '')).isdigit():
-                                a = subprocess.run(['gh', 'api', f"repos/elifbot/elifbot/check-runs/{paper_job['databaseId']}/annotations"],
-                                                   cwd=ROOT, capture_output=True, text=True, timeout=20, check=True)
-                                annotations = json.loads(a.stdout)
-                                match = next((x for x in annotations if x.get('title') == 'Freqtrade kısa dry-run'), None)
-                                if match:
-                                    freq['report'] = json.loads(match['message'])
+                        checks = subprocess.run(['gh', 'api', f"repos/elifbot/elifbot/commits/{f['headSha']}/check-runs?per_page=100"],
+                                                cwd=ROOT, capture_output=True, text=True, timeout=20, check=True)
+                        candidates = [c for c in json.loads(checks.stdout).get('check_runs', [])
+                                      if c.get('name') == f'Freqtrade Paper {FREQ_RUN_ID}']
+                        if candidates:
+                            summary = (max(candidates, key=lambda c: c['id']).get('output') or {}).get('summary') or '{}'
+                            report = json.loads(summary)
+                            if report.get('kind') == 'freqtrade-live-paper':
+                                freq['report'] = report
                     except Exception:
                         freq = {'status': 'unknown', 'error': 'Freqtrade koşusu sorgulanamadı'}
                 body = json.dumps({'run': {k: run.get(k) for k in ('status','conclusion','url','createdAt','updatedAt')},
