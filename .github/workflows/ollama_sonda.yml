@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   sonda:
-    if: ${{ inputs.model != 'borsa-probe' && inputs.model != 'paper-30m' && inputs.model != 'paper-3m' && inputs.model != 'tani' && inputs.model != 'kapasite' && inputs.model != 'bot-uyumluluk' && inputs.model != 'freq-paper-3m' && inputs.model != 'freq-paper-30m' }}
+    if: ${{ inputs.model != 'borsa-probe' && inputs.model != 'paper-30m' && inputs.model != 'paper-3m' && inputs.model != 'tani' && inputs.model != 'kapasite' && inputs.model != 'bot-uyumluluk' && inputs.model != 'freq-paper-3m' && inputs.model != 'freq-paper-30m' && inputs.model != 'octobot-tani' }}
     runs-on: ubuntu-latest
     timeout-minutes: 40
     steps:
@@ -101,3 +101,9 @@ jobs:
       contents: read
       checks: write
     uses: ./.github/workflows/freqtrade-30-paper.yml
+
+  octobot-tani:
+    if: ${{ inputs.model == 'octobot-tani' }}
+    permissions:
+      contents: read
+    uses: ./.github/workflows/octobot-tentacles.yml
