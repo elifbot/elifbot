@@ -24,3 +24,17 @@ Gerçek analiz için seçilen model sağlayıcısına erişim ve genellikle API 
 **Bu geliştirme ortamında** dış ağ erişimi GitHub ve paket depolarıyla sınırlıdır; bu nedenle model ve piyasa verisi servisleriyle uçtan uca analiz burada doğrulanamaz. Kurulum kontrolü yalnızca paket yükleme, bağımlılık kontrolü ve CLI yardım ekranını kapsar.
 
 TradingAgents araştırma amaçlıdır; çıktıları yatırım tavsiyesi değildir. ACARBOT'a entegrasyon, canlı emir veya bu deponun 1.000 $ / 50 $ / 10x / CROSS / −10 $ risk kurallarının uygulanması bu kurulumun kapsamına dahil değildir.
+
+## GitHub Actions genel veri sondası
+
+23 Kasım 2026'daki [sonda](https://github.com/elifbot/elifbot/actions/runs/45181859817) yalnızca anahtarsız BTC vadeli fiyat uçlarını sorguladı: OKX HTTP 200, Binance Futures HTTP 451 döndürdü. Bu bir bağlantı kontrolüdür; TradingAgents çalıştırılmadı ve sanal işlem yapılmadı. Sonuçlar koşucunun bulunduğu bölgeye ve zamana göre değişebilir.
+
+API anahtarı olmadan Ollama ile yerel model kullanımı teknik olarak mümkündür. Ancak TradingAgents'e OKX/Binance futures verisini ve güvenli bir sanal işlem motorunu bağlamak ayrıca geliştirme ve doğrulama gerektirir; mevcut kurulum bunu yapmaz. Binance'ın 451 yanıtı sürdükçe aynı GitHub koşucusunda Binance verisi de kullanılamaz.
+
+Mevcut daldaki sondanın tekrarı (hiçbir borsa anahtarı veya emir yetkisi kullanmaz):
+
+```bash
+gh workflow run ollama_sonda.yml --ref "$(git branch --show-current)" -f model=borsa-probe
+```
+
+Sonuçlar işin GitHub Actions açıklamalarında (annotations) görülür. İşin başarılı olması yalnızca sondanın tamamlandığını, her iki borsanın erişilebilir olduğunu değil, gösterir.
