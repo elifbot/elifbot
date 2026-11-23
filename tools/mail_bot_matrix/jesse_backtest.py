@@ -123,7 +123,11 @@ def run(input_path: Path, output_path: Path) -> dict:
     }
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+    encoded = json.dumps(report, ensure_ascii=False, separators=(",", ":"))
     print(json.dumps(report, ensure_ascii=False, indent=2))
+    # GitHub keeps notices in the check-run API even when runner logs and
+    # artifact blobs are unavailable to this sandbox.
+    print("::notice title=Jesse core araştırma replay::" + encoded, flush=True)
     return report
 
 
