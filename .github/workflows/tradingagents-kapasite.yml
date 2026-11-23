@@ -42,6 +42,6 @@ jobs:
               key=(r.get('ctType',''),q,r.get('settleCcy',''),r.get('ctValCcy',''))
               groups[key]+=1
               samples.setdefault(key,r.get('instId'))
-          for key,n in groups.most_common():
-              print(f'::notice title=OKX kontrat tipi::{n} adet; ctType={key[0]}, quote={key[1]}, settle={key[2]}, ctValCcy={key[3]}, örnek={samples[key]}')
+          result=[{'n':n,'ctType':key[0],'quote':key[1],'settle':key[2],'ctValCcy':key[3],'sample':samples[key]} for key,n in groups.most_common()]
+          print('::notice title=OKX kontrat tipleri::' + json.dumps(result,ensure_ascii=False))
           PY
