@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   sonda:
-    if: ${{ inputs.model != 'borsa-probe' && inputs.model != 'paper-30m' && inputs.model != 'paper-3m' && inputs.model != 'tani' && inputs.model != 'kapasite' }}
+    if: ${{ inputs.model != 'borsa-probe' && inputs.model != 'paper-30m' && inputs.model != 'paper-3m' && inputs.model != 'tani' && inputs.model != 'kapasite' && inputs.model != 'bot-uyumluluk' }}
     runs-on: ubuntu-latest
     timeout-minutes: 40
     steps:
@@ -82,3 +82,9 @@ jobs:
     permissions:
       contents: read
     uses: ./.github/workflows/tradingagents-kapasite.yml
+
+  bot-uyumluluk:
+    if: ${{ inputs.model == 'bot-uyumluluk' }}
+    permissions:
+      contents: read
+    uses: ./.github/workflows/bot-uyumluluk.yml

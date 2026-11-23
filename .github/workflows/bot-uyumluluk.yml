@@ -1,0 +1,45 @@
+name: Üç bot kurulum ve OKX uyumluluk tanısı
+on:
+  workflow_call:
+permissions:
+  contents: read
+jobs:
+  probe:
+    name: '${{ matrix.bot }} · kurulum ve OKX erişimi'
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - bot: freqtrade
+            requirement: 'freqtrade==2026.10'
+          - bot: octobot
+            requirement: 'octobot[full]==2.1.1'
+          - bot: jesse
+            requirement: 'jesse==3.7.0'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Gerçek bot paketini yükle
+        env:
+          REQUIREMENT: '${{ matrix.requirement }}'
+        run: python -m pip install "$REQUIREMENT"
+      - name: Motoru içe aktar ve OKX public evrenini doğrula
+        env:
+          BOT_NAME: '${{ matrix.bot }}'
+        run: python -u -m bot.bot_karsilastirma.probe
+      - name: Kurulu bağımlılık sürümleri
+        if: always()
+        run: |
+          mkdir -p 'runs/bot_uyumluluk/${{ matrix.bot }}'
+          python -m pip freeze > 'runs/bot_uyumluluk/${{ matrix.bot }}/dependencies.txt'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: 'bot-uyumluluk-${{ matrix.bot }}'
+          path: 'runs/bot_uyumluluk/${{ matrix.bot }}/'
+          if-no-files-found: warn
+          retention-days: 7
