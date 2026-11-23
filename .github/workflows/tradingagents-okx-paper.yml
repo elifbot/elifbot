@@ -32,9 +32,9 @@ jobs:
             sleep 2
           done
           curl -fsS http://127.0.0.1:11434/api/version
-          ollama pull qwen2.5:1.5b
+          ollama pull qwen2.5:0.5b
       - name: OKX gerçek veri ve sanal işlem testi
-        run: python -u -m bot.tradingagents_paper.run --dakika '${{ inputs.dakika }}' --sembol 20 --output runs/tradingagents_okx_paper
+        run: python -u -m bot.tradingagents_paper.run --dakika '${{ inputs.dakika }}' --model qwen2.5:0.5b --output runs/tradingagents_okx_paper
       - name: Özet anotasyonu
         if: always()
         run: |

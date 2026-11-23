@@ -1,7 +1,6 @@
-"""30 dakikalık OKX public futures verisiyle TradingAgents paper denemesi.
+"""OKX SWAP/FUTURES public veri + sinyal değerlendirmeli TradingAgents paper testi.
 
-Sadece GET /api/v5/public/instruments ve GET /api/v5/market/tickers kullanır.
-Gerçek emir gönderme kodu ve borsa kimlik bilgisi bu modülde yoktur.
+Yalnızca açık piyasa verisi GET çağrıları kullanılır. Özel API/emir yolu yoktur.
 """
 from __future__ import annotations
 
@@ -16,10 +15,11 @@ import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
-from .paper import Instrument, PaperBook, rating_action
+from .paper import Instrument, PaperBook, accepts_signal
 
 BASE = 'https://www.okx.com'
-PATHS = {'/api/v5/public/instruments?instType=SWAP', '/api/v5/market/tickers?instType=SWAP'}
+TYPES = ('SWAP', 'FUTURES')
+PATHS = {f'/api/v5/{path}?instType={kind}' for path in ('public/instruments', 'market/tickers') for kind in TYPES}
 
 
 def fetch(path):
@@ -38,11 +38,14 @@ def instruments(rows):
     for r in rows:
         try:
             symbol = r['instId']
-            if not (symbol.endswith('-USDT-SWAP') and r['state'] == 'live'
-                    and r['ctType'] == 'linear' and r['settleCcy'] == 'USDT'):
+            if r['state'] != 'live' or r.get('instType') not in TYPES:
                 continue
-            inst = Instrument(symbol, float(r['ctVal']), float(r['lotSz']), float(r['minSz']))
-            if all(math.isfinite(x) and x > 0 for x in (inst.ct_val, inst.lot, inst.minimum)):
+            parts = symbol.split('-')
+            quote = parts[1] if len(parts) > 1 else ''
+            inst = Instrument(symbol, float(r['ctVal']), float(r['lotSz']), float(r['minSz']),
+                              r['ctType'], quote, int(r.get('expTime') or 0),
+                              float(r.get('ctMult') or 1))
+            if all(math.isfinite(x) and x > 0 for x in (inst.ct_val, inst.lot, inst.minimum, inst.multiplier)):
                 found[symbol] = inst
         except (KeyError, TypeError, ValueError):
             continue
@@ -55,17 +58,36 @@ def quotes(rows, now):
         try:
             s = r['instId']
             px, ts = float(r['last']), int(r['ts']) / 1000
-            vol = float(r['volCcy24h']) * px
+            vol = float(r['volCcy24h'] or 0)
             opening = float(r['open24h'])
             if not all(math.isfinite(x) for x in (px, ts, vol, opening)) or px <= 0 or opening <= 0 or vol < 0:
                 continue
             if not -5 <= now - ts <= 20:
                 continue
-            out[s] = {'price': px, 'ts': ts, 'volume_usd': vol, 'open24h': opening,
+            out[s] = {'price': px, 'ts': ts, 'volume_ccy_24h': vol, 'open24h': opening,
                       'high24h': float(r['high24h']), 'low24h': float(r['low24h'])}
         except (KeyError, TypeError, ValueError):
             continue
     return out
+
+
+def signal(history):
+    """Son yaklaşık dakika değişimi: yön her iki tarafa açık bir adaydır.
+
+    Fiyat değişmemişse ya da en az 50 saniyelik veri yoksa sinyal yok. Bu basit
+    aday üretici kârlılık iddiası değildir; agent her adayı değerlendirir.
+    """
+    if len(history) < 2:
+        return None
+    last_ts, last_price = history[-1]
+    earlier = next(((t, p) for t, p in history if 50 <= last_ts - t <= 75), None)
+    if not earlier:
+        return None
+    change = last_price / earlier[1] - 1
+    if change == 0:
+        return None
+    return {'direction': 1 if change > 0 else -1, 'change_pct': 100 * change,
+            'window_seconds': last_ts - earlier[0], 'source': 'sampled_1m_direction'}
 
 
 def analyse_loop(tasks, results, model):
@@ -79,25 +101,21 @@ def analyse_loop(tasks, results, model):
         task = tasks.get()
         if task is None:
             return
-        symbol, snapshot, sampled = task
         try:
-            rating, decision, report = decide(graph, symbol, snapshot)
-            results.put({'symbol': symbol, 'sampled': sampled, 'rating': rating,
-                         'decision': decision, 'market_report': report})
+            rating, decision, report = decide(graph, task['symbol'], task['snapshot'])
+            results.put({**task, 'rating': rating, 'decision': decision, 'market_report': report})
         except Exception as exc:
-            results.put({'symbol': symbol, 'sampled': sampled,
-                         'error': f'{type(exc).__name__}: {exc}'})
+            results.put({**task, 'error': f'{type(exc).__name__}: {exc}'})
 
 
 def main(argv=None):
     p = argparse.ArgumentParser()
     p.add_argument('--dakika', type=float, default=30)
-    p.add_argument('--sembol', type=int, default=20)
-    p.add_argument('--model', default='qwen2.5:1.5b')
+    p.add_argument('--model', default='qwen2.5:0.5b')
     p.add_argument('--output', default='runs/tradingagents_okx_paper')
     args = p.parse_args(argv)
-    if not 0 < args.dakika <= 30 or not 2 <= args.sembol <= 50:
-        p.error('dakika 0–30 aralığında ve sembol 2–50 arasında olmalı')
+    if not 0 < args.dakika <= 30:
+        p.error('dakika 0–30 aralığında olmalı')
 
     output = Path(args.output)
     output.mkdir(parents=True, exist_ok=True)
@@ -111,45 +129,69 @@ def main(argv=None):
             print('::warning title=TradingAgents model hatası::' + str(kw.get('error', 'unknown')).replace('\n', ' ')[:500], flush=True)
         elif kind == 'decision':
             print('::notice title=TradingAgents kararı::' + str(kw.get('symbol')) + ' ' + str(kw.get('rating')), flush=True)
+        elif kind == 'start':
+            print(f"::notice title=OKX evreni::{kw['universe']} aktif sözleşme; {kw['supported']} paper uyumlu", flush=True)
+        elif kind == 'progress':
+            print(f"::notice title=Paper ilerleme::{kw['seconds']}sn; taze={kw['fresh_symbols']}/{kw['universe']}, sinyal={kw['signals']}, kuyruk={kw['queued']}, eski={kw['stale_signals']}, karar={kw['decisions']}", flush=True)
 
-    meta = instruments(fetch('/api/v5/public/instruments?instType=SWAP'))
-    initial = quotes(fetch('/api/v5/market/tickers?instType=SWAP'), time.time())
-    symbols = sorted((s for s in initial if s in meta), key=lambda s: initial[s]['volume_usd'], reverse=True)[:args.sembol]
-    if len(symbols) < 2:
-        raise RuntimeError('OKX üzerinde en az iki taze USDT perpetual bulunamadı')
+    def get_all(path):
+        rows = []
+        for kind in TYPES:
+            rows.extend(fetch(f'/api/v5/{path}?instType={kind}'))
+        return rows
+
+    meta = instruments(get_all('public/instruments'))
+    if not meta:
+        raise RuntimeError('OKX SWAP/FUTURES sözleşmeleri alınamadı')
     book = PaperBook()
-    prices = {}
-    seen = {}
-    history = {s: collections.deque(maxlen=36) for s in symbols}
+    prices, seen = {}, {}
+    history = collections.defaultdict(lambda: collections.deque(maxlen=40))
+    pending = collections.deque()
+    queued_symbols = set()
+    last_signal_at = {}
     tasks, results = queue.Queue(maxsize=1), queue.Queue()
     threading.Thread(target=analyse_loop, args=(tasks, results, args.model), daemon=True).start()
     start = time.monotonic()
     end = start + args.dakika * 60
-    next_log = start
-    pending = False
-    cursor = 0
-    decisions = 0
-    valid_decisions = 0
-    usable_decisions = 0
-    fetch_errors = 0
-    last_prices = {}
+    wall_end = time.time() + args.dakika * 60
+    next_log, next_refresh = start, start + 60
+    active = None
+    decisions = valid_decisions = usable_decisions = fetch_errors = signals = stale_signals = 0
     fatal_agent_error = None
-    log('start', symbols=symbols, duration_seconds=args.dakika * 60, model=args.model,
-        note='Yalnızca public GET ve simülasyon; gerçek emir yok. Sadece LONG; Sell=kapama.')
+    log('start', universe=len(meta), supported=sum(x.supported for x in meta.values()),
+        symbols=sorted(meta), duration_seconds=args.dakika * 60, model=args.model,
+        note='Tüm canlı SWAP/FUTURES sözleşmeleri; LONG/SHORT. Yalnızca public GET ve simülasyon.')
 
     while time.monotonic() < end:
         now = time.time()
+        if time.monotonic() >= next_refresh:
+            try:
+                # Keep any open position's metadata even if OKX delists it.
+                meta = instruments(get_all('public/instruments')) | {s: meta[s] for s in book.positions if s in meta}
+            except Exception as exc:
+                fetch_errors += 1
+                log('metadata_error', error=f'{type(exc).__name__}: {exc}')
+            next_refresh = time.monotonic() + 60
         try:
-            all_quotes = quotes(fetch('/api/v5/market/tickers?instType=SWAP'), now)
-            fresh = {s: all_quotes[s] for s in symbols if s in all_quotes}
+            fresh = {s: q for s, q in quotes(get_all('market/tickers'), now).items() if s in meta}
             for s, q in fresh.items():
                 prices[s], seen[s] = q['price'], q['ts']
-                history[s].append((q['ts'], q['price']))
+                h = history[s]
+                if not h or q['ts'] > h[-1][0]:
+                    h.append((q['ts'], q['price']))
                 closed = book.update(s, q['price'], now)
                 if closed:
                     log('paper_close', **closed)
-            if fresh:
-                last_prices = fresh
+                candidate = signal(h)
+                if candidate and s not in queued_symbols and now - last_signal_at.get(s, 0) >= 60:
+                    task = {'symbol': s, 'sampled': q['ts'], 'candidate': candidate,
+                            'snapshot': json.dumps({'symbol': s, **q, 'signal': candidate,
+                                                    'recent_sampled_prices': list(h)[-15:]}, ensure_ascii=False)}
+                    pending.append(task)
+                    queued_symbols.add(s)
+                    last_signal_at[s] = now
+                    signals += 1
+                    log('signal', symbol=s, **candidate)
             if all(s in prices and now - seen[s] <= 20 for s in book.positions):
                 if book.liquidation(prices, now):
                     log('cross_liquidation_approx')
@@ -159,66 +201,81 @@ def main(argv=None):
 
         while not results.empty():
             result = results.get_nowait()
-            pending = False
+            active = None
+            s = result.get('symbol')
+            if s:
+                queued_symbols.discard(s)
             if 'error' in result:
                 log('agent_error', **result)
                 if result['error'].startswith('agent_init:'):
                     fatal_agent_error = result['error']
                 continue
-            symbol = result['symbol']
             age = now - result['sampled']
             decisions += 1
             if result['rating'] in ('Buy', 'Overweight', 'Hold', 'Underweight', 'Sell'):
                 valid_decisions += 1
             log('decision', **result, age_seconds=round(age, 1))
-            # Do not act on analysis of stale data or on an old quote.
-            if age > 300 or symbol not in seen or now - seen[symbol] > 20:
-                log('skip_stale', symbol=symbol, age_seconds=round(age, 1))
+            if age > 300 or s not in seen or now - seen[s] > 20:
+                log('skip_stale', symbol=s, age_seconds=round(age, 1))
                 continue
-            if result['rating'] in ('Buy', 'Overweight', 'Hold', 'Underweight', 'Sell'):
-                usable_decisions += 1
-            action = rating_action(result['rating'])
-            if action == 'open_long':
-                if any(now - seen.get(s, 0) > 20 for s in book.positions):
-                    log('skip_stale_portfolio', symbol=symbol)
-                elif book.open_long(meta[symbol], prices[symbol], prices, now):
-                    log('paper_open', **book.events[-1])
-            elif action == 'close':
-                closed = book.close(symbol, prices[symbol], 'agent_sell_or_underweight', now)
+            if result['rating'] not in ('Buy', 'Overweight', 'Hold', 'Underweight', 'Sell'):
+                continue
+            usable_decisions += 1
+            direction = result['candidate']['direction']
+            if not accepts_signal(result['rating'], direction):
+                log('signal_rejected_by_agent', symbol=s, rating=result['rating'])
+                continue
+            if any(now - seen.get(sym, 0) > 20 for sym in book.positions):
+                log('skip_stale_portfolio', symbol=s)
+                continue
+            if s not in meta:
+                log('skip_instrument_no_longer_live', symbol=s)
+                continue
+            if meta[s].expiry_ms and meta[s].expiry_ms / 1000 <= wall_end:
+                log('skip_contract_expiry_during_run', symbol=s)
+                continue
+            existing = book.positions.get(s)
+            if existing and existing['direction'] != direction:
+                closed = book.close(s, prices[s], 'opposite_approved_signal', now)
                 if closed:
                     log('paper_close', **closed)
+            if s not in book.positions:
+                if book.open(meta[s], prices[s], prices, direction, now):
+                    log('paper_open', **book.events[-1])
+                else:
+                    log('paper_rejected', **book.events[-1])
 
-        if not pending and not fatal_agent_error and last_prices:
-            # Rotate symbols; choose a fresh quote only.
-            for _ in symbols:
-                s = symbols[cursor % len(symbols)]
-                cursor += 1
-                q = last_prices.get(s)
-                if q is None or now - q['ts'] > 20:
+        if active is None and not fatal_agent_error:
+            while pending:
+                candidate = pending.popleft()
+                if now - candidate['sampled'] > 300:
+                    queued_symbols.discard(candidate['symbol'])
+                    stale_signals += 1
+                    log('signal_expired_in_queue', symbol=candidate['symbol'])
                     continue
-                samples = list(history[s])[-12:]
-                snapshot = json.dumps({'symbol': s, **q, 'recent_sampled_prices': samples}, ensure_ascii=False)
-                tasks.put_nowait((s, snapshot, q['ts']))
-                pending = True
-                log('analysis_started', symbol=s, quote_time=q['ts'])
+                active = candidate
+                tasks.put_nowait(candidate)
+                log('analysis_started', symbol=candidate['symbol'], direction=candidate['candidate']['direction'],
+                    queue_remaining=len(pending))
                 break
 
         if time.monotonic() >= next_log:
-            log('progress', seconds=round(time.monotonic() - start), decisions=decisions,
-                open_positions=len(book.positions), cash=round(book.cash, 2),
-                equity=round(book.equity(prices), 2), fresh_symbols=sum(now - seen.get(s, 0) <= 20 for s in symbols))
+            log('progress', seconds=round(time.monotonic() - start), universe=len(meta),
+                fresh_symbols=sum(now - seen.get(s, 0) <= 20 for s in meta), signals=signals,
+                queued=len(pending), stale_signals=stale_signals, decisions=decisions,
+                open_positions=len(book.positions), cash=round(book.cash, 2), equity=round(book.equity(prices), 2))
             next_log = time.monotonic() + 30
         time.sleep(min(5, max(0, end - time.monotonic())))
 
     summary = book.summary(prices)
-    summary.update({'symbols': symbols, 'duration_seconds': round(time.monotonic() - start, 1),
-                    'completed_decisions': decisions, 'valid_decisions': valid_decisions,
-                    'usable_decisions': usable_decisions, 'data_errors': fetch_errors,
-                    'agent_error': fatal_agent_error, 'unrealized_uses_last_sample': True,
-                    'freshness_seconds_at_end': {s: round(time.time() - seen[s], 1) for s in seen},
-                    'pending_analysis_not_used': pending})
+    summary.update({'symbols': sorted(meta), 'universe_count': len(meta), 'signals': signals,
+                    'queue_remaining': len(pending), 'stale_signals': stale_signals,
+                    'duration_seconds': round(time.monotonic() - start, 1), 'completed_decisions': decisions,
+                    'valid_decisions': valid_decisions, 'usable_decisions': usable_decisions,
+                    'data_errors': fetch_errors, 'agent_error': fatal_agent_error,
+                    'unrealized_uses_last_sample': True, 'pending_analysis_not_used': active is not None})
     (output / 'summary.json').write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding='utf-8')
-    log('finish', decisions=decisions, closed=summary['closed_count'], open_positions=len(book.positions),
+    log('finish', signals=signals, decisions=decisions, closed=summary['closed_count'], open_positions=len(book.positions),
         equity=round(summary['equity_usd'], 2), valid_decisions=valid_decisions, usable_decisions=usable_decisions,
         valid=usable_decisions > 0 and not fatal_agent_error)
     return 0 if usable_decisions > 0 and not fatal_agent_error else 1

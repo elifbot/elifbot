@@ -1,65 +1,89 @@
 import importlib.util
 import unittest
 
-from bot.tradingagents_paper.paper import Instrument, PaperBook, rating_action
-from bot.tradingagents_paper.run import fetch, instruments, quotes
+from bot.tradingagents_paper.paper import Instrument, PaperBook, accepts_signal
+from bot.tradingagents_paper.run import fetch, instruments, quotes, signal
 
 
 class PaperTests(unittest.TestCase):
-    def test_size_fee_and_stop(self):
-        book = PaperBook()
-        inst = Instrument('ETH-USDT-SWAP', .1, .01, .01)
-        self.assertTrue(book.open_long(inst, 100, {inst.symbol: 100}, now=1))
-        p = book.positions[inst.symbol]
-        self.assertGreaterEqual(p['units'] * p['entry'], 450)
-        self.assertLessEqual(p['units'] * p['entry'], 500)
-        self.assertLess(book.cash, 1000)
-        self.assertIsNone(book.update(inst.symbol, 100, now=2))
-        closed = book.update(inst.symbol, 95, now=3)
-        self.assertEqual(closed['reason'], 'stop_sampled')
-        self.assertLessEqual(closed['net'], -10)
-        self.assertAlmostEqual(book.cash - 1000, closed['net'])
-        self.assertEqual(len(book.positions), 0)
+    def test_long_and_short_pnl_and_stop(self):
+        for direction, favorable, adverse in [(1, 102, 95), (-1, 98, 105)]:
+            book = PaperBook()
+            inst = Instrument('ETH-USDT-SWAP', .1, .01, .01)
+            self.assertTrue(book.open(inst, 100, {inst.symbol: 100}, direction, now=1))
+            p = book.positions[inst.symbol]
+            self.assertGreaterEqual(p['notional'], 450)
+            self.assertLessEqual(p['notional'], 500)
+            self.assertGreater(book.equity({inst.symbol: favorable}), book.cash)
+            self.assertIsNone(book.update(inst.symbol, 100, now=2))
+            closed = book.update(inst.symbol, adverse, now=3)
+            self.assertEqual(closed['reason'], 'stop_sampled')
+            self.assertLessEqual(closed['net'], -10)
+            self.assertAlmostEqual(book.cash - 1000, closed['net'])
+
+    def test_inverse_sizing_long_and_short(self):
+        for direction in (1, -1):
+            book = PaperBook()
+            inst = Instrument('BTC-USD-SWAP', 100, 1, 1, ct_type='inverse', quote='USD')
+            self.assertTrue(book.open(inst, 60000, {inst.symbol: 60000}, direction))
+            self.assertEqual(book.positions[inst.symbol]['contracts'], 5)
+            close = book.close(inst.symbol, 60000 * (1 + direction * .02), 'test')
+            self.assertGreater(close['net'], 0)
+            self.assertAlmostEqual(book.cash - 1000, close['net'])
 
     def test_insufficient_margin_and_coarse_contract(self):
         inst = Instrument('BTC-USDT-SWAP', .01, .01, .01)
-        self.assertFalse(PaperBook(cash=10).open_long(inst, 60000, {inst.symbol: 60000}))
-        self.assertFalse(PaperBook().open_long(Instrument('X-USDT-SWAP', 100, 1, 1), 100, {}))
+        self.assertFalse(PaperBook(cash=10).open(inst, 60000, {inst.symbol: 60000}, 1))
+        self.assertFalse(PaperBook().open(Instrument('X-USDT-SWAP', 100, 1, 1), 100, {}, -1))
 
-    def test_long_only_mapping(self):
-        self.assertEqual(rating_action('Buy'), 'open_long')
-        self.assertEqual(rating_action('Sell'), 'close')
-        self.assertEqual(rating_action('Underweight'), 'close')
-        self.assertEqual(rating_action('REVIEW'), 'hold')
-        self.assertEqual(rating_action('Overweight'), 'hold')
+    def test_directional_agent_approval(self):
+        self.assertTrue(accepts_signal('Buy', 1))
+        self.assertTrue(accepts_signal('Overweight', 1))
+        self.assertTrue(accepts_signal('Sell', -1))
+        self.assertTrue(accepts_signal('Underweight', -1))
+        self.assertFalse(accepts_signal('Sell', 1))
+        self.assertFalse(accepts_signal('Buy', -1))
+        self.assertFalse(accepts_signal('REVIEW', -1))
+        self.assertFalse(accepts_signal('Hold', 1))
+
+    def test_signal_both_directions_and_warmup(self):
+        self.assertEqual(signal([(0, 100), (60, 101)])['direction'], 1)
+        self.assertEqual(signal([(0, 100), (60, 99)])['direction'], -1)
+        self.assertIsNone(signal([(0, 100), (10, 101)]))
+        self.assertIsNone(signal([(0, 100), (60, 100)]))
 
     def test_private_endpoint_cannot_be_used(self):
         with self.assertRaises(ValueError):
             fetch('/api/v5/trade/order')
 
-    def test_instruments_and_stale_quotes(self):
-        row = {'instId': 'ETH-USDT-SWAP', 'state': 'live', 'ctType': 'linear', 'settleCcy': 'USDT',
-               'ctVal': '0.1', 'lotSz': '0.01', 'minSz': '0.01'}
-        self.assertIn('ETH-USDT-SWAP', instruments([row]))
-        row['ctType'] = 'inverse'
-        self.assertEqual(instruments([row]), {})
+    def test_all_futures_types_and_stale_quotes(self):
+        base = {'state': 'live', 'ctVal': '0.1', 'lotSz': '0.01', 'minSz': '0.01', 'ctMult': '1'}
+        rows = [dict(base, instId='ETH-USDT-SWAP', instType='SWAP', ctType='linear'),
+                dict(base, instId='BTC-USD-SWAP', instType='SWAP', ctType='inverse'),
+                dict(base, instId='ETH-USDC-261225', instType='FUTURES', ctType='linear'),
+                dict(base, instId='ETH-EUR-261225', instType='FUTURES', ctType='linear')]
+        got = instruments(rows)
+        self.assertEqual(len(got), 4)
+        self.assertTrue(got['BTC-USD-SWAP'].supported)
+        self.assertTrue(got['ETH-USDC-261225'].supported)
+        self.assertFalse(got['ETH-EUR-261225'].supported)
         ticker = {'instId': 'ETH-USDT-SWAP', 'last': '100', 'ts': '99000', 'volCcy24h': '12',
                   'open24h': '99', 'high24h': '110', 'low24h': '90'}
-        self.assertEqual(quotes([ticker], 100)['ETH-USDT-SWAP']['volume_usd'], 1200)
+        self.assertIn('ETH-USDT-SWAP', quotes([ticker], 100))
         self.assertEqual(quotes([ticker], 121), {})
 
     def test_liquidation_closes_entire_book(self):
         book = PaperBook()
         inst = Instrument('A-USDT-SWAP', .1, .01, .01)
-        book.open_long(inst, 100, {inst.symbol: 100})
+        book.open(inst, 100, {inst.symbol: 100}, -1)
         book.cash = 0
-        self.assertTrue(book.liquidation({inst.symbol: 99}))
+        self.assertTrue(book.liquidation({inst.symbol: 101}))
         self.assertEqual(book.closed[-1]['reason'], 'cross_liquidation_approx')
 
 
 @unittest.skipUnless(importlib.util.find_spec('tradingagents'), 'optional TradingAgents not installed')
 class AgentTests(unittest.TestCase):
-    def test_upstream_graph_uses_only_supplied_market_snapshot(self):
+    def test_upstream_graph_uses_supplied_market_snapshot(self):
         from langchain_core.messages import AIMessage
         from bot.tradingagents_paper.agents import create_graph, decide
 
