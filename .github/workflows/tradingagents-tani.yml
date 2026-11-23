@@ -61,7 +61,15 @@ jobs:
                       'Content-Type':'application/json', 'X-GitHub-Api-Version':'2022-11-28'})
               with urllib.request.urlopen(req,timeout=20) as r:
                   return 'check_id=' + str(json.load(r)['id'])
+          def graph_call():
+              from bot.tradingagents_paper.agents import create_graph, decide
+              graph = create_graph('qwen2.5:0.5b')
+              result = decide(graph, 'BTC-USDT-SWAP', json.dumps({
+                  'price': 60000, 'signal': {'direction':1, 'change_pct':0.2},
+                  'recent_sampled_prices': [[n*5, 60000+n] for n in range(15)]}))
+              return 'rating=' + str(result[0])
           test('Ollama HTTP', http_call)
           test('LangChain model', lc_call)
           test('GitHub Checks yazma', checks_call)
+          test('TradingAgents grafik', graph_call)
           PY
