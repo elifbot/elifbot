@@ -1,0 +1,49 @@
+{
+  "received_at_utc": "2026-11-23T17:21:01Z",
+  "gmail_message_id": "1a2096cea67c131a",
+  "gmail_thread_id": "1a2096cd263fc236",
+  "subject": "Freqtrade, OctoBot ve Jesse — son çalışma dosyaları",
+  "source": "Gmail message plus Google Drive attachments/links",
+  "safety": {
+    "private_api_keys_found": false,
+    "real_orders_enabled": false,
+    "planned_mode": "public market data with dry-run/backtest only"
+  },
+  "archives": [
+    {
+      "bot": "Freqtrade",
+      "version": "2026.10",
+      "drive_file_id": "17ksoc1SG1bg4B4LWdNuu4kZW1_dD5EFw",
+      "drive_created_at_utc": "2026-11-23T16:35:07.344Z",
+      "filename": "Freqtrade-2026.10-kaynak.zip",
+      "size_bytes": 50321598,
+      "sha256": "fe83bc2d83893ae723a9360bb46d72bce1e586f8632a83d169e735c641c535a2",
+      "upstream_revision": "4cf0351e08d26e96a6429ef48103b726bb230cf8"
+    },
+    {
+      "bot": "OctoBot",
+      "version": "2.1.1",
+      "drive_file_id": "1eqGztYismQ6BkO1iSofdggGuGn8in9vO",
+      "drive_created_at_utc": "2026-11-23T16:35:00.666Z",
+      "filename": "OctoBot-2.1.1-kaynak.zip",
+      "size_bytes": 25655478,
+      "sha256": "339b0add7ad5289d20a473aa4e4b9128c949f377befad74c868d880266dae5b3",
+      "upstream_revision": "64658476d1f09505aee070cf98c51a5705cdfdb2"
+    },
+    {
+      "bot": "Jesse",
+      "version": "3.7.0",
+      "drive_file_id": "1eeXoTpSTLYCHrQ_1i_uLotvqgMvctC9X",
+      "drive_created_at_utc": "2026-11-23T16:35:04.465Z",
+      "filename": "Jesse-3.7.0-kaynak.zip",
+      "size_bytes": 38209248,
+      "sha256": "72815433763a2f62aa6e9fbc2bf2c3aa73c12ce11337da0de94da06a9852500f",
+      "upstream_revision": "5b97b13ae6e40168b7f119b6c75d965e81add92c"
+    }
+  ],
+  "supporting_work_archive": {
+    "filename": "uc_bot_son_calisma_dosyalari.zip",
+    "size_bytes": 5224899,
+    "sha256": "386e10466a5de7451124e5a93d60bb7db91060887273913d86671b98abe30204"
+  }
+}

@@ -1,0 +1,121 @@
+name: Mail bots real market matrix
+
+# The three archives are the upstream frameworks received in the 23 Nov 2026
+# email.  This workflow is deliberately manual and paper-only: it never has
+# exchange credentials and never calls a private/order endpoint.
+on:
+  workflow_dispatch:
+    inputs:
+      seconds:
+        description: "Freqtrade/OctoBot public-feed smoke duration"
+        required: true
+        default: "180"
+      pairs:
+        description: "Comma-separated OKX linear swap pairs"
+        required: true
+        default: "BTC/USDT:USDT,ETH/USDT:USDT,SOL/USDT:USDT"
+      jesse_bars:
+        description: "Closed OKX 1m candles for Jesse research replay"
+        required: true
+        default: "3000"
+
+permissions:
+  contents: read
+
+jobs:
+  freqtrade-paper:
+    name: Freqtrade 2026.10 · OKX dry-run
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Install exact bot release
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install "freqtrade==2026.10"
+          python -c "import importlib.metadata; print(importlib.metadata.version('freqtrade'))"
+      - name: Run public-data dry-run
+        env:
+          FREQ_SMOKE_SECONDS: ${{ github.event.inputs.seconds }}
+          MAIL_BOT_PAIRS: ${{ github.event.inputs.pairs }}
+          MAIL_BOT_RUN_DIR: runs/mail_bot_real_market/freqtrade
+        run: python tools/mail_bot_matrix/freqtrade_smoke.py
+      - name: Upload Freqtrade evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mail-bot-freqtrade
+          path: runs/mail_bot_real_market/freqtrade/
+          if-no-files-found: warn
+
+  octobot-paper:
+    name: OctoBot 2.1.1 · OKX simulator
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+      - name: Install exact bot release
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install "OctoBot==2.1.1"
+          python -c "import importlib.metadata; print(importlib.metadata.version('OctoBot'))"
+      - name: Prepare matching upstream profile
+        run: |
+          git clone --depth 1 --branch 2.1.1 https://github.com/Drakkar-Software/OctoBot.git vendor/octobot-2.1.1
+          mkdir -p user/profiles
+          cp -a vendor/octobot-2.1.1/packages/tentacles/profiles/daily_trading user/profiles/
+      - name: Run public-data simulator probe
+        env:
+          MAIL_BOT_PAIRS: ${{ github.event.inputs.pairs }}
+          PYTHONPATH: ${{ github.workspace }}
+        run: python tools/mail_bot_matrix/octobot_smoke.py
+      - name: Upload OctoBot evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mail-bot-octobot
+          path: |
+            smoke-report.json
+            smoke-console.txt
+            candle-evidence.jsonl
+            okx-swaps.json
+          if-no-files-found: warn
+
+  jesse-research:
+    name: Jesse 3.7.0 · OKX candle replay
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+      - name: Install exact bot release
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install "jesse==3.7.0"
+          python -c "import importlib.metadata; print(importlib.metadata.version('jesse'))"
+      - name: Capture closed public market data
+        run: |
+          python tools/mail_bot_matrix/okx_market.py \
+            --inst-id BTC-USDT-SWAP \
+            --bars "${{ github.event.inputs.jesse_bars }}" \
+            --output runs/mail_bot_real_market/jesse/okx-btc-1m.json
+      - name: Run Jesse core research replay
+        run: |
+          python tools/mail_bot_matrix/jesse_backtest.py \
+            --input runs/mail_bot_real_market/jesse/okx-btc-1m.json \
+            --output runs/mail_bot_real_market/jesse/report.json
+      - name: Upload Jesse evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mail-bot-jesse
+          path: runs/mail_bot_real_market/jesse/
+          if-no-files-found: warn
