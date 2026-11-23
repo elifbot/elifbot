@@ -25,6 +25,7 @@ def main():
     import ccxt.pro
     from octobot_trading.exchange_data.funding.channel.funding_updater import FundingUpdater
     from octobot.cli import main as octobot_main
+    from octobot_trading.exchange_data.ohlcv.channel.ohlcv import OHLCVProducer
     swaps = set(json.loads(Path('okx-swaps.json').read_text()))
     original_describe = ccxt.pro.okx.describe
     def describe(self):
@@ -36,6 +37,19 @@ def main():
             return perpetual_pairs(original_get_pairs(self), swaps)
         return original_get_pairs(self)
     FundingUpdater._get_pairs_to_update = get_pairs
+    # Record only the first non-empty candle per symbol/timeframe. This measures
+    # delivery to the bot, not order fills or coverage of the configured universe.
+    original_push = OHLCVProducer.push
+    seen = set()
+    async def record_candles(self, time_frame, symbol, candle, replace_all=False, partial=False):
+        if candle and self.channel.exchange_manager.exchange_name == 'okx':
+            key = (symbol, str(time_frame.value))
+            if key not in seen:
+                seen.add(key)
+                with open('candle-evidence.jsonl', 'a') as evidence:
+                    evidence.write(json.dumps({'symbol':symbol, 'timeframe':key[1]}) + '\n')
+        return await original_push(self, time_frame, symbol, candle, replace_all, partial)
+    OHLCVProducer.push = record_candles
     # This entry point intentionally has no command-line switch for real trading.
     octobot_main(['--simulate', '--no_web', '--no-telegram'])
 

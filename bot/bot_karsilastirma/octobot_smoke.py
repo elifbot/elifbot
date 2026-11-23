@@ -64,14 +64,16 @@ def main():
     markers = [l[:2000] for l in lines if 'Starting OctoBot with' in l]
     good = any('simulated trader' in s and 'okx[future]' in s.lower() for s in markers)
     errors = [x[:500] for x in lines if ' ERROR ' in x or 'CRITICAL' in x][-3:]
-    result = {'stage':'octobot_short_simulator_probe','requested_seconds':180,'eligible_contracts':len(eligible),
+    evidence_file = root/'candle-evidence.jsonl'
+    candles = [json.loads(line) for line in evidence_file.read_text().splitlines()] if evidence_file.exists() else []
+    result = {'candle_symbol_count':len({x['symbol'] for x in candles}), 'candle_samples':candles[:5], 'stage':'octobot_short_simulator_probe','requested_seconds':180,'eligible_contracts':len(eligible),
               'starting_portfolio':{'USDT':1_000_000}, 'early_exit':early,'exit_code':code,
               'simulator_and_okx_future_seen':good,'errors':errors,
-              'caution':'startup marker is not proof of usable prices or trades'}
+              'caution':'candle delivery is not proof of coverage, working signals or trades'}
     (root/'smoke-report.json').write_text(json.dumps(result,indent=2))
     print('::notice title=OctoBot paper prova::'+json.dumps(result),flush=True)
     print('\n'.join(lines[-40:]),flush=True)
     # Starting the simulator is not enough: feed errors make the probe fail.
-    return 0 if good and not early and not errors else 1
+    return 0 if good and not early and not errors and candles else 1
 
 if __name__=='__main__': sys.exit(main())
