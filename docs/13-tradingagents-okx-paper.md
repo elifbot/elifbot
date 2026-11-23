@@ -32,4 +32,8 @@ Actions koşusunda `tradingagents-paper / paper` işinin **OKX gerçek veri ve s
 .venv/tradingagents/bin/python -m panel.tradingagents_server --host 0.0.0.0 --port 8000
 ```
 
-Panel GitHub'daki **45185083638** numaralı geçmiş koşunun anotasyonlarını `gh` ile okur; yeni bir gerçek piyasa koşusu başlatmaz. Çalıştırıldığı ortamın GitHub erişimi gerekir. Panel açılırken LONG/SHORT, TradingAgents grafiği ve sanal defter için ağsız bir teknik prova başlatılır; bu prova sentetik fiyatlar ve deterministik sahte model kullanır, performans ölçmez. Panelden tekrar çalıştırılabilir. Arena geliştirme ortamında OKX'e dış ağ erişimi ve yerel Ollama servisi bulunmadığı için burada gerçek piyasa/model testi yapılamaz.
+Panel üstte mevcut dalın son `TradingAgents Paper` GitHub check telemetrisini, altta ise **45185083638** numaralı geçmiş koşunun anotasyonlarını `gh` ile okur. Yeni test GitHub Actions'ta çalışır, genel durum her yaklaşık 12 saniyede bir GitHub Checks'e yazılır ve Arena panelinden okunur. Depo herkese açık olduğu için yayınlanan telemetri de herkese açıktır; anahtar veya özel hesap bilgisi içermez. Panelin çalıştığı ortamda GitHub erişimi ve yetkili `gh` gerekir. Arena doğrudan OKX veya Ollama'ya bağlanmaz; köprü kesilirse panel veri gecikmesi uyarısı gösterir.
+
+Panel açılırken LONG/SHORT, TradingAgents grafiği ve sanal defter için ağsız bir teknik prova da başlatılır. Bu ayrı prova sentetik fiyatlar ve deterministik sahte model kullanır; performans ölçmez ve gerçek verili koşu ile karıştırılmamalıdır. Panelden tekrar çalıştırılabilir.
+
+Yerel modelin bir tam TradingAgents karar zinciri GitHub CPU koşucusunda tanı sırasında yaklaşık 277 saniye sürdü. Bu nedenle tüm aktif sözleşmeler taransa da bütün sinyallerin zamanında değerlendirilmesi mümkün olmayabilir. Kuyrukta eskiyen sinyaller, bağlantı ve model hataları ile kararlar canlı panelde gösterilir. Hiç kullanılabilir karar verilmezse test başarısız sayılır.

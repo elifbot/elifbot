@@ -113,6 +113,7 @@ def main(argv=None):
     p.add_argument('--dakika', type=float, default=30)
     p.add_argument('--model', default='qwen2.5:0.5b')
     p.add_argument('--output', default='runs/tradingagents_okx_paper')
+    p.add_argument('--github-telemetry', action='store_true', help='Genel özet verilerini GitHub Checks üzerinden yayınla')
     args = p.parse_args(argv)
     if not 0 < args.dakika <= 30:
         p.error('dakika 0–30 aralığında olmalı')
@@ -120,11 +121,20 @@ def main(argv=None):
     output = Path(args.output)
     output.mkdir(parents=True, exist_ok=True)
     events_path = output / 'events.jsonl'
+    publisher = None
+    if args.github_telemetry:
+        import atexit
+        from .telemetry import CheckPublisher
+        publisher = CheckPublisher.from_env()
+        atexit.register(publisher.finish)
+
     def log(kind, **kw):
         event = {'time': datetime.now(timezone.utc).isoformat(), 'type': kind, **kw}
         with events_path.open('a', encoding='utf-8') as f:
             f.write(json.dumps(event, ensure_ascii=False) + '\n')
         print(json.dumps(event, ensure_ascii=False), flush=True)
+        if publisher:
+            publisher.record(event)
         if kind == 'agent_error':
             print('::warning title=TradingAgents model hatası::' + str(kw.get('error', 'unknown')).replace('\n', ' ')[:500], flush=True)
         elif kind == 'decision':
@@ -264,7 +274,7 @@ def main(argv=None):
                 fresh_symbols=sum(now - seen.get(s, 0) <= 20 for s in meta), signals=signals,
                 queued=len(pending), stale_signals=stale_signals, decisions=decisions,
                 open_positions=len(book.positions), cash=round(book.cash, 2), equity=round(book.equity(prices), 2))
-            next_log = time.monotonic() + 30
+            next_log = time.monotonic() + 10
         time.sleep(min(5, max(0, end - time.monotonic())))
 
     summary = book.summary(prices)
@@ -278,6 +288,8 @@ def main(argv=None):
     log('finish', signals=signals, decisions=decisions, closed=summary['closed_count'], open_positions=len(book.positions),
         equity=round(summary['equity_usd'], 2), valid_decisions=valid_decisions, usable_decisions=usable_decisions,
         valid=usable_decisions > 0 and not fatal_agent_error)
+    if publisher:
+        publisher.finish()
     return 0 if usable_decisions > 0 and not fatal_agent_error else 1
 
 

@@ -25,6 +25,19 @@ class PanelTests(unittest.TestCase):
         self.assertEqual(progress[-1]['seconds'], 265)
         self.assertIn('OpenAITimeoutError', errors[0])
 
+    def test_live_data_is_read_from_latest_paper_check(self):
+        from panel.tradingagents_server import live_github_state
+        from types import SimpleNamespace
+        state = '{"kind":"okx-live-paper","run_id":"42","status":"running","signals":10}'
+        checks = {'check_runs': [{'id': 7, 'name': 'TradingAgents Paper 42', 'output': {'summary': state}}]}
+        run = {'status': 'in_progress', 'conclusion': None, 'url': 'https://github.com/elifbot/elifbot/actions/runs/42'}
+        with patch('panel.tradingagents_server.subprocess.run', return_value=SimpleNamespace(stdout='deadbeef\n')):
+            with patch('panel.tradingagents_server.gh_json', side_effect=[checks, run]):
+                data = live_github_state()
+        self.assertEqual(data['data']['signals'], 10)
+        self.assertEqual(data['data']['run_id'], '42')
+        self.assertEqual(data['run']['status'], 'in_progress')
+
     def test_missing_data_stays_unknown(self):
         m, errors, progress = parse_annotations([])
         self.assertIsNone(m['universe'])

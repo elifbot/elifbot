@@ -75,6 +75,7 @@ def github_state():
 
 _lock = threading.Lock()
 _cache = {'at': 0.0, 'value': None}
+_live_cache = {'at': 0.0, 'value': None}
 _rehearsal = {'status': 'not_started', 'result': None, 'error': None}
 
 
@@ -86,6 +87,35 @@ def cached_github():
     with _lock:
         _cache.update(at=time.monotonic(), value=state)
     return state
+
+
+def live_github_state():
+    """Mevcut dal commit'indeki en son paper check durumunu oku."""
+    sha = subprocess.run(['git', 'rev-parse', 'HEAD'], cwd=ROOT, capture_output=True,
+                         text=True, timeout=10, check=True).stdout.strip()
+    checks = gh_json('api', f'repos/elifbot/elifbot/commits/{sha}/check-runs?per_page=100')
+    candidates = [c for c in checks.get('check_runs', [])
+                  if re.fullmatch(r'TradingAgents Paper \d+', c.get('name', ''))]
+    if not candidates:
+        return {'status': 'waiting', 'message': 'Canlı testin başlatılması bekleniyor.'}
+    check = max(candidates, key=lambda c: c['id'])
+    state = json.loads((check.get('output') or {}).get('summary') or '{}')
+    if state.get('kind') != 'okx-live-paper' or not str(state.get('run_id', '')).isdigit():
+        raise ValueError('Geçersiz canlı test verisi')
+    run_id = str(state['run_id'])
+    run = gh_json('run', 'view', run_id, '--json', 'status,conclusion,url')
+    return {'status': state.get('status', 'unknown'), 'data': state, 'run': run,
+            'checked_at': datetime.now(timezone.utc).isoformat()}
+
+
+def cached_live():
+    with _lock:
+        if _live_cache['value'] and time.monotonic() - _live_cache['at'] < 10:
+            return _live_cache['value']
+    value = live_github_state()
+    with _lock:
+        _live_cache.update(at=time.monotonic(), value=value)
+    return value
 
 
 def technical_rehearsal():
@@ -191,6 +221,11 @@ class Handler(BaseHTTPRequestHandler):
                 self.send_json(cached_github())
             except (OSError, subprocess.SubprocessError, ValueError):
                 self.send_json({'error': 'GitHub koşu verisi alınamadı.', 'source_url': RUN_URL}, 503)
+        elif path == '/api/live':
+            try:
+                self.send_json(cached_live())
+            except (OSError, subprocess.SubprocessError, ValueError):
+                self.send_json({'status': 'unavailable', 'error': 'Canlı koşu verisi alınamadı.'}, 503)
         elif path == '/api/rehearsal':
             with _lock:
                 value = dict(_rehearsal)

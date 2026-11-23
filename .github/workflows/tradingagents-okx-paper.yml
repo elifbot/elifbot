@@ -9,6 +9,7 @@ on:
 
 permissions:
   contents: read
+  checks: write
 
 jobs:
   paper:
@@ -34,7 +35,9 @@ jobs:
           curl -fsS http://127.0.0.1:11434/api/version
           ollama pull qwen2.5:0.5b
       - name: OKX gerçek veri ve sanal işlem testi
-        run: python -u -m bot.tradingagents_paper.run --dakika '${{ inputs.dakika }}' --model qwen2.5:0.5b --output runs/tradingagents_okx_paper
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python -u -m bot.tradingagents_paper.run --dakika '${{ inputs.dakika }}' --model qwen2.5:0.5b --output runs/tradingagents_okx_paper --github-telemetry
       - name: Özet anotasyonu
         if: always()
         run: |
