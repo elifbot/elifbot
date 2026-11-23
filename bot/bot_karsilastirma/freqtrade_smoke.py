@@ -22,8 +22,8 @@ def config():
         'exit_pricing': {'price_side': 'same', 'use_order_book': True, 'order_book_top': 1},
         'exchange': {'name': 'okx', 'key': '', 'secret': '', 'password': '',
                      'pair_whitelist': ['.*/USDT:USDT'], 'pair_blacklist': []},
-        'pairlists': [{'method': 'StaticPairList'}], 'telegram': {'enabled': False},
-        'api_server': {'enabled': False}, 'internals': {'process_throttle_secs': 5},
+        'pairlists': [{'method': 'StaticPairList'}],
+        'internals': {'process_throttle_secs': 5},
     }
 
 
