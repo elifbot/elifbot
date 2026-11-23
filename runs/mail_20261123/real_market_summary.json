@@ -1,0 +1,96 @@
+{
+  "run": {
+    "provider": "GitHub Actions",
+    "workflow": "Smoke",
+    "run_id": 45229625681,
+    "url": "https://github.com/elifbot/elifbot/actions/runs/45229625681",
+    "commit": "65f0de62bb48862ccd7b1d5ddda5c671205a19ef",
+    "finished_at_utc": "2026-11-23T17:41:06Z",
+    "result": "success",
+    "inputs": {
+      "seconds": 180,
+      "pairs": ["BTC/USDT:USDT", "ETH/USDT:USDT", "SOL/USDT:USDT"],
+      "jesse_bars_requested": 3000
+    }
+  },
+  "safety": {
+    "real_orders": false,
+    "private_exchange_api": false,
+    "freqtrade_dry_run": true,
+    "octobot_trader_enabled": false,
+    "octobot_simulator_enabled": true,
+    "jesse_live_or_paper": false,
+    "note": "These are public-market-data and simulated/research checks, not live trading or profitability evidence."
+  },
+  "bots": {
+    "freqtrade": {
+      "version": "2026.10",
+      "mode": "actual dry-run",
+      "market": "OKX public USDT-settled linear swaps recognized by Freqtrade",
+      "timeframe": "5m",
+      "requested_seconds": 180,
+      "controlled_exit": true,
+      "running_heartbeat": true,
+      "exit_code": 130,
+      "starting_usdt": 1000000,
+      "paper_trades": 0,
+      "open_trades": 0,
+      "strategy": "upstream SampleStrategy with short rules enabled",
+      "scope_limits": [
+        "No dated futures, inverse contracts or other settlement currencies",
+        "No exchange credentials and no order endpoint",
+        "Short observation window; zero trades is not a performance result"
+      ]
+    },
+    "octobot": {
+      "version": "2.1.1",
+      "mode": "public OKX feed plus simulator startup probe",
+      "timeframes": ["15m", "1h"],
+      "eligible_okx_linear_contracts": 3,
+      "symbols": ["BTC/USDT:USDT", "ETH/USDT:USDT", "SOL/USDT:USDT"],
+      "candle_symbol_count": 3,
+      "requested_seconds": 180,
+      "controlled_exit": true,
+      "early_exit": false,
+      "exit_code": 0,
+      "simulator_and_okx_future_seen": true,
+      "feed_errors": [],
+      "starting_portfolio": {"USDT": 1000000},
+      "trades": null,
+      "scope_limits": [
+        "The OctoBot trader was explicitly disabled; the simulator was enabled",
+        "Candle delivery does not prove signal generation, fills or strategy coverage",
+        "Telegram initialization was intentionally omitted and is not a market-data failure"
+      ]
+    },
+    "jesse": {
+      "version": "3.7.0",
+      "mode": "Jesse core historical research replay",
+      "source": "OKX public BTC-USDT-SWAP closed candles",
+      "input_timeframe": "1m",
+      "strategy_timeframe": "15m",
+      "closed_candles": 1439,
+      "first_open_utc": "2026-11-22T17:38:00+00:00",
+      "last_open_utc": "2026-11-23T17:36:00+00:00",
+      "volume_unit": "OKX contract volume; not USD",
+      "strategy": "fixed 50 USDT long-only smoke strategy; EMA20/EMA50 and RSI14; 1% stop/target",
+      "trades": 5,
+      "winning_trades": 2,
+      "losing_trades": 3,
+      "win_rate": 0.4,
+      "starting_balance": 1000000.0,
+      "finishing_balance": 999999.2504754582,
+      "net_profit": -0.7495245419923777,
+      "net_profit_percentage": -0.00007495245419923777,
+      "fee": 0.4993256855831103,
+      "max_drawdown": -0.00007495245417654672,
+      "open_trades_at_end": 1,
+      "open_pl": -0.33721308598403965,
+      "scope_limits": [
+        "This validates Jesse core ingestion and research execution, not Jesse live/paper",
+        "The strategy is a test harness, not a supplied profitable strategy",
+        "Slippage, funding and live fill behavior are not represented"
+      ]
+    }
+  }
+}
