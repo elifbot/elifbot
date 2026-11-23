@@ -39,9 +39,9 @@ jobs:
               if r.get('state') != 'live': continue
               parts=r.get('instId','').split('-')
               q=parts[1] if len(parts)>1 else ''
-              key=(r.get('ctType',''),q,r.get('settleCcy',''),r.get('ctValCcy',''))
+              key=(r.get('ctType',''),q,r.get('settleCcy',''))
               groups[key]+=1
-              samples.setdefault(key,r.get('instId'))
-          result=[{'n':n,'ctType':key[0],'quote':key[1],'settle':key[2],'ctValCcy':key[3],'sample':samples[key]} for key,n in groups.most_common()]
+              samples.setdefault(key,(r.get('instId'),r.get('ctValCcy')))
+          result=[{'n':n,'ctType':key[0],'quote':key[1],'settle':key[2],'sample':samples[key]} for key,n in groups.most_common()]
           print('::notice title=OKX kontrat tipleri::' + json.dumps(result,ensure_ascii=False))
           PY
