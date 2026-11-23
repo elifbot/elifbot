@@ -1,0 +1,60 @@
+name: TradingAgents OKX paper
+
+on:
+  workflow_call:
+    inputs:
+      dakika:
+        type: number
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  paper:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: TradingAgents kurulumu ve testler
+        run: |
+          python -m pip install -r requirements-tradingagents.txt
+          python -m unittest bot.tests.test_tradingagents_paper -v
+      - name: Ollama kurulumu
+        run: |
+          curl -fsSL https://ollama.com/install.sh | sh
+          nohup ollama serve > /tmp/ollama.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:11434/api/version; then break; fi
+            sleep 2
+          done
+          curl -fsS http://127.0.0.1:11434/api/version
+          ollama pull qwen2.5:1.5b
+      - name: OKX gerçek veri ve sanal işlem testi
+        run: python -u -m bot.tradingagents_paper.run --dakika '${{ inputs.dakika }}' --sembol 20 --output runs/tradingagents_okx_paper
+      - name: Özet anotasyonu
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('runs/tradingagents_okx_paper/summary.json')
+          if p.exists():
+              d = json.loads(p.read_text())
+              print('::notice title=Paper sonuç::'
+                    f"Karar={d['completed_decisions']}, geçerli karar={d['valid_decisions']}, "
+                    f"kapanan={d['closed_count']}, açık={len(d['positions'])}, "
+                    f"özkaynak={d['equity_usd']:.2f} USD")
+          else:
+              print('::warning title=Paper sonuç::Özet oluşturulamadı; önceki adımı kontrol edin.')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tradingagents-okx-paper
+          path: runs/tradingagents_okx_paper/
+          if-no-files-found: warn
+          retention-days: 7

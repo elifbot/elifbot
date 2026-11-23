@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   sonda:
-    if: ${{ inputs.model != 'borsa-probe' }}
+    if: ${{ inputs.model != 'borsa-probe' && inputs.model != 'paper-30m' && inputs.model != 'paper-3m' }}
     runs-on: ubuntu-latest
     timeout-minutes: 40
     steps:
@@ -59,3 +59,11 @@ jobs:
     permissions:
       contents: read
     uses: ./.github/workflows/tradingagents-borsa-sonda.yml
+
+  tradingagents-paper:
+    if: ${{ inputs.model == 'paper-30m' || inputs.model == 'paper-3m' }}
+    permissions:
+      contents: read
+    uses: ./.github/workflows/tradingagents-okx-paper.yml
+    with:
+      dakika: ${{ inputs.model == 'paper-30m' && 30 || 3 }}
