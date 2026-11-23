@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import subprocess
 import threading
@@ -91,11 +92,19 @@ def cached_github():
 
 def live_github_state():
     """Mevcut dal commit'indeki en son paper check durumunu oku."""
-    sha = subprocess.run(['git', 'rev-parse', 'HEAD'], cwd=ROOT, capture_output=True,
-                         text=True, timeout=10, check=True).stdout.strip()
+    pinned_run = os.environ.get('PAPER_RUN_ID', '')
+    if pinned_run:
+        if not pinned_run.isdigit():
+            raise ValueError('Geçersiz koşu kimliği')
+        run_meta = gh_json('run', 'view', pinned_run, '--json', 'headSha')
+        sha = run_meta['headSha']
+    else:
+        sha = subprocess.run(['git', 'rev-parse', 'HEAD'], cwd=ROOT, capture_output=True,
+                             text=True, timeout=10, check=True).stdout.strip()
     checks = gh_json('api', f'repos/elifbot/elifbot/commits/{sha}/check-runs?per_page=100')
     candidates = [c for c in checks.get('check_runs', [])
-                  if re.fullmatch(r'TradingAgents Paper \d+', c.get('name', ''))]
+                  if re.fullmatch(r'TradingAgents Paper \d+', c.get('name', ''))
+                  and (not pinned_run or c.get('name') == f'TradingAgents Paper {pinned_run}')]
     if not candidates:
         return {'status': 'waiting', 'message': 'Canlı testin başlatılması bekleniyor.'}
     check = max(candidates, key=lambda c: c['id'])
@@ -169,7 +178,7 @@ def technical_rehearsal():
         # Prices fixed in advance. This is an implementation check, not a return measurement.
         exit_price = last_price * (1 + expected_direction * .001)
         prices[name] = exit_price
-        close = book.close(name, exit_price, 'prova_sonu', now=65)
+        close = book.close(book.events[-1]['position_id'], exit_price, 'prova_sonu', now=65)
         events.append({'step': 'Sanal kapanış', 'symbol': name,
                        'detail': f"{close['net']:+.4f} $ · sentetik; performans değil"})
     return {'kind': 'synthetic_rehearsal', 'model': 'Sahte / deterministik', 'market': 'Sentetik',

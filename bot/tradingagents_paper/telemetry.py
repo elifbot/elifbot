@@ -56,10 +56,17 @@ class CheckPublisher:
             if kind == 'start':
                 state.update(status='running', universe=event.get('universe'),
                              supported=event.get('supported'), duration_seconds=event.get('duration_seconds'),
-                             model=event.get('model'), started_at=event.get('time'))
+                             model=event.get('model'), started_at=event.get('time'),
+                             analyst_workers=event.get('analyst_workers'), entry_mode=event.get('entry_mode'))
             elif kind == 'progress':
                 state.update({k: event.get(k) for k in ('seconds', 'universe', 'fresh_symbols', 'signals',
-                              'queued', 'stale_signals', 'decisions', 'open_positions', 'cash', 'equity')})
+                              'queued', 'stale_signals', 'decisions', 'open_positions', 'cash', 'equity',
+                              'positions', 'closed_trades', 'total_closed', 'trade_attempts', 'trade_opens',
+                              'analyst_active')})
+            elif kind == 'paper_rejected':
+                reasons = state.setdefault('rejections', {})
+                reason = str(event.get('event', 'unknown'))[:100]
+                reasons[reason] = reasons.get(reason, 0) + 1
             elif kind == 'agent_error':
                 state['model_errors'] += 1
                 state['last_error'] = str(event.get('error', 'model hatası'))[:300]
@@ -67,19 +74,30 @@ class CheckPublisher:
                 state.update(status='completed' if event.get('valid') else 'failed',
                              decisions=event.get('decisions'), signals=event.get('signals'),
                              open_positions=event.get('open_positions'), closed=event.get('closed'),
-                             equity=event.get('equity'), usable_decisions=event.get('usable_decisions'))
+                             equity=event.get('equity'), usable_decisions=event.get('usable_decisions'),
+                             positions=event.get('positions', []), closed_trades=event.get('closed_trades', []),
+                             total_closed=event.get('total_closed'), trade_attempts=event.get('trade_attempts'),
+                             trade_opens=event.get('trade_opens'))
             if kind in ('analysis_started', 'decision', 'agent_error', 'paper_open', 'paper_close',
                         'paper_rejected', 'skip_stale', 'signal_rejected_by_agent', 'data_error'):
                 # Reports/prompts can be very long; telemetry only needs a compact audit trail.
                 state['recent'].append({k: event.get(k) for k in ('time', 'type', 'symbol', 'direction',
-                                       'rating', 'error', 'reason', 'net', 'age_seconds') if k in event})
+                                       'rating', 'error', 'reason', 'net', 'age_seconds', 'price', 'entry',
+                                       'position_id', 'event', 'notional', 'advisory_agrees') if k in event})
                 state['recent'] = state['recent'][-25:]
 
     def _publish(self, completed=False):
         with self.lock:
             snapshot = json.loads(json.dumps(self.state))
-        payload = {'output': {'title': 'OKX paper test · canlı durum',
-                              'summary': json.dumps(snapshot, ensure_ascii=False, separators=(',', ':'))}}
+        # GitHub Check output has a 65,535-character limit. Keep totals, but
+        # explicitly flag truncated details instead of silently losing updates.
+        def encoded():
+            return json.dumps(snapshot, ensure_ascii=False, separators=(',', ':'))
+        for key in ('closed_trades', 'recent', 'positions'):
+            while len(encoded().encode('utf-8')) > 60000 and snapshot.get(key):
+                snapshot[key].pop(0)
+                snapshot['details_truncated'] = True
+        payload = {'output': {'title': 'OKX paper test · canlı durum', 'summary': encoded()}}
         if completed:
             payload.update(status='completed', conclusion='success' if snapshot['status'] == 'completed' else 'failure')
         self._request('PATCH', f'/repos/{self.repository}/check-runs/{self.check_id}', payload)

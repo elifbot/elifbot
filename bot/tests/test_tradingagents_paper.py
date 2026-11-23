@@ -2,7 +2,7 @@ import importlib.util
 import unittest
 
 from bot.tradingagents_paper.paper import Instrument, PaperBook, accepts_signal
-from bot.tradingagents_paper.run import fetch, instruments, quotes, signal
+from bot.tradingagents_paper.run import direct_entry, fetch, instruments, quotes, signal
 
 
 class PaperTests(unittest.TestCase):
@@ -11,25 +11,40 @@ class PaperTests(unittest.TestCase):
             book = PaperBook()
             inst = Instrument('ETH-USDT-SWAP', .1, .01, .01)
             self.assertTrue(book.open(inst, 100, {inst.symbol: 100}, direction, now=1))
-            p = book.positions[inst.symbol]
+            p = next(iter(book.positions.values()))
             self.assertGreaterEqual(p['notional'], 450)
             self.assertLessEqual(p['notional'], 500)
             self.assertGreater(book.equity({inst.symbol: favorable}), book.cash)
-            self.assertIsNone(book.update(inst.symbol, 100, now=2))
+            self.assertEqual(book.update(inst.symbol, 100, now=2), [])
             closed = book.update(inst.symbol, adverse, now=3)
-            self.assertEqual(closed['reason'], 'stop_sampled')
-            self.assertLessEqual(closed['net'], -10)
-            self.assertAlmostEqual(book.cash - 1000, closed['net'])
+            self.assertEqual(closed[0]['reason'], 'stop_sampled')
+            self.assertLessEqual(closed[0]['net'], -10)
+            self.assertAlmostEqual(book.cash - 1000, closed[0]['net'])
 
     def test_inverse_sizing_long_and_short(self):
         for direction in (1, -1):
             book = PaperBook()
             inst = Instrument('BTC-USD-SWAP', 100, 1, 1, ct_type='inverse', quote='USD')
             self.assertTrue(book.open(inst, 60000, {inst.symbol: 60000}, direction))
-            self.assertEqual(book.positions[inst.symbol]['contracts'], 5)
-            close = book.close(inst.symbol, 60000 * (1 + direction * .02), 'test')
+            self.assertEqual(next(iter(book.positions.values()))['contracts'], 5)
+            close = book.close(next(iter(book.positions)), 60000 * (1 + direction * .02), 'test')
             self.assertGreater(close['net'], 0)
             self.assertAlmostEqual(book.cash - 1000, close['net'])
+
+    def test_same_symbol_many_long_and_short_until_margin_runs_out(self):
+        book = PaperBook()
+        inst = Instrument('A-USDT-SWAP', .1, .01, .01)
+        prices = {inst.symbol: 100}
+        self.assertTrue(book.open(inst, 100, prices, 1))
+        self.assertTrue(book.open(inst, 100, prices, 1))
+        self.assertTrue(book.open(inst, 100, prices, -1))
+        self.assertEqual(len(book.positions), 3)
+        self.assertEqual({p['direction'] for p in book.positions.values()}, {1, -1})
+        while book.open(inst, 100, prices, 1):
+            pass
+        self.assertGreater(len(book.positions), 3)
+        self.assertEqual(book.events[-1]['event'], 'reject_margin')
+        self.assertGreaterEqual(book.available(prices), 0)
 
     def test_insufficient_margin_and_coarse_contract(self):
         inst = Instrument('BTC-USDT-SWAP', .01, .01, .01)
@@ -52,6 +67,20 @@ class PaperTests(unittest.TestCase):
         self.assertIsNone(signal([(0, 100), (10, 101)]))
         self.assertIsNone(signal([(0, 100), (60, 100)]))
 
+    def test_direct_entries_do_not_wait_for_model_or_deduplicate_symbol(self):
+        book = PaperBook()
+        inst = Instrument('A-USDT-SWAP', .1, .01, .01)
+        prices, seen = {inst.symbol: 100}, {inst.symbol: 100}
+        for direction in (1, 1, -1):
+            opened, event = direct_entry(book, inst, 100, prices, seen, 100, 1900, {'direction': direction})
+            self.assertTrue(opened)
+            self.assertEqual(event['event'], 'open')
+        self.assertEqual(len(book.positions), 3)
+        self.assertEqual({p['direction'] for p in book.positions.values()}, {1, -1})
+        opened, event = direct_entry(book, inst, 100, prices, seen, 121, 1900, {'direction': 1})
+        self.assertFalse(opened)
+        self.assertEqual(event['event'], 'reject_stale_portfolio')
+
     def test_private_endpoint_cannot_be_used(self):
         with self.assertRaises(ValueError):
             fetch('/api/v5/trade/order')
@@ -61,9 +90,13 @@ class PaperTests(unittest.TestCase):
         rows = [dict(base, instId='ETH-USDT-SWAP', instType='SWAP', ctType='linear'),
                 dict(base, instId='BTC-USD-SWAP', instType='SWAP', ctType='inverse'),
                 dict(base, instId='ETH-USDC-261225', instType='FUTURES', ctType='linear'),
-                dict(base, instId='ETH-EUR-261225', instType='FUTURES', ctType='linear')]
+                dict(base, instId='ETH-EUR-261225', instType='FUTURES', ctType='linear'),
+                dict(base, instId='GRVT-USD_UM_XPERP-310801', instType='FUTURES', ctType='linear', settleCcy='USD'),
+                dict(base, instId='BTC-USD_UM-261127', instType='FUTURES', ctType='linear', settleCcy='USD')]
         got = instruments(rows)
-        self.assertEqual(len(got), 4)
+        self.assertEqual(len(got), 6)
+        self.assertTrue(got['GRVT-USD_UM_XPERP-310801'].supported)
+        self.assertTrue(got['BTC-USD_UM-261127'].supported)
         self.assertTrue(got['BTC-USD-SWAP'].supported)
         self.assertTrue(got['ETH-USDC-261225'].supported)
         self.assertFalse(got['ETH-EUR-261225'].supported)

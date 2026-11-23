@@ -27,6 +27,22 @@ class TelemetryTests(unittest.TestCase):
         self.assertNotIn('private-test-token', str(requests))
         self.assertIn('timeout', requests[1][2]['output']['summary'])
 
+    def test_large_positions_are_truncated_and_rejections_counted(self):
+        import json
+        outputs = []
+        with patch.object(CheckPublisher, '_request', lambda self, method, path, payload: outputs.append(payload) or {'id': 1}):
+            pub = CheckPublisher('token', 'elifbot/elifbot', 'abcdef', '3', interval=999)
+            pub.record({'type': 'paper_rejected', 'event': 'reject_margin'})
+            pub.record({'type': 'paper_rejected', 'event': 'reject_margin'})
+            pub.record({'type': 'progress', 'positions': [{'symbol': 'X' * 500} for _ in range(300)]})
+            pub._publish()
+            data = outputs[-1]['output']['summary']
+            self.assertLessEqual(len(data.encode('utf-8')), 60000)
+            state = json.loads(data)
+            self.assertTrue(state['details_truncated'])
+            self.assertEqual(state['rejections']['reject_margin'], 2)
+            pub.finish()
+
     def test_fail_closed_if_run_aborts(self):
         outputs = []
         with patch.object(CheckPublisher, '_request', lambda self, method, path, payload: outputs.append(payload) or {'id': 1}):

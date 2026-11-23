@@ -27,7 +27,8 @@ jobs:
       - name: Ollama kurulumu
         run: |
           curl -fsSL https://ollama.com/install.sh | sh
-          nohup ollama serve > /tmp/ollama.log 2>&1 &
+          # Four concurrent inference slots on GitHub's four-vCPU public runner.
+          OLLAMA_NUM_PARALLEL=4 nohup ollama serve > /tmp/ollama.log 2>&1 &
           for i in $(seq 1 30); do
             if curl -fsS http://127.0.0.1:11434/api/version; then break; fi
             sleep 2
@@ -37,7 +38,7 @@ jobs:
       - name: OKX gerçek veri ve sanal işlem testi
         env:
           GH_TOKEN: ${{ github.token }}
-        run: python -u -m bot.tradingagents_paper.run --dakika '${{ inputs.dakika }}' --model qwen2.5:0.5b --output runs/tradingagents_okx_paper --github-telemetry
+        run: python -u -m bot.tradingagents_paper.run --dakika '${{ inputs.dakika }}' --model qwen2.5:0.5b --analyst-workers 4 --output runs/tradingagents_okx_paper --github-telemetry
       - name: Özet anotasyonu
         if: always()
         run: |
