@@ -58,6 +58,13 @@ Panel: `http://localhost:8000`
 
 ---
 
+### İsteğe bağlı: TradingAgents
+
+TradingAgents, ACARBOT'tan bağımsız bir araştırma aracı olarak ayrı bir ortamda kurulabilir.
+Kurulum, erişim gereksinimleri ve sınırlamalar: [`docs/12-tradingagents.md`](docs/12-tradingagents.md).
+
+---
+
 ## 3. Gerçek piyasa verisi (önemli)
 
 Bu depo iki besleme modunu destekler:

@@ -1,0 +1,46 @@
+name: TradingAgents borsa bağlantı sondası
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  public-data:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Binance ve OKX genel vadeli işlem verisini kontrol et
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json
+          import urllib.error
+          import urllib.request
+
+          targets = [
+              ("Binance", "https://fapi.binance.com/fapi/v1/ticker/price?symbol=BTCUSDT"),
+              ("OKX", "https://www.okx.com/api/v5/market/ticker?instId=BTC-USDT-SWAP"),
+          ]
+          for name, url in targets:
+              try:
+                  request = urllib.request.Request(url, headers={"User-Agent": "elifbot-paper-data-probe/1.0"})
+                  with urllib.request.urlopen(request, timeout=20) as response:
+                      body = json.load(response)
+                      status = response.status
+                  if name == "Binance":
+                      price = float(body["price"])
+                      valid = body.get("symbol") == "BTCUSDT" and price > 0
+                  else:
+                      valid = body.get("code") == "0" and bool(body.get("data"))
+                      price = float(body["data"][0]["last"]) if valid else 0
+                      valid = valid and body["data"][0].get("instId") == "BTC-USDT-SWAP" and price > 0
+                  if not valid:
+                      raise ValueError("beklenmeyen veri")
+                  print(f"::notice title={name}::HTTP {status}; BTC vadeli fiyatı alındı: {price}")
+              except urllib.error.HTTPError as exc:
+                  print(f"::warning title={name}::HTTP {exc.code}; genel veri alınamadı")
+              except Exception as exc:
+                  print(f"::warning title={name}::{type(exc).__name__}; genel veri alınamadı")
+          PY
